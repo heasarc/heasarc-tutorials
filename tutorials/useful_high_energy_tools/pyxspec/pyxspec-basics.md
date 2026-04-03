@@ -744,23 +744,37 @@ levelvals = xs.Plot.contourLevels()
 statval = xs.Fit.statistic
 ```
 
+***<span style="color: red">TALK ABOUT WHY INDEX CUTS OFF AT ZERO</span>***
+
+***<span style="color: red">WHY CAN I STILL NOT FIGURE OUT HOW DELTA FIT STATISTIC CONNECTS TO SIGMA</span>***
+
+***For two parameters, delta chi-squared is 2.3***
+
 ```{code-cell} python
 ---
 tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-plt.contour(x, y, z, levelvals)
-plt.ylabel(labels[0])
-plt.xlabel(labels[1])
+plt.figure(figsize=(5.5, 5.5))
+plt.minorticks_on()
+plt.tick_params(which="both", direction="in", right=True, top=True)
+
+plt.contour(x, y, z, levelvals, cmap="rainbow")
+
+plt.ylabel(labels[0], fontsize=15)
+plt.xlabel(labels[1], fontsize=15)
 plt.errorbar(
-    model_one.phabs.nH.values[0], model_one.powerlaw.PhoIndex.values[0], fmt="."
+    model_one.phabs.nH.values[0], model_one.powerlaw.PhoIndex.values[0], fmt="+"
 )
 legendstring = (
     f"min={statval:{10}.{4}}, levels={levelvals[0]:{10}.{4}},"
     f"{levelvals[1]:{10}.{4}},{levelvals[2]:{10}.{4}}"
 )
-plt.legend([legendstring], loc="upper left")
+plt.legend([legendstring], loc="best", fontsize=14)
+
+plt.tight_layout()
+plt.show()
 ```
 
 The contours shown are for one, two, and three sigma. The dot marks the best-fit position.
