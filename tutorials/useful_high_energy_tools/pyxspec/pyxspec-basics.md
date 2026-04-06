@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-04-02'
+date: '2026-04-06'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -746,9 +746,7 @@ statval = xs.Fit.statistic
 
 ***<span style="color: red">TALK ABOUT WHY INDEX CUTS OFF AT ZERO</span>***
 
-***<span style="color: red">WHY CAN I STILL NOT FIGURE OUT HOW DELTA FIT STATISTIC CONNECTS TO SIGMA</span>***
-
-***For two parameters, delta chi-squared is 2.3***
+***<span style="color: red">ALTERNATIVELY LET STEPPAR GO LOWER THAN ZERO FOR PHO IND, SHOW THAT IT GOES STRAIGHT, AND EXPLAIN WHY THERE IS NO CONSTRAINING POWER ON NH WITH A NEGATIVE PHO INDEX</span>***
 
 ```{code-cell} python
 ---
@@ -777,7 +775,8 @@ plt.tight_layout()
 plt.show()
 ```
 
-The contours shown are for one, two, and three sigma. The dot marks the best-fit position.
+***<span style="color: red">I THINK THIS SHOWS 1sigma, 90%, and 3sigma</span>***
+~~The contours shown are for one, two, and three sigma. The dot marks the best-fit position.~~
 
 ## 5. Flux calculation
 
@@ -795,7 +794,7 @@ AllModels is the way of operating on all Model objects in the same way as AllDat
 on all Spectrum objects.
 
 Here we have chosen the range of 2-10 keV and find that the energy flux is
-$2.2\times10^{-11}$ ergs/cm$^2$/s. Note that calcFlux will integrate only within
+$2.2 \times 10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$. Note that calcFlux will integrate only within
 the energy range of the current response matrix. If the model flux outside this
 range is desired - in effect, an extrapolation beyond the data - then the method
 setEnergies should be used. This method defines a set of energies on which the models
@@ -808,7 +807,7 @@ xs.AllModels.setEnergies("extend", "low,0.2,100")
 xs.AllModels.calcFlux("0.2 2.0")
 ```
 
-The energy flux, at $8.8\times10^{-12}$ ergs/cm$^2$/s is lower in this band but the
+The energy flux, at $8.8\times10^{-12} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$ is lower in this band but the
 photon flux is higher. The model energies can be reset to the response energies
 using xs.AllModels.setEnergies("reset"). Calculating the flux is not usually
 enough, we want its uncertainty as well. The best way to do this is to use the
@@ -836,7 +835,7 @@ xs.Fit.error("4")
 ```
 
 for a 90% confidence range on the 0.2-2 keV unabsorbed flux of
-$3.49\times10^{-11}$ - $8.33\times10^{-11}$ ergs/cm$^2$/s.
+$3.49\times10^{-11}$ - $8.33\times10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
 
 ## 6. Testing alternative spectral models
 
@@ -981,10 +980,10 @@ plt.hlines(0.0, stepenergies[0], stepenergies[-1], linestyles="dashed")
 ```
 
 There appears to be a surplus of softer photons, perhaps indicating a second continuum
-component. To investigate this possibility we can add a component to our model. Here,
+component. To investigate this possibility, we can add a component to our model. Here,
 we'll add a black body component. Note that we freeze the temperature parameter of
-the black body to 2 keV(the canonical temperature for nuclear burning on the surface
-of a neutron star in a low-mass X-ray binary) using an xspec trick that setting the
+the black body to 2 keV (the canonical temperature for nuclear burning on the surface
+of a neutron star in a low-mass X-ray binary) using an XSPEC trick that setting the
 delta for a parameter to zero switches its freeze/thaw status. We also set the
 normalization of the component to a small number to start the fit off in a sensible
 place since we are looking for a small change to the model.
@@ -1003,7 +1002,7 @@ xs.Fit.perform()
 
 The fit is better than the one with just a power law and the fixed Galactic
 column, but it is still not good. Thawing the black body temperature and fitting
-does of course improve the fit but the powerl law index becomes even steeper. Looking
+does of course improve the fit, but the power law index becomes even steeper. Looking
 at this odd model with the command
 
 ```{code-cell} python
@@ -1091,7 +1090,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-04-02
+Updated On: 2026-04-06
 
 +++
 
