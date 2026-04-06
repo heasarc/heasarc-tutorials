@@ -47,6 +47,7 @@ In this example, we'll conduct a general investigation of the spectrum from the
 Medium Energy (ME) instrument, i.e. follow the same sort of steps as the original
 investigators ([Seward F. D., Charles P. A., Smale A. P. 1986](https://ui.adsabs.harvard.edu/abs/1986ApJ...305..814S/abstract)).
 
+**<span style="color:red">THIS IS TRUE BUT PERHAPS HIGHLIGHT THAT THE DATA AREN'T ACQUIRED THAT WAY IN THIS IMPLEMENTATION</span>**
 The ME spectrum and corresponding
 response matrix were obtained from the HEASARC and are available
 from https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz
@@ -90,7 +91,8 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
+def sigma_to_delta_chi_square():
+    pass
 ```
 
 ### Constants
@@ -905,6 +907,66 @@ plt.errorbar(energies, resid, xerr=edeltas, yerr=residerr, fmt=".")
 plt.hlines(0.0, stepenergies[0], stepenergies[-1], linestyles="dashed")
 ```
 
+```{code-cell} python
+fig, ax_arr = plt.subplots(nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True)
+# Shrink the vertical gap between the panels to zero
+fig.subplots_adjust(hspace=0)
+
+spec_ax = ax_arr[0]
+spec_ax.minorticks_on()
+spec_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+spec_ax.errorbar(
+    energies,
+    rates,
+    xerr=edeltas,
+    yerr=errors,
+    fmt="+",
+    capsize=1.5,
+    label="EXOSAT-ME data",
+    color="navy",
+)
+
+if not STEPPED_MODEL:
+    spec_ax.plot(
+        energies, model_data, color="firebrick", label="Fitted model", alpha=0.8
+    )
+else:
+    spec_ax.step(
+        stepenergies,
+        foldedmodel,
+        where="post",
+        color="firebrick",
+        label="Fitted model",
+        alpha=0.8,
+    )
+
+spec_ax.set_yscale("log")
+spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+spec_ax.set_ylabel(labels[1], fontsize=15)
+
+spec_ax.legend(fontsize=14)
+
+res_ax = ax_arr[1]
+res_ax.minorticks_on()
+res_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+res_ax.errorbar(
+    energies, resid, xerr=edeltas, yerr=residerr, fmt="+", capsize=1.5, color="navy"
+)
+res_ax.axhline(0, color="goldenrod", linestyle="dashed")
+
+res_ax.set_xlabel(residLabels[0], fontsize=15)
+res_ax.set_ylabel(residLabels[1], fontsize=15)
+
+res_ax.set_xscale("log")
+res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+plt.show()
+```
+
 Note the wave-like shape of the residuals which indicates how poor the fit is, i.e.
 that the continuum is obviously not a black body.
 
@@ -979,6 +1041,66 @@ plt.errorbar(energies, resid, xerr=edeltas, yerr=residerr, fmt=".")
 plt.hlines(0.0, stepenergies[0], stepenergies[-1], linestyles="dashed")
 ```
 
+```{code-cell} python
+fig, ax_arr = plt.subplots(nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True)
+# Shrink the vertical gap between the panels to zero
+fig.subplots_adjust(hspace=0)
+
+spec_ax = ax_arr[0]
+spec_ax.minorticks_on()
+spec_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+spec_ax.errorbar(
+    energies,
+    rates,
+    xerr=edeltas,
+    yerr=errors,
+    fmt="+",
+    capsize=1.5,
+    label="EXOSAT-ME data",
+    color="navy",
+)
+
+if not STEPPED_MODEL:
+    spec_ax.plot(
+        energies, model_data, color="firebrick", label="Fitted model", alpha=0.8
+    )
+else:
+    spec_ax.step(
+        stepenergies,
+        foldedmodel,
+        where="post",
+        color="firebrick",
+        label="Fitted model",
+        alpha=0.8,
+    )
+
+spec_ax.set_yscale("log")
+spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+spec_ax.set_ylabel(labels[1], fontsize=15)
+
+spec_ax.legend(fontsize=14)
+
+res_ax = ax_arr[1]
+res_ax.minorticks_on()
+res_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+res_ax.errorbar(
+    energies, resid, xerr=edeltas, yerr=residerr, fmt="+", capsize=1.5, color="navy"
+)
+res_ax.axhline(0, color="goldenrod", linestyle="dashed")
+
+res_ax.set_xlabel(residLabels[0], fontsize=15)
+res_ax.set_ylabel(residLabels[1], fontsize=15)
+
+res_ax.set_xscale("log")
+res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+plt.show()
+```
+
 There appears to be a surplus of softer photons, perhaps indicating a second continuum
 component. To investigate this possibility, we can add a component to our model. Here,
 we'll add a black body component. Note that we freeze the temperature parameter of
@@ -1009,9 +1131,15 @@ at this odd model with the command
 xs.Plot("model")
 energies = xs.Plot.x()
 edeltas = xs.Plot.xErr()
+
 modelvals = xs.Plot.model()
 modelcomp1 = xs.Plot.addComp(1)
 modelcomp2 = xs.Plot.addComp(2)
+
+summ_mod_values = xs.Plot.model()
+comp1_mod_values = xs.Plot.addComp(1)
+comp2_mod_values = xs.Plot.addComp(2)
+
 labels = xs.Plot.labels()
 nE = len(energies)
 stepenergies = list()
@@ -1029,15 +1157,89 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
+plt.figure(figsize=(7, 4.5))
+plt.minorticks_on()
+plt.tick_params(which="both", direction="in", top=True, right=True)
+
+tot_leg_lab = "Total model"
+comp_one_leg_lab = "Power law component"
+comp_two_leg_lab = "Blackbody component"
+
+tot_color = "darkorchid"
+comp_one_color = "tab:blue"
+comp_two_color = "peru"
+
+tot_ls = "solid"
+comp_one_ls = "dashed"
+comp_two_ls = (0, (3, 1, 1, 1))
+
+if not STEPPED_MODEL:
+    plt.plot(
+        energies,
+        summ_mod_values,
+        color=tot_color,
+        label=tot_leg_lab,
+        alpha=0.8,
+        linestyle=tot_ls,
+    )
+    plt.plot(
+        energies,
+        comp1_mod_values,
+        color=comp_one_color,
+        label=comp_one_leg_lab,
+        alpha=0.8,
+        linestyle=comp_one_ls,
+    )
+    plt.plot(
+        energies,
+        comp2_mod_values,
+        color=comp_two_color,
+        label=comp_two_leg_lab,
+        alpha=0.8,
+        linestyle=comp_two_ls,
+    )
+else:
+    plt.step(
+        stepenergies,
+        modelvals,
+        color=tot_color,
+        label=tot_leg_lab,
+        where="post",
+        linestyle=tot_ls,
+    )
+    plt.step(
+        stepenergies,
+        modelcomp1,
+        color=comp_one_color,
+        where="post",
+        label=comp_one_leg_lab,
+        linestyle=comp_one_ls,
+    )
+    plt.step(
+        stepenergies,
+        modelcomp2,
+        color=comp_two_color,
+        where="post",
+        label=comp_two_leg_lab,
+        linestyle=comp_two_ls,
+    )
+
+plt.ylim(3.0e-6)
+plt.xlim(1.25, 15)
+
 plt.xscale("log")
 plt.yscale("log")
-plt.ylim(3.0e-6, 3.0e-3)
-plt.title(labels[2])
-plt.xlabel(labels[0])
-plt.ylabel(labels[1])
-plt.step(stepenergies, modelvals, where="post")
-plt.step(stepenergies, modelcomp1, where="post", linestyle="dashed")
-plt.step(stepenergies, modelcomp2, where="post", linestyle="dotted")
+
+plt.gca().xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+plt.gca().xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+plt.xlabel(labels[0], fontsize=15)
+plt.ylabel(labels[1], fontsize=15)
+
+plt.legend(fontsize=14)
+plt.tight_layout()
+plt.show()
 ```
 
 We see that the black body and the power law have changed places, in that the power
