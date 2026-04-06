@@ -79,6 +79,7 @@ import numpy as np
 import xspec as xs
 from matplotlib import pyplot as plt
 from matplotlib.ticker import FuncFormatter
+from scipy.stats import chi2
 ```
 
 ## Global Setup
@@ -91,8 +92,7 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-def sigma_to_delta_chi_square():
-    pass
+
 ```
 
 ### Constants
@@ -711,7 +711,7 @@ which is an intrinsically parallel operation so we can use PyXspec's support for
 multiple cores and run the error estimations in parallel:
 
 ```{code-cell} python
-xs.Xset.parallel.error = 3
+xs.Xset.parallel.error = NUM_CORES
 xs.Fit.error("1-3")
 ```
 
@@ -730,6 +730,10 @@ grid over these two parameters:
 
 ```{code-cell} python
 xs.Fit.steppar("1 0.0 1.5 25 2 1.5 3.0 25")
+```
+
+```{code-cell} python
+chi2.ppf([0.6826, 0.9554, 0.9973], df=2).round(2)
 ```
 
 The results can be understood more clearly by plotting confidence contours:
