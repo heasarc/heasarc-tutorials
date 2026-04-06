@@ -736,6 +736,13 @@ xs.Fit.steppar("1 0.0 1.5 25 2 1.5 3.0 25")
 chi2.ppf([0.6826, 0.9554, 0.9973], df=2).round(2)
 ```
 
+***DEFAULT CHI-SQ LEVELS (FOR TWO-PARAMETER CONTOURS) ARE:***
+- 2.30 [1sig]
+- 4.61 [90%]
+- 9.21 [99%]
+
+***PER THE PLOT CONTOUR DOC PAGE, AND THE SRC***
+
 The results can be understood more clearly by plotting confidence contours:
 
 ```{code-cell} python
