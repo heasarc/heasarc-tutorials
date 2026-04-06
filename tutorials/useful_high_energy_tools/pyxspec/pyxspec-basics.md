@@ -307,9 +307,9 @@ spec_plot_data = {
     "energy_delta": xs.Plot.xErr(),
     "rate": xs.Plot.y(),
     "rate_err": xs.Plot.yErr(),
-    "x_label": xs.Plot.labels(0),
-    "y_label": xs.Plot.labels(1),
-    "title": xs.Plot.labels(3),
+    "x_label": xs.Plot.labels()[0],
+    "y_label": xs.Plot.labels()[1],
+    "title": xs.Plot.labels()[2],
 }
 ```
 
