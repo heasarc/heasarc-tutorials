@@ -199,29 +199,50 @@ The spectrum file we are using for this demonstration has not been downloaded to
 same directory as the notebook, so we briefly change our working directory as we load
 it.
 
-Of course, we could have passed the full spectrum path, rather than changing
+Of course, we could have passed the full spectrum path rather than changing
 directories, but the 'RESPFILE' entry in the spectrum's header is a path relative
-to the location of the spectrum file. That means that PyXspec would have been
-unable to find the response file if we had not changed directories.
+to the location of the spectrum file.
+
+If we hadn't changed directories, then PyXspec would have been unable to find and
+automatically load the response file (though we could also have passed a response
+file path to the optional `respfile` argument of the `Spectrum` constructor).
 
 ```{code-cell} python
 with contextlib.chdir(ROOT_DATA_DIR):
     exo_me_spec = xs.Spectrum("s54405.pha")
 ```
 
-Spectrum tells the program to read the data as well as the response file that is named in the header of the data file.
-
 ## 2. Visualizing the data
 
 One of the first things most users will want to do at this stage - even before fitting
-models - is to look at their data. There are more than 50 different things that can be
-plotted, all related in some way to the data, the model, the fit and the instrument.
+a model - is to look at their data (something we strongly encourage as a first
+step of _any_ analysis).
 
-To see them, type:
+XSPEC can plot a wide variety of different information, all related in some way to
+the underlying spectral data, fitted model(s), fit statistics, and the instrument
+used to collect the data.
+
+Even though we're using the Python interface to XSPEC and will be creating
+visualizations using Matplotlib, we can still take advantage of the backend
+XSPEC plotting functionality by retrieving the data necessary to create
+a particular figure from PyXspec.
+
+The exact visualization information that can be retrieved from PyXspec will depend on
+what you're plotting, but here follow some examples of what can be fetched:
+- X and Y data points.
+- X and Y uncertainties.
+- Axis labels
+- Plot title
+
+### What plots can XSPEC generate?
+
+To list the types of plots that PyXspec can generate, you run:
 
 ```{code-cell} python
 xs.Plot("?")
 ```
+
+###
 
 The most fundamental is the data plotted against instrument channel (data); next
 most fundamental, and more informative, is the data plotted against channel
@@ -523,8 +544,35 @@ use the command for this case (where it is not necessary):
 
 ### Checking the goodness of fit
 
+***TALK ABOUT SIGNIFICANT PERFORMANCE INCREASE WITH PARALLELISATION ON A 12 CORE MAC - FROM 3.8s TO 22ms***
+
 ```{code-cell} python
-xs.Fit.goodness(1000)
+xs.Xset.parallel.goodness = NUM_CORES
+```
+
+```{code-cell} python
+cur_lt_stat_perc = xs.Fit.goodness(1000)
+
+cur_test_stat = xs.Fit.testStatistic
+
+# The 'previousGoodnessSims' attribute returns a list of strings - they
+#  must be converted to floats before we make a histogram.
+goodness_dist = np.array(xs.Fit.previousGoodnessSims).astype(float)
+goodness_dist[:20]
+```
+
+```{warning}
+We retrieve the goodness-of-fit distribution in the same cell as the call to the
+`goodness()` method to ensure that no other fit or goodness calculation has been
+run in between _this_ goodness call and the _retrieval_.
+
+This might happen if, for instance, you are running the notebook out of order - as the
+goodness-of-fit distribution is stored in the global fit manager, rather than a unique
+model object, it could be overridden.
+```
+
+```{code-cell} python
+len(goodness_dist)
 ```
 
 Approximately 60% of the simulations give a statistic value less than that
@@ -532,39 +580,16 @@ observed, consistent with this being a good fit. We can plot a histogram of the
 $\chi^2$ values from the simulations with the observed value shown by the vertical
 dotted line.
 
-```{code-cell} python
-# xs.Plot("goodness")
-# statvals = xs.Plot.x()
-# statdeltas = xs.Plot.xErr()
-# probvals = xs.Plot.y()
-# labels = xs.Plot.labels()
-# nBins = len(statvals)
-# statstepvals = list()
-# for i in range(nBins):
-#     statstepvals.append(statvals[i] - statdeltas[i])
-# statstepvals.append(statvals[-1] + statdeltas[-1])
-# probvals.append(probvals[-1])
-# maxprob = 0
-# for i in range(nBins):
-#     if probvals[i] > maxprob:
-#         maxprob = probvals[i]
-```
+It is entirely possible to retrieve the bin centers and probability density values
+from PyXspec, and use them with matplotlib to reconstruct the histogram that XSPEC
+would make - just as we've been doing for other visualizations.
 
-```{code-cell} python
-# plt.xlabel(labels[0])
-# plt.ylabel(labels[1])
-# plt.step(statstepvals, probvals, where="post")
-# plt.vlines(xs.Fit.testStatistic, 0.0, maxprob, linestyles="dashed")
-```
+Taking that route for a histogram is a little awkward, however, so why don't we
+instead directly use the goodness-of-fit value distribution to construct and plot
+a histogram.
 
-```{code-cell} python
-goodness_sim_vals = np.array(xs.Fit.previousGoodnessSims).astype(float)
-goodness_sim_vals[:20]
-```
-
-```{code-cell} python
-len(goodness_sim_vals)
-```
+We actually already retrieved the goodness-of-fit distribution, in the same cell we ran
+the `goodness()` method, so creating a histogram is simple:
 
 ```{code-cell} python
 ---
@@ -577,7 +602,7 @@ plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
 plt.hist(
-    goodness_sim_vals,
+    goodness_dist,
     bins=20,
     density=True,
     ec="teal",
@@ -588,7 +613,7 @@ plt.hist(
 )
 
 plt.axvline(
-    xs.Fit.testStatistic,
+    cur_test_stat,
     linestyle="dashed",
     color="goldenrod",
     linewidth=2,
@@ -605,7 +630,7 @@ plt.show()
 
 ### Examining fit residuals
 
-So the statistic implies the fit is good but it is still always a good idea to look
+So the statistic implies the fit is good, but it is still always a good idea to look
 at the data and residuals to check for any systematic differences that may not be
 caught by the test.
 
