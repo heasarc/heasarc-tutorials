@@ -236,28 +236,101 @@ what you're plotting, but here follow some examples of what can be fetched:
 
 ### What plots can XSPEC generate?
 
-To list the types of plots that PyXspec can generate, you run:
+To list the types of plots that PyXspec can generate, we can run:
 
 ```{code-cell} python
 xs.Plot("?")
 ```
 
-###
+### Setting XSPEC's plot device
 
-The most fundamental is the data plotted against instrument channel (data); next
-most fundamental, and more informative, is the data plotted against channel
-energy. To do this:
+Before we actually plot something, we need to set the 'plotting device' that XSPEC's
+graphics library tries to output to. When running XSPEC 'traditionally' (i.e. through
+the command line), then your choice of plot device will control whether a figure is
+written to a file or displayed in a window.
+
+Here, as we're going to be doing the plotting ourselves using matplotlib, we don't
+really want either of those things to happen. As such, we set the plot device
+to "/null":
 
 ```{code-cell} python
 xs.Plot.device = "/null"
-xs.Plot.xAxis = "keV"
-xs.Plot("data")
-energies = xs.Plot.x()
-edeltas = xs.Plot.xErr()
-rates = xs.Plot.y()
-errors = xs.Plot.yErr()
-labels = xs.Plot.labels()
 ```
+
+```{danger}
+Skipping this step could result in many files being written to your current
+directory, or the wholesale failure of all plotting in your notebook.
+```
+
+### Plotting a spectrum
+
+The **data** plot option produces the most important of all XSPEC visualizations - a
+spectrum! By default, spectra will be plotted as a function of
+**instrument channel**, which is the most fundamental indication of the energy
+of an X-ray event (which hopefully corresponds to a _photon_ hitting the detector).
+
+However, if an instrument response has been loaded along with the spectral data (we
+made sure of that [Section 1](#1-loading-a-spectrum-into-pyxspec)), then we can plot
+the much more useful spectrum as a function of **energy**.
+
+Note, however, that this won't happen automatically just because a response is
+available; we have to specify the units of the energy axis explicitly:
+
+```{code-cell} python
+xs.Plot.xAxis = "keV"
+```
+
+As we've already mentioned, we're going to use the matplotlib Python module to
+construct our figures and visualizations - it will give us a great deal of flexibility
+and more control over the final plot than if we just used XSPEC's built-in plotting
+functionality.
+
+Our first task is to use PyXspec to produce the rate, energy, and uncertainty
+information that makes up a spectrum visualization and then to retrieve the data
+for later use.
+
+Here we call the `Plot` method, passing **"data"** to specify which type of plot XSPEC
+should produce (in this case a spectrum). Note that **preparing** and **retrieving** the
+data necessary to visualize a PyXspec plot with Matplotlib are **two distinct steps**:
+
+1. Running `Plot("data")` will recalcuate plot quantities based on the current data, noticed channels, model fit (if any), etc.
+2. Calling `Plot.x()` or `Plot.y()` will **fetch** the most current calculated quantities.
+
+You will also notice that PyXspec very handily provides the axis labels and title that
+it would use if it were making the plot itself, we store those too:
+
+```{code-cell} python
+xs.Plot("data")
+
+spec_plot_data = {
+    "energy": xs.Plot.x(),
+    "energy_delta": xs.Plot.xErr(),
+    "rate": xs.Plot.y(),
+    "rate_err": xs.Plot.yErr(),
+    "x_label": xs.Plot.labels(0),
+    "y_label": xs.Plot.labels(1),
+    "title": xs.Plot.labels(3),
+}
+```
+
+```{tip}
+If you're working in a Jupyter notebook, and are likely to be making multiple versions
+of XSPEC plots, we recommend storing plot data in a dictionary, as we have
+demonstrated above.
+
+This helps reduce the risk of accidentally re-using variable names and overwriting their
+existing values, or using plot data from a previous figure. As Jupyter notebooks can
+be run out of order, or have cells re-executed, this is an important consideration.
+```
+
+Now we can use that information to construct a figure showing the spectrum, prior to
+any fitting or energy limits, whilst making some small customizations to improve
+the appearance and clarity of the plot.
+
+In this particular case, this includes:
+- Logging the energy axis; `plt.xscale("log")`
+- Configuring axis ticks to point inwards and be present on the top and right of the figure; `plt.tick_params(which="both", direction="in", top=True, right=True)`
+- Removing labels from minor ticks on the energy axis if the values are below 1 keV, to avoid colliding labels; `ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp) if inp >= 1 else ""))`
 
 ```{code-cell} python
 ---
@@ -270,10 +343,10 @@ plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
 plt.errorbar(
-    energies,
-    rates,
-    xerr=edeltas,
-    yerr=errors,
+    spec_plot_data["energy"],
+    spec_plot_data["rate"],
+    xerr=spec_plot_data["energy_delta"],
+    yerr=spec_plot_data["rate_err"],
     fmt="+",
     label="EXOSAT-ME data",
     color="navy",
@@ -283,12 +356,14 @@ plt.xscale("log")
 
 ax = plt.gca()
 ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+ax.xaxis.set_minor_formatter(
+    FuncFormatter(lambda inp, _: "{:g}".format(inp) if inp >= 1 else "")
+)
 
-plt.xlabel(labels[0], fontsize=15)
-plt.ylabel(labels[1], fontsize=15)
+plt.xlabel(spec_plot_data["x_label"], fontsize=15)
+plt.ylabel(spec_plot_data["y_label"], fontsize=15)
 
-# plt.title(labels[2], fontsize=16)
+plt.title(spec_plot_data["title"], fontsize=16)
 
 plt.legend(fontsize=14)
 plt.tight_layout()
@@ -432,7 +507,7 @@ spec_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp
 spec_ax.set_yscale("log")
 spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 
-spec_ax.set_ylabel(labels[1], fontsize=15)
+spec_ax.set_ylabel(dataLabels[1], fontsize=15)
 
 spec_ax.legend(fontsize=14)
 
@@ -447,7 +522,7 @@ else:
 
 chi_ax.axhline(0, color="goldenrod", linestyle="dashed")
 
-chi_ax.set_xlabel(labels[0], fontsize=15)
+chi_ax.set_xlabel(chiLabels[0], fontsize=15)
 chi_ax.set_ylabel(
     r"$\frac{\rm{Residual}}{|\rm{Residual}|} \: \times \: \Delta\chi^2$", fontsize=15
 )
@@ -701,7 +776,7 @@ else:
 spec_ax.set_yscale("log")
 spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 
-spec_ax.set_ylabel(labels[1], fontsize=15)
+spec_ax.set_ylabel(dataLabels[1], fontsize=15)
 
 spec_ax.legend(fontsize=14)
 
@@ -1335,6 +1410,8 @@ Updated On: 2026-04-06
 ### Additional Resources
 
 Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=xspec)
+
+[XSPEC plot devices](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node110.html)
 
 ### Acknowledgements
 
