@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-04-06'
+date: '2026-04-07'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -73,6 +73,7 @@ As of {Date}, this notebook takes ~{N}s to run to completion on Fornax using the
 ```{code-cell} python
 import contextlib
 import os
+from time import sleep
 from typing import Optional, Tuple
 from urllib.request import urlretrieve
 
@@ -920,7 +921,18 @@ tags: [hide-output]
 jupyter:
   output_hidden: true
 ---
+xs.Xset.parallel.steppar = NUM_CORES
 xs.Fit.steppar("1 0.0 1.5 25 2 1.5 3.0 25")
+
+# See the warning below
+sleep(5)
+```
+
+```{warning}
+We are aware of an unexpected behaviour in PyXspec v2.1.5 where `steppar()` outputs can
+spill over into the next cell's output, particularly when using Jupyter's 'run all'
+option. Pausing Python's execution for a few seconds after the `steppar` call is
+a crude workaround.
 ```
 
 <span style="color:red">This...</span>
@@ -1278,7 +1290,6 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
 plt.figure(figsize=(7, 4.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
@@ -1413,7 +1424,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-04-06
+Updated On: 2026-04-07
 
 +++
 
