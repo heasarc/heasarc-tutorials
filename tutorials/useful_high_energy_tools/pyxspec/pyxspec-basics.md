@@ -79,6 +79,7 @@ from urllib.request import urlretrieve
 
 import numpy as np
 import xspec as xs
+from astropy.units import Quantity
 from matplotlib import pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from scipy.stats import chi2
@@ -598,11 +599,6 @@ rn_mod_plot_data["chisq_label"]
 ```
 
 ```{code-cell} python
-# TODO REMOVE THIS
-STEPPED_MODEL = True
-```
-
-```{code-cell} python
 ---
 tags: [hide-input]
 jupyter:
@@ -798,10 +794,6 @@ goodness-of-fit distribution is stored in the global fit manager, rather than a 
 model object, it could be overridden.
 ```
 
-```{code-cell} python
-len(goodness_dist)
-```
-
 Approximately 60% of the simulations give a statistic value less than that
 observed, consistent with this being a good fit. We can plot a histogram of the
 $\chi^2$ values from the simulations with the observed value shown by the vertical
@@ -980,7 +972,7 @@ cont_chisq
 ```
 
 ```{note}
-If you wish to calculate $\delta\chi^{2}$ values from percentage confidence levels
+If you wish to calculate $\Delta\chi^{2}$ values from percentage confidence levels
 to pass to an XSPEC `error()` call, **remember to set `df=1`**. When you're using
 `error()` to calculate parameter uncertainties, you are not calculating a _joint_
 confidence region, no matter how many parameters you told `error()` to explore.
@@ -1075,36 +1067,58 @@ plt.show()
 What else can we do with the fit? One thing is to derive the flux of the model. The
 data by themselves only give the instrument-dependent count rate. The model, on the
 other hand, is an estimate of the true spectrum emitted. In PyXspec, the model is
-defined in physical units independent of the instrument. xs.AllModels.calcFlux()
-integrates the current model over the range specified by the user:
+defined in physical units independent of the instrument.
+
+### Calling `calcFlux()`
+
+The `calcFlux()` method of the model manager `AllModels` (`AllModels` is the way of
+operating on all `Model` objects in the same way as `AllData` on all `Spectrum`
+objects) integrates the current model over an energy range specified by the
+user (2.0–10.0 keV in this case):
 
 ```{code-cell} python
 xs.AllModels.calcFlux("2.0 10.0")
 ```
 
-AllModels is the way of operating on all Model objects in the same way as AllData
-on all Spectrum objects.
+From that calculation we can see that the energy flux is
+${\sim}2.2 \times 10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
 
-Here we have chosen the range of 2-10 keV and find that the energy flux is
-$2.2 \times 10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$. Note that calcFlux will integrate only within
-the energy range of the current response matrix. If the model flux outside this
-range is desired - in effect, an extrapolation beyond the data - then the method
-setEnergies should be used. This method defines a set of energies on which the models
-will be calculated. The resulting models are then remapped onto the response energies
-for convolution with the response matrix. For example, if we want to know the flux of
-our model in the ROSAT PSPC band of 0.2-2 keV, we enter:
+
+When calculating the flux in this manner (i.e. not using the method discussed
+in [the next subsection](#using-the-_cflux_-model-component-to-calculate-flux-value-and-uncertainty)),
+we can retrieve the current value from the `flux` attribute of the spectrum object:
+
+```{code-cell} python
+exo_me_spec.flux[0]
+```
+
+Note that `calcFlux()` will integrate only within the energy range of the current
+response matrix. If the model flux outside this energy range is desired - in effect, an
+extrapolation beyond the data - then the `setEnergies()` method should be used.
+
+This method defines a set of energies on which the models will be calculated. The
+resulting models are then remapped onto the response energies for convolution with
+the response matrix.
+
+For example, if we want to know the flux of our model in the ROSAT PSPC band
+of 0.2–2.0 keV, we enter:
 
 ```{code-cell} python
 xs.AllModels.setEnergies("extend", "low,0.2,100")
 xs.AllModels.calcFlux("0.2 2.0")
 ```
 
-The energy flux, at $8.8\times10^{-12} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$ is lower in this band but the
-photon flux is higher. The model energies can be reset to the response energies
-using xs.AllModels.setEnergies("reset"). Calculating the flux is not usually
-enough, we want its uncertainty as well. The best way to do this is to use the
-cflux model. Suppose further that what we really want is the flux without the
-absorption then we redefine the model by
+The energy flux, at ${\sim}8.8\times10^{-12} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$ is
+lower in this band, but the photon flux is higher.
+
+Model energies can be reset to the response energies using `xs.AllModels.setEnergies("reset")`.
+
+### Using the _cflux_ model component to calculate flux value and uncertainty
+
+Calculating the flux is not usually enough, we want its uncertainty as well. The best
+way to do this is to make use of the _cflux_ model. Suppose further that what we
+really want is the **unabsorbed** flux (i.e. what we think the object is emitting
+prior to the wider Universe getting in the way) then we redefine the model by:
 
 ```{code-cell} python
 abs_pl_par_vals = (
@@ -1126,9 +1140,9 @@ abs_pl_cflux_mod = xs.Model(
 )
 ```
 
-The Emin and Emax parameters are set to the energy range over which we want the flux
-to be calculated. We also have to fix the norm of the powerlaw because the
-normalization of the model will now be determined by the lg10Flux parameter.
+The _Emin_ and _Emax_ parameters are set to the energy range over which we want the
+flux to be calculated. We also have to fix the normalization of the powerlaw because the
+normalization of the model will now be determined by the _lg10Flux_ parameter.
 
 ```{code-cell} python
 abs_pl_cflux_mod.powerlaw.norm.frozen = True
@@ -1139,13 +1153,23 @@ xs.Fit.perform()
 xs.Fit.error("4")
 ```
 
-for a 90% confidence range on the 0.2-2 keV unabsorbed flux of
-$3.49\times10^{-11}$ - $8.33\times10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
+for a 90% confidence range (the default when `error()` is called without further
+arguments) on the 0.2–2.0 keV unabsorbed flux of
+${\sim}3.5 — 8.3 \: \times 10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
 
-***<span style="color:red">SHOW HOW TO READ OUT FLUXES INTO PYTHON VARIABLES - DON'T KNOW IF BELOW IS RIGHT</span>***
+More usefully, we can also programmatically retrieve the flux value and
+just-calculated confidence interval. As _cflux_ is just another component model,
+we can access its parameters in the same way we would any other:
 
 ```{code-cell} python
-exo_me_spec.flux[0]
+cur_flux = Quantity(10 ** abs_pl_cflux_mod.cflux.lg10Flux.values[0], "erg cm^-2 s^-1")
+cur_flux
+```
+
+```{code-cell} python
+cur_flux_conf_inter = 10 ** np.array(abs_pl_cflux_mod.cflux.lg10Flux.error[:2])
+cur_flux_conf_inter = Quantity(cur_flux_conf_inter, "erg cm^-2 s^-1")
+cur_flux_conf_inter
 ```
 
 ## 6. Testing alternative spectral models
