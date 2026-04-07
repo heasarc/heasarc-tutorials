@@ -30,27 +30,28 @@ title: PyXspec basics - fitting models to data
 
 By the end of this tutorial, you will be able to:
 
-- Load X-ray spectral data and response files using PyXspec.
-- Use PyXspec and matplotlib to visualize spectra and model fits.
+- Load X-ray a spectrum and response using PyXspec.
 - Define and fit spectral models to X-ray data.
+- Use PyXspec and matplotlib to visualize spectra and model fits.
 - Evaluate goodness-of-fit using statistical methods.
 - Calculate parameter errors and confidence contours.
 
 ## Introduction
 
-Our first example uses very old data which is much simpler than more modern
+This example uses some very old spectral data. It's much simpler than more modern
 observations and so can be used to better illustrate the basics of XSPEC analysis.
 
-The 6 s period X-ray pulsar 1E1048.1-5937 was observed by EXOSAT in June 1985 for 20 ks.
+The data in question is an observation of the 6 s period X-ray pulsar **1E1048.1-5937**
+by EXOSAT, with its Medium-Energy (ME) proportional counter instrument, in June of 1985, for 20 ks.
 
 In this example, we'll conduct a general investigation of the spectrum from the
-Medium Energy (ME) instrument, i.e. follow the same sort of steps as the original
+Medium Energy instrument, i.e. follow the same sort of steps as the original
 investigators ([Seward F. D., Charles P. A., Smale A. P. 1986](https://ui.adsabs.harvard.edu/abs/1986ApJ...305..814S/abstract)).
 
-**<span style="color:red">THIS IS TRUE BUT PERHAPS HIGHLIGHT THAT THE DATA AREN'T ACQUIRED THAT WAY IN THIS IMPLEMENTATION</span>**
-The ME spectrum and corresponding
-response matrix were obtained from the HEASARC and are available
-from https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz
+The ME spectrum and corresponding response matrix were obtained from the HEASARC and
+are available either as part of a large collection of example
+data (https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz) or directly
+from the URLs defined in the [Global Setup: Constants](#constants) section.
 
 ### Inputs
 
@@ -319,7 +320,8 @@ ret = urlretrieve(
 
 ## 1. Loading a spectrum into PyXspec
 
-***<span style="color:red">SPIEL AND ALSO EXPLAIN WHERE THE FILES WERE DOWNLOADED</span>***
+The spectral files we need for this demonstration should have been downloaded
+in the [Global Setup: Configuration](#configuration) section.
 
 We can read our spectrum file into a PyXspec `Spectrum` object, assigning it
 to the `exo_me_spec`variable. **Most** PyXspec operations don't involve
@@ -516,7 +518,7 @@ convolved with the instrumental response.
 
 More generally, XSPEC allows three types of modifying components: convolutions and
 mixing models in addition to the multiplicative type. Since there must be a source, there
-must be least one additive component in a model, but there is no restriction on the
+must be at least one additive component in a model, but there is no restriction on the
 number of modifying components.
 
 Given the quality of our data, as shown by the plot, we'll choose an absorbed
@@ -532,16 +534,19 @@ abs_pl_mod = xs.Model("tbabs(powerlaw)")
 ### Ignoring bad channels
 
 We are not quite ready to fit the data (and obtain a better $\chi^2$), because not
-all of the 125 PHA bins should be included in the fitting: some are below the lower
-discriminator of the instrument and therefore do not contain valid data; some have
-imperfect background subtraction at the margins of the pass band; and some may not
-contain enough counts for $\chi^2$ to be strictly meaningful. To find out which
-channels to discard (ignore in XSPEC terminology), consult mission-specific
-documentation that will include information about discriminator settings, background
-subtraction problems and other issues. For the mature missions in the HEASARC
-archives, this information already has been encoded in the headers of the spectral
-files as a list of bad channels. To remove the bad channels from the spectrum that
-we read into s:
+all of the 125 PHA bins should be included in the fitting:
+- Some are below the lower discriminator of the instrument and therefore do not contain valid data
+- Some have imperfect background subtraction at the margins of the pass band
+- Some may not contain enough counts for $\chi^2$ to be strictly meaningful.
+
+To find out which channels to discard (ignore in XSPEC terminology), consult
+mission-specific documentation that will include information about discriminator
+settings, background subtraction problems, and other issues.
+
+For the mature missions in the HEASARC archives, this information may have already been
+encoded in the headers of the spectral files as a list of bad channels. To remove the
+bad channels from the spectrum that we
+[previously read into `exo_me_spec`](#1-loading-a-spectrum-into-pyxspec), we can use:
 
 ```{code-cell} python
 xs.AllData.ignore("bad")
@@ -556,14 +561,25 @@ perform operations on all current spectra.
 ### Renormalizing the model to our data
 
 The current statistic is $\chi^2$ and is huge for the initial, default values - mostly
-because the power law normalization is two orders of magnitude too large. This is
-easily fixed using the renorm method.
+because the power law normalization is two orders of magnitude too large. This
+particular problem is easily fixed using the renorm method:
 
 ```{code-cell} python
 xs.Fit.renorm()
 ```
 
-***<span style="color:red">DON'T THINK THE 'L' OF 'LDATA' HAS ANY EFFECT WHEN PLOTTING THIS WAY</span>***
+To show off our renormalized, but not yet fit, model, we'll use PyXspec and
+matplotlib together to produce a two-panel figure. The top panel will show
+the spectral data and the current state of the model, and the bottom panel will
+show the **signed** $\Delta\chi^2$ (each $\Delta\chi^2$ point has the sign of
+the corresponding residual point).
+
+Just like in [Section 2](#plotting-a-spectrum), we can use the PyXspec `Plot` manager
+object to calculate the information necessary to plot our spectrum, model, and signed
+$\Delta\chi^2$.
+
+Giving two options for the Plot command generates a plot with vertically stacked
+windows. Up to six options can be given to the Plot command at a time.
 
 ```{code-cell} python
 xs.Plot("data chi")
@@ -668,15 +684,15 @@ chi_ax.set_ylabel(
 plt.show()
 ```
 
-Giving two options for the Plot command generates a plot with vertically stacked
-windows. Up to six options can be given to the Plot command at a time. Forty channels
-were rejected because they were flagged as bad - but do we need to ignore any more?
 
 ### Ignoring channels based on energy
 
+Forty channels were rejected in [a previous section](#ignoring-bad-channels) because
+they were flagged as **bad** - but do we need to ignore any more?
+
 This figure shows the result of plotting the data and the model (in the upper window)
 and the contributions to $\chi^2$ (in the lower window). We see that above about 15 keV
-the signal-to-noise becomes small. We also see, comparing with the earlier figure, which bad
+the signal-to-noise becomes small. We also see, when comparing with the earlier figure, which bad
 channels were ignored. Although visual inspection is not the most rigorous method for
 deciding which channels to ignore (more on this subject later), it's good enough for
 now, and will at least prevent us from getting grossly misleading results from the
@@ -716,18 +732,18 @@ xs.Fit.nIterations = 50
 xs.Fit.perform()
 ```
 
-There is a fair amount of information here so we will unpack it a bit at a time. One
-line is written out after each fit iteration. The columns labeled Chi-Squared and
-Parameters are obvious. The other two provide additional information on fit
+There is a fair amount of information here, so we will unpack it a bit at a time. One
+line is written out after each fit iteration. The columns labeled 'Chi-Squared' and
+'Parameters' are obvious. The other two provide additional information on fit
 convergence. At each step in the fit a numerical derivative of the statistic with
-respect to the parameters is calculated. We call the vector of these derivatives beta.
+respect to the parameters is calculated. We call the vector of these derivatives 'beta'.
 
-At the best-fit the norm of beta should be zero so we write out |beta| divided by the
+At the best-fit the norm of beta should be zero, so we write out |beta| divided by the
 number of parameters as a check. The actual default convergence criterion is when the
-fit statistic does not change significantly between iterations so it is possible for
+fit statistic does not change significantly between iterations, so it is possible for
 the fit to end while |beta| is still significantly different from zero. The |beta|/N
 column helps us spot this case. The Lvl column also indicates how the fit is
-converging and should generally decrease. Note that on the first iteration only the
+converging and should generally decrease. Note that for the first iteration only the
 powerlaw norm is varied. While not necessary this simple model, for more complicated
 models only varying the norms on the first iteration helps the fit proper get started
 in a reasonable region of parameter space.
@@ -739,9 +755,9 @@ derivatives, the better determined the parameter (think of the case of a parabol
 in 1-D). The Covariance Matrix is the inverse of the matrix of second derivatives. The
 Variances and Principal Axes section is based on an eigenvector decomposition of the
 matrix of second derivatives and indicates which parameters are correlated. We can see
-in this case that the first eigenvector depends almost entirely on the powerlaw norm
+in this case that the first eigenvector depends almost entirely on the powerlaw normalization,
 while the other two are combinations of the nH and powerlaw PhoIndex. This tells us
-that the norm is independent but the other two parameters are correlated.
+that the normalization is independent, but the other two parameters are correlated.
 
 The next section shows the best-fit parameters and error estimates. The latter are
 just the square roots of the diagonal elements of the covariance matrix so implicitly
