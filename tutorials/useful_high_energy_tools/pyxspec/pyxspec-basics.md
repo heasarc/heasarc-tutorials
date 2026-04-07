@@ -522,16 +522,6 @@ power law. To set it up define a `Model` object called `model_one`.
 model_one = xs.Model("tbabs(powerlaw)")
 ```
 
-### Renormalizing the model to our data
-
-The current statistic is $\chi^2$ and is huge for the initial, default values - mostly
-because the power law normalization is two orders of magnitude too large. This is
-easily fixed using the renorm method.
-
-```{code-cell} python
-xs.Fit.renorm()
-```
-
 ### Ignoring bad channels
 
 We are not quite ready to fit the data (and obtain a better $\chi^2$), because not
@@ -554,6 +544,16 @@ xs.AllData.ignore("bad")
 PyXspec doesn't allow us to ignore "bad" channels for individual spectra
 but does it for all loaded spectra. AllData is a special object which allows us to
 perform operations on all current spectra.
+```
+
+### Renormalizing the model to our data
+
+The current statistic is $\chi^2$ and is huge for the initial, default values - mostly
+because the power law normalization is two orders of magnitude too large. This is
+easily fixed using the renorm method.
+
+```{code-cell} python
+xs.Fit.renorm()
 ```
 
 ***<span style="color:red">DON'T THINK THE 'L' OF 'LDATA' HAS ANY EFFECT WHEN PLOTTING THIS WAY</span>***
