@@ -388,13 +388,13 @@ mixing models in addition to the multiplicative type. Since there must be a sour
 must be least one additive component in a model, but there is no restriction on the
 number of modifying components.
 
-Given the quality of our data, as shown by the plot, we'll choose an absorbed power
-law. To set it up define a `Model` object called `model_one`.
+Given the quality of our data, as shown by the plot, we'll choose an absorbed
+power law. To set it up define a `Model` object called `model_one`.
 
 ### Setting up a model object
 
 ```{code-cell} python
-model_one = xs.Model("phabs(powerlaw)")
+model_one = xs.Model("tbabs(powerlaw)")
 ```
 
 ### Renormalizing the model to our data
@@ -454,6 +454,14 @@ rn_mod_plot_data["energy_steps"] = np.append(
 )
 ```
 
+```{attention}
+We get a warning that the fit is not current because no fit has been performed
+yet (renormalizing doesn't count, the reason for which will become obvious when you
+see the figure).
+```
+
+<span style="color=red">KEEP AND EXPLAIN WHY WE'RE NOT USING IT?</span>
+
 ```{code-cell} python
 rn_mod_plot_data["chisq_label"]
 ```
@@ -496,6 +504,7 @@ spec_ax.stairs(
     color="firebrick",
     alpha=0.8,
     label="Renormalized model",
+    linewidth=1.4,
 )
 
 spec_ax.set_xscale("log")
@@ -519,6 +528,7 @@ chi_ax.stairs(
     baseline=None,
     fill=False,
     color="navy",
+    linewidth=1.4,
 )
 
 chi_ax.axhline(0, color="goldenrod", linestyle="dashed")
@@ -530,8 +540,6 @@ chi_ax.set_ylabel(
 
 plt.show()
 ```
-
-We get a warning that the fit is not current because no fit has been performed yet.
 
 Giving two options for the Plot command generates a plot with vertically stacked
 windows. Up to six options can be given to the Plot command at a time. Forty channels
@@ -620,7 +628,7 @@ use the command for this case (where it is not necessary):
 
 ### Checking the goodness of fit
 
-***TALK ABOUT SIGNIFICANT PERFORMANCE INCREASE WITH PARALLELISATION ON A 12 CORE MAC - FROM 3.8s TO 22ms***
+***TALK ABOUT SIGNIFICANT PERFORMANCE INCREASE WITH PARALLELISATION ON A 12 CORE MAC - FROM 3.8s TO 22ms*** - ***<span style="color:red">SUSPICIOUS?</span>***
 
 ```{code-cell} python
 xs.Xset.parallel.goodness = NUM_CORES
@@ -877,7 +885,7 @@ plt.contour(x, y, z, levelvals, cmap="rainbow")
 plt.ylabel(labels[0], fontsize=15)
 plt.xlabel(labels[1], fontsize=15)
 plt.errorbar(
-    model_one.phabs.nH.values[0], model_one.powerlaw.PhoIndex.values[0], fmt="+"
+    model_one.tbabs.nH.values[0], model_one.powerlaw.PhoIndex.values[0], fmt="+"
 )
 legendstring = (
     f"min={statval:{10}.{4}}, levels={levelvals[0]:{10}.{4}},"
@@ -961,7 +969,7 @@ which, although not evident in the data nor required for a good fit, are neverth
 important to constrain. First, let's try an absorbed black body:
 
 ```{code-cell} python
-model_one = xs.Model("phabs*bb")
+model_one = xs.Model("tbabs*bb")
 xs.Fit.perform()
 ```
 
@@ -1085,7 +1093,7 @@ that the continuum is obviously not a black body.
 Let's try thermal bremsstrahlung next:
 
 ```{code-cell} python
-model_one = xs.Model("phabs*br")
+model_one = xs.Model("tbabs*br")
 xs.Fit.perform()
 ```
 
@@ -1103,9 +1111,9 @@ Galactic value and refit the power law. Although we won't get a good fit, the sh
 of the residuals might give us a clue to what is missing.
 
 ```{code-cell} python
-model_one = xs.Model("phabs*po")
-model_one.phabs.nH = 4.0
-model_one.phabs.nH.frozen = True
+model_one = xs.Model("tbabs*po")
+model_one.tbabs.nH = 4.0
+model_one.tbabs.nH.frozen = True
 xs.Fit.perform()
 ```
 
@@ -1225,9 +1233,9 @@ place since we are looking for a small change to the model.
 ```{code-cell} python
 parVals = model_one(1).values[0], model_one(2).values[0], model_one(3).values[0]
 model_one = xs.Model(
-    "phabs(pow+bb)", setPars=(parVals[0], parVals[1], parVals[2], "2.0,0.0", 1.0e-5)
+    "tbabs(pow+bb)", setPars=(parVals[0], parVals[1], parVals[2], "2.0,0.0", 1.0e-5)
 )
-model_one.phabs.nH.frozen = True
+model_one.tbabs.nH.frozen = True
 ```
 
 ```{code-cell} python
@@ -1368,7 +1376,7 @@ and add a gaussian emission line of fixed energy and width then fit to get:
 
 ```{code-cell} python
 model_one = xs.Model(
-    "phabs*(po + ga)", setPars=(1.0, 1.0, 1.0, "6.4,0.0", "0.1,0.0", 1.0e-4)
+    "tbabs*(po + ga)", setPars=(1.0, 1.0, 1.0, "6.4,0.0", "0.1,0.0", 1.0e-4)
 )
 xs.Fit.perform()
 ```
