@@ -102,6 +102,7 @@ def plot_fit_residual_spec(
     y_lims: Optional[Tuple[float, float]] = None,
     inst_name: Optional[str] = None,
     stepped_model: bool = True,
+    mod_expr: Optional[str] = None,
 ):
 
     # Some basic checks to make sure the plot data is in the right format
@@ -138,6 +139,9 @@ def plot_fit_residual_spec(
     #  instrument name
     sp_label = "Spectral data" if inst_name is None else f"{inst_name} data"
 
+    # Same as above, but for the model label
+    mod_label = "Fitted model" if mod_expr is None else f"Fitted model ({mod_expr})"
+
     fig, ax_arr = plt.subplots(
         nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True
     )
@@ -167,7 +171,7 @@ def plot_fit_residual_spec(
             fill=False,
             color=mod_color,
             alpha=0.8,
-            label="Fitted model",
+            label=mod_label,
             linewidth=1.4,
         )
     else:
@@ -876,32 +880,9 @@ fit_pl_plot_data["energy_step"] = np.append(
 ```
 
 ```{code-cell} python
-xs.Plot("data resid")
-energies = xs.Plot.x()
-edeltas = xs.Plot.xErr()
-rates = xs.Plot.y(1, 1)
-errors = xs.Plot.yErr(1, 1)
-foldedmodel = xs.Plot.model()
-model_data = xs.Plot.model()
-
-dataLabels = xs.Plot.labels(1)
-residLabels = xs.Plot.labels(2)
-# note that for matplotlib step plots we need an x-axis array which includes the
-#  start and end value for each
-# bin and the y-axis has to be the same size with an extra value added equal to
-#  the value of the last bin
-nE = len(energies)
-stepenergies = list()
-for i in range(nE):
-    stepenergies.append(energies[i] - edeltas[i])
-stepenergies.append(energies[-1] + edeltas[-1])
-foldedmodel.append(foldedmodel[-1])
-resid = xs.Plot.y(1, 2)
-residerr = xs.Plot.yErr(1, 2)
-```
-
-```{code-cell} python
-plot_fit_residual_spec(fit_pl_plot_data, inst_name="EXOSAT-ME")
+plot_fit_residual_spec(
+    fit_pl_plot_data, inst_name="EXOSAT-ME", mod_expr=abs_pl_mod.expression
+)
 ```
 
 ## 4. Error analysis
@@ -981,7 +962,7 @@ plt.contour(x, y, z, levelvals, cmap="rainbow")
 plt.ylabel(labels[0], fontsize=15)
 plt.xlabel(labels[1], fontsize=15)
 plt.errorbar(
-    abs_pl_mod.tbabs.nH.values[0], abs_pl_mod.powerlaw.PhoIndex.values[0], fmt="+"
+    abs_pl_mod.TBabs.nH.values[0], abs_pl_mod.powerlaw.PhoIndex.values[0], fmt="+"
 )
 legendstring = (
     f"min={statval:{10}.{4}}, levels={levelvals[0]:{10}.{4}},"
@@ -1033,9 +1014,22 @@ cflux model. Suppose further that what we really want is the flux without the
 absorption then we redefine the model by
 
 ```{code-cell} python
-parVals = abs_pl_mod(1).values[0], abs_pl_mod(2).values[0], abs_pl_mod(3).values[0]
-model_one = xs.Model(
-    "pha*cflux(pow)", setPars=(parVals[0], 0.2, 2.0, -10.3, parVals[1], parVals[2])
+abs_pl_par_vals = (
+    abs_pl_mod(1).values[0],
+    abs_pl_mod(2).values[0],
+    abs_pl_mod(3).values[0],
+)
+
+abs_pl_cflux_mod = xs.Model(
+    "tbabs*cflux(powerlaw)",
+    setPars=(
+        abs_pl_par_vals[0],
+        0.2,
+        2.0,
+        -10.3,
+        abs_pl_par_vals[1],
+        abs_pl_par_vals[2],
+    ),
 )
 ```
 
@@ -1044,7 +1038,7 @@ to be calculated. We also have to fix the norm of the powerlaw because the
 normalization of the model will now be determined by the lg10Flux parameter.
 
 ```{code-cell} python
-model_one.powerlaw.norm.frozen = True
+abs_pl_cflux_mod.powerlaw.norm.frozen = True
 ```
 
 ```{code-cell} python
@@ -1054,6 +1048,12 @@ xs.Fit.error("4")
 
 for a 90% confidence range on the 0.2-2 keV unabsorbed flux of
 $3.49\times10^{-11}$ - $8.33\times10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
+
+***<span style="color:red">SHOW HOW TO READ OUT FLUXES INTO PYTHON VARIABLES - DON'T KNOW IF BELOW IS RIGHT</span>***
+
+```{code-cell} python
+exo_me_spec.flux[0]
+```
 
 ## 6. Testing alternative spectral models
 
@@ -1065,7 +1065,7 @@ which, although not evident in the data nor required for a good fit, are neverth
 important to constrain. First, let's try an absorbed black body:
 
 ```{code-cell} python
-model_one = xs.Model("tbabs*bb")
+abs_bb_mod = xs.Model("tbabs*bb")
 xs.Fit.perform()
 ```
 
@@ -1076,111 +1076,32 @@ the model is not appropriate. One thing to check in this case is that the model
 component has any contribution within the energy range being calculated.
 
 The black body fit is obviously not a good one. Not only is $\chi^2$ large, but the
-best-fitting N$_{\rm H}$ is indeterminate. Inspection of the residuals confirms
+best-fitting N$_{\rm H}$ is isndeterminate. Inspection of the residuals confirms
 this: the pronounced wave-like shape is indicative of a bad choice of overall continuum.
 
 ```{code-cell} python
 xs.Plot("data resid")
-energies = xs.Plot.x()
-edeltas = xs.Plot.xErr()
-rates = xs.Plot.y(1, 1)
-errors = xs.Plot.yErr(1, 1)
-foldedmodel = xs.Plot.model()
-dataLabels = xs.Plot.labels(1)
-residLabels = xs.Plot.labels(2)
-# note that for matplotlib step plots we need an x-axis array
-#  which includes the start and end value for each
-# bin and the y-axis has to be the same size with an extra value
-#  added equal to the value of the last bin
-nE = len(energies)
-stepenergies = list()
-for i in range(nE):
-    stepenergies.append(energies[i] - edeltas[i])
-stepenergies.append(energies[-1] + edeltas[-1])
-foldedmodel.append(foldedmodel[-1])
-resid = xs.Plot.y(1, 2)
-residerr = xs.Plot.yErr(1, 2)
+
+fit_bb_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
+
+fit_bb_plot_data["energy_step"] = np.append(
+    fit_bb_plot_data["energy"] - fit_bb_plot_data["energy_delta"],
+    fit_bb_plot_data["energy"][-1] + fit_bb_plot_data["energy_delta"][-1],
+)
 ```
 
 ```{code-cell} python
----
-tags: [hide-input]
-jupyter:
-  source_hidden: true
----
-plt.subplot(211)
-plt.xscale("log")
-plt.yscale("log")
-plt.ylabel(dataLabels[1])
-plt.title(dataLabels[2])
-plt.errorbar(energies, rates, xerr=edeltas, yerr=errors, fmt=".")
-plt.step(stepenergies, foldedmodel, where="post")
-plt.subplot(212)
-plt.xscale("log")
-plt.xlabel(residLabels[0])
-plt.ylabel(residLabels[1])
-plt.errorbar(energies, resid, xerr=edeltas, yerr=residerr, fmt=".")
-plt.hlines(0.0, stepenergies[0], stepenergies[-1], linestyles="dashed")
-```
-
-```{code-cell} python
-fig, ax_arr = plt.subplots(nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True)
-# Shrink the vertical gap between the panels to zero
-fig.subplots_adjust(hspace=0)
-
-spec_ax = ax_arr[0]
-spec_ax.minorticks_on()
-spec_ax.tick_params(which="both", direction="in", top=True, right=True)
-
-spec_ax.errorbar(
-    energies,
-    rates,
-    xerr=edeltas,
-    yerr=errors,
-    fmt="+",
-    capsize=1.5,
-    label="EXOSAT-ME data",
-    color="navy",
+plot_fit_residual_spec(
+    fit_bb_plot_data, inst_name="EXOSAT-ME", mod_expr=abs_bb_mod.expression
 )
-
-if not STEPPED_MODEL:
-    spec_ax.plot(
-        energies, model_data, color="firebrick", label="Fitted model", alpha=0.8
-    )
-else:
-    spec_ax.step(
-        stepenergies,
-        foldedmodel,
-        where="post",
-        color="firebrick",
-        label="Fitted model",
-        alpha=0.8,
-    )
-
-spec_ax.set_yscale("log")
-spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-
-spec_ax.set_ylabel(labels[1], fontsize=15)
-
-spec_ax.legend(fontsize=14)
-
-res_ax = ax_arr[1]
-res_ax.minorticks_on()
-res_ax.tick_params(which="both", direction="in", top=True, right=True)
-
-res_ax.errorbar(
-    energies, resid, xerr=edeltas, yerr=residerr, fmt="+", capsize=1.5, color="navy"
-)
-res_ax.axhline(0, color="goldenrod", linestyle="dashed")
-
-res_ax.set_xlabel(residLabels[0], fontsize=15)
-res_ax.set_ylabel(residLabels[1], fontsize=15)
-
-res_ax.set_xscale("log")
-res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-
-plt.show()
 ```
 
 Note the wave-like shape of the residuals which indicates how poor the fit is, i.e.
@@ -1189,8 +1110,33 @@ that the continuum is obviously not a black body.
 Let's try thermal bremsstrahlung next:
 
 ```{code-cell} python
-model_one = xs.Model("tbabs*br")
+abs_br_mod = xs.Model("tbabs*br")
 xs.Fit.perform()
+```
+
+```{code-cell} python
+xs.Plot("data resid")
+
+fit_br_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
+
+fit_br_plot_data["energy_step"] = np.append(
+    fit_br_plot_data["energy"] - fit_br_plot_data["energy_delta"],
+    fit_br_plot_data["energy"][-1] + fit_br_plot_data["energy_delta"][-1],
+)
+```
+
+```{code-cell} python
+plot_fit_residual_spec(
+    fit_br_plot_data, inst_name="EXOSAT-ME", mod_expr=abs_br_mod.expression
+)
 ```
 
 Bremsstrahlung is a better fit than the black body - and is as good as the power
@@ -1207,114 +1153,39 @@ Galactic value and refit the power law. Although we won't get a good fit, the sh
 of the residuals might give us a clue to what is missing.
 
 ```{code-cell} python
-model_one = xs.Model("tbabs*po")
-model_one.tbabs.nH = 4.0
-model_one.tbabs.nH.frozen = True
+abs_pl_frz_nh_mod = xs.Model("tbabs*powerlaw")
+
+abs_pl_frz_nh_mod.TBabs.nH = 4.0
+abs_pl_frz_nh_mod.TBabs.nH.frozen = True
+
 xs.Fit.perform()
 ```
 
 ```{code-cell} python
-xs.Plot()
-energies = xs.Plot.x()
-edeltas = xs.Plot.xErr()
-rates = xs.Plot.y(1, 1)
-errors = xs.Plot.yErr(1, 1)
-foldedmodel = xs.Plot.model()
-dataLabels = xs.Plot.labels(1)
-residLabels = xs.Plot.labels(2)
-# note that for matplotlib step plots we need an x-axis array which
-#  includes the start and end value for each
-# bin and the y-axis has to be the same size with an extra value
-#  added equal to the value of the last bin
-nE = len(energies)
-stepenergies = list()
-for i in range(nE):
-    stepenergies.append(energies[i] - edeltas[i])
-stepenergies.append(energies[-1] + edeltas[-1])
-foldedmodel.append(foldedmodel[-1])
-resid = xs.Plot.y(1, 2)
-residerr = xs.Plot.yErr(1, 2)
+xs.Plot("data resid")
+
+fit_pl_frz_nh_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
+
+fit_pl_frz_nh_plot_data["energy_step"] = np.append(
+    fit_pl_frz_nh_plot_data["energy"] - fit_pl_frz_nh_plot_data["energy_delta"],
+    fit_pl_frz_nh_plot_data["energy"][-1] + fit_pl_frz_nh_plot_data["energy_delta"][-1],
+)
 ```
 
 ```{code-cell} python
----
-tags: [hide-input]
-jupyter:
-  source_hidden: true
----
-plt.subplot(211)
-plt.xscale("log")
-plt.yscale("log")
-plt.ylabel(dataLabels[1])
-plt.title(dataLabels[2])
-plt.errorbar(energies, rates, xerr=edeltas, yerr=errors, fmt=".")
-plt.step(stepenergies, foldedmodel, where="post")
-plt.subplot(212)
-plt.xscale("log")
-plt.xlabel(residLabels[0])
-plt.ylabel(residLabels[1])
-plt.errorbar(energies, resid, xerr=edeltas, yerr=residerr, fmt=".")
-plt.hlines(0.0, stepenergies[0], stepenergies[-1], linestyles="dashed")
-```
-
-```{code-cell} python
-fig, ax_arr = plt.subplots(nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True)
-# Shrink the vertical gap between the panels to zero
-fig.subplots_adjust(hspace=0)
-
-spec_ax = ax_arr[0]
-spec_ax.minorticks_on()
-spec_ax.tick_params(which="both", direction="in", top=True, right=True)
-
-spec_ax.errorbar(
-    energies,
-    rates,
-    xerr=edeltas,
-    yerr=errors,
-    fmt="+",
-    capsize=1.5,
-    label="EXOSAT-ME data",
-    color="navy",
+plot_fit_residual_spec(
+    fit_pl_frz_nh_plot_data,
+    inst_name="EXOSAT-ME",
+    mod_expr=abs_pl_frz_nh_mod.expression,
 )
-
-if not STEPPED_MODEL:
-    spec_ax.plot(
-        energies, model_data, color="firebrick", label="Fitted model", alpha=0.8
-    )
-else:
-    spec_ax.step(
-        stepenergies,
-        foldedmodel,
-        where="post",
-        color="firebrick",
-        label="Fitted model",
-        alpha=0.8,
-    )
-
-spec_ax.set_yscale("log")
-spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-
-spec_ax.set_ylabel(labels[1], fontsize=15)
-
-spec_ax.legend(fontsize=14)
-
-res_ax = ax_arr[1]
-res_ax.minorticks_on()
-res_ax.tick_params(which="both", direction="in", top=True, right=True)
-
-res_ax.errorbar(
-    energies, resid, xerr=edeltas, yerr=residerr, fmt="+", capsize=1.5, color="navy"
-)
-res_ax.axhline(0, color="goldenrod", linestyle="dashed")
-
-res_ax.set_xlabel(residLabels[0], fontsize=15)
-res_ax.set_ylabel(residLabels[1], fontsize=15)
-
-res_ax.set_xscale("log")
-res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-
-plt.show()
 ```
 
 There appears to be a surplus of softer photons, perhaps indicating a second continuum
@@ -1327,11 +1198,23 @@ normalization of the component to a small number to start the fit off in a sensi
 place since we are looking for a small change to the model.
 
 ```{code-cell} python
-parVals = model_one(1).values[0], model_one(2).values[0], model_one(3).values[0]
-model_one = xs.Model(
-    "tbabs(pow+bb)", setPars=(parVals[0], parVals[1], parVals[2], "2.0,0.0", 1.0e-5)
+abs_pl_frz_nh_par_vals = (
+    abs_pl_frz_nh_mod(1).values[0],
+    abs_pl_frz_nh_mod(2).values[0],
+    abs_pl_frz_nh_mod(3).values[0],
 )
-model_one.tbabs.nH.frozen = True
+
+abs_pl_bb_frz_nh_mod = xs.Model(
+    "tbabs(powerlaw+bb)",
+    setPars=(
+        abs_pl_frz_nh_par_vals[0],
+        abs_pl_frz_nh_par_vals[1],
+        abs_pl_frz_nh_par_vals[2],
+        "2.0,0.0",
+        1.0e-5,
+    ),
+)
+abs_pl_bb_frz_nh_mod.TBabs.nH.frozen = True
 ```
 
 ```{code-cell} python
