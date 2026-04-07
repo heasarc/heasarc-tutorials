@@ -935,10 +935,20 @@ option. Pausing Python's execution for a few seconds after the `steppar` call is
 a crude workaround.
 ```
 
-<span style="color:red">This...</span>
+The default $\Delta\chi^2$ contour levels are:
+1. 2.30 [$1\sigma$; 68.3%]
+2. 4.61 [90%]
+3. 9.21 [99%]
+
+with the stated confidence levels valid for a **two degree of freedom** (i.e.
+parameter) contour plot.
+
+We can
 
 ```{code-cell} python
-sigma_delta_chi_sq = chi2.ppf([0.6826, 0.9554, 0.9973], df=2).round(2)
+cont_conf_perc = {r"$1\sigma$": 0.6826, r"$2\sigma$": 0.9554, r"$3\sigma$": 0.9973}
+
+sigma_delta_chi_sq = chi2.ppf(list(cont_conf_perc.values()), df=2).round(2)
 sigma_delta_chi_sq
 ```
 
@@ -953,19 +963,23 @@ The results can be understood more clearly by plotting confidence contours:
 
 ```{code-cell} python
 xs.Plot.addCommand("image off")
-xs.Plot("contour")
+
+xs.Plot(
+    f"contour ,,{len(sigma_delta_chi_sq)},{','.join(sigma_delta_chi_sq.astype(str))}"
+)
 xs.Plot.delCommand(1)
-labels = xs.Plot.labels()
-x = xs.Plot.x()
-y = xs.Plot.y()
-z = xs.Plot.z()
-levelvals = xs.Plot.contourLevels()
-statval = xs.Fit.statistic
+
+steppar_plot_data = {
+    "nh": xs.Plot.x(),
+    "powerlaw_ind": xs.Plot.y(),
+    "contour_height": xs.Plot.z(),
+    "contour_level": xs.Plot.contourLevels(),
+    "x_label": xs.Plot.labels()[0],
+    "y_label": xs.Plot.labels()[1],
+}
+
+cur_fit_stat = xs.Fit.statistic
 ```
-
-***<span style="color: red">TALK ABOUT WHY INDEX CUTS OFF AT ZERO</span>***
-
-***<span style="color: red">ALTERNATIVELY LET STEPPAR GO LOWER THAN ZERO FOR PHO IND, SHOW THAT IT GOES STRAIGHT, AND EXPLAIN WHY THERE IS NO CONSTRAINING POWER ON NH WITH A NEGATIVE PHO INDEX</span>***
 
 ```{code-cell} python
 ---
@@ -977,25 +991,47 @@ plt.figure(figsize=(5.5, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=True)
 
-plt.contour(x, y, z, levelvals, cmap="rainbow")
+cont_obj = plt.contour(
+    steppar_plot_data["nh"],
+    steppar_plot_data["powerlaw_ind"],
+    steppar_plot_data["contour_height"],
+    steppar_plot_data["contour_level"],
+    cmap="rainbow",
+)
+plt.clabel(cont_obj)
 
-plt.ylabel(labels[0], fontsize=15)
-plt.xlabel(labels[1], fontsize=15)
-plt.errorbar(
-    abs_pl_mod.TBabs.nH.values[0], abs_pl_mod.powerlaw.PhoIndex.values[0], fmt="+"
+plt.xlabel(steppar_plot_data["x_label"], fontsize=15)
+plt.ylabel(steppar_plot_data["y_label"], fontsize=15)
+
+fit_point_obj = plt.plot(
+    abs_pl_mod.TBabs.nH.values[0],
+    abs_pl_mod.powerlaw.PhoIndex.values[0],
+    "+",
+    color="black",
+    markersize=15,
+    markeredgewidth=0.8,
 )
-legendstring = (
-    f"min={statval:{10}.{4}}, levels={levelvals[0]:{10}.{4}},"
-    f"{levelvals[1]:{10}.{4}},{levelvals[2]:{10}.{4}}"
+
+plt.axvline(
+    abs_pl_mod.TBabs.nH.values[0], color="black", linestyle="solid", linewidth=1.2
 )
-plt.legend([legendstring], loc="best", fontsize=14)
+plt.axhline(
+    abs_pl_mod.powerlaw.PhoIndex.values[0],
+    color="black",
+    linestyle="solid",
+    linewidth=1.2,
+)
+
+cont_handles = cont_obj.legend_elements()[0]
+
+leg_labels = ["Fit result"] + list(cont_conf_perc.keys())
+leg_handles = fit_point_obj + cont_handles
+
+plt.legend(leg_handles, leg_labels, fontsize=14, loc=4)
 
 plt.tight_layout()
 plt.show()
 ```
-
-***<span style="color: red">I THINK THIS SHOWS 1sigma, 90%, and 3sigma</span>***
-~~The contours shown are for one, two, and three sigma. The dot marks the best-fit position.~~
 
 ## 5. Flux calculation
 
