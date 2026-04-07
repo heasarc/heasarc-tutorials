@@ -915,11 +915,19 @@ correlated. To investigate this further we can use the xs.Fit.steppar() to run a
 grid over these two parameters:
 
 ```{code-cell} python
+---
+tags: [hide-output]
+jupyter:
+  output_hidden: true
+---
 xs.Fit.steppar("1 0.0 1.5 25 2 1.5 3.0 25")
 ```
 
+<span style="color:red">This...</span>
+
 ```{code-cell} python
-chi2.ppf([0.6826, 0.9554, 0.9973], df=2).round(2)
+sigma_delta_chi_sq = chi2.ppf([0.6826, 0.9554, 0.9973], df=2).round(2)
+sigma_delta_chi_sq
 ```
 
 ***DEFAULT CHI-SQ LEVELS (FOR TWO-PARAMETER CONTOURS) ARE:***
@@ -1242,16 +1250,20 @@ does of course improve the fit, but the power law index becomes even steeper. Lo
 at this odd model with the command
 
 ```{code-cell} python
-xs.Plot("data resid")
+xs.Plot.add = True
+```
+
+```{code-cell} python
+xs.Plot("data")
 
 fit_pl_bb_plot_data = {
-    "energy": np.array(xs.Plot.x(plotWindow=1)),
-    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
-    "rate": np.array(xs.Plot.y(plotWindow=1)),
-    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
-    "model": np.array(xs.Plot.model(plotWindow=1)),
-    "residual": np.array(xs.Plot.y(plotWindow=2)),
-    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+    "energy": np.array(xs.Plot.x()),
+    "energy_delta": np.array(xs.Plot.xErr()),
+    "rate": np.array(xs.Plot.y()),
+    "rate_err": np.array(xs.Plot.yErr()),
+    "total_model": np.array(xs.Plot.model()),
+    "powerlaw_model": np.array(xs.Plot.addComp(1)),
+    "bbody_model": np.array(xs.Plot.addComp(2)),
 }
 
 fit_pl_bb_plot_data["energy_step"] = np.append(
@@ -1261,116 +1273,92 @@ fit_pl_bb_plot_data["energy_step"] = np.append(
 ```
 
 ```{code-cell} python
-xs.Plot("model")
-energies = xs.Plot.x()
-edeltas = xs.Plot.xErr()
-
-modelvals = xs.Plot.model()
-modelcomp1 = xs.Plot.addComp(1)
-modelcomp2 = xs.Plot.addComp(2)
-
-summ_mod_values = xs.Plot.model()
-comp1_mod_values = xs.Plot.addComp(1)
-comp2_mod_values = xs.Plot.addComp(2)
-
-labels = xs.Plot.labels()
-nE = len(energies)
-stepenergies = list()
-for i in range(nE):
-    stepenergies.append(energies[i] - edeltas[i])
-stepenergies.append(energies[-1] + edeltas[-1])
-modelvals.append(modelvals[-1])
-modelcomp1.append(modelcomp1[-1])
-modelcomp2.append(modelcomp2[-1])
-```
-
-```{code-cell} python
 ---
 tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
+
 plt.figure(figsize=(7, 4.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
-tot_leg_lab = "Total model"
-comp_one_leg_lab = "Power law component"
-comp_two_leg_lab = "Blackbody component"
+cur_sp_color = "navy"
+cur_tot_mod_color = "firebrick"
+cur_pl_mod_color = "darkorchid"
+cur_bb_mod_color = "peru"
 
-tot_color = "darkorchid"
-comp_one_color = "tab:blue"
-comp_two_color = "peru"
+cur_tot_mod_ls = "solid"
+cur_pl_mod_ls = "dashed"
+cur_bb_mod_ls = (0, (3, 1, 1, 1))
 
-tot_ls = "solid"
-comp_one_ls = "dashed"
-comp_two_ls = (0, (3, 1, 1, 1))
+plt.errorbar(
+    fit_pl_bb_plot_data["energy"],
+    fit_pl_bb_plot_data["rate"],
+    xerr=fit_pl_bb_plot_data["energy_delta"],
+    yerr=fit_pl_bb_plot_data["rate_err"],
+    fmt="+",
+    capsize=1.5,
+    label="EXOSAT-ME data",
+    color=cur_sp_color,
+)
 
-if not STEPPED_MODEL:
-    plt.plot(
-        energies,
-        summ_mod_values,
-        color=tot_color,
-        label=tot_leg_lab,
-        alpha=0.8,
-        linestyle=tot_ls,
-    )
-    plt.plot(
-        energies,
-        comp1_mod_values,
-        color=comp_one_color,
-        label=comp_one_leg_lab,
-        alpha=0.8,
-        linestyle=comp_one_ls,
-    )
-    plt.plot(
-        energies,
-        comp2_mod_values,
-        color=comp_two_color,
-        label=comp_two_leg_lab,
-        alpha=0.8,
-        linestyle=comp_two_ls,
-    )
-else:
-    plt.step(
-        stepenergies,
-        modelvals,
-        color=tot_color,
-        label=tot_leg_lab,
-        where="post",
-        linestyle=tot_ls,
-    )
-    plt.step(
-        stepenergies,
-        modelcomp1,
-        color=comp_one_color,
-        where="post",
-        label=comp_one_leg_lab,
-        linestyle=comp_one_ls,
-    )
-    plt.step(
-        stepenergies,
-        modelcomp2,
-        color=comp_two_color,
-        where="post",
-        label=comp_two_leg_lab,
-        linestyle=comp_two_ls,
-    )
+# Total model
+plt.stairs(
+    fit_pl_bb_plot_data["total_model"],
+    fit_pl_bb_plot_data["energy_step"],
+    baseline=None,
+    fill=False,
+    color=cur_tot_mod_color,
+    alpha=0.8,
+    label="Total model",
+    linewidth=1.4,
+    linestyle=cur_tot_mod_ls,
+)
 
-plt.ylim(3.0e-6)
-plt.xlim(1.25, 15)
+# Power law model component
+plt.stairs(
+    fit_pl_bb_plot_data["powerlaw_model"],
+    fit_pl_bb_plot_data["energy_step"],
+    baseline=None,
+    fill=False,
+    color=cur_pl_mod_color,
+    alpha=0.8,
+    label="Power law component",
+    linewidth=1.4,
+    linestyle=cur_pl_mod_ls,
+)
+
+# Bremsstrahlung model component
+plt.stairs(
+    fit_pl_bb_plot_data["bbody_model"],
+    fit_pl_bb_plot_data["energy_step"],
+    baseline=None,
+    fill=False,
+    color=cur_bb_mod_color,
+    alpha=0.8,
+    label="Blackbody component",
+    linewidth=1.4,
+    linestyle=cur_bb_mod_ls,
+)
 
 plt.xscale("log")
 plt.yscale("log")
 
 plt.gca().xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 plt.gca().xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
 plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 
-plt.xlabel(labels[0], fontsize=15)
-plt.ylabel(labels[1], fontsize=15)
+
+plt.xlabel("Energy [keV]", fontsize=15)
+
+plt.ylabel(
+    r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+)
 
 plt.legend(fontsize=14)
+
 plt.tight_layout()
 plt.show()
 ```
