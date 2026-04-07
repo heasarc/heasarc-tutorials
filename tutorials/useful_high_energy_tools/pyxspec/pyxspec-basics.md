@@ -1057,12 +1057,16 @@ exo_me_spec.flux[0]
 
 ## 6. Testing alternative spectral models
 
-The fit, as we've remarked, is good, and the parameters are constrained. But unless
+The fit, as we've remarked, is good and the parameters are constrained, but unless
 the purpose of our investigation is merely to measure a photon index, it's a good idea
 to check whether alternative models can fit the data just as well. We also should
 derive upper limits to components such as iron emission lines and additional continua,
 which, although not evident in the data nor required for a good fit, are nevertheless
-important to constrain. First, let's try an absorbed black body:
+important to constrain.
+
+## Absorbed blackbody model
+
+First, let's try an absorbed blackbody:
 
 ```{code-cell} python
 abs_bb_mod = xs.Model("tbabs*bb")
@@ -1107,6 +1111,8 @@ plot_fit_residual_spec(
 Note the wave-like shape of the residuals which indicates how poor the fit is, i.e.
 that the continuum is obviously not a black body.
 
+### Absorbed thermal bremsstrahlung model
+
 Let's try thermal bremsstrahlung next:
 
 ```{code-cell} python
@@ -1140,7 +1146,11 @@ plot_fit_residual_spec(
 ```
 
 Bremsstrahlung is a better fit than the black body - and is as good as the power
-law - although it shares the low absorption column. With two good fits, the power
+law - although it shares the low absorption column.
+
+### Absorbed power law model [frozen nH]
+
+With two good fits, the power
 law and the bremsstrahlung, it's time to scrutinize their parameters in more detail.
 
 From the EXOSAT database on HEASARC, we know that the target in question,
@@ -1189,7 +1199,11 @@ plot_fit_residual_spec(
 ```
 
 There appears to be a surplus of softer photons, perhaps indicating a second continuum
-component. To investigate this possibility, we can add a component to our model. Here,
+component.
+
+### Absorbed power law + blackbody model [frozen nH]
+
+To investigate this possibility, we can add a component to our model. Here,
 we'll add a black body component. Note that we freeze the temperature parameter of
 the black body to 2 keV (the canonical temperature for nuclear burning on the surface
 of a neutron star in a low-mass X-ray binary) using an XSPEC trick that setting the
@@ -1214,6 +1228,7 @@ abs_pl_bb_frz_nh_mod = xs.Model(
         1.0e-5,
     ),
 )
+
 abs_pl_bb_frz_nh_mod.TBabs.nH.frozen = True
 ```
 
@@ -1225,6 +1240,25 @@ The fit is better than the one with just a power law and the fixed Galactic
 column, but it is still not good. Thawing the black body temperature and fitting
 does of course improve the fit, but the power law index becomes even steeper. Looking
 at this odd model with the command
+
+```{code-cell} python
+xs.Plot("data resid")
+
+fit_pl_bb_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
+
+fit_pl_bb_plot_data["energy_step"] = np.append(
+    fit_pl_bb_plot_data["energy"] - fit_pl_bb_plot_data["energy_delta"],
+    fit_pl_bb_plot_data["energy"][-1] + fit_pl_bb_plot_data["energy_delta"][-1],
+)
+```
 
 ```{code-cell} python
 xs.Plot("model")
@@ -1354,8 +1388,8 @@ to the presence of a fluorescent iron emission line. We return to our original m
 and add a gaussian emission line of fixed energy and width then fit to get:
 
 ```{code-cell} python
-model_one = xs.Model(
-    "tbabs*(po + ga)", setPars=(1.0, 1.0, 1.0, "6.4,0.0", "0.1,0.0", 1.0e-4)
+abs_pl_gauss_em_mod = xs.Model(
+    "tbabs*(powerlaw + gaussian)", setPars=(1.0, 1.0, 1.0, "6.4,0.0", "0.1,0.0", 1.0e-4)
 )
 xs.Fit.perform()
 ```
@@ -1376,14 +1410,14 @@ the error search stopped when the minimum value hit zero, the "hard" lower limit
 the parameter.
 
 ```{code-cell} python
-model_one.gaussian.norm = model_one.gaussian.norm.error[1]
+abs_pl_gauss_em_mod.gaussian.norm = abs_pl_gauss_em_mod.gaussian.norm.error[1]
 ```
 
 ```{code-cell} python
 xs.AllModels.eqwidth("3")
 ```
 
-The eqwidth method takes the component number as its argument.
+The `eqwidth()` method takes the component number as its argument.
 
 ## About this notebook
 
