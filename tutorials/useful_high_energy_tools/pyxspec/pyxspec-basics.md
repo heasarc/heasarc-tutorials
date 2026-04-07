@@ -514,12 +514,13 @@ must be least one additive component in a model, but there is no restriction on 
 number of modifying components.
 
 Given the quality of our data, as shown by the plot, we'll choose an absorbed
-power law. To set it up define a `Model` object called `model_one`.
+power law. To set it up, we define an instance of the PyXspec `Model` class
+and assign it to a variable - `abs_pl_mod`.
 
 ### Setting up a model object
 
 ```{code-cell} python
-model_one = xs.Model("tbabs(powerlaw)")
+abs_pl_mod = xs.Model("tbabs(powerlaw)")
 ```
 
 ### Ignoring bad channels
@@ -980,7 +981,7 @@ plt.contour(x, y, z, levelvals, cmap="rainbow")
 plt.ylabel(labels[0], fontsize=15)
 plt.xlabel(labels[1], fontsize=15)
 plt.errorbar(
-    model_one.tbabs.nH.values[0], model_one.powerlaw.PhoIndex.values[0], fmt="+"
+    abs_pl_mod.tbabs.nH.values[0], abs_pl_mod.powerlaw.PhoIndex.values[0], fmt="+"
 )
 legendstring = (
     f"min={statval:{10}.{4}}, levels={levelvals[0]:{10}.{4}},"
@@ -1032,7 +1033,7 @@ cflux model. Suppose further that what we really want is the flux without the
 absorption then we redefine the model by
 
 ```{code-cell} python
-parVals = model_one(1).values[0], model_one(2).values[0], model_one(3).values[0]
+parVals = abs_pl_mod(1).values[0], abs_pl_mod(2).values[0], abs_pl_mod(3).values[0]
 model_one = xs.Model(
     "pha*cflux(pow)", setPars=(parVals[0], 0.2, 2.0, -10.3, parVals[1], parVals[2])
 )
