@@ -1069,7 +1069,7 @@ data by themselves only give the instrument-dependent count rate. The model, on 
 other hand, is an estimate of the true spectrum emitted. In PyXspec, the model is
 defined in physical units independent of the instrument.
 
-### Calling `calcFlux()`
+### Calling the `calcFlux()` method
 
 The `calcFlux()` method of the model manager `AllModels` (`AllModels` is the way of
 operating on all `Model` objects in the same way as `AllData` on all `Spectrum`
@@ -1083,9 +1083,8 @@ xs.AllModels.calcFlux("2.0 10.0")
 From that calculation we can see that the energy flux is
 ${\sim}2.2 \times 10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
 
-
 When calculating the flux in this manner (i.e. not using the method discussed
-in [the next subsection](#using-the-_cflux_-model-component-to-calculate-flux-value-and-uncertainty)),
+in [the next subsection](#using-the-cflux-model-component-to-calculate-flux-value-and-uncertainty)),
 we can retrieve the current value from the `flux` attribute of the spectrum object:
 
 ```{code-cell} python
@@ -1148,16 +1147,19 @@ normalization of the model will now be determined by the _lg10Flux_ parameter.
 abs_pl_cflux_mod.powerlaw.norm.frozen = True
 ```
 
+Now we run the model fit and calculate the uncertainty on parameter
+**four** (_lg10Flux_):
+
 ```{code-cell} python
 xs.Fit.perform()
 xs.Fit.error("4")
 ```
 
-for a 90% confidence range (the default when `error()` is called without further
-arguments) on the 0.2–2.0 keV unabsorbed flux of
-${\sim}3.5 — 8.3 \: \times 10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
+This process tells us that the 90% confidence range (the default when
+`error("<par ID>")` is called without further arguments) of the 0.2–2.0 keV unabsorbed
+flux is ${\sim}3.5 — 8.3 \: \times 10^{-11} \: \rm{erg}\:\rm{cm}^{-2}\:s^{-1}$.
 
-More usefully, we can also programmatically retrieve the flux value and
+Usefully, we can also programmatically retrieve the flux value and
 just-calculated confidence interval. As _cflux_ is just another component model,
 we can access its parameters in the same way we would any other:
 
@@ -1174,12 +1176,15 @@ cur_flux_conf_inter
 
 ## 6. Testing alternative spectral models
 
-The fit, as we've remarked, is good and the parameters are constrained, but unless
-the purpose of our investigation is merely to measure a photon index, it's a good idea
-to check whether alternative models can fit the data just as well. We also should
-derive upper limits to components such as iron emission lines and additional continua,
-which, although not evident in the data nor required for a good fit, are nevertheless
-important to constrain.
+The absorbed power law fit, as we've remarked, is good, and the parameters are
+constrained. However, unless the purpose of our investigation is merely to measure
+a photon index, it's a good idea to check whether alternative models can fit the data
+just as well.
+
+We also should derive upper limits on components such as iron emission lines and
+additional continua, which, although not evident in the data nor required for a good
+fit, are nevertheless important to constrain - though we'll get to that
+in [Section 7](#7-deriving-upper-limits-on-model-parameters).
 
 ## Absorbed blackbody model
 
@@ -1190,15 +1195,22 @@ abs_bb_mod = xs.Model("tbabs*bb")
 xs.Fit.perform()
 ```
 
-Note that the fit has written out a warning about the first parameter and its
-estimated error is written as -1. This indicates that the fit is unable to constrain
-the parameter and it should be considered indeterminate. This usually indicates that
-the model is not appropriate. One thing to check in this case is that the model
-component has any contribution within the energy range being calculated.
+Note that the fit process has displayed a warning about the first parameter and its
+estimated **error is -1**.
+
+Unsurprisingly, this is a bad sign! It indicates that the fit is unable to constrain
+the parameter, and it should be considered indeterminate. We can usually interpret this
+as meaning that the model is not appropriate.
+
+One thing to check in this case is that the model component has any contribution
+within the energy range being calculated.
 
 The black body fit is obviously not a good one. Not only is $\chi^2$ large, but the
-best-fitting N$_{\rm H}$ is isndeterminate. Inspection of the residuals confirms
-this: the pronounced wave-like shape is indicative of a bad choice of overall continuum.
+best-fitting N$_{\rm H}$ is indeterminate.
+
+When diagnosing a seemingly poor model fit, it is often useful to take a look at
+the residuals (like we [already did for the absorbed power law model](#examining-fit-residuals)). To
+that end, we once again ask PyXspec to provide the necessary plotting data:
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -1218,6 +1230,10 @@ fit_bb_plot_data["energy_step"] = np.append(
     fit_bb_plot_data["energy"][-1] + fit_bb_plot_data["energy_delta"][-1],
 )
 ```
+
+Now we plot the data, and inspection of the residuals provides another confirmation
+of our belief that the absorbed blackbody model is not a good choice. The
+pronounced wave-like shape is indicative of a bad choice of overall continuum:
 
 ```{code-cell} python
 plot_fit_residual_spec(
