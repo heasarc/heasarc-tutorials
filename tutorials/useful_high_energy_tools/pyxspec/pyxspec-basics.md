@@ -188,7 +188,7 @@ ret = urlretrieve(
 
 ## 1. Loading a spectrum into PyXspec
 
-***SPIEL AND ALSO EXPLAIN WHERE THE FILES WERE DOWNLOADED***
+***<span style="color:red">SPIEL AND ALSO EXPLAIN WHERE THE FILES WERE DOWNLOADED</span>***
 
 We can read our spectrum file into a PyXspec `Spectrum` object, assigning it
 to the `exo_me_spec`variable. **Most** PyXspec operations don't involve
@@ -303,10 +303,10 @@ it would use if it were making the plot itself, we store those too:
 xs.Plot("data")
 
 spec_plot_data = {
-    "energy": xs.Plot.x(),
-    "energy_delta": xs.Plot.xErr(),
-    "rate": xs.Plot.y(),
-    "rate_err": xs.Plot.yErr(),
+    "energy": np.array(xs.Plot.x()),
+    "energy_delta": np.array(xs.Plot.xErr()),
+    "rate": np.array(xs.Plot.y()),
+    "rate_err": np.array(xs.Plot.yErr()),
     "x_label": xs.Plot.labels()[0],
     "y_label": xs.Plot.labels()[1],
     "title": xs.Plot.labels()[2],
@@ -425,39 +425,41 @@ we read into s:
 xs.AllData.ignore("bad")
 ```
 
-Note that PyXspec doesn't allow us to ignore "bad" channels for individual spectra
-but does it for all loaded spectra. AllData is a special object which allows
-operations on all current spectra. Now plot again:
+```{note}
+PyXspec doesn't allow us to ignore "bad" channels for individual spectra
+but does it for all loaded spectra. AllData is a special object which allows us to
+perform operations on all current spectra.
+```
+
+***<span style="color:red">DON'T THINK THE 'L' OF 'LDATA' HAS ANY EFFECT WHEN PLOTTING THIS WAY</span>***
 
 ```{code-cell} python
-xs.Plot("ldata chi")
-energies = xs.Plot.x()
-edeltas = xs.Plot.xErr()
-rates = xs.Plot.y(1, 1)
-errors = xs.Plot.yErr(1, 1)
-foldedmodel = xs.Plot.model()
-model_data = xs.Plot.model()
+xs.Plot("data chi")
 
-dataLabels = xs.Plot.labels(1)
-chiLabels = xs.Plot.labels(2)
-# note that for matplotlib step plots we need an x-axis array which includes
-#  the start and end value for each
-# bin and the y-axis has to be the same size with an extra value added equal
-#  to the value of the last bin
-nE = len(energies)
-stepenergies = list()
-for i in range(nE):
-    stepenergies.append(energies[i] - edeltas[i])
-stepenergies.append(energies[-1] + edeltas[-1])
-foldedmodel.append(foldedmodel[-1])
-chi = xs.Plot.y(1, 2)
+rn_mod_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "signed_chisq": np.array(xs.Plot.y(plotWindow=2)),
+    "x_label": xs.Plot.labels(plotWindow=1)[0],
+    "y_label": xs.Plot.labels(plotWindow=1)[1],
+    "chisq_label": xs.Plot.labels(plotWindow=2)[1],
+}
 
-chi_plot_data = xs.Plot.y(1, 2)
-
-chi.append(chi[-1])
+rn_mod_plot_data["energy_steps"] = np.append(
+    rn_mod_plot_data["energy"] - rn_mod_plot_data["energy_delta"],
+    rn_mod_plot_data["energy"][-1] + rn_mod_plot_data["energy_delta"][-1],
+)
 ```
 
 ```{code-cell} python
+rn_mod_plot_data["chisq_label"]
+```
+
+```{code-cell} python
+# TODO REMOVE THIS
 STEPPED_MODEL = True
 ```
 
@@ -476,29 +478,25 @@ spec_ax.minorticks_on()
 spec_ax.tick_params(which="both", direction="in", top=True, right=True)
 
 spec_ax.errorbar(
-    energies,
-    rates,
-    xerr=edeltas,
-    yerr=errors,
+    rn_mod_plot_data["energy"],
+    rn_mod_plot_data["rate"],
+    xerr=rn_mod_plot_data["energy_delta"],
+    yerr=rn_mod_plot_data["rate_err"],
     fmt="+",
     capsize=1.5,
     label="EXOSAT-ME data",
     color="navy",
 )
 
-if not STEPPED_MODEL:
-    spec_ax.plot(
-        energies, model_data, color="firebrick", label="Fitted model", alpha=0.8
-    )
-else:
-    spec_ax.step(
-        stepenergies,
-        foldedmodel,
-        where="post",
-        color="firebrick",
-        label="Fitted model",
-        alpha=0.8,
-    )
+spec_ax.stairs(
+    rn_mod_plot_data["model"],
+    rn_mod_plot_data["energy_steps"],
+    baseline=None,
+    fill=False,
+    color="firebrick",
+    alpha=0.8,
+    label="Renormalized model",
+)
 
 spec_ax.set_xscale("log")
 spec_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
@@ -507,7 +505,7 @@ spec_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp
 spec_ax.set_yscale("log")
 spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 
-spec_ax.set_ylabel(dataLabels[1], fontsize=15)
+spec_ax.set_ylabel(rn_mod_plot_data["y_label"], fontsize=15)
 
 spec_ax.legend(fontsize=14)
 
@@ -515,14 +513,17 @@ chi_ax = ax_arr[1]
 chi_ax.minorticks_on()
 chi_ax.tick_params(which="both", direction="in", top=True, right=True)
 
-if not STEPPED_MODEL:
-    chi_ax.plot(energies, chi_plot_data, color="navy")
-else:
-    chi_ax.step(stepenergies, chi, where="post", color="navy")
+chi_ax.stairs(
+    rn_mod_plot_data["signed_chisq"],
+    rn_mod_plot_data["energy_steps"],
+    baseline=None,
+    fill=False,
+    color="navy",
+)
 
 chi_ax.axhline(0, color="goldenrod", linestyle="dashed")
 
-chi_ax.set_xlabel(chiLabels[0], fontsize=15)
+chi_ax.set_xlabel(rn_mod_plot_data["x_label"], fontsize=15)
 chi_ax.set_ylabel(
     r"$\frac{\rm{Residual}}{|\rm{Residual}|} \: \times \: \Delta\chi^2$", fontsize=15
 )
@@ -1412,6 +1413,8 @@ Updated On: 2026-04-06
 Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=xspec)
 
 [XSPEC plot devices](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node110.html)
+
+[XSPEC plot types](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node113.html)
 
 ### Acknowledgements
 
