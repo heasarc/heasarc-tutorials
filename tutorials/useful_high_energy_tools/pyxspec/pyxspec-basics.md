@@ -676,7 +676,7 @@ were rejected because they were flagged as bad - but do we need to ignore any mo
 
 This figure shows the result of plotting the data and the model (in the upper window)
 and the contributions to $\chi^2$ (in the lower window). We see that above about 15 keV
-the S/N becomes small. We also see, comparing with the earlier figure, which bad
+the signal-to-noise becomes small. We also see, comparing with the earlier figure, which bad
 channels were ignored. Although visual inspection is not the most rigorous method for
 deciding which channels to ignore (more on this subject later), it's good enough for
 now, and will at least prevent us from getting grossly misleading results from the
@@ -1186,7 +1186,7 @@ additional continua, which, although not evident in the data nor required for a 
 fit, are nevertheless important to constrain - though we'll get to that
 in [Section 7](#7-deriving-upper-limits-on-model-parameters).
 
-## Absorbed blackbody model
+### Absorbed blackbody model
 
 First, let's try an absorbed blackbody:
 
@@ -1233,25 +1233,32 @@ fit_bb_plot_data["energy_step"] = np.append(
 
 Now we plot the data, and inspection of the residuals provides another confirmation
 of our belief that the absorbed blackbody model is not a good choice. The
-pronounced wave-like shape is indicative of a bad choice of overall continuum:
+pronounced wave-like shape is **indicative of a bad choice of overall continuum**:
 
 ```{code-cell} python
 plot_fit_residual_spec(
-    fit_bb_plot_data, inst_name="EXOSAT-ME", mod_expr=abs_bb_mod.expression
+    fit_bb_plot_data,
+    inst_name="EXOSAT-ME",
+    mod_expr=abs_bb_mod.expression,
+    sp_color="darkgreen",
+    res_color="darkgreen",
+    mod_color="darkgrey",
 )
 ```
 
-Note the wave-like shape of the residuals which indicates how poor the fit is, i.e.
-that the continuum is obviously not a black body.
-
 ### Absorbed thermal bremsstrahlung model
 
-Let's try thermal bremsstrahlung next:
+Let's try thermal bremsstrahlung next, following the same procedure we did for the
+absorbed blackbody in [the last subsection](#absorbed-blackbody-model).
+
+First, we define a model instance and run a fit:
 
 ```{code-cell} python
-abs_br_mod = xs.Model("tbabs*br")
+abs_br_mod = xs.Model("tbabs*brems")
 xs.Fit.perform()
 ```
+
+Now we extract the data necessary to plot the fitted spectrum and residuals:
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -1272,28 +1279,37 @@ fit_br_plot_data["energy_step"] = np.append(
 )
 ```
 
+Finally, we make a visualization:
+
 ```{code-cell} python
 plot_fit_residual_spec(
     fit_br_plot_data, inst_name="EXOSAT-ME", mod_expr=abs_br_mod.expression
 )
 ```
 
-Bremsstrahlung is a better fit than the black body - and is as good as the power
-law - although it shares the low absorption column.
+It is clear that the Bremsstrahlung model is a better fit than the blackbody - and is
+as good as the power law - although it shares the low absorption column.
 
 ### Absorbed power law model [frozen nH]
 
-With two good fits, the power
-law and the bremsstrahlung, it's time to scrutinize their parameters in more detail.
+With two models that appear to be good fits to the spectrum (absorbed power law and
+absorbed Bremsstrahlung), it's time to scrutinize their parameters in more detail.
 
 From the EXOSAT database on HEASARC, we know that the target in question,
-1E1048.1-5937, is almost on the plane of the Galaxy. In fact, the database also
-provides the value of the Galactic N$_{\rm H}$ based on 21-cm radio observations. At
-$4\times10^{22}$ cm$^{-2}$, it is higher than the 90 percent-confidence upper limit
-from the power-law fit. Perhaps, then, the power-law fit is not so good after all. What
+**1E1048.1-5937**, is almost on the plane of the Galaxy. In fact, the database also
+provides values for the Galactic N$_{\rm H}$ based on 21-cm radio observations.
+
+One estimate (though admittedly not the one you will get from the current version
+of `nhtool`) puts it at $4\times10^{22}$ cm$^{-2}$, which is higher than the 90%
+confidence upper limit from the power-law fit.
+
+Perhaps, then, the power-law fit is not so good after all. What
 we can do is fix (freeze in XSPEC terminology) the value of N$_{\rm H}$ at the
 Galactic value and refit the power law. Although we won't get a good fit, the shape
 of the residuals might give us a clue to what is missing.
+
+We follow a familiar procedure, though here we make sure to freeze the value of
+the Hydrogen column density at the estimate we're using:
 
 ```{code-cell} python
 abs_pl_frz_nh_mod = xs.Model("tbabs*powerlaw")
@@ -1303,6 +1319,8 @@ abs_pl_frz_nh_mod.TBabs.nH.frozen = True
 
 xs.Fit.perform()
 ```
+
+Then fetching the information necessary to plot a fitted spectrum and residuals:
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -1323,6 +1341,8 @@ fit_pl_frz_nh_plot_data["energy_step"] = np.append(
 )
 ```
 
+Finally, making a visualization:
+
 ```{code-cell} python
 plot_fit_residual_spec(
     fit_pl_frz_nh_plot_data,
@@ -1331,18 +1351,22 @@ plot_fit_residual_spec(
 )
 ```
 
-There appears to be a surplus of softer photons, perhaps indicating a second continuum
-component.
+In this version of the absorbed power-law fit, there appears to be an observational
+surplus of softer photons, perhaps indicating a second continuum component needs to
+be modeled.
 
 ### Absorbed power law + blackbody model [frozen nH]
 
-To investigate this possibility, we can add a component to our model. Here,
-we'll add a black body component. Note that we freeze the temperature parameter of
-the black body to 2 keV (the canonical temperature for nuclear burning on the surface
-of a neutron star in a low-mass X-ray binary) using an XSPEC trick that setting the
-delta for a parameter to zero switches its freeze/thaw status. We also set the
-normalization of the component to a small number to start the fit off in a sensible
-place since we are looking for a small change to the model.
+To investigate this possibility, we can combine what we have with another additive
+model component; a _bbody_.
+
+Note that we freeze the temperature parameter of the black body to 2 keV (the canonical
+temperature for nuclear burning on the surface of a neutron star in a low-mass
+X-ray binary) using an XSPEC trick that setting the delta for a parameter to zero
+switches its freeze/thaw status.
+
+We also set the normalization of the component to a small number to start the fit
+off in a sensible place since we are looking for a small change to the model.
 
 ```{code-cell} python
 abs_pl_frz_nh_par_vals = (
@@ -1365,18 +1389,33 @@ abs_pl_bb_frz_nh_mod = xs.Model(
 abs_pl_bb_frz_nh_mod.TBabs.nH.frozen = True
 ```
 
+We run the fit of this new two-continua-component model:
+
 ```{code-cell} python
 xs.Fit.perform()
 ```
 
 The fit is better than the one with just a power law and the fixed Galactic
 column, but it is still not good. Thawing the black body temperature and fitting
-does of course improve the fit, but the power law index becomes even steeper. Looking
-at this odd model with the command
+does of course improve the fit, but the power law index becomes even steeper.
+
+Now we have two separate additive models contributing to the continuum fit, we might
+want to examine their individual contributions to this odd model.
+
+To do that, we're going to make yet another version of a fitted spectrum
+visualization. This time though we're going to drop the residual panel, and
+retrieve/plot both the overall model, and the curves of the individual model components.
+
+For this to work, we have to tell PyXspec to calculate the plotting information for
+individual additive model components as well as the usual total model:
 
 ```{code-cell} python
 xs.Plot.add = True
 ```
+
+Now we fetch much the same data as we have previously, but this time also use
+the `Plot.addComp(<additive model ID>)` method to retrieve the plotting information
+for the individual model components:
 
 ```{code-cell} python
 xs.Plot("data")
@@ -1396,6 +1435,8 @@ fit_pl_bb_plot_data["energy_step"] = np.append(
     fit_pl_bb_plot_data["energy"][-1] + fit_pl_bb_plot_data["energy_delta"][-1],
 )
 ```
+
+Now we can visualize the spectrum and the two-additive-model fit:
 
 ```{code-cell} python
 ---
@@ -1495,7 +1536,7 @@ don't warrant it (the original investigators published only the power law fit).
 
 ## 7. Deriving upper limits on model parameters
 
-There is, however, one final, useful thing to do with the data: derive an upper limit
+There is one final useful thing to do with the data - derive an upper limit
 to the presence of a fluorescent iron emission line. We return to our original model
 and add a gaussian emission line of fixed energy and width then fit to get:
 
@@ -1525,11 +1566,11 @@ the parameter.
 abs_pl_gauss_em_mod.gaussian.norm = abs_pl_gauss_em_mod.gaussian.norm.error[1]
 ```
 
+The `eqwidth()` method takes the component number as its argument:
+
 ```{code-cell} python
 xs.AllModels.eqwidth("3")
 ```
-
-The `eqwidth()` method takes the component number as its argument.
 
 ## About this notebook
 
