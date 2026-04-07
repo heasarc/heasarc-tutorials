@@ -897,6 +897,8 @@ obtained using the xs.Fit.error() command. We want to run error on all three par
 which is an intrinsically parallel operation so we can use PyXspec's support for
 multiple cores and run the error estimations in parallel:
 
+### XSPEC's `error()` method
+
 ```{code-cell} python
 xs.Xset.parallel.error = NUM_CORES
 xs.Fit.error("1-3")
@@ -912,7 +914,11 @@ extra time can be considerable. The error for each parameter is determined allow
 the other two parameters to vary freely. If the parameters are uncorrelated this is
 all the information we need to know. However, we have an indication from the
 covariance matrix at the end of the fit that the column and photon index are
-correlated. To investigate this further we can use the xs.Fit.steppar() to run a
+correlated.
+
+### Running `steppar` to explore parameter correlations
+
+To investigate this further we can use the xs.Fit.steppar() to run a
 grid over these two parameters:
 
 ```{code-cell} python
@@ -935,7 +941,12 @@ option. Pausing Python's execution for a few seconds after the `steppar` call is
 a crude workaround.
 ```
 
-The default $\Delta\chi^2$ contour levels are:
+### Examining `steppar` output as a contour plot
+
+The result of our `steppar()` run can be understood more clearly by plotting
+confidence contours.
+
+XSPEC's (and thus PyXspec's) default $\Delta\chi^2$ contour levels are:
 1. 2.30 [$1\sigma$; 68.3%]
 2. 4.61 [90%]
 3. 9.21 [99%]
@@ -943,30 +954,51 @@ The default $\Delta\chi^2$ contour levels are:
 with the stated confidence levels valid for a **two degree of freedom** (i.e.
 parameter) contour plot.
 
-We can
+The contour command we're about to use does expect the input to be a set
+of $\Delta\chi^2$ values, so if we, for instance, want to specify which contours
+are calculated as confidence levels in fraction/percentage form, we need to perform
+a quick calculation.
+
+To infer a confidence level (or inversely a p-value) from a $\chi^2$-distribution, we
+have to inverse the cumulative distribution function (CDF). To make this a
+little simpler, we can just use SciPy's implementation of the $\chi^2$-distribution,
+and call the `ppf(...)` method (standing for "percent point function").
+
+As we want to plot these contours and label them with their confidence levels, we
+store our chosen percentiles in a dictionary, with keys ready to be used in the
+legend of the figure we're about to construct.
+
+The `df=2` argument specifies that we want to calculate the $\Delta\chi^2$ values
+for a **two degree of freedom** distribution - this is because we're calculating a
+confidence region for both parameters we investigated with `steppar()`:
 
 ```{code-cell} python
 cont_conf_perc = {r"$1\sigma$": 0.6826, r"$2\sigma$": 0.9554, r"$3\sigma$": 0.9973}
 
-sigma_delta_chi_sq = chi2.ppf(list(cont_conf_perc.values()), df=2).round(2)
-sigma_delta_chi_sq
+cont_chisq = chi2.ppf(list(cont_conf_perc.values()), df=2).round(2)
+cont_chisq
 ```
 
-***DEFAULT CHI-SQ LEVELS (FOR TWO-PARAMETER CONTOURS) ARE:***
-- 2.30 [1sig]
-- 4.61 [90%]
-- 9.21 [99%]
+```{note}
+If you wish to calculate $\delta\chi^{2}$ values from percentage confidence levels
+to pass to an XSPEC `error()` call, **remember to set `df=1`**. When you're using
+`error()` to calculate parameter uncertainties, you are not calculating a _joint_
+confidence region, no matter how many parameters you told `error()` to explore.
+```
 
-***PER THE PLOT CONTOUR DOC PAGE, AND THE SRC***
+Now we use PyXspec's `Plot` manager to prepare all the information required to
+create a contour plot using matplotlib. By default XSPEC will include a
+probability density image as a backdrop to its contour plots, but as we don't
+require that for our purposes, we turn it off.
 
-The results can be understood more clearly by plotting confidence contours:
+The command we pass to `Plot` specifies the number of contours, and their levels;
+as we don't manually specify a minimum fit statistic (the first argument), the
+command begins with ",,".
 
 ```{code-cell} python
 xs.Plot.addCommand("image off")
 
-xs.Plot(
-    f"contour ,,{len(sigma_delta_chi_sq)},{','.join(sigma_delta_chi_sq.astype(str))}"
-)
+xs.Plot(f"contour ,,{len(cont_chisq)},{','.join(cont_chisq.astype(str))}")
 xs.Plot.delCommand(1)
 
 steppar_plot_data = {
@@ -978,8 +1010,12 @@ steppar_plot_data = {
     "y_label": xs.Plot.labels()[1],
 }
 
+# Store the current fit statistic value
 cur_fit_stat = xs.Fit.statistic
 ```
+
+Now that PyXspec has done all the hard work for us, we can use the information we
+just retrieved to make a nice contour plot:
 
 ```{code-cell} python
 ---
@@ -987,6 +1023,7 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
+#
 plt.figure(figsize=(5.5, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=True)
