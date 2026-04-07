@@ -73,6 +73,7 @@ As of {Date}, this notebook takes ~{N}s to run to completion on Fornax using the
 ```{code-cell} python
 import contextlib
 import os
+from typing import Optional, Tuple
 from urllib.request import urlretrieve
 
 import numpy as np
@@ -92,7 +93,131 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
+def plot_fit_residual_spec(
+    plot_data: dict,
+    sp_color: str = "navy",
+    mod_color: str = "firebrick",
+    res_color: str = "navy",
+    x_lims: Optional[Tuple[float, float]] = None,
+    y_lims: Optional[Tuple[float, float]] = None,
+    inst_name: Optional[str] = None,
+    stepped_model: bool = True,
+):
 
+    # Some basic checks to make sure the plot data is in the right format
+    # These are what we need
+    req_ents = [
+        "energy",
+        "energy_delta",
+        "rate",
+        "rate_err",
+        "model",
+        "residual",
+        "residual_err",
+        "energy_step",
+    ]
+    # Raise an error before we get started plotting if any entries are missing
+    if any([en not in plot_data for en in req_ents]):
+        raise KeyError(
+            f"Plot data must contain the following keys: f{', '.join(req_ents)}"
+        )
+
+    # Basic validity check on any axis limits
+    if x_lims is not None and (len(x_lims) != 2 or np.diff(x_lims) < 0):
+        raise ValueError(
+            "Passed x-axis limits must be a two-element tuple, with the first "
+            "entry less than the second."
+        )
+    if y_lims is not None and (len(y_lims) != 2 or np.diff(y_lims) < 0):
+        raise ValueError(
+            "Passed y-axis limits must be a two-element tuple, with the first "
+            "entry less than the second."
+        )
+
+    # Determine what the label for spectrum data points should be based on input
+    #  instrument name
+    sp_label = "Spectral data" if inst_name is None else f"{inst_name} data"
+
+    fig, ax_arr = plt.subplots(
+        nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True
+    )
+    # Shrink the vertical gap between the panels to zero
+    fig.subplots_adjust(hspace=0)
+
+    spec_ax = ax_arr[0]
+    spec_ax.minorticks_on()
+    spec_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+    spec_ax.errorbar(
+        plot_data["energy"],
+        plot_data["rate"],
+        xerr=plot_data["energy_delta"],
+        yerr=plot_data["rate_err"],
+        fmt="+",
+        capsize=1.5,
+        label=sp_label,
+        color=sp_color,
+    )
+
+    if stepped_model:
+        spec_ax.stairs(
+            plot_data["model"],
+            plot_data["energy_step"],
+            baseline=None,
+            fill=False,
+            color=mod_color,
+            alpha=0.8,
+            label="Fitted model",
+            linewidth=1.4,
+        )
+    else:
+        spec_ax.plot(
+            plot_data["energy"],
+            plot_data["model"],
+            color=mod_color,
+            label="Fitted model",
+            alpha=0.8,
+        )
+
+    if x_lims is not None:
+        spec_ax.set_xlim(x_lims)
+    if y_lims is not None:
+        spec_ax.set_ylim(y_lims)
+
+    spec_ax.set_yscale("log")
+    spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+    spec_ax.set_ylabel(
+        r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+    )
+
+    spec_ax.legend(fontsize=14)
+
+    res_ax = ax_arr[1]
+    res_ax.minorticks_on()
+    res_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+    res_ax.errorbar(
+        plot_data["energy"],
+        plot_data["residual"],
+        xerr=plot_data["energy_delta"],
+        yerr=plot_data["residual_err"],
+        fmt="+",
+        capsize=1.5,
+        color=res_color,
+    )
+    res_ax.axhline(0, color="goldenrod", linestyle="dashed")
+
+    res_ax.set_xlabel("Energy [keV]", fontsize=15)
+    res_ax.set_ylabel(
+        r"Residuals [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+    )
+
+    res_ax.set_xscale("log")
+    res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+    res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+    plt.show()
 ```
 
 ### Constants
@@ -448,7 +573,7 @@ rn_mod_plot_data = {
     "chisq_label": xs.Plot.labels(plotWindow=2)[1],
 }
 
-rn_mod_plot_data["energy_steps"] = np.append(
+rn_mod_plot_data["energy_step"] = np.append(
     rn_mod_plot_data["energy"] - rn_mod_plot_data["energy_delta"],
     rn_mod_plot_data["energy"][-1] + rn_mod_plot_data["energy_delta"][-1],
 )
@@ -498,7 +623,7 @@ spec_ax.errorbar(
 
 spec_ax.stairs(
     rn_mod_plot_data["model"],
-    rn_mod_plot_data["energy_steps"],
+    rn_mod_plot_data["energy_step"],
     baseline=None,
     fill=False,
     color="firebrick",
@@ -524,7 +649,7 @@ chi_ax.tick_params(which="both", direction="in", top=True, right=True)
 
 chi_ax.stairs(
     rn_mod_plot_data["signed_chisq"],
-    rn_mod_plot_data["energy_steps"],
+    rn_mod_plot_data["energy_step"],
     baseline=None,
     fill=False,
     color="navy",
@@ -545,6 +670,8 @@ Giving two options for the Plot command generates a plot with vertically stacked
 windows. Up to six options can be given to the Plot command at a time. Forty channels
 were rejected because they were flagged as bad - but do we need to ignore any more?
 
+### Ignoring channels based on energy
+
 This figure shows the result of plotting the data and the model (in the upper window)
 and the contributions to $\chi^2$ (in the lower window). We see that above about 15 keV
 the S/N becomes small. We also see, comparing with the earlier figure, which bad
@@ -561,14 +688,24 @@ Note that ignore (and notice) interpret integers as channel numbers and real
 numbers as energies. The double star is a special indicator which just means the
 extreme value in the spectrum.
 
+### Preparing to fit the model
+
 We are now ready to fit the data. Fitting is initiated by the command xs.Fit.perform().
 
 As the fit proceeds, the screen displays the status of the fit for each iteration
 until either the fit converges to the minimum $\chi^2$, or the maximum number of
-iterations is exceeded. The maximum number of iterations is xs.Fit.nIterations.
+iterations is exceeded.
+
+The current maximum number of iterations can be found like this:
 
 ```{code-cell} python
 print(xs.Fit.nIterations)
+```
+
+Similarly, we can set a new maximum number of iterations:
+
+```{code-cell} python
+xs.Fit.nIterations = 50
 ```
 
 ### Performing the model fit
@@ -665,7 +802,7 @@ $\chi^2$ values from the simulations with the observed value shown by the vertic
 dotted line.
 
 It is entirely possible to retrieve the bin centers and probability density values
-from PyXspec, and use them with matplotlib to reconstruct the histogram that XSPEC
+from PyXspec and use them with matplotlib to reconstruct the histogram that XSPEC
 would make - just as we've been doing for other visualizations.
 
 Taking that route for a histogram is a little awkward, however, so why don't we
@@ -673,7 +810,7 @@ instead directly use the goodness-of-fit value distribution to construct and plo
 a histogram.
 
 We actually already retrieved the goodness-of-fit distribution, in the same cell we ran
-the `goodness()` method, so creating a histogram is simple:
+the `goodness()` method, so creating a histogram is straightforward:
 
 ```{code-cell} python
 ---
@@ -720,6 +857,25 @@ caught by the test.
 
 ```{code-cell} python
 xs.Plot("data resid")
+
+fit_pl_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
+
+fit_pl_plot_data["energy_step"] = np.append(
+    fit_pl_plot_data["energy"] - fit_pl_plot_data["energy_delta"],
+    fit_pl_plot_data["energy"][-1] + fit_pl_plot_data["energy_delta"][-1],
+)
+```
+
+```{code-cell} python
+xs.Plot("data resid")
 energies = xs.Plot.x()
 edeltas = xs.Plot.xErr()
 rates = xs.Plot.y(1, 1)
@@ -744,68 +900,7 @@ residerr = xs.Plot.yErr(1, 2)
 ```
 
 ```{code-cell} python
----
-tags: [hide-input]
-jupyter:
-  source_hidden: true
----
-fig, ax_arr = plt.subplots(nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True)
-# Shrink the vertical gap between the panels to zero
-fig.subplots_adjust(hspace=0)
-
-spec_ax = ax_arr[0]
-spec_ax.minorticks_on()
-spec_ax.tick_params(which="both", direction="in", top=True, right=True)
-
-spec_ax.errorbar(
-    energies,
-    rates,
-    xerr=edeltas,
-    yerr=errors,
-    fmt="+",
-    capsize=1.5,
-    label="EXOSAT-ME data",
-    color="navy",
-)
-
-if not STEPPED_MODEL:
-    spec_ax.plot(
-        energies, model_data, color="firebrick", label="Fitted model", alpha=0.8
-    )
-else:
-    spec_ax.step(
-        stepenergies,
-        foldedmodel,
-        where="post",
-        color="firebrick",
-        label="Fitted model",
-        alpha=0.8,
-    )
-
-spec_ax.set_yscale("log")
-spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-
-spec_ax.set_ylabel(dataLabels[1], fontsize=15)
-
-spec_ax.legend(fontsize=14)
-
-res_ax = ax_arr[1]
-res_ax.minorticks_on()
-res_ax.tick_params(which="both", direction="in", top=True, right=True)
-
-res_ax.errorbar(
-    energies, resid, xerr=edeltas, yerr=residerr, fmt="+", capsize=1.5, color="navy"
-)
-res_ax.axhline(0, color="goldenrod", linestyle="dashed")
-
-res_ax.set_xlabel(residLabels[0], fontsize=15)
-res_ax.set_ylabel(residLabels[1], fontsize=15)
-
-res_ax.set_xscale("log")
-res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-
-plt.show()
+plot_fit_residual_spec(fit_pl_plot_data, inst_name="EXOSAT-ME")
 ```
 
 ## 4. Error analysis
