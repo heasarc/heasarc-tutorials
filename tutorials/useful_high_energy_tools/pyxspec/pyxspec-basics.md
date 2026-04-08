@@ -347,7 +347,7 @@ ret = urlretrieve(
 
 ## 1. Loading a spectrum into PyXspec
 
-The spectral files we need for this demonstration should have been downloaded
+The spectral files we need for this demonstration were downloaded
 in the [Global Setup: Configuration](#configuration) section.
 
 We can read our spectrum file into a PyXspec `Spectrum` object, assigning it
@@ -356,15 +356,15 @@ direct interaction with individual spectrum objects, but we will use it to ignor
 some channels later in this tutorial.
 
 The spectrum file we are using for this demonstration has not been downloaded to the
-same directory as the notebook, so we briefly change our working directory as we load
-it.
+same directory as the notebook, so we will briefly change our working directory as we
+load it.
 
-Of course, we could have passed the full spectrum path rather than changing
+Of course, we could pass the full spectrum path rather than changing
 directories, but the 'RESPFILE' entry in the spectrum's header is a path relative
 to the location of the spectrum file.
 
-If we hadn't changed directories, then PyXspec would have been unable to find and
-automatically load the response file (though we could also have passed a response
+As such, if we didn't change directories, PyXspec would have been unable to find and
+automatically load the response file (though we _could_ instead pass a response
 file path to the optional `respfile` argument of the `Spectrum` constructor).
 
 ```{code-cell} python
