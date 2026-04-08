@@ -1060,11 +1060,7 @@ The numbers 1, 2, 3 refer to the IDs assigned to each parameter by XSPEC. You
 can check which ID goes with which parameter by passing the IDs to our model object:
 
 ```{code-cell} python
-print(abs_pl_mod(1).name, "\n")
-
-print(abs_pl_mod(2).name, "\n")
-
-print(abs_pl_mod(3).name)
+print(abs_pl_mod(1).name, abs_pl_mod(2).name, abs_pl_mod(3).name)
 ```
 
 Now we run the error calculation:
@@ -1121,8 +1117,17 @@ column density and photon index parameters are correlated!
 
 ### Running `steppar` to explore parameter correlations
 
-To investigate this further we can use the xs.Fit.steppar() to run a
-grid over these two parameters:
+To further investigate the possible correlation between hydrogen column density and
+power law photon index, we can use the PyXspec `Fit` manager object's `steppar(...)`
+method to run a grid over these two parameters, calculating a joint confidence region.
+
+When we call `steppar`, we're going to make it construct a two-dimensional
+parameter grid for _nH_ and _PhoIndex_:
+- The _nH_ dimension will consist of **25** evenly spaced points between **0.0 and 1.5**.
+- The _PhoIndex_ dimension will consist of **25** evenly spaced points between **1.5 and 3.0**.
+
+This is another operation that can benefit greatly from parallelization, so we make
+sure to configure PyXspec to use all available cores:
 
 ```{code-cell} python
 ---
@@ -1828,6 +1833,8 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 [Parallelization settings in PyXspec](https://heasarc.gsfc.nasa.gov/docs/software/xspec/python/html/xspecsettings.html)
 
 [XSPEC `tclout` API reference](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node60.html#tclout)
+
+[XSPEC `steppar` command](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node86.html)
 
 ### Acknowledgements
 
