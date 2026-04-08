@@ -841,7 +841,6 @@ reasonable region of parameter space.
 
 #### Fitting statistics [second section]
 
-
 Once the fit has finished its iterations, PyXspec writes out the
 "Variances and Principal Axes" and "Covariance Matrix" tables.
 
@@ -916,10 +915,14 @@ Here we specifically set the `goodness` function to use all available cores:
 xs.Xset.parallel.goodness = NUM_CORES
 ```
 
-
+Now we can run the command, which will display a one-line message passing judgement
+on the current model's goodness (or lack thereof); it also returns the percentage of
+simulations that had a smaller test statistic than the observed data. While we're
+at it, we retrieve the distribution of simulation test statistics for later use:
 
 ```{code-cell} python
 cur_lt_stat_perc = xs.Fit.goodness(1000)
+# This just splits off the XSPEC output from the other output we show below
 print("--------------------------------------------------------------------", "\n")
 cur_test_stat = xs.Fit.testStatistic
 
@@ -940,9 +943,9 @@ model object, it could be overridden.
 ```
 
 Approximately 60% of the simulations give a statistic value less than that
-observed, consistent with this being a good fit. We can plot a histogram of the
-$\chi^2$ values from the simulations with the observed value shown by the vertical
-dotted line.
+observed, consistent with this being a good fit. We might now want to plot a
+histogram of the$\chi^2$ values from the simulations, with the observed statistic
+value shown as a vertical line, for context.
 
 It is entirely possible to retrieve the bin centers and probability density values
 from PyXspec and use them with matplotlib to reconstruct the histogram that XSPEC
@@ -981,7 +984,7 @@ plt.axvline(
     linestyle="dashed",
     color="goldenrod",
     linewidth=2,
-    label=r"Test statistic",
+    label=r"Data $\chi^{2}$",
 )
 
 plt.xlabel(r"$\chi^2$", fontsize=15)
@@ -997,6 +1000,10 @@ plt.show()
 So the statistic implies the fit is good, but it is still always a good idea to look
 at the data and residuals to check for any systematic differences that may not be
 caught by the test.
+
+We pull the relevant information out of PyXspec in a similar manner to our earlier
+plot of [the renormalized, unfit, model earlier](#visualizing-the-spectrum-and-renormalized-model),
+though here we pass "data resid" rather than "data chi":
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -1016,6 +1023,13 @@ fit_pl_plot_data["energy_step"] = np.append(
     fit_pl_plot_data["energy"][-1] + fit_pl_plot_data["energy_delta"][-1],
 )
 ```
+
+We can now visualize our data, fitted model, and residuals by calling a convenience
+function that was defined in the [Global Setup: Functions](#functions) section. Said
+function contains plotting code that is quite similar to what we wrote for
+[the last spectrum figure](#visualizing-the-spectrum-and-renormalized-model), but
+seeing as we'll be wanting to make a few of these plots, it is neater to
+put into a function:
 
 ```{code-cell} python
 plot_fit_residual_spec(
