@@ -808,10 +808,13 @@ xs.Fit.nIterations = 50
 xs.Fit.perform()
 ```
 
-<br>
+### Interpreting the output of an XSPEC fit
 
-There is a fair amount of information here, so we will unpack it a bit at a time. XSPEC
-writes out one line after each fit iteration, containing the following:
+There is a fair amount of information here, so we will unpack it a bit at a time.
+
+#### State of the fit at each iteration [first section]
+
+XSPEC writes out one line after each fit iteration, containing the following:
 - Two obvious columns:
   - **Chi-Squared**
   - **Parameters**
@@ -820,115 +823,100 @@ writes out one line after each fit iteration, containing the following:
     - **Lvl** – A measure of the Levenberg–Marquardt algorithm's (the default XSPEC fitting method) 'damping parameter' indicating how the fit is converging (it should generally decrease).
 
 
+At the best-fit the normalization of beta should be **zero**, so XSPEC displays |beta|
+divided by the number of parameters (N) as a check of that.
+
+The actual default convergence criterion is when the fit statistic does not change
+significantly between iterations, so bear in mind that it is possible for the fit to
+end while |beta| is still significantly different from zero.
+
+```{note}
+For the first iteration only the powerlaw normalization is varied.
+
+While not strictly necessary this simple model, for more complicated models only
+varying the norms on the first iteration helps the fit proper get started in a
+reasonable region of parameter space.
+```
 
 
-
-At the best-fit the norm of beta should be zero, so we write out |beta| divided by the
-number of parameters as a check.
-
-The actual default convergence criterion is when the
-fit statistic does not change significantly between iterations, so it is possible for
-the fit to end while |beta| is still significantly different from zero.
-
-The |beta|/N
-column helps us spot this case.
-
-The Lvl column also indicates how the fit is
-converging and should generally decrease.
-
-Note that for the first iteration only the
-powerlaw norm is varied.
-
-While not necessary this simple model, for more complicated
-models only varying the norms on the first iteration helps the fit proper get started
-in a reasonable region of parameter space.
+#### Fitting statistics [second section]
 
 
+Once the fit has finished its iterations, PyXspec writes out the
+"Variances and Principal Axes" and "Covariance Matrix" tables.
+
+These are both based on the second derivatives of the fit statistic with respect
+to the parameters. Generally, the larger these second derivatives, the better
+determined the parameter (think of the case of a parabola in 1-D).
+
+The "Covariance Matrix" table is the inverse of the matrix of second derivatives.
+
+The "Variances and Principal Axes" section is based on an eigenvector decomposition of the
+second derivative matrix and indicates which parameters are correlated. We can see that
+in this case that the first eigenvector depends almost entirely on
+the powerlaw normalization, while the other two are combinations of the _nH_ and
+powerlaw _PhoIndex_. This tells us that the normalization is independent, but that the **other two
+parameters are correlated**.
 
 
-At the end of the fit PyXspec writes out the Variances and Principal Axes and
-Covariance Matrix sections.
+#### Best-fit model parameters and error _estimates_ [third section]
 
-These are both based on the second derivatives of the
-statistic with respect to the parameters.
+After the "Covariance Matrix" section, the next table shows the best-fit model
+parameters and their error _estimates_. The latter are just the square roots of
+the covariance matrix's diagonal elements (i.e. the **variance** elements) – as
+such they implicitly assume that the parameter space is multidimensional Gaussian
+with all parameters independent.
 
-Generally, the larger these second
-derivatives, the better determined the parameter (think of the case of a parabola
-in 1-D).
-
-The Covariance Matrix is the inverse of the matrix of second derivatives.
-
-The
-Variances and Principal Axes section is based on an eigenvector decomposition of the
-matrix of second derivatives and indicates which parameters are correlated.
-
-We can see
-in this case that the first eigenvector depends almost entirely on the powerlaw normalization,
-while the other two are combinations of the nH and powerlaw PhoIndex.
-
-This tells us
-that the normalization is independent, but the other two parameters are correlated.
+We **already know that in this case the parameters are not independent**, so
+these error estimates should only be considered guidelines to help us determine
+[the true errors later](#4-error-analysis).
 
 
+#### Final statistic values [fourth section]
+
+The fourth and final section displays the statistic values at the end of the fit.
+
+PyXspec defines a fit statistic, used to determine the best-fit parameters and
+errors, and test statistic, used to decide whether this model and parameters
+provide a good fit to the data.
+
+By default, both statistics are $\chi^2$ – when the test statistic is $\chi^2$, we
+can also calculate the null hypothesis probability (as you can see in the fit output).
+
+The null hypothesis probability is the likelihood of getting a value of $\chi^2$ as
+large or larger than observed if the model is correct, and **if this probability is
+small, then the model is not a good fit**.
 
 
-The next section shows the best-fit parameters and error estimates.
+### Examining goodness of fit without a null hypothesis probability
 
-The latter are
-just the square roots of the diagonal elements of the covariance matrix so implicitly
-assume that the parameter space is multidimensional Gaussian with all parameters
-independent.
+The null hypothesis probability can be calculated analytically for the $\chi^2$
+statistic and, if you haven't selected a different test statistic, XSPEC will
+do so during model fits, as we [saw in the last section](#final-statistic-values-fourth-section).
 
-We already know in this case that the parameters are not independent so
-these error estimates should only be considered guidelines to help us determine the
-true errors later.
+Unfortunately, there is no way to analytically calculate the null hypothesis
+probability for some of the other test statistics that XSPEC offers, so we need
+another way to determine the meaning of the statistic value.
 
+PyXspec has a built-in function that will perform simulations of the data based on
+the current model and parameters, then compare the statistic values of the simulation
+to that calculated for the real data. If the observed statistic is larger than the
+values calculated for the simulated data, then the implication is that the real data
+do not come from the current model.
 
+Before we run the `Fit.goodness(...)` function, we will make our first use of XSPEC's
+parallelization capabilities, intended to improve the performance of certain tasks by
+utilizing multiple cores (many-core CPUs are now almost ubiquitous). This demonstration
+notebook determined the number of cores available in the [Global Setup: Configuration](#configuration)
+section, and stored the number in the `NUM_CORES` constant.
 
-
-The final section shows the statistic values at the end of the fit.
-
-PyXspec defines
-a fit statistic, used to determine the best-fit parameters and errors, and test
-statistic, used to decide whether this model and parameters provide a good fit to the
-data.
-
-By default, both statistics are $\chi^2$. When the test statistic is $\chi^2$ we
-can also calculate the null hypothesis probability.
-
-This is the probability of getting
-a value of $\chi^2$ as large or larger than observed if the model is correct.
-
-If this
-probability is small then the model is not a good fit.
-
-The null hypothesis probability
-can be calculated analytically for $\chi^2$ but not for some other test statistics so
-PyXspec provides another way of determining the meaning of the statistic value.
-
-The
-xs.Fit.goodness() method performs simulations of the data based on the current model
-and parameters and compares the statistic values calculated with that for the real
-data.
-
-If the observed statistic is larger than the values for the simulated data this
-implies that the real data do not come from the model.
-
-To see how this works we will
-use the command for this case (where it is not necessary):
-
-
-
-
-
-
-### Checking the goodness of fit
-
-***TALK ABOUT SIGNIFICANT PERFORMANCE INCREASE WITH PARALLELISATION ON A 12 CORE MAC - FROM 3.8s TO 22ms*** - ***<span style="color:red">SUSPICIOUS?</span>***
+Here we specifically set the `goodness` function to use all available cores:
 
 ```{code-cell} python
 xs.Xset.parallel.goodness = NUM_CORES
 ```
+
+
 
 ```{code-cell} python
 cur_lt_stat_perc = xs.Fit.goodness(1000)
@@ -1770,6 +1758,8 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 [XSPEC **convolution** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/Convolution.html)
 
 [XSPEC **mixing** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node330.html)
+
+[Parallelization settings in PyXspec](https://heasarc.gsfc.nasa.gov/docs/software/xspec/python/html/xspecsettings.html)
 
 ### Acknowledgements
 
