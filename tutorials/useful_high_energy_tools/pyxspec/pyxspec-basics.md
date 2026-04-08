@@ -79,6 +79,7 @@ from urllib.request import urlretrieve
 import numpy as np
 import xspec as xs
 from astropy.units import Quantity
+from IPython.display import display
 from matplotlib import pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from scipy.stats import chi2
@@ -838,7 +839,6 @@ varying the norms on the first iteration helps the fit proper get started in a
 reasonable region of parameter space.
 ```
 
-
 #### Fitting statistics [second section]
 
 Once the fit has finished its iterations, PyXspec writes out the
@@ -1039,33 +1039,85 @@ plot_fit_residual_spec(
 
 ## 4. Error analysis
 
-Now that we think we have the correct model we need to determine how well the
-parameters are determined. The screen output at the end of the fit shows the
-best-fitting parameter values, as well as approximations to their errors. These
-errors should be regarded as indications of the uncertainties in the parameters and
-should not be quoted in publications. The true errors, i.e. the confidence ranges, are
-obtained using the xs.Fit.error() command. We want to run error on all three parameters
-which is an intrinsically parallel operation so we can use PyXspec's support for
-multiple cores and run the error estimations in parallel:
+Now that we think we have an acceptable model, we need to determine how well the
+parameters are constrained.
+
+You may recall that the output at the end of XSPEC's fitting process (see
+[this summary of its contents](#best-fit-model-parameters-and-error-estimates-third-section))
+shows the best-fitting parameter values, and **approximations** to their errors. Those
+errors should be regarded only as _indications_ of the parameter uncertainties and should
+absolutely **not be quoted in publications**.
 
 ### XSPEC's `error()` method
+
+The true errors, i.e. the confidence ranges, are obtained using the `Fit.error()` method.
+
+We want to run `error()` on all three parameters of our model, which is an intrinsically
+parallel operation, so we can once again use PyXspec's support for multiple cores and
+run the error estimations in parallel.
+
+The numbers 1, 2, 3 refer to the IDs assigned to each parameter by XSPEC. You
+can check which ID goes with which parameter by passing the IDs to our model object:
+
+```{code-cell} python
+print(abs_pl_mod(1).name, "\n")
+
+print(abs_pl_mod(2).name, "\n")
+
+print(abs_pl_mod(3).name)
+```
+
+Now we run the error calculation:
 
 ```{code-cell} python
 xs.Xset.parallel.error = NUM_CORES
 xs.Fit.error("1-3")
 ```
 
-Here, the numbers 1, 2, 3 refer to the parameter numbers in the Model par column of
-the output at the end of the fit. For the first parameter, the column of absorbing
-hydrogen atoms, the 90% confidence range is 0.110 to 1.033. This corresponds to an
-excursion in $\chi^2$ of 2.706. The reason these better errors are not given
-automatically as part of the fit output is that they entail further fitting. When
-the model is simple, this does not require much CPU, but for complicated models the
-extra time can be considerable. The error for each parameter is determined allowing
-the other two parameters to vary freely. If the parameters are uncorrelated this is
-all the information we need to know. However, we have an indication from the
-covariance matrix at the end of the fit that the column and photon index are
-correlated.
+Examining the output of the `error()` method we see that for the first parameter, the
+column density of absorbing hydrogen atoms, the 90% confidence range is 0.110–1.018.
+
+More usefully, we can dynamically retrieve error values calculated for specific
+parameters from the XSPEC model object:
+
+```{code-cell} python
+display(abs_pl_mod(1).error)
+
+# EQUIVALENTLY
+
+display(abs_pl_mod.TBabs.nH.error)
+```
+
+The first entry in the returned tuple is the lower confidence limit, the second is the
+upper confidence limit, and the third is the **nine-letter error string** that
+indicates whether the error calculation was successful (**FFFFFFFFF** means that we're
+all good; see the 'error' entry in the [XSPEC `tclout` API reference](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node60.html#tclout)
+for full information).
+
+```{tip}
+When you pass only a set of parameters to `error()`, and no other arguments, you are
+determining the 90% confidence interval - a $\Delta\chi^{2}$ of 2.706.
+
+It is of course possible to tell XSPEC to calculate a different confidence level. You
+can pass a delta fit statistic calculated from a **one degree of freedom** $\chi^2$
+distribution ([see the next section for an easy way to do this in Python](#running-steppar-to-explore-parameter-correlations))
+to the `error()` method. For the 68.3% ($1\sigma$) confidence levels of all three
+parameters we would use `error("1.0 1-3")`, for 95.5% ($2\sigma$) - `error("4.034 1-3")`,
+and for 99.7% ($3\sigma$) - `error("9.0 1-3")`
+```
+
+You might ask why these better error calculations are not performed automatically, as
+part of the standard fitting process – the answer to that question is that they entail
+further fitting. When the model is simple (as in our example), this requires
+little CPU time, but for complicated models the extra time can be quite considerable.
+
+The error for each parameter is determined by allowing all other, unfrozen, model
+parameters to vary freely, and if model parameters are uncorrelated then this error is
+all we need to know.
+
+Remember, though, that we have an indication from the fit process's
+[output covariance matrix](#fitting-statistics-second-section) that the hydrogen
+column density and photon index parameters are correlated!
 
 ### Running `steppar` to explore parameter correlations
 
@@ -1774,6 +1826,8 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 [XSPEC **mixing** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node330.html)
 
 [Parallelization settings in PyXspec](https://heasarc.gsfc.nasa.gov/docs/software/xspec/python/html/xspecsettings.html)
+
+[XSPEC `tclout` API reference](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node60.html#tclout)
 
 ### Acknowledgements
 
