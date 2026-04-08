@@ -107,6 +107,35 @@ def plot_fit_residual_spec(
     stepped_model: bool = True,
     mod_expr: Optional[str] = None,
 ):
+    """
+    A convenience function used to plot the spectrum, fitted model, and residuals, at
+    various points in this demonstration. The required input is a dictionary of
+    the style constructed in various subsections of the 'alternative spectral models'
+    section.
+
+    Limited customization of the output figure is offered, but this is not intended
+    as a truly general-purpose plotting function, more as a possible inspiration
+    for your own versions.
+
+    :param dict plot_data: Dictionary containing all information necessary to produce
+        the fitted spectrum and residual visualization.
+    :param str sp_color: Matplotlib color to use for the spectral data points.
+    :param str mod_color: Matplotlib color to use for the fitted model staircase line.
+    :param str res_color: Matplotlib color to use for the residual data points.
+    :param Optional[Tuple[float, float]] x_lims: Optional limits on which parts
+        of the x-axis to plot. Must be a two-element tuple containing the lower and
+        then the upper limit.
+    :param Optional[Tuple[float, float]] y_lims: Optional limits on which parts
+        of the y-axis to plot. Must be a two-element tuple containing the lower and
+        then the upper limit.
+    :param str inst_name: Optionally, a mission/instrument name to add to the
+        legend label given to the spectral data points.
+    :param bool stepped_model: Controls whether the fitted model is plotted as a
+        staircase (to match XSPEC's plotting style) or as a smooth line. Default is
+        True, resulting in a staircase.
+    :param str mod_expr: Optionally, the 'expression' of the fitted model - to be
+        added to its legend label.
+    """
 
     # Some basic checks to make sure the plot data is in the right format
     # These are what we need
