@@ -383,16 +383,16 @@ the underlying spectral data, fitted model(s), fit statistics, and the instrumen
 used to collect the data.
 
 Even though we're using the Python interface to XSPEC and will be creating
-visualizations using Matplotlib, we can still take advantage of the backend
-XSPEC plotting functionality by retrieving the data necessary to create
+visualizations using Matplotlib, we can still take advantage of XSPEC's backend
+plotting functionality by retrieving the data necessary to create
 a particular figure from PyXspec.
 
 The exact visualization information that can be retrieved from PyXspec will depend on
 what you're plotting, but here follow some examples of what can be fetched:
 - X and Y data points.
 - X and Y uncertainties.
-- Axis labels
-- Plot title
+- Axis labels.
+- Plot title.
 
 ### What plots can XSPEC generate?
 
@@ -404,14 +404,14 @@ xs.Plot("?")
 
 ### Setting XSPEC's plot device
 
-Before we actually plot something, we need to set the 'plotting device' that XSPEC's
-graphics library tries to output to. When running XSPEC 'traditionally' (i.e. through
+Before we actually plot something, we need to set the 'plot device' that XSPEC's
+graphic library outputs to. When running XSPEC 'traditionally' (i.e. through
 the command line), then your choice of plot device will control whether a figure is
-written to a file or displayed in a window.
+written to a file or displayed in a window (and what technology/file format is utilized).
 
-Here, as we're going to be doing the plotting ourselves using matplotlib, we don't
-really want either of those things to happen. As such, we set the plot device
-to "/null":
+In this demonstration we don't really want either of those things to happen, as we're
+going to use the Python plotting module matplotlib to do our own plotting. As such, we
+set the plot device to "/null", which means that XSPEC won't output figures at all:
 
 ```{code-cell} python
 xs.Plot.device = "/null"
@@ -424,14 +424,16 @@ directory, or the wholesale failure of all plotting in your notebook.
 
 ### Plotting a spectrum
 
-The **data** plot option produces the most important of all XSPEC visualizations - a
-spectrum! By default, spectra will be plotted as a function of
-**instrument channel**, which is the most fundamental indication of the energy
-of an X-ray event (which hopefully corresponds to a _photon_ hitting the detector).
+The **data** plot option produces the most important of all XSPEC visualizations – a
+spectrum!
 
-However, if an instrument response has been loaded along with the spectral data (we
+By default, spectra will be plotted as a function of **instrument channel**, which
+is the most fundamental indication of an X-ray event's energy (said event hopefully
+corresponding to a _photon_, as opposed to a particle, hitting the detector).
+
+On the other hand, if an instrument _response_ has been loaded along with the spectral data (we
 made sure of that [Section 1](#1-loading-a-spectrum-into-pyxspec)), then we can plot
-the much more useful spectrum as a function of **energy**.
+the spectrum as a function of **energy** (considerably more useful).
 
 Note, however, that this won't happen automatically just because a response is
 available; we have to specify the units of the energy axis explicitly:
@@ -440,14 +442,14 @@ available; we have to specify the units of the energy axis explicitly:
 xs.Plot.xAxis = "keV"
 ```
 
-As we've already mentioned, we're going to use the matplotlib Python module to
-construct our figures and visualizations - it will give us a great deal of flexibility
-and more control over the final plot than if we just used XSPEC's built-in plotting
-functionality.
+As we've already mentioned, we're going to use the Python module **matplotlib** to
+construct our figures and visualizations. Compared to using XSPEC's intrinsic plotting
+functionality, this will give us a great deal of flexibility and much finer control
+over the final figure.
 
 Our first task is to use PyXspec to produce the rate, energy, and uncertainty
-information that makes up a spectrum visualization and then to retrieve the data
-for later use.
+information that make up a spectrum visualization, then to retrieve the data
+to pass to matplotlib.
 
 Here we call the `Plot` method, passing **"data"** to specify which type of plot XSPEC
 should produce (in this case a spectrum). Note that **preparing** and **retrieving** the
@@ -483,7 +485,7 @@ existing values, or using plot data from a previous figure. As Jupyter notebooks
 be run out of order, or have cells re-executed, this is an important consideration.
 ```
 
-Now we can use that information to construct a figure showing the spectrum, prior to
+All that information can now be used to construct a figure showing the spectrum, prior to
 any fitting or energy limits, whilst making some small customizations to improve
 the appearance and clarity of the plot.
 
@@ -532,27 +534,29 @@ plt.show()
 
 ## 3. Defining and fitting models
 
-We are now ready to fit the data with a model. Models in XSPEC are specified using
-the model command, followed by an algebraic expression of a combination of model
-components. There are two basic kinds of model components: additive and multiplicative.
+We are now ready to fit the data with a model.
 
-Additive components represent X-Ray sources of different kinds (e.g., a bremsstrahlung
-continuum) and, after being convolved with the instrument response, prescribe the
-number of counts per energy bin. Multiplicative components represent phenomena that
-modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an
-energy-dependent multiplicative factor to the source radiation before the result is
-convolved with the instrumental response.
+Models in XSPEC are specified using the `model` command, followed by an algebraic
+expression of a combination of component models.
 
-More generally, XSPEC allows three types of modifying components: convolutions and
-mixing models in addition to the multiplicative type. Since there must be a source, there
-must be at least one additive component in a model, but there is no restriction on the
-number of modifying components.
+There are two basic kinds of model components – **additive** and **multiplicative**:
+- **Additive components** – Represent X-Ray sources of different kinds (e.g., a bremsstrahlung continuum) and, after being convolved with the instrument response, prescribe the number of counts per energy bin.
+- **Multiplicative components** – Represent phenomena that modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an energy-dependent multiplicative factor to the source radiation before the result is convolved with the instrumental response.
 
-Given the quality of our data, as shown by the plot, we'll choose an absorbed
-power law. To set it up, we define an instance of the PyXspec `Model` class
-and assign it to a variable - `abs_pl_mod`.
+More generally, XSPEC allows three types of **modifying** components:
+- The **multiplicative** type mentioned above.
+- **Convolutions**, which apply a convolution operator to an input model calculated from another model (e.g. _cgflux_, which we use [in Section 5](#5-flux-calculation)).
+- **Mixing models**, which perform transformations on the available spectra (e.g. modeling cross-talk between spatial regions of a detector/source).
+
+
+Since there must be a source, there must be **at least one additive component model**, but
+there is no restriction on the number of modifying components.
 
 ### Setting up a model object
+
+Given the fairly low quality of our data, as shown by [the plot above](#plotting-a-spectrum), we'll
+choose an **absorbed power law**. To set it up, we define an instance of the PyXspec
+`Model` class and assign it to a variable - `abs_pl_mod`:
 
 ```{code-cell} python
 abs_pl_mod = xs.Model("tbabs(powerlaw)")
@@ -1665,6 +1669,10 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 [XSPEC plot devices](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node110.html)
 
 [XSPEC plot types](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node113.html)
+
+[XSPEC **convolution** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/Convolution.html)
+
+[XSPEC **mixing** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node330.html)
 
 ### Acknowledgements
 
