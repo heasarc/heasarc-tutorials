@@ -773,18 +773,14 @@ exo_me_spec.ignore("15.0-**")
 ```
 
 ```{caution}
-Note that `ignore` (and `notice`) interpret **integers as channel numbers** and **real
-numbers as energies** - it can be confusing when you think you've ignored everything
+Note that `ignore` (and `notice`) interpret **integers as channel numbers** and ***real
+numbers as energies*** - it can be confusing when you think you've ignored everything
 above 8 keV but instead find you only have 8 channels.
 
-Also, the double star ('\*\*') is a special indicator which just means the
+Also, the double star (\*\*) is a special indicator which just means the
 extreme value in the spectrum - in this case the upper extreme, but if we've
 instead run `ignore("**-15.0")` we'd ignore everything **up to** 15 keV.
 ```
-
-Note that ignore (and notice) interpret integers as channel numbers and real
-numbers as energies. The double star is a special indicator which just means the
-extreme value in the spectrum.
 
 ### Preparing to fit the model
 
@@ -800,7 +796,7 @@ The current maximum number of iterations can be found like this:
 print(xs.Fit.nIterations)
 ```
 
-Similarly, we can set a new maximum number of iterations:
+We can also set a new maximum number of iterations using the same `Fit` attribute:
 
 ```{code-cell} python
 xs.Fit.nIterations = 50
@@ -812,54 +808,119 @@ xs.Fit.nIterations = 50
 xs.Fit.perform()
 ```
 
-There is a fair amount of information here, so we will unpack it a bit at a time. One
-line is written out after each fit iteration. The columns labeled 'Chi-Squared' and
-'Parameters' are obvious. The other two provide additional information on fit
-convergence. At each step in the fit a numerical derivative of the statistic with
-respect to the parameters is calculated. We call the vector of these derivatives 'beta'.
+<br>
+
+There is a fair amount of information here, so we will unpack it a bit at a time. XSPEC
+writes out one line after each fit iteration, containing the following:
+- Two obvious columns:
+  - **Chi-Squared**
+  - **Parameters**
+- As well as two less obvious columns related to fit convergence:
+    - **|beta|/N** – At each step in the fit a numerical derivative of the statistic with respect to the parameters is calculated. We call the vector of these derivatives 'beta'.
+    - **Lvl** – A measure of the Levenberg–Marquardt algorithm's (the default XSPEC fitting method) 'damping parameter' indicating how the fit is converging (it should generally decrease).
+
+
+
+
 
 At the best-fit the norm of beta should be zero, so we write out |beta| divided by the
-number of parameters as a check. The actual default convergence criterion is when the
+number of parameters as a check.
+
+The actual default convergence criterion is when the
 fit statistic does not change significantly between iterations, so it is possible for
-the fit to end while |beta| is still significantly different from zero. The |beta|/N
-column helps us spot this case. The Lvl column also indicates how the fit is
-converging and should generally decrease. Note that for the first iteration only the
-powerlaw norm is varied. While not necessary this simple model, for more complicated
+the fit to end while |beta| is still significantly different from zero.
+
+The |beta|/N
+column helps us spot this case.
+
+The Lvl column also indicates how the fit is
+converging and should generally decrease.
+
+Note that for the first iteration only the
+powerlaw norm is varied.
+
+While not necessary this simple model, for more complicated
 models only varying the norms on the first iteration helps the fit proper get started
 in a reasonable region of parameter space.
 
+
+
+
 At the end of the fit PyXspec writes out the Variances and Principal Axes and
-Covariance Matrix sections. These are both based on the second derivatives of the
-statistic with respect to the parameters. Generally, the larger these second
+Covariance Matrix sections.
+
+These are both based on the second derivatives of the
+statistic with respect to the parameters.
+
+Generally, the larger these second
 derivatives, the better determined the parameter (think of the case of a parabola
-in 1-D). The Covariance Matrix is the inverse of the matrix of second derivatives. The
+in 1-D).
+
+The Covariance Matrix is the inverse of the matrix of second derivatives.
+
+The
 Variances and Principal Axes section is based on an eigenvector decomposition of the
-matrix of second derivatives and indicates which parameters are correlated. We can see
+matrix of second derivatives and indicates which parameters are correlated.
+
+We can see
 in this case that the first eigenvector depends almost entirely on the powerlaw normalization,
-while the other two are combinations of the nH and powerlaw PhoIndex. This tells us
+while the other two are combinations of the nH and powerlaw PhoIndex.
+
+This tells us
 that the normalization is independent, but the other two parameters are correlated.
 
-The next section shows the best-fit parameters and error estimates. The latter are
+
+
+
+The next section shows the best-fit parameters and error estimates.
+
+The latter are
 just the square roots of the diagonal elements of the covariance matrix so implicitly
 assume that the parameter space is multidimensional Gaussian with all parameters
-independent. We already know in this case that the parameters are not independent so
+independent.
+
+We already know in this case that the parameters are not independent so
 these error estimates should only be considered guidelines to help us determine the
 true errors later.
 
-The final section shows the statistic values at the end of the fit. PyXspec defines
+
+
+
+The final section shows the statistic values at the end of the fit.
+
+PyXspec defines
 a fit statistic, used to determine the best-fit parameters and errors, and test
 statistic, used to decide whether this model and parameters provide a good fit to the
-data. By default, both statistics are $\chi^2$. When the test statistic is $\chi^2$ we
-can also calculate the null hypothesis probability. This is the probability of getting
-a value of $\chi^2$ as large or larger than observed if the model is correct. If this
-probability is small then the model is not a good fit. The null hypothesis probability
+data.
+
+By default, both statistics are $\chi^2$. When the test statistic is $\chi^2$ we
+can also calculate the null hypothesis probability.
+
+This is the probability of getting
+a value of $\chi^2$ as large or larger than observed if the model is correct.
+
+If this
+probability is small then the model is not a good fit.
+
+The null hypothesis probability
 can be calculated analytically for $\chi^2$ but not for some other test statistics so
-PyXspec provides another way of determining the meaning of the statistic value. The
+PyXspec provides another way of determining the meaning of the statistic value.
+
+The
 xs.Fit.goodness() method performs simulations of the data based on the current model
 and parameters and compares the statistic values calculated with that for the real
-data. If the observed statistic is larger than the values for the simulated data this
-implies that the real data do not come from the model. To see how this works we will
+data.
+
+If the observed statistic is larger than the values for the simulated data this
+implies that the real data do not come from the model.
+
+To see how this works we will
 use the command for this case (where it is not necessary):
+
+
+
+
+
 
 ### Checking the goodness of fit
 
@@ -871,7 +932,7 @@ xs.Xset.parallel.goodness = NUM_CORES
 
 ```{code-cell} python
 cur_lt_stat_perc = xs.Fit.goodness(1000)
-
+print("--------------------------------------------------------------------", "\n")
 cur_test_stat = xs.Fit.testStatistic
 
 # The 'previousGoodnessSims' attribute returns a list of strings - they
@@ -1235,6 +1296,8 @@ abs_pl_cflux_mod = xs.Model(
 )
 ```
 
+<br>
+
 The _Emin_ and _Emax_ parameters are set to the energy range over which we want the
 flux to be calculated. We also have to fix the normalization of the powerlaw because the
 normalization of the model will now be determined by the _lg10Flux_ parameter.
@@ -1250,6 +1313,8 @@ Now we run the model fit and calculate the uncertainty on parameter
 xs.Fit.perform()
 xs.Fit.error("4")
 ```
+
+<br>
 
 This process tells us that the 90% confidence range (the default when
 `error("<par ID>")` is called without further arguments) of the 0.2–2.0 keV unabsorbed
@@ -1290,6 +1355,8 @@ First, let's try an absorbed blackbody:
 abs_bb_mod = xs.Model("tbabs*bb")
 xs.Fit.perform()
 ```
+
+<br>
 
 Note that the fit process has displayed a warning about the first parameter and its
 estimated **error is -1**.
@@ -1354,6 +1421,8 @@ abs_br_mod = xs.Model("tbabs*brems")
 xs.Fit.perform()
 ```
 
+<br>
+
 Now we extract the data necessary to plot the fitted spectrum and residuals:
 
 ```{code-cell} python
@@ -1415,6 +1484,8 @@ abs_pl_frz_nh_mod.TBabs.nH.frozen = True
 
 xs.Fit.perform()
 ```
+
+<br>
 
 Then fetching the information necessary to plot a fitted spectrum and residuals:
 
@@ -1484,6 +1555,8 @@ abs_pl_bb_frz_nh_mod = xs.Model(
 
 abs_pl_bb_frz_nh_mod.TBabs.nH.frozen = True
 ```
+
+<br>
 
 We run the fit of this new two-continua-component model:
 
@@ -1643,6 +1716,8 @@ abs_pl_gauss_em_mod = xs.Model(
 xs.Fit.perform()
 ```
 
+<br>
+
 The energy and width have to be frozen because, in the absence of an obvious line in
 the data, the fit would be completely unable to converge on meaningful
 values. Besides, our aim is to see how bright a line at 6.4 keV can be and still
@@ -1653,6 +1728,8 @@ maximum value with and, finally, derive the equivalent width. That is:
 ```{code-cell} python
 xs.Fit.error("6")
 ```
+
+<br>
 
 Note that the true minimum value of the gaussian normalization is less than zero, but
 the error search stopped when the minimum value hit zero, the "hard" lower limit of
