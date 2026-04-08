@@ -564,8 +564,9 @@ abs_pl_mod = xs.Model("tbabs(powerlaw)")
 
 ### Ignoring bad channels
 
-We are not quite ready to fit the data (and obtain a better $\chi^2$), because not
-all of the 125 PHA bins should be included in the fitting:
+We are not quite ready to fit the data (and obtain a better $\chi^2$), because some
+of the 125 PHA bins should not be included in the fitting:
+
 - Some are below the lower discriminator of the instrument and therefore do not contain valid data.
 - Some have imperfect background subtraction at the margins of the pass band.
 - Some may not contain enough counts for $\chi^2$ to be strictly meaningful.
@@ -584,53 +585,57 @@ xs.AllData.ignore("bad")
 ```
 
 ```{note}
-PyXspec doesn't allow us to ignore "bad" channels for individual spectra
-but does it for all loaded spectra. AllData is a special object which allows us to
-perform operations on all current spectra.
+PyXspec doesn't allow us to ignore "bad" channels for individual spectra, only for
+**all loaded spectra**. `AllData` is a special data manager object which allows us
+to perform operations on all current spectra.
 ```
 
 ### Renormalizing the model to our data
 
-The current statistic is $\chi^2$ and is huge for the initial, default values - mostly
-because the power law normalization is two orders of magnitude too large. This
-particular problem is easily fixed using the renorm method:
+The **current statistic is $\chi^2$**, and is huge for the initial, default, model
+parameter values – mostly because the power law normalization is **two orders of
+magnitude too large**. This particular problem is easily fixed using the renorm method:
 
 ```{code-cell} python
 xs.Fit.renorm()
 ```
 
+### Visualizing the spectrum and renormalized model
+
 To show off our renormalized, but not yet fit, model, we'll use PyXspec and
 matplotlib together to produce a two-panel figure. The top panel will show
 the spectral data and the current state of the model, and the bottom panel will
-show the **signed** $\Delta\chi^2$ (each $\Delta\chi^2$ point has the sign of
-the corresponding residual point).
+show $\Delta\chi^2$ values given the sign of the corresponding residual value.
 
 Just like in [Section 2](#plotting-a-spectrum), we can use the PyXspec `Plot` manager
 object to calculate the information necessary to plot our spectrum, model, and signed
 $\Delta\chi^2$.
 
 Passing two choices to the `Plot` object generates a plot with vertically stacked
-'plot windows' (a maximum of six choices can be passed at once). The plot data
+'plot windows' (up to a maximum of six panels). The plot data
 calculated for each plot option can be accessed by passing an index to the
 `plotWindow=...` argument of `Plot`'s various methods.
 
+```{tip}
 Remember that XSPEC (and thus PyXspec) uses 'one-based indexing' (as opposed to
 Python's zero-based indexing), so to retrieve the data relevant to the bottom panel, we
 need to pass `plotWindow=2`, and `plotWindow=1` for the top panel.
+```
 
 We read out the spectral rates and errors, energy bin centers and half-widths, the
 current rates of the model at each energy bin center, and the signed $\Delta\chi^2$
-values calculated for the bottom panel - storing them in a dictionary. Additionally, the
-axis labels that XSPEC _would_ have used are also stored in the same dictionary.
+values calculated for the bottom panel – storing them in a dictionary. Additionally, the
+axis labels that XSPEC _would_ have used are stored in the same dictionary.
 
 In this instance we're going to imitate the appearance of an XSPEC fitted spectrum
-plot, so rather than plotting the model as a smooth line, we'll display it as a
-'staircase'. This being as a visual reminder that the model is only evaluated at the
+plot, so rather than plotting the model as a **smooth line**, we'll display it as a
+**staircase**. This being a visual reminder that the model is only evaluated at the
 centers of the energy bins.
 
-For that, we calculate the edges of each energy bin by subtracting the energy bin
-half-widths from the energy bin centers and appending a final bin edge
-representing the last energy bin center plus its half-width:
+To support the staircased model line, we calculate the upper and lower edges of
+each energy bin by subtracting the energy bin half-widths from the energy bin centers
+and appending a final bin edge representing the last energy bin center plus
+its half-width:
 
 ```{code-cell} python
 xs.Plot("data chi")
@@ -663,10 +668,12 @@ As a brief aside, we can examine the XSPEC-generated label for the y-axis of the
 upcoming figure's lower panel, as we won't actually be using it in our
 visualization.
 
-This is for practical purposes, as it is too long for the small amount of space we
-give to the lower panel - but as you can see, the meanings are equivalent, and you
-will also notice that XSPEC produces LaTeX-formatted labels suitable for use
-with matplotlib:
+We're discarding the default label for practical purposes, as it is too long for
+the small amount of space we give to the lower panel.
+
+However, as you can see, the meanings of the original and our replacement are
+equivalent. You will also notice that XSPEC produces LaTeX-formatted labels
+suitable for use with matplotlib:
 
 ```{code-cell} python
 rn_mod_plot_data["chisq_label"]
@@ -744,22 +751,35 @@ chi_ax.set_ylabel(
 plt.show()
 ```
 
-
 ### Ignoring channels based on energy
 
 Forty channels were rejected in [a previous section](#ignoring-bad-channels) because
-they were flagged as **bad** - but do we need to ignore any more?
+they were flagged as **bad** – but do we need to ignore any more?
 
-This figure shows the result of plotting the data and the model (in the upper window)
-and the contributions to $\chi^2$ (in the lower window). We see that above about 15 keV
-the signal-to-noise becomes small. We also see, when comparing with the earlier figure, which bad
-channels were ignored. Although visual inspection is not the most rigorous method for
-deciding which channels to ignore (more on this subject later), it's good enough for
-now, and will at least prevent us from getting grossly misleading results from the
-fitting. To ignore energies above 15 keV:
+The [renormalized model figure](#visualizing-the-spectrum-and-renormalized-model) shows
+the result of plotting the data and the model (in the upper window) and the
+contributions to $\chi^2$ (in the lower window).
+
+We see that above about 15 keV the signal-to-noise becomes small. We also see, when
+comparing with our [initial spectrum figure](#plotting-a-spectrum), which bad
+channels were ignored.
+
+Although visual inspection is not the most rigorous method for deciding which
+channels to ignore, it's good enough for now and will at least prevent us from
+getting grossly misleading fit results. To ignore energies above 15 keV:
 
 ```{code-cell} python
 exo_me_spec.ignore("15.0-**")
+```
+
+```{caution}
+Note that `ignore` (and `notice`) interpret **integers as channel numbers** and **real
+numbers as energies** - it can be confusing when you think you've ignored everything
+above 8 keV but instead find you only have 8 channels.
+
+Also, the double star ('\*\*') is a special indicator which just means the
+extreme value in the spectrum - in this case the upper extreme, but if we've
+instead run `ignore("**-15.0")` we'd ignore everything **up to** 15 keV.
 ```
 
 Note that ignore (and notice) interpret integers as channel numbers and real
