@@ -578,8 +578,28 @@ Just like in [Section 2](#plotting-a-spectrum), we can use the PyXspec `Plot` ma
 object to calculate the information necessary to plot our spectrum, model, and signed
 $\Delta\chi^2$.
 
-Giving two options for the Plot command generates a plot with vertically stacked
-windows. Up to six options can be given to the Plot command at a time.
+Passing two choices to the `Plot` object generates a plot with vertically stacked
+'plot windows' (a maximum of six choices can be passed at once). The plot data
+calculated for each plot option can be accessed by passing an index to the
+`plotWindow=...` argument of `Plot`'s various methods.
+
+Remember that XSPEC (and thus PyXspec) uses 'one-based indexing' (as opposed to
+Python's zero-based indexing), so to retrieve the data relevant to the bottom panel, we
+need to pass `plotWindow=2`, and `plotWindow=1` for the top panel.
+
+We read out the spectral rates and errors, energy bin centers and half-widths, the
+current rates of the model at each energy bin center, and the signed $\Delta\chi^2$
+values calculated for the bottom panel - storing them in a dictionary. Additionally, the
+axis labels that XSPEC _would_ have used are also stored in the same dictionary.
+
+In this instance we're going to imitate the appearance of an XSPEC fitted spectrum
+plot, so rather than plotting the model as a smooth line, we'll display it as a
+'staircase'. This being as a visual reminder that the model is only evaluated at the
+centers of the energy bins.
+
+For that, we calculate the edges of each energy bin by subtracting the energy bin
+half-widths from the energy bin centers and appending a final bin edge
+representing the last energy bin center plus its half-width:
 
 ```{code-cell} python
 xs.Plot("data chi")
@@ -608,11 +628,20 @@ yet (renormalizing doesn't count, the reason for which will become obvious when 
 see the figure).
 ```
 
-<span style="color=red">KEEP AND EXPLAIN WHY WE'RE NOT USING IT?</span>
+As a brief aside, we can examine the XSPEC-generated label for the y-axis of the
+upcoming figure's lower panel, as we won't actually be using it in our
+visualization.
+
+This is for practical purposes, as it is too long for the small amount of space we
+give to the lower panel - but as you can see, the meanings are equivalent, and you
+will also notice that XSPEC produces LaTeX-formatted labels suitable for use
+with matplotlib:
 
 ```{code-cell} python
 rn_mod_plot_data["chisq_label"]
 ```
+
+Finally, we can make our visualization:
 
 ```{code-cell} python
 ---
