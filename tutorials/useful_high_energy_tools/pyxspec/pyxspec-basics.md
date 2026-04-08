@@ -949,7 +949,7 @@ value shown as a vertical line, for context.
 
 It is entirely possible to retrieve the bin centers and probability density values
 from PyXspec and use them with matplotlib to reconstruct the histogram that XSPEC
-would make - just as we've been doing for other visualizations.
+would make – just as we've been doing for other visualizations.
 
 Taking that route for a histogram is a little awkward, however, so why don't we
 instead directly use the goodness-of-fit value distribution to construct and plot
@@ -1159,11 +1159,11 @@ XSPEC's (and thus PyXspec's) default $\Delta\chi^2$ contour levels are:
 2. 4.61 [90%]
 3. 9.21 [99%]
 
-with the stated confidence levels valid for a **two degree of freedom** (i.e.
+The stated confidence levels are valid for a **two degree of freedom** (i.e.
 parameter) contour plot.
 
-The contour command we're about to use does expect the input to be a set
-of $\Delta\chi^2$ values, so if we, for instance, want to specify which contours
+The contour plotting command we're about to use expects contour levels to be input as
+$\Delta\chi^2$ values, so if we, for instance, want to specify which contours
 are calculated as confidence levels in fraction/percentage form, we need to perform
 a quick calculation.
 
@@ -1177,7 +1177,7 @@ store our chosen percentiles in a dictionary, with keys ready to be used in the
 legend of the figure we're about to construct.
 
 The `df=2` argument specifies that we want to calculate the $\Delta\chi^2$ values
-for a **two degree of freedom** distribution - this is because we're calculating a
+for a **two degree of freedom** distribution – this is because we're calculating a
 confidence region for both parameters we investigated with `steppar()`:
 
 ```{code-cell} python
@@ -1280,9 +1280,11 @@ plt.show()
 
 ## 5. Flux calculation
 
-What else can we do with the fit? One thing is to derive the flux of the model. The
-data by themselves only give the instrument-dependent count rate. The model, on the
-other hand, is an estimate of the true spectrum emitted. In PyXspec, the model is
+What else can we do with a model fit?
+
+One thing is to derive the flux of the model – the data by themselves only give the
+instrument-dependent count rate. The model, on the other hand, is an estimate of the
+true spectrum emitted by the astrophysical object. In PyXspec, the model is
 defined in physical units independent of the instrument.
 
 ### Calling the `calcFlux()` method
@@ -1403,7 +1405,7 @@ just as well.
 
 We also should derive upper limits on components such as iron emission lines and
 additional continua, which, although not evident in the data nor required for a good
-fit, are nevertheless important to constrain - though we'll get to that
+fit, are nevertheless important to constrain – though we'll get to that
 in [Section 7](#7-deriving-upper-limits-on-model-parameters).
 
 ### Absorbed blackbody model
@@ -1418,7 +1420,7 @@ xs.Fit.perform()
 <br>
 
 Note that the fit process has displayed a warning about the first parameter and its
-estimated **error is -1**.
+_estimated_ **error is -1**.
 
 Unsurprisingly, this is a bad sign! It indicates that the fit is unable to constrain
 the parameter, and it should be considered indeterminate. We can usually interpret this
@@ -1511,8 +1513,8 @@ plot_fit_residual_spec(
 )
 ```
 
-It is clear that the Bremsstrahlung model is a better fit than the blackbody - and is
-as good as the power law - although it shares the low absorption column.
+It is clear that the Bremsstrahlung model is a better fit than the blackbody – and is
+as good as the power law – although it shares the low absorption column.
 
 ### Absorbed power law model [frozen nH]
 
@@ -1764,7 +1766,7 @@ don't warrant it (the original investigators published only the power law fit).
 
 ## 7. Deriving upper limits on model parameters
 
-There is one final useful thing to do with the data - derive an upper limit
+There is one final useful thing to do with the data – derive an upper limit
 to the presence of a fluorescent iron emission line. We return to our original model
 and add a gaussian emission line of fixed energy and width then fit to get:
 
