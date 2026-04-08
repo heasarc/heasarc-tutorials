@@ -30,27 +30,25 @@ title: PyXspec basics - fitting models to data
 
 By the end of this tutorial, you will be able to:
 
-- Load X-ray a spectrum and response using PyXspec.
-- Define and fit spectral models to X-ray data.
-- Use PyXspec and matplotlib to visualize spectra and model fits.
-- Evaluate goodness-of-fit using statistical methods.
+- Load X-ray a spectrum and response into PyXspec.
+- Define and fit models to X-ray spectra and evaluate their quality.
 - Calculate parameter errors and confidence contours.
+- Use PyXspec and matplotlib to visualize spectra and model fits.
 
 ## Introduction
 
 This example uses some very old spectral data. It's much simpler than more modern
 observations and so can be used to better illustrate the basics of XSPEC analysis.
 
-The data in question is an observation of the 6 s period X-ray pulsar **1E1048.1-5937**
-by EXOSAT, with its Medium-Energy (ME) proportional counter instrument, in June of 1985, for 20 ks.
+The data in question is a 20 ks EXOSAT 'Medium-Energy' (ME) observation of the
+6-second period X-ray pulsar **1E1048.1-5937** by EXOSAT, taken in June 1985.
 
 In this example, we'll conduct a general investigation of the spectrum from the
 Medium Energy instrument, i.e. follow the same sort of steps as the original
 investigators ([Seward F. D., Charles P. A., Smale A. P. 1986](https://ui.adsabs.harvard.edu/abs/1986ApJ...305..814S/abstract)).
 
 The ME spectrum and corresponding response matrix were obtained from the HEASARC and
-are available either as part of a large collection of example
-data (https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz) or directly
+are available either as part of a [large collection of example data](https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz) or directly
 from the URLs defined in the [Global Setup: Constants](#constants) section.
 
 ### Inputs
@@ -1661,6 +1659,8 @@ Updated On: 2026-04-08
 Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=xspec)
 
 [Original PyXspec Jupyter Notebooks Repository](https://github.com/HEASARC/PyXspec-Jupyter-notebooks)
+
+[Full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz)
 
 [XSPEC plot devices](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node110.html)
 
