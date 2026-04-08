@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-04-07'
+date: '2026-04-08'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -67,7 +67,7 @@ from the URLs defined in the [Global Setup: Constants](#constants) section.
 
 ### Runtime
 
-As of {Date}, this notebook takes ~{N}s to run to completion on Fornax using the '{name: size}' server with NGB RAM/ N cores.
+As of 8th April 2026, this notebook takes ~1-minute to run to completion on Fornax using the 'small' server with 8GB RAM/2 cores.
 
 ## Imports
 
@@ -290,8 +290,8 @@ elif isinstance(NUM_CORES, int) and NUM_CORES > total_cores:
 # --------------------------------------------------------------
 
 # -------------- Set paths and create directories --------------
-if os.path.exists("../../_data"):
-    ROOT_DATA_DIR = "../../_data/PyXSPEC/EXOSAT"
+if os.path.exists("../../../_data"):
+    ROOT_DATA_DIR = "../../../_data/PyXSPEC/EXOSAT"
 else:
     ROOT_DATA_DIR = "PyXSPEC/EXOSAT"
 
@@ -535,8 +535,8 @@ abs_pl_mod = xs.Model("tbabs(powerlaw)")
 
 We are not quite ready to fit the data (and obtain a better $\chi^2$), because not
 all of the 125 PHA bins should be included in the fitting:
-- Some are below the lower discriminator of the instrument and therefore do not contain valid data
-- Some have imperfect background subtraction at the margins of the pass band
+- Some are below the lower discriminator of the instrument and therefore do not contain valid data.
+- Some have imperfect background subtraction at the margins of the pass band.
 - Some may not contain enough counts for $\chi^2$ to be strictly meaningful.
 
 To find out which channels to discard (ignore in XSPEC terminology), consult
@@ -1623,13 +1623,15 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-04-07
+Updated On: 2026-04-08
 
 +++
 
 ### Additional Resources
 
 Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=xspec)
+
+[Original PyXspec Jupyter Notebooks Repository](https://github.com/HEASARC/PyXspec-Jupyter-notebooks)
 
 [XSPEC plot devices](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node110.html)
 
