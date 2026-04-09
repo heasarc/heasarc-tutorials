@@ -284,6 +284,7 @@ def gen_xrism_resolve_rmf(
     consider_grades: List[int],
     rel_region: SkyRegion = None,
     rel_pixels: List[int] = None,
+    rmf_type: str = "L",
 ):
     """
     A wrapper around the XRISM-Resolve-specific RMF generation tool implemented as
@@ -291,10 +292,17 @@ def gen_xrism_resolve_rmf(
 
     :param str spec_file: The path to the spectrum file for which to generate an RMF.
     :param str out_dir: The directory where output files should be written.
+
     :param List[int] consider_grades:
-    :param SkyRegion rel_region:
+    :param str rel_region:
     :param List[int] rel_pixels:
     """
+
+    # Check that the RMF type passed by the user is valid
+    if not isinstance(rmf_type, str):
+        raise TypeError("The 'rmf_type' argument must be of type string.")
+    elif rmf_type not in ["S", "M", "L", "X"]:
+        raise ValueError("'rmf_type' must be 'S', 'M', 'L', or 'X'.")
 
     # Enforce correct types for input grades
     if isinstance(consider_grades, str) or (
@@ -330,6 +338,36 @@ def gen_xrism_resolve_rmf(
     if rel_region is None and rel_pixels is None:
         raise ValueError("Either 'rel_region' or 'rel_pixels' must be provided.")
 
+    elif rel_pixels is not None:
+        if not isinstance(rel_pixels, (list, str, int)):
+            raise TypeError("'rel_pixels' must be a list of integer pixel IDs.")
+        elif not isinstance(rel_pixels, list) and isinstance(rel_pixels, (str, int)):
+            rel_pixels = [rel_pixels]
+
+        try:
+            rel_pixels = np.array([int(rp) for rp in rel_pixels])
+        except ValueError:
+            raise TypeError(
+                "All entries in 'rel_pixels' must be integer "
+                "XRISM-Resolve pixel IDs."
+            )
+
+        # Convert to a set of pixel ranges, as requested in the XRISM rslmkrmf docs
+        groups = np.split(u := np.unique(rel_pixels), np.where(np.diff(u) > 1)[0] + 1)
+        rel_pixels = ",".join(
+            f"{g[0]}-{g[-1]}" if len(g) > 1 else str(g[0]) for g in groups
+        )
+        print(rel_pixels)
+
+        # CHECK IF IT WILL JUST TAKE A LIST OF PIXEL IDS - I HOPE IT WILL
+        rel_pixels = ",".join(rel_pixels.astype(str))
+
+        # If rel_pixels is provided,
+        rel_region = "NONE"
+
+    elif rel_region is not None:
+        raise NotImplementedError("Not yet implemented.")
+
     # Create a temporary working directory
     temp_work_dir = os.path.join(out_dir, "rslrmf_{}".format(randint(0, int(1e8))))
     os.makedirs(temp_work_dir)
@@ -344,7 +382,10 @@ def gen_xrism_resolve_rmf(
     with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
         out = hsp.rslmkrmf(
             infile=spec_file,
+            whichrmf=rmf_type,
             resolist=consider_grades,
+            regionfile=rel_region,
+            pixlist=rel_pixels,
             outfile=rmf_out,
             noprompt=True,
             clobber=True,
