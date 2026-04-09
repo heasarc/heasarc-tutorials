@@ -85,6 +85,7 @@ import multiprocessing as mp
 import os
 from random import randint
 from shutil import rmtree
+from typing import List
 
 import heasoftpy as hsp
 import matplotlib.pyplot as plt
@@ -101,9 +102,7 @@ from astroquery.heasarc import Heasarc
 
 # from matplotlib.ticker import FuncFormatter
 from packaging.version import Version
-
-# from typing import Union
-# from regions import CircleSkyRegion, Regions
+from regions import SkyRegion
 from xga.products import EventList
 ```
 
@@ -277,6 +276,87 @@ def gen_xrism_resolve_spectrum(
     rmtree(temp_work_dir)
 
     return [src_out, back_out]
+
+
+def gen_xrism_resolve_rmf(
+    spec_file: str,
+    out_dir: str,
+    consider_grades: List[int],
+    rel_region: SkyRegion = None,
+    rel_pixels: List[int] = None,
+):
+    """
+    A wrapper around the XRISM-Resolve-specific RMF generation tool implemented as
+    part of HEASoft (and called here through HEASoftPy).
+
+    :param str spec_file: The path to the spectrum file for which to generate an RMF.
+    :param str out_dir: The directory where output files should be written.
+    :param List[int] consider_grades:
+    :param SkyRegion rel_region:
+    :param List[int] rel_pixels:
+    """
+
+    # Enforce correct types for input grades
+    if isinstance(consider_grades, str) or (
+        isinstance(consider_grades, list)
+        and any(isinstance([gr for gr in consider_grades]), str)
+    ):
+        try:
+            consider_grades = [int(gr) for gr in list(consider_grades)]
+        except ValueError:
+            # Error message doesn't exactly match the error we caught, but if the
+            #  user just replaces entries with integers this issue will be solved
+            raise TypeError("Entries in the 'consider_grades' list must be integers.")
+    elif isinstance(int):
+        consider_grades = [consider_grades]
+    elif not isinstance(consider_grades, list) and isinstance(
+        [gr for gr in consider_grades], str
+    ):
+        raise TypeError("Only pass lists of integers to 'consider_grades'.")
+
+    # Now make sure that the input grades are all in the valid range
+    consider_grades = np.array(consider_grades)
+    if (consider_grades < 0).any() or (consider_grades > 4).any():
+        raise ValueError(
+            "XRISM-Resolve events are assigned an integer grade from "
+            "0 to 4, and at least one entry in 'consider_grades' is "
+            "outside this range."
+        )
+
+    # Turn the grades into a string that can be passed to the XRISM task
+    consider_grades = ",".join(consider_grades.astype(str))
+
+    # Either rel_region or rel_pixels must be provided
+    if rel_region is None and rel_pixels is None:
+        raise ValueError("Either 'rel_region' or 'rel_pixels' must be provided.")
+
+    # Create a temporary working directory
+    temp_work_dir = os.path.join(out_dir, "rslrmf_{}".format(randint(0, int(1e8))))
+    os.makedirs(temp_work_dir)
+
+    # Set up the RMF file name by cannibalising the name of the spectrum file - this
+    #  means we don't have to worry about identifying the ObsID
+    rmf_out = os.path.basename(spec_file).split("-ra")[0] + ".rmf"
+
+    # Using dual contexts, one that moves us into the output directory for the
+    #  duration, and another that creates a new set of HEASoft parameter files (so
+    #  there are no clashes with other processes).
+    with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
+        out = hsp.rslmkrmf(
+            infile=spec_file,
+            resolist=consider_grades,
+            outfile=rmf_out,
+            noprompt=True,
+            clobber=True,
+        )
+
+    # Move the RMF up from the temporary directory
+    os.rename(os.path.join(temp_work_dir, rmf_out), os.path.join(out_dir, rmf_out))
+
+    # Make sure to remove the temporary directory
+    rmtree(temp_work_dir)
+
+    return out
 ```
 
 ### Constants
