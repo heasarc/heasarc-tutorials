@@ -779,8 +779,8 @@ numbers as energies*** - it can be confusing when you think you've ignored every
 above 8 keV but instead find you only have 8 channels.
 
 Also, the double star (\*\*) is a special indicator which just means the
-extreme value in the spectrum - in this case the upper extreme, but if we've
-instead run `ignore("**-15.0")` we'd ignore everything **up to** 15 keV.
+extreme value in the spectrum - in this case the upper extreme, but if we instead
+ran `ignore("**-15.0")` we'd ignore everything **up to** 15 keV.
 ```
 
 ### Preparing to fit the model
