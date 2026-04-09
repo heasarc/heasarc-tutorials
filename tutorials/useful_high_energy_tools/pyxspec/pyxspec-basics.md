@@ -79,7 +79,6 @@ from urllib.request import urlretrieve
 import numpy as np
 import xspec as xs
 from astropy.units import Quantity
-from IPython.display import display
 from matplotlib import pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from scipy.stats import chi2
@@ -1076,11 +1075,11 @@ More usefully, we can dynamically retrieve error values calculated for specific
 parameters from the XSPEC model object:
 
 ```{code-cell} python
-display(abs_pl_mod(1).error)
+# Can access the nH parameter instance by passing its ID to the model
+print(abs_pl_mod(1).error, "\n")
 
-# EQUIVALENTLY
-
-display(abs_pl_mod.TBabs.nH.error)
+# Or by accessing the nH attribute of the model's TBabs attribute
+print(abs_pl_mod.TBabs.nH.error)
 ```
 
 The first entry in the returned tuple is the lower confidence limit, the second is the
