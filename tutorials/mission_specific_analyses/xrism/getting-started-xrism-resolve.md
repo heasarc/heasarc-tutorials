@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-04-02'
+date: '2026-04-09'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -90,8 +90,8 @@ import heasoftpy as hsp
 import matplotlib.pyplot as plt
 import numpy as np
 from astropy.coordinates import SkyCoord
+from astropy.io import fits
 
-# from astropy.io import fits
 # from astropy.table import Table
 from astropy.time import Time
 from astropy.units import Quantity
@@ -117,7 +117,6 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
 def process_xrism_resolve(
     obs_dir: str,
     cur_obs_id: str,
@@ -183,6 +182,101 @@ def process_xrism_resolve(
         # Make sure to remove the temporary directory
         rmtree(temp_work_dir)
     return cur_obs_id, out, task_success
+
+
+def gen_xrism_resolve_spectrum(
+    event_file: str,
+    out_dir: str,
+    rel_src_coord: SkyCoord,
+    rel_src_radius: Quantity,
+    src_reg_file: str,
+    back_reg_file: str,
+):
+    """
+
+
+    :param str event_file: Path to the event list (usually cleaned, but not
+        necessarily) we wish to generate a XRISM-Resolve spectrum from. ObsID and
+        dataclass information will be extracted from the EVENTS table header.
+    :param str out_dir: The directory where output files should be written.
+    :param SkyCoord rel_src_coord: The source coordinate (RA, Dec) of the
+        source region for which we wish to generate a spectrum.
+    :param Quantity rel_src_radius: The radius of the source region for which we wish
+        to generate a spectrum.
+    :param str src_reg_file: Path to the region file defining the source region for
+        which we wish to generate a spectrum.
+    :param str back_reg_file: Path to the region file defining the background region
+        for which we wish to generate a spectrum.
+    """
+
+    # We can extract the ObsID directly from the header of the event list - it is
+    #  safer than having them be passed to this function separately.
+    with fits.open(event_file) as read_evto:
+        cur_obs_id = read_evto["EVENTS"].header["OBS_ID"]
+        # We extract the filter value from the header, then pass it through a
+        #  dictionary defined in the constants section to convert it to the
+        #  format you see in XRISM file names.
+        cur_filter = RESOLVE_FILTERS[read_evto["EVENTS"].header["FILTER"]]
+
+    # Get RA, Dec, and radius values in the right format
+    ra_val = rel_src_coord.ra.to("deg").value.round(6)
+    dec_val = rel_src_coord.dec.to("deg").value.round(6)
+    rad_val = rel_src_radius.to("deg").value.round(4)
+
+    # Set up the output file names for the source and background spectra we're
+    #  about to generate.
+    sp_out = os.path.basename(SP_PATH_TEMP).format(
+        oi=cur_obs_id, xrf=cur_filter, ra=ra_val, dec=dec_val, rad=rad_val
+    )
+    sp_back_out = os.path.basename(BACK_SP_PATH_TEMP).format(
+        oi=cur_obs_id, xrf=cur_filter, ra=ra_val, dec=dec_val
+    )
+
+    # Create a temporary working directory
+    temp_work_dir = os.path.join(
+        out_dir, "spec_extractor_{}".format(randint(0, int(1e8)))
+    )
+    os.makedirs(temp_work_dir)
+
+    # Using dual contexts, one that moves us into the output directory for the
+    #  duration, and another that creates a new set of HEASoft parameter files (so
+    #  there are no clashes with other processes).
+    with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
+        src_out = hsp.extractor(
+            filename=os.path.relpath(event_file),
+            phafile=sp_out,
+            regionfile=os.path.relpath(src_reg_file),
+            xcolf="X",
+            ycolf="Y",
+            ecol="PI",
+            gti="GTI",
+            noprompt=True,
+            clobber=True,
+        )
+
+        # Now for the background spectrum
+        back_out = hsp.extractor(
+            filename=os.path.relpath(event_file),
+            phafile=sp_back_out,
+            regionfile=os.path.relpath(back_reg_file),
+            xcolf="X",
+            ycolf="Y",
+            ecol="PI",
+            gti="GTI",
+            noprompt=True,
+            clobber=True,
+        )
+
+    # Move the spectra up from the temporary directory
+    os.rename(os.path.join(temp_work_dir, sp_out), os.path.join(out_dir, sp_out))
+    os.rename(
+        os.path.join(temp_work_dir, sp_back_out), os.path.join(out_dir, sp_back_out)
+    )
+
+    # Make sure to remove the temporary directory
+    rmtree(temp_work_dir)
+
+    return [src_out, back_out]
 ```
 
 ### Constants
@@ -213,6 +307,17 @@ DESCRIPTIVE_RESOLVE_EVT_GRADES = {
     "Bl": "Baseline event (diagnostic) [5]",
     "El": "Lost event [6]",
     "Rj": "Rejected event [7]",
+}
+
+# Relation of XRISM-Resolve fits header FILTER values to the equivalent
+#  XRISM-Resolve file naming scheme
+RESOLVE_FILTERS = {
+    "OPEN": "px1000",
+    "FE55": "px5000",
+    "BE": "px4000",
+    "ND": "px3000",
+    "POLY": "px2000",
+    "UNDEF": "px0000",
 }
 ```
 
@@ -296,17 +401,17 @@ os.makedirs(OUT_PATH, exist_ok=True)
 # ------------- Set up output file path templates --------------
 # ------ XAPIPELINE -------
 # Cleaned event list path template - obviously going to be useful later
-EVT_PATH_TEMP = os.path.join(OUT_PATH, "{oi}", "xa{oi}rsl_p0{xf}_cl.evt")
+EVT_PATH_TEMP = os.path.join(OUT_PATH, "{oi}", "xa{oi}rsl_p0{xrf}_cl.evt")
 
 # The path to the bad pixel map, useful for excluding dodgy pixels from data products
-BADPIX_PATH_TEMP = os.path.join(OUT_PATH, "{oi}", "xa{oi}rsl_p{sc}{xdc}.bimg")
+BADPIX_PATH_TEMP = os.path.join(OUT_PATH, "{oi}", "xa{oi}rsl_p{sc}{xrf}.bimg")
 # --------------------------
 
 # --------- IMAGES ---------
 IM_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-dataclass{xdc}-imbinfactor{ibf}-en{lo}_{hi}keV-image.fits",
+    "xrism-resolve-obsid{oi}-filter{xrf}-imbinfactor{ibf}-en{lo}_{hi}keV-image.fits",
 )
 # --------------------------
 
@@ -315,7 +420,7 @@ IM_PATH_TEMP = os.path.join(
 EX_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-dataclass{xdc}-attraddelta{rd}arcmin-"
+    "xrism-resolve-obsid{oi}-filter{xrf}-attraddelta{rd}arcmin-"
     "attphibin{npb}-imbinfactor{ibf}-enALL-expmap.fits",
 )
 # --------------------------
@@ -325,21 +430,21 @@ EX_PATH_TEMP = os.path.join(
 LC_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-dataclass{xdc}-ra{ra}-dec{dec}-radius{rad}deg-"
+    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-radius{rad}deg-"
     "en{lo}_{hi}keV-expthresh{lct}-tb{tb}s-lightcurve.fits",
 )
 
 BACK_LC_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-dataclass{xdc}-ra{ra}-dec{dec}-"
+    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-"
     "en{lo}_{hi}keV-expthresh{lct}-tb{tb}s-back-lightcurve.fits",
 )
 
 NET_LC_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-dataclass{xdc}-ra{ra}-dec{dec}-radius{rad}deg-"
+    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-radius{rad}deg-"
     "en{lo}_{hi}keV-expthresh{lct}-tb{tb}s-net-lightcurve.fits",
 )
 # --------------------------
@@ -349,14 +454,14 @@ NET_LC_PATH_TEMP = os.path.join(
 SP_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-dataclass{xdc}-ra{ra}-dec{dec}-radius{rad}deg-"
+    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-radius{rad}deg-"
     "enALL-spectrum.fits",
 )
 
 BACK_SP_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-dataclass{xdc}-ra{ra}-dec{dec}-enALL-back-spectrum.fits",
+    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-enALL-back-spectrum.fits",
 )
 # --------------------------
 
@@ -366,7 +471,7 @@ GRP_SP_PATH_TEMP = SP_PATH_TEMP.replace("-spectrum", "-{gt}grp{gs}-spectrum")
 
 # ---------- RMF -----------
 RMF_PATH_TEMP = os.path.join(
-    OUT_PATH, "{oi}", "xrism-resolve-obsid{oi}-dataclass{xdc}.rmf"
+    OUT_PATH, "{oi}", "xrism-resolve-obsid{oi}-filter{xrf}.rmf"
 )
 # --------------------------
 
@@ -786,15 +891,13 @@ in-depth spectral analysis to other demonstration notebooks.***
 
 ```
 
-
-
 ## About this notebook
 
 Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-04-02
+Updated On: 2026-04-09
 
 +++
 
