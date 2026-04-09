@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-04-08'
+date: '2026-04-09'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -411,7 +411,7 @@ the command line), then your choice of plot device will control whether a figure
 written to a file or displayed in a window (and what technology/file format is utilized).
 
 In this demonstration we don't really want either of those things to happen, as we're
-going to use the Python plotting module matplotlib to do our own plotting. As such, we
+going to use the Python module **matplotlib** to do our own plotting. As such, we
 set the plot device to "/null", which means that XSPEC won't output figures at all:
 
 ```{code-cell} python
@@ -842,9 +842,8 @@ reasonable region of parameter space.
 #### Fitting statistics [second section]
 
 Once the fit has finished its iterations, PyXspec writes out the
-"Variances and Principal Axes" and "Covariance Matrix" tables.
-
-These are both based on the second derivatives of the fit statistic with respect
+"Variances and Principal Axes" and "Covariance Matrix" tables. These are both based
+on the second derivatives of the fit statistic with respect
 to the parameters. Generally, the larger these second derivatives, the better
 determined the parameter (think of the case of a parabola in 1-D).
 
@@ -944,7 +943,7 @@ model object, it could be overridden.
 
 Approximately 60% of the simulations give a statistic value less than that
 observed, consistent with this being a good fit. We might now want to plot a
-histogram of the$\chi^2$ values from the simulations, with the observed statistic
+histogram of the $\chi^2$ values from the simulations, with the observed statistic
 value shown as a vertical line, for context.
 
 It is entirely possible to retrieve the bin centers and probability density values
@@ -1812,7 +1811,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-04-08
+Updated On: 2026-04-09
 
 +++
 
