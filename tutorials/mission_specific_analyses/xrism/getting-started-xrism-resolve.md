@@ -435,10 +435,8 @@ def gen_xrism_resolve_image(
 def gen_xrism_resolve_spectrum(
     event_file: str,
     out_dir: str,
-    rel_src_coord: SkyCoord,
-    rel_src_radius: Quantity,
-    src_reg_file: str,
-    back_reg_file: str,
+    include_pixels: list = None,
+    include_evt_grades: list = [0, 1, 2, 3, 4],
 ):
     """
 
@@ -447,14 +445,6 @@ def gen_xrism_resolve_spectrum(
         necessarily) we wish to generate a XRISM-Resolve spectrum from. ObsID and
         dataclass information will be extracted from the EVENTS table header.
     :param str out_dir: The directory where output files should be written.
-    :param SkyCoord rel_src_coord: The source coordinate (RA, Dec) of the
-        source region for which we wish to generate a spectrum.
-    :param Quantity rel_src_radius: The radius of the source region for which we wish
-        to generate a spectrum.
-    :param str src_reg_file: Path to the region file defining the source region for
-        which we wish to generate a spectrum.
-    :param str back_reg_file: Path to the region file defining the background region
-        for which we wish to generate a spectrum.
     """
 
     # We can extract the ObsID directly from the header of the event list - it is
@@ -466,18 +456,25 @@ def gen_xrism_resolve_spectrum(
         #  format you see in XRISM file names.
         cur_filter = RESOLVE_FILTERS[read_evto["EVENTS"].header["FILTER"]]
 
-    # Get RA, Dec, and radius values in the right format
-    ra_val = rel_src_coord.ra.to("deg").value.round(6)
-    dec_val = rel_src_coord.dec.to("deg").value.round(6)
-    rad_val = rel_src_radius.to("deg").value.round(4)
+    if include_pixels is None:
+        include_pixels = "0:35"
+    else:
+        # Convert to a set of pixel ranges, as requested in the XRISM rslmkrmf docs
+        groups = np.split(
+            u := np.unique(include_pixels), np.where(np.diff(u) > 1)[0] + 1
+        )
+        include_pixels = ",".join(
+            f"{g[0]}:{g[-1]}" if len(g) > 1 else str(g[0]) for g in groups
+        )
+
+    filt_expr = f"[PIXEL={include_pixels}]"
 
     # Set up the output file names for the source and background spectra we're
     #  about to generate.
     sp_out = os.path.basename(SP_PATH_TEMP).format(
-        oi=cur_obs_id, xrf=cur_filter, ra=ra_val, dec=dec_val, rad=rad_val
-    )
-    sp_back_out = os.path.basename(BACK_SP_PATH_TEMP).format(
-        oi=cur_obs_id, xrf=cur_filter, ra=ra_val, dec=dec_val
+        oi=cur_obs_id,
+        xrf=cur_filter,
+        slp=include_pixels.replace(":", "to").replace(",", "_"),
     )
 
     # Create a temporary working directory
@@ -491,40 +488,24 @@ def gen_xrism_resolve_spectrum(
     #  there are no clashes with other processes).
     with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
         src_out = hsp.extractor(
-            filename=os.path.relpath(event_file),
+            filename=os.path.relpath(event_file) + filt_expr,
             phafile=sp_out,
-            regionfile=os.path.relpath(src_reg_file),
-            xcolf="X",
-            ycolf="Y",
             ecol="PI",
             gti="GTI",
+            gcol="ITYPE",
+            gstring=",".join(np.array(include_evt_grades).astype(str)),
             noprompt=True,
             clobber=True,
-        )
-
-        # Now for the background spectrum
-        back_out = hsp.extractor(
-            filename=os.path.relpath(event_file),
-            phafile=sp_back_out,
-            regionfile=os.path.relpath(back_reg_file),
-            xcolf="X",
-            ycolf="Y",
-            ecol="PI",
-            gti="GTI",
-            noprompt=True,
-            clobber=True,
+            chatter=TASK_CHATTER,
         )
 
     # Move the spectra up from the temporary directory
     os.rename(os.path.join(temp_work_dir, sp_out), os.path.join(out_dir, sp_out))
-    os.rename(
-        os.path.join(temp_work_dir, sp_back_out), os.path.join(out_dir, sp_back_out)
-    )
 
     # Make sure to remove the temporary directory
     rmtree(temp_work_dir)
 
-    return [src_out, back_out]
+    return src_out
 
 
 def gen_xrism_resolve_rmf(
@@ -836,15 +817,14 @@ NET_LC_PATH_TEMP = os.path.join(
 SP_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-radius{rad}deg-"
-    "enALL-spectrum.fits",
+    "xrism-resolve-obsid{oi}-filter{xrf}-pix{slp}-" "enALL-spectrum.fits",
 )
 
-BACK_SP_PATH_TEMP = os.path.join(
-    OUT_PATH,
-    "{oi}",
-    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-enALL-back-spectrum.fits",
-)
+# BACK_SP_PATH_TEMP = os.path.join(
+#    OUT_PATH,
+#    "{oi}",
+#    "xrism-resolve-obsid{oi}-filter{xrf}-ra{ra}-dec{dec}-enALL-back-spectrum.fits",
+# )
 # --------------------------
 
 # ----- GROUPEDSPECTRA -----
