@@ -317,6 +317,7 @@ def gen_xrism_resolve_image(
     hi_en: Quantity,
     sub_pixel: bool = False,
     im_bin_sub_pixel: int = 1,
+    include_evt_grades: list = [0, 1, 2, 3, 4],
 ):
     """
     This function wraps the HEASoft 'extractor' tool and is used to spatially bin
@@ -340,6 +341,7 @@ def gen_xrism_resolve_image(
         'im_bin_sub_pixel' argument, over-sampling the instruments spatial resolution.
     :param int im_bin_sub_pixel: Number of XRISM-Resolve SKY X-Y coordinate system
         'pixels' to bin into a single image pixel. Only used if 'sub_pixel' is True.
+    :param List[int] include_evt_grades:
     """
 
     # We can extract the ObsID directly from the header of the event list - it is
@@ -370,6 +372,17 @@ def gen_xrism_resolve_image(
         im_bin = im_bin_sub_pixel
         im_bin_name = im_bin
         bin_coord_sys = ""
+
+    # Normalize the input of event grades to be included
+    if isinstance(include_evt_grades, int):
+        include_evt_grades = [include_evt_grades]
+    elif isinstance(include_evt_grades, list):
+        include_evt_grades = [int(cur_gr) for cur_gr in include_evt_grades]
+    else:
+        raise TypeError(
+            "The 'include_evt_grades' argument must be a list of integer "
+            "ITYPE event grades."
+        )
 
     # Convert the energy limits to channel limits, rounding down and up to the nearest
     #  integer channel for the lower and upper bounds respectively.
@@ -403,7 +416,10 @@ def gen_xrism_resolve_image(
             binf=im_bin,
             xcolf=bin_coord_sys + "X",
             ycolf=bin_coord_sys + "Y",
+            gcol="ITYPE",
+            gstring=",".join(np.array(include_evt_grades).astype(str)),
             gti="GTI",
+            chatter=TASK_CHATTER,
         )
 
     # Move the output image file to the proper output directory from
