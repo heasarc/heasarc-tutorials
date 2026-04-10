@@ -954,6 +954,14 @@ is not compatible with remote CALDB files.
 This issue will be fixed in a future HEASoft release.
 ```
 
+As a workaround we use HEASoftPy's interface to the `quzcif` task to fetch the single
+CALDB file that the failing step requires; though only if the version of HEASoft is
+v6.36 or older, and if the CALDB is currently set up to use remote files.
+
+If we _do_ have to download the file, the path is passed to the
+`process_xrism_resolve(...)` wrapper function defined in [Global Setup: Functions](#functions)
+and discussed in the [Running the XRISM pipeline for Resolve](#running-the-xrism-pipeline-for-resolve) section.
+
 ```{code-cell} python
 # A constant that will be passed to the wrapper function for 'xapipeline', only needs
 #  to be not None if using a remote CALDB and HEASoft v6.36 or lower
