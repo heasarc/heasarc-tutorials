@@ -86,6 +86,7 @@ import os
 from random import randint
 from shutil import rmtree
 from typing import List
+from warnings import warn
 
 import heasoftpy as hsp
 import matplotlib.pyplot as plt
@@ -103,7 +104,7 @@ from astroquery.heasarc import Heasarc
 # from matplotlib.ticker import FuncFormatter
 from packaging.version import Version
 from regions import SkyRegion
-from xga.products import EventList
+from xga.products import EventList  # , Image
 ```
 
 ## Global Setup
@@ -207,12 +208,12 @@ def gen_xrism_resolve_image(
         generate the image.
     :param Quantity hi_en: Upper bound of the energy band within which we will
         generate the image.
-    :param bool sub_pixel: If True (default), then the output image pixels match
-        will match the Resolve's array's pixels. If False, then the output image
+    :param bool sub_pixel: If False (default), then the output image pixels match
+        will match the Resolve's array's pixels. If True, then the output image
         will be generated using the XY coordinates, and binned according to the
         'im_bin_sub_pixel' argument, over-sampling the instruments spatial resolution.
     :param int im_bin_sub_pixel: Number of XRISM-Resolve SKY X-Y coordinate system
-        'pixels' to bin into a single image pixel. Only used if 'sub_pixel' is False.
+        'pixels' to bin into a single image pixel. Only used if 'sub_pixel' is True.
     """
 
     # We can extract the ObsID directly from the header of the event list - it is
@@ -931,6 +932,45 @@ if HEA_VER < Version("v6.36"):
     )
 ```
 
+```{important}
+We are also aware of a problem in HEASoft **v6.36** where one step of the
+XRISM-Resolve pipeline (which we use in [the next section](#running-the-xrism-pipeline-for-resolve))
+is not compatible with remote CALDB files.
+
+This issue will be fixed in a future HEASoft release.
+```
+
+```{code-cell} python
+# A constant that will be passed to the wrapper function for 'xapipeline', only needs
+#  to be not None if using a remote CALDB and HEASoft v6.36 or lower
+RSLMPCOR_PATH = None
+
+# Have to fetch file if HEASoft v6.36 or lower, and using a remote CALDB setup
+if HEA_VER <= Version("v6.36") and (
+    os.environ["CALDB"].startswith("https") or ".com/" in os.environ["CALDB"]
+):
+    warn(
+        "Downloading the XRISM-Resolve 'RSLMPCOR' CALDB file to avoid HEASoft v6.36's "
+        "small incompatibility with a remote XRISM-Resolve CALDB.",
+        stacklevel=2,
+    )
+
+    # This will find and download (retrieve=True) the XRISM-Resolve mid-resolution
+    #  primary/secondary event channel correction file
+    with contextlib.chdir(ROOT_DATA_DIR):
+        caldb_ret = hsp.quzcif(
+            mission="xrism",
+            instrument="resolve",
+            codename="RSLMPCOR",
+            retrieve=True,
+            noprompt=True,
+            clobber=True,
+        )
+
+    # Set the path to the downloaded file
+    RSLMPCOR_PATH = os.path.join(ROOT_DATA_DIR, caldb_ret.output[0].split(" ")[0])
+```
+
 ### Running the XRISM pipeline for Resolve
 
 `xapipeline` needs the 'stem' of the input file names to be defined, so that it
@@ -1118,15 +1158,48 @@ large spread in rise times, Ls events are excluded from the cut.
 
 ```
 
-### Further considerations for spatially-resolved analyses
-
-Something something out of the scope something something
+### Making new 'cleaned' event lists
 
 ```{code-cell} python
 
 ```
 
-## 4. Generating new XRISM-Resolve spectra
+### Further considerations for spatially-resolved analyses
+
+Something something out of the scope something something but still need you to be
+aware that there _are_ further considerations.
+
+```{code-cell} python
+
+```
+
+## 4. Generating new XRISM-Resolve images
+
+### Images from unscreened event lists
+
+```{code-cell} python
+
+```
+
+### Images from 'for science' cleaned event lists
+
+```{code-cell} python
+
+```
+
+### Images from 'for RMF' cleaned event lists
+
+```{code-cell} python
+
+```
+
+### Comparing the new images
+
+```{code-cell} python
+
+```
+
+## 5. Generating new XRISM-Resolve spectra
 
 ### Defining the extraction region/pixels
 
