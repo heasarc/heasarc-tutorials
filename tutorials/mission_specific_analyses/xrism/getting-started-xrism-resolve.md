@@ -122,6 +122,7 @@ def process_xrism_resolve(
     cur_obs_id: str,
     out_dir: str,
     file_stem: str,
+    rslmpcor_caldb: str = None,
 ):
     """
 
@@ -129,6 +130,7 @@ def process_xrism_resolve(
     :param str cur_obs_id: The ObsID of the XRISM observation to be processed.
     :param str out_dir: The directory where output files should be written.
     :param str file_stem:
+    :param str rslmpcor_caldb:
 
     :return: A tuple containing the processed ObsID, the log output of the
         pipeline, and a boolean flag indicating success (True) or failure (False).
@@ -145,6 +147,13 @@ def process_xrism_resolve(
     # Create a temporary working directory
     temp_work_dir = os.path.join(out_dir, "xapipeline_{}".format(randint(0, int(1e8))))
     os.makedirs(temp_work_dir)
+
+    # Check whether a path to CALDB file that the 'rslmpcor' HEASoft task requires
+    #  has been passed. This is necessary because HEASoft v6.36 and below have a bug
+    #  where the 'rslmpcor' task is not compatible with the remote CALDB, so for this
+    #  demonstration to work we have to download it.
+    if rslmpcor_caldb is not None:
+        rslmpcor_caldb = os.path.abspath(rslmpcor_caldb)
 
     # Using dual contexts, one that moves us into the output directory for the
     #  duration, and another that creates a new set of HEASoft parameter files (so
@@ -163,6 +172,11 @@ def process_xrism_resolve(
                 exit_stage=2,
                 steminputs=file_stem,
                 stemoutputs=file_stem,
+                rsl_mpcorfile=(
+                    "NONE"
+                    if rslmpcor_caldb is None
+                    else os.path.relpath(rslmpcor_caldb)
+                ),
                 clobber=True,
                 chatter=TASK_CHATTER,
                 noprompt=True,
@@ -1004,6 +1018,7 @@ with mp.Pool(NUM_CORES) as p:
             oi,
             os.path.join(OUT_PATH, oi),
             file_stem_temp.format(oi=oi),
+            RSLMPCOR_PATH,
         ]
         for oi in rel_obsids
     ]
