@@ -435,8 +435,9 @@ def gen_xrism_resolve_image(
 def gen_xrism_resolve_spectrum(
     event_file: str,
     out_dir: str,
-    include_pixels: list = None,
     include_evt_grades: list = [0, 1, 2, 3, 4],
+    include_pixels: list = None,
+    exclude_pixel_27: bool = True,
 ):
     """
 
@@ -466,6 +467,14 @@ def gen_xrism_resolve_spectrum(
             "The 'include_evt_grades' argument must be a list of integer "
             "ITYPE event grades."
         )
+
+    # If the special-case of ignoring pixel 27 is activated, we modify the
+    #  include_pixels variable. Either from list form or from the all-inclusive None
+    #  INTO a list of all pixels except 27.
+    if exclude_pixel_27 and include_pixels is not None:
+        include_pixels = [p for p in include_pixels if p != 27]
+    elif exclude_pixel_27 and include_pixels is None:
+        include_pixels = [p for p in range(0, 36) if p != 27]
 
     if include_pixels is None:
         include_pixels = "0:35"
