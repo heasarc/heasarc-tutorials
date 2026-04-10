@@ -183,6 +183,112 @@ def process_xrism_resolve(
     return cur_obs_id, out, task_success
 
 
+def gen_xrism_resolve_image(
+    event_file: str,
+    out_dir: str,
+    lo_en: Quantity,
+    hi_en: Quantity,
+    sub_pixel: bool = False,
+    im_bin_sub_pixel: int = 1,
+):
+    """
+    This function wraps the HEASoft 'extractor' tool and is used to spatially bin
+    XRISM-Resolve event lists into images. The HEASoftPy interface to 'extractor'
+    is used.
+
+    The ObsID and X-ray filter are extracted from the header of the passed event
+    list file.
+
+    :param str event_file: Path to the event list (usually cleaned, but not
+        necessarily) we wish to generate an image from. ObsID and dataclass information
+        will be extracted from the EVENTS table header.
+    :param str out_dir: The directory where output files should be written.
+    :param Quantity lo_en: Lower bound of the energy band within which we will
+        generate the image.
+    :param Quantity hi_en: Upper bound of the energy band within which we will
+        generate the image.
+    :param bool sub_pixel: If True (default), then the output image pixels match
+        will match the Resolve's array's pixels. If False, then the output image
+        will be generated using the XY coordinates, and binned according to the
+        'im_bin_sub_pixel' argument, over-sampling the instruments spatial resolution.
+    :param int im_bin_sub_pixel: Number of XRISM-Resolve SKY X-Y coordinate system
+        'pixels' to bin into a single image pixel. Only used if 'sub_pixel' is False.
+    """
+
+    # We can extract the ObsID directly from the header of the event list - it is
+    #  safer than having them be passed to this function separately.
+    with fits.open(event_file) as read_evto:
+        cur_obs_id = read_evto["EVENTS"].header["OBS_ID"]
+        # We extract the filter value from the header, then pass it through a
+        #  dictionary defined in the constants section to convert it to the
+        #  format you see in XRISM file names.
+        cur_filter = RESOLVE_FILTERS[read_evto["EVENTS"].header["FILTER"]]
+
+    # Make sure the lower and upper energy limits make sense
+    if lo_en > hi_en:
+        raise ValueError(
+            "The lower energy limit must be less than or equal to the upper "
+            "energy limit."
+        )
+    else:
+        lo_en_val = lo_en.to("keV").value
+        hi_en_val = hi_en.to("keV").value
+
+    # The image binning factor will depend on how we're generating these images
+    if not sub_pixel:
+        im_bin = 1
+        im_bin_name = "PIX"
+        bin_coord_sys = "DET"
+    else:
+        im_bin = im_bin_sub_pixel
+        im_bin_name = im_bin
+        bin_coord_sys = ""
+
+    # Convert the energy limits to channel limits, rounding down and up to the nearest
+    #  integer channel for the lower and upper bounds respectively.
+    lo_ch = np.floor((lo_en / RSL_EV_PER_CHAN).to("chan")).value.astype(int)
+    hi_ch = np.ceil((hi_en / RSL_EV_PER_CHAN).to("chan")).value.astype(int)
+
+    # Create modified input event list file path, where we use the just-calculated
+    #  PI channel limits to subset the events
+    evt_file_chan_sel = f"{event_file}[PI={lo_ch}:{hi_ch}]"
+
+    # Set up the output file name for the image we're about to generate.
+    im_out = os.path.basename(IM_PATH_TEMP).format(
+        oi=cur_obs_id, xrf=cur_filter, ibf=im_bin_name, lo=lo_en_val, hi=hi_en_val
+    )
+
+    # Create a temporary working directory
+    temp_work_dir = os.path.join(
+        out_dir, "im_extractor_{}".format(randint(0, int(1e8)))
+    )
+    os.makedirs(temp_work_dir)
+
+    # Using dual contexts, one that moves us into the output directory for the
+    #  duration, and another that creates a new set of HEASoft parameter files (so
+    #  there are no clashes with other processes).
+    with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
+        out = hsp.extractor(
+            filename=evt_file_chan_sel,
+            imgfile=im_out,
+            noprompt=True,
+            clobber=True,
+            binf=im_bin,
+            xcolf=bin_coord_sys + "X",
+            ycolf=bin_coord_sys + "Y",
+            gti="GTI",
+        )
+
+    # Move the output image file to the proper output directory from
+    #  the temporary working directory
+    os.rename(os.path.join(temp_work_dir, im_out), os.path.join(out_dir, im_out))
+
+    # Make sure to remove the temporary directory
+    rmtree(temp_work_dir)
+
+    return out
+
+
 def gen_xrism_resolve_spectrum(
     event_file: str,
     out_dir: str,
@@ -701,6 +807,16 @@ avail_xrism_obs = avail_xrism_obs[avail_xrism_obs["obsid"] == "300072010"]
 
 # Create an array of the relevant ObsIDs
 rel_obsids = avail_xrism_obs["obsid"].value.data
+
+# Create a dictionary mapping ObsIDs to the filters used in each observation
+rel_filters = {
+    row["obsid"]: [
+        RESOLVE_FILTERS[f]
+        for f in RESOLVE_FILTERS
+        if row[f"rsl_fil_{f.lower()}"] == "Y"
+    ]
+    for row in avail_xrism_obs
+}
 ```
 
 ### Downloading the XRISM observation
@@ -938,21 +1054,65 @@ plt.show()
 
 ### Overabundance of low-resolution secondary (**Ls**) events
 
+***Highly recommended for Relatively Weak Sources/Temporary Measure***
+
 The branching ratios plot demonstrates an important known issue with XRISM-Resolve data....
+
+```
+ftcopy infile="xa000126000 rsl_p0px1000_cl.evt[EVENTS][ITYPE$<$4]"
+outfile=xa000126000 rsl_p0px1000_wols_cl.evt copyall=yes clobber=yes
+history=yes
+```
 
 ### XRISM-Resolve's pixel 27 is broken
 
-```{code-cell} python
-
-```
-
-### Excluding 'frame events'
+***<span style="color:red">Obviously recommend that it is excluded, but what is the best way to do it in this particular notebook?</span>***
 
 ```{code-cell} python
 
 ```
+
+### Excluding pixel-pixel coincident events
+
+***ARRRGH THIS SECTION IN THE ABC FEELS LIKE ITS BEEN COPIED AND PASTED FROM VARIOUS
+PLACES AND NOT EDITED - THEY SEEM TO BE TALKING ABOUT VARIOUS TYPES OF COINCIDENT EVENTS
+AND NOT MAKING CLEAR WHICH ONE THEY REFER TO AT A PARTICULAR TIME***
+
+```
+ftcopy infile="xa000126000rsl_p0px1000_cl.evt[EVENTS][(PI>=600)
+&&(((((RISE_TIME+0.00075*DERIV_MAX)>46)&&
+((RISE_TIME+0.00075*DERIV_MAX)<58))&&ITYPE<4)||(ITYPE==4))&&
+STATUS[4]==b0]" outfile=xa000126000rsl_p0px1000_cl2.evt
+copyall=yes clobber=yes history=yes
+```
+
+
+#### Frame events
+
+***<span style="color:red">CHUNK BELOW CURRENTLY JUST RIPPED FROM SECTION 6.3 OF THE XRISM ABC GUIDE</span>***
+When energy is absorbed into the silicon frame around the Resolve array, it pulses the
+temperature of the heat sink of all of the pixels, resulting in pulses in the
+temperatures of the pixels themselves. For very large depositions of energy (MeV scale),
+the resulting pulses on the pixels can produce signals that trigger in the Pulse Shape
+Processor (PSP). We refer to the resulting clusters of events as frame events. Most of
+these events have significantly different pulse rise times from regular events, so
+they can be removed efficiently with a rise time cut. Because Ls events have a very
+large spread in rise times, Ls events are excluded from the cut.
+
+```{code-cell} python
+
+```
+
+#### Electrical cross-talk
+
+
+#### Real events contaminated by untriggered crosstalk
+
+
 
 ### Avoiding periods of high particle background flux
+
+**Depending on source flux or science goal - might be useful for low brightness sources, to improve SNR**
 
 ```{code-cell} python
 
@@ -977,7 +1137,21 @@ Something something out of the scope something something
 ### Generating spectral files
 
 ```{code-cell} python
-
+# arg_combs = [
+#     [
+#         EVT_PATH_TEMP.format(oi=oi, xrf=xf),
+#         os.path.join(OUT_PATH, oi),
+#         src_coord,
+#         src_reg_rad,
+#         obs_src_reg_path_temp.format(oi=oi),
+#         obs_back_reg_path_temp.format(oi=oi),
+#     ]
+#     for oi, xfs in rel_filters.items()
+#     for xf in xfs
+# ]
+#
+# with mp.Pool(NUM_CORES) as p:
+#     sp_result = p.starmap(gen_xrism_resolve_spectrum, arg_combs)
 ```
 
 ### Producing redistribution matrix files (RMFs)
