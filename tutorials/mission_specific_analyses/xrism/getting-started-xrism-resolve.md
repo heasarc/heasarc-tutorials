@@ -456,6 +456,17 @@ def gen_xrism_resolve_spectrum(
         #  format you see in XRISM file names.
         cur_filter = RESOLVE_FILTERS[read_evto["EVENTS"].header["FILTER"]]
 
+    # Normalize the input of event grades to be included
+    if isinstance(include_evt_grades, int):
+        include_evt_grades = [include_evt_grades]
+    elif isinstance(include_evt_grades, list):
+        include_evt_grades = [int(cur_gr) for cur_gr in include_evt_grades]
+    else:
+        raise TypeError(
+            "The 'include_evt_grades' argument must be a list of integer "
+            "ITYPE event grades."
+        )
+
     if include_pixels is None:
         include_pixels = "0:35"
     else:
