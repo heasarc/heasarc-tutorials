@@ -85,7 +85,7 @@ import multiprocessing as mp
 import os
 from random import randint
 from shutil import rmtree
-from typing import List
+from typing import List, Optional, Union
 from warnings import warn
 
 import heasoftpy as hsp
@@ -196,6 +196,118 @@ def process_xrism_resolve(
         # Make sure to remove the temporary directory
         rmtree(temp_work_dir)
     return cur_obs_id, out, task_success
+
+
+def screen_xrism_resolve_evts(
+    event_file: str,
+    out_dir: str,
+    lo_pi: Optional[Union[int, Quantity]] = 600,
+    hi_pi: Optional[Union[int, Quantity]] = None,
+    rise_time_screen: bool = True,
+    exclude_frame_evts: bool = True,
+    elec_coinc_evt_screen: bool = False,
+    exclude_pix27: bool = True,
+):
+    """
+    DOES NOT DO GRADE SELECTION - AS NOT RECOMMENDED FOR MAKING IMAGES/LCS, SO I
+    DON'T WANT TO ENFORCE IT.
+    """
+
+    # We can extract the ObsID directly from the header of the event list - it is
+    #  safer than having them be passed to this function separately.
+    with fits.open(event_file) as read_evto:
+        cur_obs_id = read_evto["EVENTS"].header["OBS_ID"]
+        # We extract the filter value from the header, then pass it through a
+        #  dictionary defined in the constants section to convert it to the
+        #  format you see in XRISM file names.
+        cur_filter = RESOLVE_FILTERS[read_evto["EVENTS"].header["FILTER"]]
+
+    # NOTES TO SELF
+    # elec_coinc_evt_screen = True means screening on STATUS[13] - should
+    #  recommend for 'bright' sources
+    # DO NOT CURRENTLY UNDERSTAND THE RECOMMENDED RISE TIME CUTS - THEY AREN'T
+    #  EXPLAINED IN THE ABC THAT I CAN SEE...
+
+    if isinstance(lo_pi, int):
+        pass
+    elif isinstance(lo_pi, Quantity) and lo_pi.unit.is_equivalent("chan"):
+        lo_pi = lo_pi.to("chan").astype(int).value
+    elif isinstance(lo_pi, Quantity) and lo_pi.unit.is_equivalent("eV"):
+        lo_pi = (lo_pi.to("eV") / RSL_EV_PER_CHAN).to("chan").astype(int).value
+    elif lo_pi is not None:
+        raise ValueError(
+            "If set, 'lo_pi' must be an integer PI value, or an Astropy quantity "
+            "convertible to 'eV' - otherwise it must be None."
+        )
+
+    if isinstance(hi_pi, int):
+        pass
+    elif isinstance(hi_pi, Quantity) and hi_pi.unit.is_equivalent("chan"):
+        hi_pi = hi_pi.to("chan").astype(int).value
+    elif isinstance(hi_pi, Quantity) and hi_pi.unit.is_equivalent("eV"):
+        hi_pi = (hi_pi.to("eV") / RSL_EV_PER_CHAN).to("chan").astype(int).value
+    elif hi_pi is not None:
+        raise ValueError(
+            "If set, 'hi_pi' must be an integer PI value, or an Astropy quantity "
+            "convertible to 'eV' - otherwise it must be None."
+        )
+
+    filt_expr = []
+
+    if lo_pi is not None:
+        filt_expr.append(f"(PI>={lo_pi})")
+    if hi_pi is not None:
+        filt_expr.append(f"(PI<={hi_pi})")
+
+    if rise_time_screen:
+        filt_expr.append(
+            "(((((RISE_TIME+0.00075*DERIV_MAX)>46)&&"
+            "((RISE_TIME+0.00075*DERIV_MAX)<58))&&ITYPE<4)||(ITYPE==4))"
+        )
+
+    if exclude_pix27:
+        filt_expr.append("(PIXEL!=27)")
+
+    if exclude_frame_evts:
+        filt_expr.append("(STATUS[4]==b0)")
+
+    if elec_coinc_evt_screen:
+        filt_expr.append("(STATUS[13]==b0)")
+
+    evt_file_filt = f"{event_file}[EVENTS][{'&&'.join(filt_expr)}]"
+
+    evt_out = os.path.basename(SCR_EVT_PATH_TEMP).format(
+        oi=cur_obs_id,
+        xrf=cur_filter,
+    )
+
+    # Create a temporary working directory
+    temp_work_dir = os.path.join(
+        out_dir, "cleaning_evts_{}".format(randint(0, int(1e8)))
+    )
+    os.makedirs(temp_work_dir)
+
+    # Using dual contexts, one that moves us into the output directory for the
+    #  duration, and another that creates a new set of HEASoft parameter files (so
+    #  there are no clashes with other processes).
+    with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
+        out = hsp.ftcopy(
+            infile=os.path.relpath(evt_file_filt),
+            outfile=evt_out,
+            copyall=True,
+            clobber=True,
+            history=True,
+            noprompt=True,
+            chatter=TASK_CHATTER,
+        )
+
+    # Move the event list up from the temporary directory
+    os.rename(os.path.join(temp_work_dir, evt_out), os.path.join(out_dir, evt_out))
+
+    # Make sure to remove the temporary directory
+    rmtree(temp_work_dir)
+
+    return out
 
 
 def gen_xrism_resolve_image(
@@ -647,6 +759,18 @@ EVT_PATH_TEMP = os.path.join(OUT_PATH, "{oi}", "xa{oi}rsl_p0{xrf}_cl.evt")
 
 # The path to the bad pixel map, useful for excluding dodgy pixels from data products
 BADPIX_PATH_TEMP = os.path.join(OUT_PATH, "{oi}", "xa{oi}rsl_p{sc}{xrf}.bimg")
+# --------------------------
+
+# -- SCREENED EVENT LISTS --
+# Template for the path to screened event lists
+
+
+# TODO NEED TO FINISH THIS OBV.
+SCR_EVT_PATH_TEMP = os.path.join(
+    OUT_PATH, "{oi}", "xrism-resolve-obsid{oi}-filter{xrf}--clean-events.fits"
+)
+
+
 # --------------------------
 
 # --------- IMAGES ---------
@@ -1141,6 +1265,8 @@ history=yes
 PLACES AND NOT EDITED - THEY SEEM TO BE TALKING ABOUT VARIOUS TYPES OF COINCIDENT EVENTS
 AND NOT MAKING CLEAR WHICH ONE THEY REFER TO AT A PARTICULAR TIME***
 
+(((((RISE_TIME+0.00075*DERIV_MAX)>46)&&((RISE_TIME+0.00075*DERIV_MAX)<58))&&ITYPE<4)||(ITYPE==4))
+
 ```
 ftcopy infile="xa000126000rsl_p0px1000_cl.evt[EVENTS][(PI>=600)
 &&(((((RISE_TIME+0.00075*DERIV_MAX)>46)&&
@@ -1198,19 +1324,19 @@ aware that there _are_ further considerations.
 
 ## 4. Generating new XRISM-Resolve images
 
-### Images from unscreened event lists
+### Images from cleaned-**un**screened event lists
 
 ```{code-cell} python
 
 ```
 
-### Images from 'for science' cleaned event lists
+### Images from 'for science' cleaned-screened event lists
 
 ```{code-cell} python
 
 ```
 
-### Images from 'for RMF' cleaned event lists
+### Images from 'for RMF' cleaned-screened event lists
 
 ```{code-cell} python
 
@@ -1218,8 +1344,10 @@ aware that there _are_ further considerations.
 
 ### Comparing the new images
 
-```{code-cell} python
-
+```
+# test_im = "XRISM_output/xrism-resolve-obsid300072010-filterpx1000-imbinfactorPIX-en4.0_10.0keV-image.fits"
+# im = Image(test_im, '300072010', 'Resolve', "", "", "", Quantity(4, 'keV'), Quantity(10, 'keV'))
+# im.view(zoom_in=True, manual_zoom_xlims=[-0.5, 5.5], manual_zoom_ylims=[-0.5, 5.5])
 ```
 
 ## 5. Generating new XRISM-Resolve spectra
