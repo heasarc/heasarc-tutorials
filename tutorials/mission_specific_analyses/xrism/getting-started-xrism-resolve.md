@@ -590,7 +590,7 @@ def gen_xrism_resolve_spectrum(
         include_pixels = [p for p in range(0, 36) if p != 27]
 
     if include_pixels is None:
-        include_pixels = "0:35"
+        include_pixels = "0:11,13:35"
     else:
         # Convert to a set of pixel ranges, as requested in the XRISM rslmkrmf docs
         groups = np.split(
@@ -854,10 +854,11 @@ def gen_xrism_resolve_rmf(
 
 def gen_xrism_resolve_arf(
     out_dir: str,
+    rel_coord: SkyCoord,
     expmap_file: str,
     spec_file: str,
     rmf_file: str,
-    src_radec_reg_file: str,
+    pix_reg_file: str,
     num_photons: int,
     min_photons: int,
 ):
@@ -877,12 +878,12 @@ def gen_xrism_resolve_arf(
     CalDB file).
 
     :param str out_dir: The directory where output files should be written.
+    :param SkyCoord rel_coord:
+    :param str pix_reg_file:
     :param str expmap_file: The path to the exposure map file necessary to generate
         the ARF.
     :param str spec_file: The path to the spectrum file for which to generate an ARF.
     :param str rmf_file: The path to the RMF file necessary to generate an ARF.
-    :param str src_radec_reg_file: The path to the region file defining the source
-        region for which to generate an ARF.
     :param int num_photons: The number of photons, per energy grid point, per
         attitude histogram, to simulate in the ray-tracing portion of
         XRISM-Resolve ARF generation.
@@ -896,11 +897,10 @@ def gen_xrism_resolve_arf(
     with fits.open(spec_file) as read_speco:
         cur_obs_id = read_speco[0].header["OBS_ID"]
 
-    # Spectrum files generated in this demonstration notebook contain RA-Dec
-    #  information in their file name, so we will read it out from there
-    radec_sec = os.path.basename(spec_file).split("-radius")[0].split("-ra")[1]
-    cen_strs = radec_sec.split("-dec")
-    ra_val, dec_val = [float(crd) for crd in cen_strs]
+    pix_reg_file = os.path.abspath(pix_reg_file)
+    expmap_file = os.path.abspath(expmap_file)
+    spec_file = os.path.abspath(spec_file)
+    rmf_file = os.path.abspath(rmf_file)
 
     # Create a temporary working directory
     temp_work_dir = os.path.join(out_dir, "xaarfgen_{}".format(randint(0, int(1e8))))
@@ -935,13 +935,13 @@ def gen_xrism_resolve_arf(
             sourcetype="POINT",
             numphotons=num_photons,
             minphotons=min_photons,
-            source_ra=ra_val,
-            source_dec=dec_val,
+            source_ra=rel_coord.ra.value,
+            source_dec=rel_coord.dec.value,
+            regionfile=os.path.relpath(pix_reg_file),
             telescop="XRISM",
-            instrume="XTEND",
+            instrume="RESOLVE",
             emapfile=os.path.relpath(expmap_file),
             rmffile=os.path.relpath(rmf_file),
-            regionfile=os.path.relpath(src_radec_reg_file),
             regmode="RADEC",
             noprompt=True,
             clobber=True,
@@ -960,6 +960,38 @@ def gen_xrism_resolve_arf(
     rmtree(temp_work_dir)
 
     return out
+
+
+def det_region_from_pixels(new_reg_path: str, include_pixels: List[int] = None):
+    """
+
+    :param List[int] include_pixels:
+    """
+
+    if include_pixels is not None:
+        if not isinstance(include_pixels, (list, str, int)):
+            raise TypeError("'include_pixels' must be a list of integer pixel IDs.")
+        elif not isinstance(include_pixels, list) and isinstance(
+            include_pixels, (str, int)
+        ):
+            include_pixels = [include_pixels]
+
+        try:
+            include_pixels = np.array([int(rp) for rp in include_pixels])
+        except ValueError:
+            raise TypeError(
+                "All entries in 'include_pixels' must be integer "
+                "XRISM-Resolve pixel IDs."
+            )
+
+    else:
+        include_pixels = np.append(np.arange(0, 12), np.arange(13, 36))
+
+    #
+    rel_pix_regs = [RESOLVE_PIX_DET_REGIONS[cur_pix] for cur_pix in include_pixels]
+
+    with open(new_reg_path, "w") as new_rego:
+        new_rego.writelines(cur_reg + "\n" for cur_reg in rel_pix_regs)
 ```
 
 ### Constants
@@ -1003,6 +1035,44 @@ RESOLVE_FILTERS = {
     "ND": "px3000",
     "POLY": "px2000",
     "UNDEF": "px0000",
+}
+
+RESOLVE_PIX_DET_REGIONS = {
+    0: "box(4,3,1,1,0)",
+    1: "box(6,3,1,1,0)",
+    2: "box(5,3,1,1,0)",
+    3: "box(6,2,1,1,0)",
+    4: "box(5,2,1,1,0)",
+    5: "box(6,1,1,1,0)",
+    6: "box(5,1,1,1,0)",
+    7: "box(4,2,1,1,0)",
+    8: "box(4,1,1,1,0)",
+    9: "box(1,3,1,1,0)",
+    10: "box(2,3,1,1,0)",
+    11: "box(1,2,1,1,0)",
+    13: "box(2,2,1,1,0)",
+    14: "box(2,1,1,1,0)",
+    15: "box(3,2,1,1,0)",
+    16: "box(3,1,1,1,0)",
+    17: "box(3,3,1,1,0)",
+    18: "box(3,4,1,1,0)",
+    19: "box(1,4,1,1,0)",
+    20: "box(2,4,1,1,0)",
+    21: "box(1,5,1,1,0)",
+    22: "box(2,5,1,1,0)",
+    23: "box(1,6,1,1,0)",
+    24: "box(2,6,1,1,0)",
+    25: "box(3,5,1,1,0)",
+    26: "box(3,6,1,1,0)",
+    27: "box(6,4,1,1,0)",
+    28: "box(5,4,1,1,0)",
+    29: "box(6,5,1,1,0)",
+    30: "box(6,6,1,1,0)",
+    31: "box(5,5,1,1,0)",
+    32: "box(5,6,1,1,0)",
+    33: "box(4,5,1,1,0)",
+    34: "box(4,6,1,1,0)",
+    35: "box(4,4,1,1,0)",
 }
 ```
 
@@ -1219,11 +1289,11 @@ You could also set up a SkyCoord object directly, if you already know the coordi
 ```
 
 ```{code-cell} python
-src_coord = SkyCoord.from_name(SRC_NAME).transform_to("icrs")
+SRC_COORD = SkyCoord.from_name(SRC_NAME).transform_to("icrs")
 # This will be useful later on in the notebook, for functions that take
 #  coordinates as an astropy Quantity.
-src_coord_quant = Quantity([src_coord.ra, src_coord.dec])
-src_coord
+SRC_COORD_QUANT = Quantity([SRC_COORD.ra, SRC_COORD.dec])
+SRC_COORD
 ```
 
 ### Searching for relevant observations
@@ -1244,7 +1314,7 @@ col_str = (
     "rsl_fil_open,rsl_fil_undef"
 )
 
-all_xrism_obs = Heasarc.query_region(src_coord, catalog_name, columns=col_str)
+all_xrism_obs = Heasarc.query_region(SRC_COORD, catalog_name, columns=col_str)
 all_xrism_obs
 ```
 
