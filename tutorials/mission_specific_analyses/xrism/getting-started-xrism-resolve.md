@@ -604,10 +604,11 @@ def gen_xrism_resolve_rmf(
                     )
                     for cur_gr in sp_grade_ranges
                 ]
-            )
+            ).astype(int)
+            sp_include_evt_grades = sp_include_evt_grades.tolist()
 
         if "PIXEL" in dtype_hdr_ens:
-            sp_pix_ranges = sp_grade_ranges = read_speco["SPECTRUM"].header[
+            sp_pix_ranges = read_speco["SPECTRUM"].header[
                 dtype_hdr_ens["PIXEL"].replace("DSTYP", "DSVAL")
             ]
             sp_pix_ranges = [
@@ -623,7 +624,9 @@ def gen_xrism_resolve_rmf(
                     )
                     for cur_pr in sp_pix_ranges
                 ]
-            )
+            ).astype(int)
+
+            sp_include_pixels = sp_include_pixels.tolist()
 
     if sp_include_evt_grades is not None and include_evt_grades is not None:
         raise ValueError(
@@ -642,13 +645,13 @@ def gen_xrism_resolve_rmf(
             f"file header, and so the 'include_pixels' argument "
             f"should be None."
         )
+    elif sp_include_pixels is not None:
+        include_pixels = sp_include_pixels
     elif include_pixels is None:
         raise ValueError(
             "No pixel information could be identified in the spectrum "
             "file header, so 'include_pixels' cannot be None."
         )
-    elif sp_include_pixels is not None:
-        include_pixels = sp_include_pixels
 
     # Check that the RMF type passed by the user is valid
     if not isinstance(rmf_type, str):
@@ -659,7 +662,7 @@ def gen_xrism_resolve_rmf(
     # Enforce correct types for input grades
     if isinstance(include_evt_grades, str) or (
         isinstance(include_evt_grades, list)
-        and any(isinstance([gr for gr in include_evt_grades]), str)
+        and any([isinstance(gr, str) for gr in include_evt_grades])
     ):
         try:
             include_evt_grades = [int(gr) for gr in list(include_evt_grades)]
@@ -669,10 +672,10 @@ def gen_xrism_resolve_rmf(
             raise TypeError(
                 "Entries in the 'include_evt_grades' list must be integers."
             )
-    elif isinstance(int):
+    elif isinstance(include_evt_grades, int):
         include_evt_grades = [include_evt_grades]
-    elif not isinstance(include_evt_grades, list) and isinstance(
-        [gr for gr in include_evt_grades], str
+    elif not isinstance(include_evt_grades, list) and any(
+        [isinstance(gr, str) for gr in include_evt_grades]
     ):
         raise TypeError("Only pass lists of integers to 'include_evt_grades'.")
 
@@ -725,7 +728,7 @@ def gen_xrism_resolve_rmf(
     #  there are no clashes with other processes).
     with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
         out = hsp.rslmkrmf(
-            infile=spec_file,
+            infile=os.path.relpath(event_file),
             whichrmf=rmf_type,
             resolist=include_evt_grades,
             regionfile="NONE",
