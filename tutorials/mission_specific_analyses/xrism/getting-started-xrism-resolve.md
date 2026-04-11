@@ -103,7 +103,6 @@ from astroquery.heasarc import Heasarc
 
 # from matplotlib.ticker import FuncFormatter
 from packaging.version import Version
-from regions import SkyRegion
 from xga.products import EventList  # , Image
 ```
 
@@ -317,7 +316,7 @@ def gen_xrism_resolve_image(
     hi_en: Quantity,
     sub_pixel: bool = False,
     im_bin_sub_pixel: int = 1,
-    include_evt_grades: list = [0, 1, 2, 3, 4],
+    include_evt_grades: list = None,
 ):
     """
     This function wraps the HEASoft 'extractor' tool and is used to spatially bin
@@ -372,6 +371,10 @@ def gen_xrism_resolve_image(
         im_bin = im_bin_sub_pixel
         im_bin_name = im_bin
         bin_coord_sys = ""
+
+    # The default behavior is to use all event grades
+    if include_evt_grades is None:
+        include_evt_grades = [0, 1, 2, 3, 4]
 
     # Normalize the input of event grades to be included
     if isinstance(include_evt_grades, int):
@@ -468,6 +471,11 @@ def gen_xrism_resolve_spectrum(
             "ITYPE event grades."
         )
 
+    # Also make the selected grades into a string for the output file name
+    include_evt_grades_str = "_".join(
+        [RESOLVE_EVT_GRADES_INT_SHORT[cur_gr] for cur_gr in include_evt_grades]
+    )
+
     # If the special-case of ignoring pixel 27 is activated, we modify the
     #  include_pixels variable. Either from list form or from the all-inclusive None
     #  INTO a list of all pixels except 27.
@@ -489,12 +497,12 @@ def gen_xrism_resolve_spectrum(
 
     filt_expr = f"[PIXEL={include_pixels}]"
 
-    # Set up the output file names for the source and background spectra we're
-    #  about to generate.
+    # Set up the output file names for the source spectrum we're about to generate.
     sp_out = os.path.basename(SP_PATH_TEMP).format(
         oi=cur_obs_id,
         xrf=cur_filter,
         slp=include_pixels.replace(":", "to").replace(",", "_"),
+        grd=include_evt_grades_str,
     )
 
     # Create a temporary working directory
@@ -519,6 +527,24 @@ def gen_xrism_resolve_spectrum(
             chatter=TASK_CHATTER,
         )
 
+        # Add DSTYP and DSVAL header keys to the spectrum file describing the
+        #  pixel ranges - this is convenient for our implementation of the
+        #  RMF generation wrapper function.
+        with fits.open(sp_out, mode="update") as new_speco:
+            spec_hdr = new_speco["SPECTRUM"].header
+
+            # First find the next available DSTYP/DSVAL index to avoid overwriting
+            #  existing entries
+            dstyp_ind = 1
+            while f"DSTYP{dstyp_ind}" in spec_hdr:
+                dstyp_ind += 1
+
+            # Convert the pixel ranges back to a string format for the header
+            #  include_pixels is already in the format used for the FITS filter
+            #  expression (e.g., "0:10,15:20,27" or "0:35")
+            spec_hdr[f"DSTYP{dstyp_ind}"] = "PIXEL"
+            spec_hdr[f"DSVAL{dstyp_ind}"] = include_pixels
+
     # Move the spectra up from the temporary directory
     os.rename(os.path.join(temp_work_dir, sp_out), os.path.join(out_dir, sp_out))
 
@@ -529,11 +555,11 @@ def gen_xrism_resolve_spectrum(
 
 
 def gen_xrism_resolve_rmf(
+    event_file: str,
     spec_file: str,
     out_dir: str,
-    consider_grades: List[int],
-    rel_region: SkyRegion = None,
-    rel_pixels: List[int] = None,
+    include_evt_grades: List[int] = None,
+    include_pixels: List[int] = None,
     rmf_type: str = "L",
 ):
     """
@@ -542,11 +568,87 @@ def gen_xrism_resolve_rmf(
 
     :param str spec_file: The path to the spectrum file for which to generate an RMF.
     :param str out_dir: The directory where output files should be written.
-
-    :param List[int] consider_grades:
-    :param str rel_region:
     :param List[int] rel_pixels:
     """
+
+    #
+    sp_include_evt_grades = None
+    sp_include_pixels = None
+
+    with fits.open(spec_file) as read_speco:
+        ds_mask = np.array(
+            ["DSTYP" in hdr_key for hdr_key in read_speco["SPECTRUM"].header]
+        )
+
+        dtyp_hdrs = np.array(list(read_speco["SPECTRUM"].header.keys()))[ds_mask]
+
+        dtype_hdr_ens = {
+            read_speco["SPECTRUM"].header[rel_key]: rel_key for rel_key in dtyp_hdrs
+        }
+
+        if "ITYPE" in dtype_hdr_ens:
+            sp_grade_ranges = read_speco["SPECTRUM"].header[
+                dtype_hdr_ens["ITYPE"].replace("DSTYP", "DSVAL")
+            ]
+
+            sp_grade_ranges = [
+                np.array(list(set(ran_pair.split(":")))).astype(int)
+                for ran_pair in sp_grade_ranges.split(",")
+            ]
+            sp_include_evt_grades = np.concat(
+                [
+                    (
+                        cur_gr
+                        if len(cur_gr) == 1
+                        else list(range(cur_gr[0], cur_gr[1] + 1))
+                    )
+                    for cur_gr in sp_grade_ranges
+                ]
+            )
+
+        if "PIXEL" in dtype_hdr_ens:
+            sp_pix_ranges = sp_grade_ranges = read_speco["SPECTRUM"].header[
+                dtype_hdr_ens["PIXEL"].replace("DSTYP", "DSVAL")
+            ]
+            sp_pix_ranges = [
+                np.array(list(set(ran_pair.split(":")))).astype(int)
+                for ran_pair in sp_pix_ranges.split(",")
+            ]
+            sp_include_pixels = np.concat(
+                [
+                    (
+                        cur_pr
+                        if len(cur_pr) == 1
+                        else list(range(cur_pr[0], cur_pr[1] + 1))
+                    )
+                    for cur_pr in sp_pix_ranges
+                ]
+            )
+
+    if sp_include_evt_grades is not None and include_evt_grades is not None:
+        raise ValueError(
+            f"Event grades used to generate the spectrum "
+            f"([{sp_include_evt_grades}]) have been inferred from the "
+            f"file header, and so the 'include_evt_grades' argument "
+            f"should be None."
+        )
+    elif sp_include_evt_grades is not None:
+        include_evt_grades = sp_include_evt_grades
+
+    if sp_include_pixels is not None and include_pixels is not None:
+        raise ValueError(
+            f"Pixels used to generate the spectrum "
+            f"([{sp_include_pixels}]) have been inferred from the "
+            f"file header, and so the 'include_pixels' argument "
+            f"should be None."
+        )
+    elif include_pixels is None:
+        raise ValueError(
+            "No pixel information could be identified in the spectrum "
+            "file header, so 'include_pixels' cannot be None."
+        )
+    elif sp_include_pixels is not None:
+        include_pixels = sp_include_pixels
 
     # Check that the RMF type passed by the user is valid
     if not isinstance(rmf_type, str):
@@ -555,68 +657,60 @@ def gen_xrism_resolve_rmf(
         raise ValueError("'rmf_type' must be 'S', 'M', 'L', or 'X'.")
 
     # Enforce correct types for input grades
-    if isinstance(consider_grades, str) or (
-        isinstance(consider_grades, list)
-        and any(isinstance([gr for gr in consider_grades]), str)
+    if isinstance(include_evt_grades, str) or (
+        isinstance(include_evt_grades, list)
+        and any(isinstance([gr for gr in include_evt_grades]), str)
     ):
         try:
-            consider_grades = [int(gr) for gr in list(consider_grades)]
+            include_evt_grades = [int(gr) for gr in list(include_evt_grades)]
         except ValueError:
             # Error message doesn't exactly match the error we caught, but if the
             #  user just replaces entries with integers this issue will be solved
-            raise TypeError("Entries in the 'consider_grades' list must be integers.")
+            raise TypeError(
+                "Entries in the 'include_evt_grades' list must be integers."
+            )
     elif isinstance(int):
-        consider_grades = [consider_grades]
-    elif not isinstance(consider_grades, list) and isinstance(
-        [gr for gr in consider_grades], str
+        include_evt_grades = [include_evt_grades]
+    elif not isinstance(include_evt_grades, list) and isinstance(
+        [gr for gr in include_evt_grades], str
     ):
-        raise TypeError("Only pass lists of integers to 'consider_grades'.")
+        raise TypeError("Only pass lists of integers to 'include_evt_grades'.")
 
     # Now make sure that the input grades are all in the valid range
-    consider_grades = np.array(consider_grades)
-    if (consider_grades < 0).any() or (consider_grades > 4).any():
+    include_evt_grades = np.array(include_evt_grades)
+    if (include_evt_grades < 0).any() or (include_evt_grades > 4).any():
         raise ValueError(
             "XRISM-Resolve events are assigned an integer grade from "
-            "0 to 4, and at least one entry in 'consider_grades' is "
+            "0 to 4, and at least one entry in 'include_evt_grades' is "
             "outside this range."
         )
 
     # Turn the grades into a string that can be passed to the XRISM task
-    consider_grades = ",".join(consider_grades.astype(str))
+    include_evt_grades = ",".join(include_evt_grades.astype(str))
 
-    # Either rel_region or rel_pixels must be provided
-    if rel_region is None and rel_pixels is None:
-        raise ValueError("Either 'rel_region' or 'rel_pixels' must be provided.")
-
-    elif rel_pixels is not None:
-        if not isinstance(rel_pixels, (list, str, int)):
-            raise TypeError("'rel_pixels' must be a list of integer pixel IDs.")
-        elif not isinstance(rel_pixels, list) and isinstance(rel_pixels, (str, int)):
-            rel_pixels = [rel_pixels]
+    if include_pixels is not None:
+        if not isinstance(include_pixels, (list, str, int)):
+            raise TypeError("'include_pixels' must be a list of integer pixel IDs.")
+        elif not isinstance(include_pixels, list) and isinstance(
+            include_pixels, (str, int)
+        ):
+            include_pixels = [include_pixels]
 
         try:
-            rel_pixels = np.array([int(rp) for rp in rel_pixels])
+            include_pixels = np.array([int(rp) for rp in include_pixels])
         except ValueError:
             raise TypeError(
-                "All entries in 'rel_pixels' must be integer "
+                "All entries in 'include_pixels' must be integer "
                 "XRISM-Resolve pixel IDs."
             )
 
         # Convert to a set of pixel ranges, as requested in the XRISM rslmkrmf docs
-        groups = np.split(u := np.unique(rel_pixels), np.where(np.diff(u) > 1)[0] + 1)
-        rel_pixels = ",".join(
+        groups = np.split(
+            u := np.unique(include_pixels), np.where(np.diff(u) > 1)[0] + 1
+        )
+        include_pixels = ",".join(
             f"{g[0]}-{g[-1]}" if len(g) > 1 else str(g[0]) for g in groups
         )
-        print(rel_pixels)
-
-        # CHECK IF IT WILL JUST TAKE A LIST OF PIXEL IDS - I HOPE IT WILL
-        rel_pixels = ",".join(rel_pixels.astype(str))
-
-        # If rel_pixels is provided,
-        rel_region = "NONE"
-
-    elif rel_region is not None:
-        raise NotImplementedError("Not yet implemented.")
 
     # Create a temporary working directory
     temp_work_dir = os.path.join(out_dir, "rslrmf_{}".format(randint(0, int(1e8))))
@@ -633,9 +727,9 @@ def gen_xrism_resolve_rmf(
         out = hsp.rslmkrmf(
             infile=spec_file,
             whichrmf=rmf_type,
-            resolist=consider_grades,
-            regionfile=rel_region,
-            pixlist=rel_pixels,
+            resolist=include_evt_grades,
+            regionfile="NONE",
+            pixlist=include_pixels,
             outfile=rmf_out,
             noprompt=True,
             clobber=True,
@@ -679,6 +773,8 @@ DESCRIPTIVE_RESOLVE_EVT_GRADES = {
     "El": "Lost event [6]",
     "Rj": "Rejected event [7]",
 }
+
+RESOLVE_EVT_GRADES_INT_SHORT = {0: "Hp", 1: "Mp", 2: "Ms", 3: "Lp", 4: "Ls"}
 
 # Relation of XRISM-Resolve fits header FILTER values to the equivalent
 #  XRISM-Resolve file naming scheme
@@ -837,7 +933,7 @@ NET_LC_PATH_TEMP = os.path.join(
 SP_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{oi}",
-    "xrism-resolve-obsid{oi}-filter{xrf}-pix{slp}-" "enALL-spectrum.fits",
+    "xrism-resolve-obsid{oi}-filter{xrf}-pix{slp}-res{grd}-enALL-spectrum.fits",
 )
 
 # BACK_SP_PATH_TEMP = os.path.join(
@@ -1347,12 +1443,6 @@ aware that there _are_ further considerations.
 ```
 
 ### Images from 'for science' cleaned-screened event lists
-
-```{code-cell} python
-
-```
-
-### Images from 'for RMF' cleaned-screened event lists
 
 ```{code-cell} python
 
