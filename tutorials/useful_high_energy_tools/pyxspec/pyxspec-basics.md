@@ -213,23 +213,31 @@ def plot_fit_residual_spec(
             label=mod_label,
             linewidth=1.4,
         )
+    # Otherwise, the model will be plotted as a smooth line.
     else:
         spec_ax.plot(
             plot_data["energy"],
             plot_data["model"],
             color=mod_color,
-            label="Fitted model",
+            label=mod_label,
             alpha=0.8,
         )
 
+    # We allow the user to set specific x and y axis limits when they call this
+    #  function - if they have passed limits, we enforce them here (the residual
+    #  axis will inherit the limits as well, because we set sharex=True when
+    #  we defined the figure.
     if x_lims is not None:
         spec_ax.set_xlim(x_lims)
     if y_lims is not None:
         spec_ax.set_ylim(y_lims)
 
+    # We just assume the user wants a logged y-scale, which I don't think is too
+    #  restrictive.
     spec_ax.set_yscale("log")
+    # Alter the formatting of the labels so that they are 0.1, 0.01, 0.001 etc.
     spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
-
+    # And make sure to set the y-axis label
     spec_ax.set_ylabel(
         r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
     )
