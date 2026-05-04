@@ -1588,6 +1588,8 @@ CALDB location configuration can be found in the [Global Setup: Configuration](#
 
 ## 3. Choosing the events to consider for data product generation
 
+***<span style="color:red">SHOULD MAKE CLEAR MENTION OF PIXEL 12 SOMEWHERE IN HERE, EXPLAIN THAT ITS A DEDICATED CALIBRATION PIXEL, AND THAT THEY WILL SOMETIMES SEE IT SKIPPED IN THINGS LIKE THE PIXEL NUM TO DET-REGION CONVERSION DICTIONARY BECAUSE OF THAT.</span>***
+
 ```{code-cell} python
 evt_lists = {oi: EventList(EVT_PATH_TEMP.format(oi=oi)) for oi in rel_obsids}
 evt_lists
