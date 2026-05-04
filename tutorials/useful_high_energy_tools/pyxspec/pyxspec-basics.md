@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-04-09'
+date: '2026-05-04'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -178,10 +178,16 @@ def plot_fit_residual_spec(
     # Shrink the vertical gap between the panels to zero
     fig.subplots_adjust(hspace=0)
 
+    # First axis (the large, top-most one) is where we will plot the spectrum
+    #  data points, and fitted model lines.
     spec_ax = ax_arr[0]
+    # Turn minor axis ticks on, and configure the direction they point, and that
+    #  they also appear on the top and right sides of the plot.
     spec_ax.minorticks_on()
     spec_ax.tick_params(which="both", direction="in", top=True, right=True)
 
+    # First we plot the spectrum data points, including the count rate uncertainty,
+    #  and the size of each energy bin as error bars.
     spec_ax.errorbar(
         plot_data["energy"],
         plot_data["rate"],
@@ -193,6 +199,9 @@ def plot_fit_residual_spec(
         color=sp_color,
     )
 
+    # If the user has requested that the model fit be shown as a 'stepped' line (i.e.
+    #  what the standard XSPEC plots look like), we have to use the 'stairs' method
+    #  rather than the standard 'plot' method.
     if stepped_model:
         spec_ax.stairs(
             plot_data["model"],
