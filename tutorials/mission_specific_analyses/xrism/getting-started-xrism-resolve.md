@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-04-09'
+date: '2026-05-04'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -31,6 +31,8 @@ title: Getting started with XRISM-Resolve
 By the end of this tutorial, you will be able to:
 
 - Find...
+- BLEEP BLOOP
+- Generate a ~~**whole-array**~~ XRISM-Resolve spectrum and perform basic fits using PyXspec.
 
 ## Introduction
 
@@ -1337,9 +1339,10 @@ avail_xrism_obs
 ```
 
 We can see that there is a single public XRISM observation of PDS 456
-(as of March 2026) - its observation ID is **300072010**.
-
-***DECIDE WHETHER TO RESTRICT TO THIS ONE OBSID IN CASE OF FURTHER OBS, PROBABLY YES?***
+(as of May 2026) – with an ObsID of **300072010**. As proof against future
+observations being taken, and causing this notebook to take longer to run, we will
+specify that we are only going to use that one observation, by filtering
+the `avail_xrism_obs` table:
 
 ```{code-cell} python
 avail_xrism_obs = avail_xrism_obs[avail_xrism_obs["obsid"] == "300072010"]
@@ -1347,7 +1350,7 @@ avail_xrism_obs = avail_xrism_obs[avail_xrism_obs["obsid"] == "300072010"]
 # Create an array of the relevant ObsIDs
 rel_obsids = avail_xrism_obs["obsid"].value.data
 
-# Create a dictionary mapping ObsIDs to the filters used in each observation
+# Create a dictionary storing which filters were used for each ObsID
 rel_filters = {
     row["obsid"]: [
         RESOLVE_FILTERS[f]
@@ -1356,6 +1359,13 @@ rel_filters = {
     ]
     for row in avail_xrism_obs
 }
+```
+
+```{important}
+Though we have chosen to demonstrate using a **single observation** of PDS 456, we
+note that the notebook is designed so that it can handle any number of observations. As such, if you
+wish to adapt this demonstration to examine a different source, with multiple observations, it
+should work without modification.
 ```
 
 ### Downloading the XRISM observation
@@ -1588,15 +1598,73 @@ CALDB location configuration can be found in the [Global Setup: Configuration](#
 
 ## 3. Choosing the events to consider for data product generation
 
+Before we can begin filtering out events that we don't want for our particular analysis, we first
+have to choose which event **list** we want to use. Many XRISM-Resolve observations will have
+multiple event lists associated with them, representing periods of the observation that were
+taken with different filters applied; some will contain genuine events detected from the target source(s), and
+others will contain events from calibration sources onboard XRISM.
+
+The filter that was active for a particular event list is indicated by the four-digit section of the file name following 'px' (and also in the
+event file header) – the substrings map to the following filters:
+- **px0000** – Undefined
+- **px1000** – Open
+- **px2000** – Al/Polyimide
+- **px3000** – Neutral Density (ND)
+- **px4000** – Be
+- **px5000** – Fe 55 calibration source
+
+Exactly which event list you pick will depend on the type of analysis you are performing, but this demonstration
+is operating under the assumption that we don't want to directly use the calibration source event lists.
+
+Most XRISM-Resolve observations will have at least undefined-filter and calibration-filter event lists, as
+well as an event list taken with the PI's filter of choice (though it is possible that there will be multiple
+'science' filters requested by the PI).
+
+In the latter part of the [searching for relevant observations section](#searching-for-relevant-observations) we set
+up a dictionary that stores which filters were used for each observation (though this demonstration's default behavior
+is to use just one observation, **300072010**). Reminding ourselves of the contents of this dictionary, we can
+see that the undefined, calibration, and open filters were used:
+
+```{code-cell} python
+rel_filters
+```
+
+From here on, we limit ourselves to the event list created from the open-filter observation. The `rel_filters`
+dictionary will be cut down to only include filters specified in the `USE_FILTERS` variable defined below - the
+code here is set up so that multiple filters can be selected, if you wish to modify this tutorial:
+
+```{code-cell} python
+USE_FILTERS = ["px1000"]
+
+cut_rel_filters = {
+    oi: [cur_fi for cur_fi in filts if cur_fi in USE_FILTERS]
+    for oi, filts in rel_filters.items()
+}
+cut_rel_filters
+```
+
+```{important}
+Though we have specified a single filter, we note that this demonstration is designed so that it can process
+and deal with multiple event lists, with different filters, for each observation.
+```
+
+### Loading event lists into Python
+
 ***<span style="color:red">SHOULD MAKE CLEAR MENTION OF PIXEL 12 SOMEWHERE IN HERE, EXPLAIN THAT ITS A DEDICATED CALIBRATION PIXEL, AND THAT THEY WILL SOMETIMES SEE IT SKIPPED IN THINGS LIKE THE PIXEL NUM TO DET-REGION CONVERSION DICTIONARY BECAUSE OF THAT.</span>***
 
 ```{code-cell} python
-evt_lists = {oi: EventList(EVT_PATH_TEMP.format(oi=oi)) for oi in rel_obsids}
+evt_lists = {
+    oi: {
+        cur_filt: EventList(EVT_PATH_TEMP.format(oi=oi, xrf=cur_filt))
+        for cur_filt in cur_filts
+    }
+    for oi, cur_filts in cut_rel_filters.items()
+}
 evt_lists
 ```
 
 ```{code-cell} python
-cur_evt_list = evt_lists[rel_obsids[0]]
+cur_evt_list = evt_lists[rel_obsids[0]][cut_rel_filters[rel_obsids[0]][0]]
 ```
 
 ### Event grades and branching ratios
@@ -1712,7 +1780,21 @@ large spread in rise times, Ls events are excluded from the cut.
 ### Making new 'cleaned' event lists
 
 ```{code-cell} python
-
+# arg_combs = [
+#     [
+#         EVT_PATH_TEMP.format(oi=oi, xrf=xf),
+#         os.path.join(OUT_PATH, oi),
+#         src_coord,
+#         src_reg_rad,
+#         obs_src_reg_path_temp.format(oi=oi),
+#         obs_back_reg_path_temp.format(oi=oi),
+#     ]
+#     for oi, xfs in rel_filters.items()
+#     for xf in xfs
+# ]
+#
+# with mp.Pool(NUM_CORES) as p:
+#     sp_result = p.starmap(screen_xrism_resolve_evts, arg_combs)
 ```
 
 ### Further considerations for spatially-resolved analyses
@@ -1744,6 +1826,14 @@ aware that there _are_ further considerations.
 # test_im = "XRISM_output/xrism-resolve-obsid300072010-filterpx1000-imbinfactorPIX-en4.0_10.0keV-image.fits"
 # im = Image(test_im, '300072010', 'Resolve', "", "", "", Quantity(4, 'keV'), Quantity(10, 'keV'))
 # im.view(zoom_in=True, manual_zoom_xlims=[-0.5, 5.5], manual_zoom_ylims=[-0.5, 5.5])
+```
+
+
+### Setting up region files
+
+```{code-cell} python
+# det_region_from_pixels('testo.reg',
+#                        [0, 1, 2, 3, 4, 22, 23, 24, 25, 30, 31, 16, 17, 18])
 ```
 
 ## 5. Generating new XRISM-Resolve spectra
@@ -1786,7 +1876,7 @@ aware that there _are_ further considerations.
 
 ```
 
-## 4. Fitting a model with PyXspec
+## 6. Fitting a model with PyXspec
 
 In this section we will perform a simple model fit to our new XRISM-Resolve spectra.
 
@@ -1812,7 +1902,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-04-09
+Updated On: 2026-05-04
 
 +++
 
