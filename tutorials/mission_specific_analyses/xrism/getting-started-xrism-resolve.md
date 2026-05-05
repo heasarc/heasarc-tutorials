@@ -1670,6 +1670,19 @@ cur_evt_list = evt_lists[rel_obsids[0]][cut_rel_filters[rel_obsids[0]][0]]
 
 ### Pixel 12 is a dedicated calibration pixel
 
+XRISM-Resolve is constructed as a **6x6** array of microcalorimeter detector 'pixels', but only
+**35 of 36** are exposed to the light focused by the X-ray optics. The one left out pixel, **pixel 12**, is
+dedicated only to observations of a calibration source that is built into the Resolve instrument – it is
+separate from the Fe 55 calibration source housed in the filter wheel, which we briefly discussed in
+the introduction to [Section 3](#3-choosing-the-events-to-consider-for-data-product-generation).
+
+Pixel 12 is most conspicuous by its absence from cleaned event lists – you will not find any events
+recorded by the calibration pixel, which is **centered at DETX, DETY = 1, 1** (putting it in the
+bottom left of the array). We can quickly demonstrate this by fetching the detector coordinates of
+every event recorded in the event list we just produced by
+[running the XRISM xapipeline](#running-the-xrism-pipeline-for-resolve), then plotting
+a binned detector-coordinate 'image':
+
 ```{code-cell} python
 ---
 tags: [hide-input]
@@ -1704,6 +1717,16 @@ cb.set_label("Counts", size=15)
 
 plt.tight_layout()
 plt.show()
+```
+
+Though there are a great many events attributed to other pixels in the XRISM-Resolve array, the
+total count value of the bottom-left pixel is zero.
+
+```{important}
+Though the rest of the detector (i.e. pixels 0-35) is not directly exposed to pixel 12's
+calibration source, the source can still have an indirect impact on the data recorded by
+pixels 11 and 13 via 'electrical cross-talk'. This concept is discussed
+[in a later section of this demonstration.](#electrical-cross-talk).
 ```
 
 ### Event grades and branching ratios
