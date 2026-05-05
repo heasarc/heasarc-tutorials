@@ -102,6 +102,7 @@ from astropy.units import Quantity
 
 # , UnitConversionError
 from astroquery.heasarc import Heasarc
+from matplotlib.lines import Line2D
 
 # from matplotlib.ticker import FuncFormatter
 from packaging.version import Version
@@ -1665,6 +1666,44 @@ evt_lists
 
 ```{code-cell} python
 cur_evt_list = evt_lists[rel_obsids[0]][cut_rel_filters[rel_obsids[0]][0]]
+```
+
+### Pixel 12 is a dedicated calibration pixel
+
+```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+plt.figure(figsize=(6.7, 5.5))
+ax = plt.gca()
+ax.set_axis_off()
+
+detxy_data = cur_evt_list.data[["DETX", "DETY"]]
+
+det_im_arr = np.histogram2d(detxy_data["DETX"], detxy_data["DETY"], np.arange(1, 8))[0]
+
+plt.imshow(det_im_arr, origin="lower", cmap="gnuplot2")
+
+ax.add_artist(Line2D([-0.5, 0.5, 0.5], [0.5, 0.5, -0.5], color="snow", lw=3))
+
+plt.text(
+    x=0,
+    y=0,
+    s="12",
+    color="snow",
+    fontsize=25,
+    fontweight="bold",
+    horizontalalignment="center",
+    verticalalignment="center",
+)
+
+cb = plt.colorbar()
+cb.set_label("Counts", size=15)
+
+plt.tight_layout()
+plt.show()
 ```
 
 ### Event grades and branching ratios
