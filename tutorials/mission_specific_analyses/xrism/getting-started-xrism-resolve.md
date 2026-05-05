@@ -1695,7 +1695,9 @@ ax.set_axis_off()
 
 detxy_data = cur_evt_list.data[["DETX", "DETY"]]
 
-det_im_arr = np.histogram2d(detxy_data["DETX"], detxy_data["DETY"], np.arange(1, 8))[0]
+det_im_arr = np.histogram2d(
+    detxy_data["DETX"], detxy_data["DETY"], np.arange(0.5, 7.5)
+)[0]
 
 plt.imshow(det_im_arr, origin="lower", cmap="gnuplot2")
 
@@ -1713,7 +1715,7 @@ plt.text(
 )
 
 cb = plt.colorbar()
-cb.set_label("Counts", size=15)
+cb.set_label("Counts", size=15, rotation=270, va="bottom")
 
 plt.tight_layout()
 plt.show()
@@ -1726,10 +1728,47 @@ total count value of the bottom-left pixel is zero.
 Though the rest of the detector (i.e. pixels 0-35) is not directly exposed to pixel 12's
 calibration source, the source can still have an indirect impact on the data recorded by
 pixels 11 and 13 via 'electrical cross-talk'. This concept is discussed
-[in a later section of this demonstration.](#electrical-cross-talk).
+[in a later section of this demonstration](#electrical-cross-talk).
 ```
 
 ### Event grades and branching ratios
+
+Every event recorded by the XRISM-Resolve instrument is assessed by the post-observation
+pipeline (**not** `xapipeline`, but rather an internal pipeline used to handle the raw
+data delivered from the satellite). This assessment is intended to flag potentially
+problematic events, which can occur for a whole host of different reasons, so that the
+end user (you!) can decide which events are safe to keep for their particular analysis.
+
+The values representing the quality of each event are stored in the event list, under
+the **TYPE/ITYPE** (both provide the same information, just in slightly different
+formats) and **STATUS** columns. These XRISM-Resolve event list columns (and many others)
+are described in detail by [XRISM GOF & SDC (2024)](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000).
+
+In the **TYPE/ITYPE** columns, you will find what other missions may refer to as the
+event 'grade', which for XRISM-Resolve essentially represents the precision to which the
+event's energy can be determined (i.e., the energy resolution). Exactly how XRISM-Resolve
+events are graded is discussed in detail by
+[XRISM GOF & SDC (2026)](https://heasarc.gsfc.nasa.gov/docs/xrism/proposals/POG/Resolve.html#sec:resolve_eventgrading),
+but the most important concepts are:
+1. XRISM-Resolve pixels are essentially thermometers.
+2. An arriving photon's energy is defined by how it alters the temperature of the pixel.
+3. Not being magic, the pixel takes some quantifiable time to both read out the temperature and to cool down after the arrival and detection of a photon.
+4. More photons arriving before the pixel has had time to cool down (re-equilibrate) can cause biases in the measurement of those photon's energies, and more uncertainty as to the precise energy, so they are marked as lower resolution events.
+5. Even worse, if another photon (or photons) arrive before the temperature can be read out, it is not possible for the pixel to determine that they **are** separate photons, and they will be read out as a single event (**pile-up, usually only a problem for very bright sources**).
+
+The exact grades assigned to lower resolution events are determined by comparing the time-separation between
+neighboring temperature 'pulses' in the same pixel to limiting values determined by the mission team. The following
+grades (TYPE column in the event list) can be assigned to an event (the value in brackets is the ITYPE equivalent):
+- **Hp (0)** – High-resolution primary
+- **Mp (1)** – Mid-resolution primary
+- **Ms (2)** – Mid-resolution secondary
+- **Lp (3)** – Low-resolution primary
+- **Ls (4)** – Low-resolution primary
+
+Other event grades can be assigned, but are less likely to be seen in science data:
+- **Bl (5)** – Baseline event (diagnostic)
+- **El (6)** – Lost event
+- **Rj (7)** – Rejected event
 
 ```{code-cell} python
 ---
@@ -1773,9 +1812,14 @@ plt.show()
 
 ### Overabundance of low-resolution secondary (**Ls**) events
 
-***Highly recommended for Relatively Weak Sources/Temporary Measure***
+<span style="color:red">***Highly recommended for Relatively Weak Sources/Temporary Measure [DON'T ACTUALLY REMEMBER IF THIS WAS PUT IN THE RIGHT PLACE]***</span>
 
-The branching ratios plot demonstrates an important known issue with XRISM-Resolve data....
+
+The histogram of event grade counts and branching ratios we constructed
+[in the last section](#event-grades-and-branching-ratios) demonstrates a serious problem that
+currently affects the majority of XRISM-Resolve observations – **there is a severe overabundance of low-resolution secondary events (Ls).**
+
+
 
 ```
 ftcopy infile="xa000126000 rsl_p0px1000_cl.evt[EVENTS][ITYPE$<$4]"
@@ -1994,3 +2038,5 @@ Updated On: 2026-05-04
 [XRISM GOF & SDC (2024) - _XRISM ABC GUIDE FILE NAMING CONVENTIONS_ [ACCESSED 11-DEC-2025]](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html)
 
 [XRISM GOF & SDC (2024) - _XRISM ABC GUIDE EVENT TABLE COLUMNS_ [ACCESSED 26-Mar-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)
+
+[XRISM GOF & SDC (2026) - _XRISM POG EVENT GRADING_ [ACCESSED 05-May-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/proposals/POG/Resolve.html#sec:resolve_eventgrading)
