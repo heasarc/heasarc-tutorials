@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-05-04'
+date: '2026-05-05'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -1018,10 +1018,10 @@ RSL_EV_PER_CHAN = (1 / Quantity(2000, "chan/keV")).to("eV/chan")
 #  a little more descriptive
 DESCRIPTIVE_RESOLVE_EVT_GRADES = {
     "Hp": "High-resolution Primary [0]",
-    "Lp": "Low-resolution Primary [3]",
-    "Ls": "Low-resolution Secondary [4]",
     "Mp": "Mid-resolution Primary [1]",
     "Ms": "Mid-resolution Secondary [2]",
+    "Lp": "Low-resolution Primary [3]",
+    "Ls": "Low-resolution Secondary [4]",
     "Bl": "Baseline event (diagnostic) [5]",
     "El": "Lost event [6]",
     "Rj": "Rejected event [7]",
@@ -1744,6 +1744,8 @@ the **TYPE/ITYPE** (both provide the same information, just in slightly differen
 formats) and **STATUS** columns. These XRISM-Resolve event list columns (and many others)
 are described in detail by [XRISM GOF & SDC (2024)](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000).
 
+The **STATUS** column will be addressed in a later section of this demonstration.
+
 In the **TYPE/ITYPE** columns, you will find what other missions may refer to as the
 event 'grade', which for XRISM-Resolve essentially represents the precision to which the
 event's energy can be determined (i.e., the energy resolution). Exactly how XRISM-Resolve
@@ -1770,6 +1772,17 @@ Other event grades can be assigned, but are less likely to be seen in science da
 - **El (6)** – Lost event
 - **Rj (7)** – Rejected event
 
+***<span style="color:red">ADD A SHORT DISCUSSION HERE ABOUT THE APPROXIMATE ENERGY RESOLUTIONS OF EACH GRADE</span>***
+
+In an ideal world our entire event list would entirely consist of high-resolution primary events, though unfortunately,
+that is not very likely to happen. To get an idea of different event grade's relative occurrence rates, at least
+for our observation of PDS 456, we can construct a histogram from the event list we produced by
+[running the XRISM xapipeline in a previous section](#running-the-xrism-pipeline-for-resolve).
+
+On the left side y-axis, the histogram represents the absolute number of events which were assigned
+a particular grade, and on the right side y-axis, the 'branching ratio' of each grade. The branching
+ratio is defined as the fraction of events that fall into a particular event grade:
+
 ```{code-cell} python
 ---
 tags: [hide-input]
@@ -1782,6 +1795,15 @@ plt.tick_params(direction="in", bottom=False)
 evt_grade_names, evt_grade_cnts = np.unique(
     cur_evt_list.data["TYPE"], return_counts=True
 )
+# Now we put the event grades in the same order as they are defined in the
+#  DESCRIPTIVE_RESOLVE_EVT_GRADES constant
+grade_matches = (
+    np.array(list(DESCRIPTIVE_RESOLVE_EVT_GRADES.keys()))[:, None]
+    == evt_grade_names.value
+)
+sort_indices = np.where(grade_matches)[1]
+evt_grade_names = evt_grade_names[sort_indices]
+evt_grade_cnts = evt_grade_cnts[sort_indices]
 
 grade_colors = plt.cm.plasma(np.linspace(0, 1, len(evt_grade_names)))
 
@@ -1812,12 +1834,60 @@ plt.show()
 
 ### Overabundance of low-resolution secondary (**Ls**) events
 
-<span style="color:red">***Highly recommended for Relatively Weak Sources/Temporary Measure [DON'T ACTUALLY REMEMBER IF THIS WAS PUT IN THE RIGHT PLACE]***</span>
-
-
 The histogram of event grade counts and branching ratios we constructed
-[in the last section](#event-grades-and-branching-ratios) demonstrates a serious problem that
-currently affects the majority of XRISM-Resolve observations – **there is a severe overabundance of low-resolution secondary events (Ls).**
+[in the last section](#event-grades-and-branching-ratios) demonstrates a serious issue
+currently affecting the majority of XRISM-Resolve observations – **there is a severe overabundance of low-resolution secondary events (Ls).**
+
+This problem is discussed in the XRISM ABC guide
+([XRISM GOF & SDC 2024](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/Resolve_Data_Analysis.html#SECTION00932000000000000000)),
+which provides recommendations on how to handle these anomalous Ls events.
+
+Anomalous Ls events **do not represent real, celestial, X-ray photons** instead they are currently
+believed to have two distinct origins:
+1. The first component, dominating the 'low count rate' regime ($\lesssim 0.4$ [$\rm{ct}\:\rm{pix}^{-1}\:s^{-1}$]), likely derives "from cosmic-ray particles, or instrumental X-rays induced by cosmic rays".
+2. The second, which occurs for observations with count rates significantly higher than $\sim 1$ [$\rm{ct}\:\rm{pix}^{-1}\:s^{-1}$], is likely due to "secondary signals produced by initial (probably energetic) X-rays".
+
+```{note}
+As XRISM is a relatively new mission, the best practice of data analysis is still under active development by the mission team. That
+is particularly true when dealing with issues like this one, as the large numbers of Ls events we see in XRISM data were not
+expected from pre-launch testing. The XRISM demonstration articles in HEASARC-tutorials are kept up to date, but we
+strongly recommend that you also check the XRISM ABC guide to see if any new recommendations have been made.
+```
+
+#### What to do for faint sources
+
+**We currently recommend that all Ls events be excluded from analysis for observations with per-pixel count rates of
+$\lesssim 0.4$ [$\rm{ct}\:\rm{pix}^{-1}\:s^{-1}$]**, which translates to a total of $\lesssim 1$ [$\rm{ct}\:s^{-1}$] for
+a point source.
+
+
+#### What to do for bright sources
+
+For moderately bright emission, up to a total of $\sim 10$ [$\rm{ct}\:s^{-1}$] for a point source, the
+recommendation is to:
+1. **Remove all Ls events, just as [for faint sources](#what-to-do-for-faint-sources)**.
+2. **To restrict yourself to analyzing events between 3–10 keV**.
+3. **Assume that whatever source fluxes you derive are lower limits, as a not-entirely-negligible fraction of the excluded Ls events will have been real.**
+
+This is because in this count rate regime, the second component of the anomalous Ls event abundance comes into play (see the [beginning of this section](#overabundance-of-low-resolution-secondary-ls-events)).
+
+#### What to do for very bright sources
+
+The Ls events of brighter sources have complicated behavior, so we do not yet have an
+effective solution. With currently available response files, their absolute flux and
+global spectral shape are highly uncertain, so users should limit analyses to narrow
+energy bands. The XRISM-Resolve instrument team is conducting a comprehensive study to determine
+the most effective strategy for mitigating this problem.
+
+
+```{danger}
+It is **essential to note** that the rslmkrmf response generator divides the X-ray
+collecting area by the number ratio of the selected grade events over the total
+grade 0$-$4 events, which include the Ls events. The produced response systematically
+has a lower collective area than it should be, which overestimates the total flux.
+```
+
+
 
 
 
@@ -1826,6 +1896,8 @@ ftcopy infile="xa000126000 rsl_p0px1000_cl.evt[EVENTS][ITYPE$<$4]"
 outfile=xa000126000 rsl_p0px1000_wols_cl.evt copyall=yes clobber=yes
 history=yes
 ```
+
+
 
 ### XRISM-Resolve's pixel 27 is broken
 
@@ -2008,7 +2080,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-04
+Updated On: 2026-05-05
 
 +++
 
@@ -2040,3 +2112,5 @@ Updated On: 2026-05-04
 [XRISM GOF & SDC (2024) - _XRISM ABC GUIDE EVENT TABLE COLUMNS_ [ACCESSED 26-Mar-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)
 
 [XRISM GOF & SDC (2026) - _XRISM POG EVENT GRADING_ [ACCESSED 05-May-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/proposals/POG/Resolve.html#sec:resolve_eventgrading)
+
+[XRISM GOF & SDC (2024) - _XRISM ABC GUIDE REMOVING ANOMALOUS LS EVENTS_ [ACCESSED 05-May-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/Resolve_Data_Analysis.html#SECTION00932000000000000000)
