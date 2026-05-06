@@ -1754,7 +1754,7 @@ the **TYPE/ITYPE** (both provide the same information, just in slightly differen
 formats) and **STATUS** columns. These XRISM-Resolve event list columns (and many others)
 are described in detail by [XRISM GOF & SDC (2024)](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000).
 
-The **STATUS** column will be addressed in a later section of this demonstration.
+The **STATUS** column is addressed in a [later section of this demonstration](#excluding-pixel-pixel-coincident-events).
 
 In the **TYPE/ITYPE** columns, you will find what other missions may refer to as the
 event 'grade', which for XRISM-Resolve essentially represents the precision to which the
@@ -2004,11 +2004,16 @@ and [the ARF](#calculating-ancillary-response-files-arfs) generation sections of
 
 ### Excluding pixel-pixel coincident events
 
-***ARRRGH THIS SECTION IN THE ABC FEELS LIKE ITS BEEN COPIED AND PASTED FROM VARIOUS
-PLACES AND NOT EDITED - THEY SEEM TO BE TALKING ABOUT VARIOUS TYPES OF COINCIDENT EVENTS
-AND NOT MAKING CLEAR WHICH ONE THEY REFER TO AT A PARTICULAR TIME***
 
-(((((RISE_TIME+0.00075*DERIV_MAX)>46)&&((RISE_TIME+0.00075*DERIV_MAX)<58))&&ITYPE<4)||(ITYPE==4))
+Now we will begin to use a small subset of the useful information stored in the
+**STATUS** column of XRISM-Resolve event lists – this column is a *16-bit-per-event flag* (with
+14 actually in use), and is fully described in the XRISM ABC guide
+([XRISM GOF & SDC (2024)](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)).
+
+A value of **b0** for a particular **STATUS** bit indicates that the flag that bit represents
+was **not**raised (a good thing), whereas **b1** indicates that the flag _was_ raised.
+
+
 
 ```
 ftcopy infile="xa000126000rsl_p0px1000_cl.evt[EVENTS][(PI>=600)
