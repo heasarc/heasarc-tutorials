@@ -95,8 +95,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
-
-# from astropy.table import Table
+from astropy.table import Table
 from astropy.time import Time
 from astropy.units import Quantity
 
@@ -1702,12 +1701,23 @@ det_im_arr = np.histogram2d(
 plt.imshow(det_im_arr, origin="lower", cmap="gnuplot2")
 
 ax.add_artist(Line2D([-0.5, 0.5, 0.5], [0.5, 0.5, -0.5], color="snow", lw=3))
-
 plt.text(
     x=0,
     y=0,
     s="12",
     color="snow",
+    fontsize=25,
+    fontweight="bold",
+    horizontalalignment="center",
+    verticalalignment="center",
+)
+
+ax.add_artist(Line2D([5.5, 4.5, 4.5, 5.5], [3.5, 3.5, 2.5, 2.5], color="gold", lw=3))
+plt.text(
+    x=5,
+    y=3,
+    s="27",
+    color="gold",
     fontsize=25,
     fontweight="bold",
     horizontalalignment="center",
@@ -1832,6 +1842,12 @@ plt.tight_layout()
 plt.show()
 ```
 
+```{note}
+Energy scale accuracy is only truly guaranteed for high-resolution events at the
+moment, so we currently recommend limiting analysis to events with a grade of **Hp**.
+```
+
+
 ### Overabundance of low-resolution secondary (**Ls**) events
 
 The histogram of event grade counts and branching ratios we constructed
@@ -1894,14 +1910,96 @@ up seeing, so if they are not excluded the net effective area of the Resolve spe
 responses could be in error by as much as a factor of $\sim2$.
 ```
 
+<span style="color:red>***Now need to talk about how we're going to handle this in the demonstration.***</span>
 
 
-### XRISM-Resolve's pixel 27 is broken
+### Pixel 27 of XRISM-Resolve is broken
 
-***<span style="color:red">Obviously recommend that it is excluded, but what is the best way to do it in this particular notebook?</span>***
+Another of XRISM-Resolve's teething problems is that the microcalorimeter labeled as 'pixel 27' (we
+highlighted the location in the figure
+[produced in a previous section](#pixel-12-is-a-dedicated-calibration-pixel)) has significantly
+different gain variation characteristics to all the other microcalorimeters in the XRISM-Resolve array.
+
+'Gain' in this context is what describes the relationship between the 'pulse' of temperature
+increase-then-decrease recorded by the microcalorimeter's electronics and the actual energy of the
+detected photon. You can see the necessity of being able to trust the gain calculated for
+every event!
+
+Unfortunately, when tracking the 'gain history' of each pixel during a long observation, strange spikes in
+gain versus time were identified for pixel 27, when compared to the smoother gain versus time curves
+of all the other pixels. The practical meaning of this is that you **cannot fully trust the
+energies assigned to pixel 27 events**.
+
+We can illustrate this problem by showing the 'gain history' of the XRISM-Resolve pixels during
+our observation of PDS 456 – read from the gain history file produced
+[when we ran `xapipeline`](#running-the-xrism-pipeline-for-resolve). This figure
+plots the temperature of the pixel (as calculated using the gain information) against time, and we can
+clearly see that near the beginning of the observation, pixel 27 shows a sudden increase
+in calculated temperature that the other pixels do not:
+
+```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+rel_ghf_path = os.path.join(
+    OUT_PATH, rel_obsids[0], f"xa{rel_obsids[0]}rsl_000_fe55.ghf"
+)
+
+with fits.open(rel_ghf_path) as gaino:
+    gain_tab = Table(gaino["Drift_energy"].data)[["TIME", "PIXEL", "TEMP_FIT"]]
+
+# Bad way to get the gain curve in x-units of APPROXIMATELY seconds from the
+#  beginning of the observation. Do not use this method to calculate
+#  time-since-start when the times actually matter
+gain_tab["TIME"] = gain_tab["TIME"] - gain_tab["TIME"][0]
+
+plt.figure(figsize=(5, 4))
+plt.minorticks_on()
+plt.tick_params(which="both", direction="in", top=True, right=True)
+
+for pix_id in set(gain_tab["PIXEL"]):
+
+    cur_sub_gain = gain_tab[gain_tab["PIXEL"] == pix_id]
+
+    if pix_id != 27:
+
+        plt.plot(cur_sub_gain["TIME"], cur_sub_gain["TEMP_FIT"], alpha=0.3, lw=0.5)
+
+    else:
+        plt.plot(
+            cur_sub_gain["TIME"],
+            cur_sub_gain["TEMP_FIT"],
+            alpha=1,
+            color="dodgerblue",
+            lw=2,
+            label="PIXEL 27",
+        )
+
+plt.xlim(0, gain_tab["TIME"].max())
+
+plt.ylabel("Average Temperature [K]")
+plt.xlabel("Time [s]", fontsize=15)
+
+plt.legend(loc=1, fontsize=14)
+plt.tight_layout()
+plt.show()
+```
+
+Investigations into the cause of this problem and potential strategies for mitigation are ongoing, but the
+current best practice is to **exclude pixel 27 from analysis entirely**.
 
 ```{code-cell} python
 
+```
+
+```{important}
+The inclusion of data taken from pixel 27 can degrade the overall spectral resolution
+achievable by the Resolve instrument, you should exclude it from your analysis. You
+must also remember to exclude pixel 27 from the pixel list or the detector region when
+generating RMFs and ARFs (we implement this in [the RMF](#producing-redistribution-matrix-files-rmfs)
+and [the ARF](#calculating-ancillary-response-files-arfs) generation sections of this demonstration).
 ```
 
 ### Excluding pixel-pixel coincident events
