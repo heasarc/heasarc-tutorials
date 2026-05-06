@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-05-05'
+date: '2026-05-06'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -2021,18 +2021,124 @@ copyall=yes clobber=yes history=yes
 
 #### Frame events
 
+Also in the category of
+
 ***<span style="color:red">CHUNK BELOW CURRENTLY JUST RIPPED FROM SECTION 6.3 OF THE XRISM ABC GUIDE</span>***
+
 When energy is absorbed into the silicon frame around the Resolve array, it pulses the
 temperature of the heat sink of all of the pixels, resulting in pulses in the
-temperatures of the pixels themselves. For very large depositions of energy (MeV scale),
+temperatures of the pixels themselves.
+
+For very large depositions of energy (MeV scale),
 the resulting pulses on the pixels can produce signals that trigger in the Pulse Shape
-Processor (PSP). We refer to the resulting clusters of events as frame events. Most of
+Processor (PSP).
+
+We refer to the resulting clusters of events as frame events.
+
+Most of
 these events have significantly different pulse rise times from regular events, so
 they can be removed efficiently with a rise time cut. Because Ls events have a very
 large spread in rise times, Ls events are excluded from the cut.
 
 ```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+plt.figure(figsize=(5.5, 5.5))
+plt.minorticks_on()
+plt.tick_params(which="both", direction="in", top=True, right=True)
 
+rise_time_bins = np.linspace(
+    cur_evt_list.data["RISE_TIME"].min(), cur_evt_list.data["RISE_TIME"].max(), 100
+)
+
+non_low_sec_data = cur_evt_list.data[cur_evt_list.data["ITYPE"] < 4]
+non_low_sec_rise_times = non_low_sec_data["RISE_TIME"]
+
+low_sec_data = cur_evt_list.data[cur_evt_list.data["ITYPE"] == 4]
+low_sec_rise_times = low_sec_data["RISE_TIME"]
+
+sel_rise_time_mask = (
+    (non_low_sec_data["RISE_TIME"] + (0.00075 * non_low_sec_data["DERIV_MAX"])) > 46
+) & ((non_low_sec_data["RISE_TIME"] + (0.00075 * non_low_sec_data["DERIV_MAX"])) < 58)
+rise_time_sel_data = non_low_sec_data[sel_rise_time_mask]
+
+plt.hist(
+    non_low_sec_rise_times,
+    bins=rise_time_bins,
+    color="navy",
+    alpha=0.7,
+    label="Hp—Lp events",
+    histtype="step",
+    lw=1.8,
+    hatch="///",
+)
+plt.hist(
+    low_sec_rise_times,
+    bins=rise_time_bins,
+    color="crimson",
+    label="Ls events",
+    alpha=1,
+    histtype="step",
+    lw=1.8,
+)
+
+plt.hist(
+    rise_time_sel_data["RISE_TIME"],
+    bins=rise_time_bins,
+    color="mediumturquoise",
+    alpha=0.8,
+    histtype="stepfilled",
+    label="Selected events",
+)
+
+plt.xlabel("Rise Time [ms]", fontsize=15)
+plt.ylabel("N", fontsize=15)
+
+plt.legend(loc="best", fontsize=14)
+plt.tight_layout()
+plt.show()
+```
+
+```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+plt.figure(figsize=(5.5, 5.5))
+plt.minorticks_on()
+plt.tick_params(which="both", direction="in", top=True, right=True)
+
+pi_bins = np.linspace(cur_evt_list.data["PI"].min(), cur_evt_list.data["PI"].max(), 80)
+
+rise_time_removed_data = non_low_sec_data[~sel_rise_time_mask]
+
+plt.hist(
+    rise_time_sel_data["PI"],
+    bins=pi_bins,
+    color="teal",
+    alpha=0.8,
+    histtype="stepfilled",
+    label="Selected events",
+)
+plt.hist(
+    rise_time_removed_data["PI"],
+    bins=pi_bins,
+    color="goldenrod",
+    alpha=0.8,
+    histtype="stepfilled",
+    label="Cut Hp—Lp events",
+)
+
+plt.xlabel("PI", fontsize=15)
+plt.ylabel("N", fontsize=15)
+
+plt.legend(loc="best", fontsize=14)
+plt.tight_layout()
+plt.show()
 ```
 
 #### Electrical cross-talk
@@ -2175,7 +2281,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-05
+Updated On: 2026-05-06
 
 +++
 
