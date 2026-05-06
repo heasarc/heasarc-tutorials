@@ -2062,8 +2062,8 @@ we can produce histograms showing the distribution of _RISE_TIME_ for several su
 - **High-resolution primary (Hp; grade 0) to low-resolution primary (Lp; grade 3) events**
 - **Hp-Lp events with the recommended _RISE_TIME_ cut applied**.
 
-The total distribution of selected events would be the sum of the histograms labeled **Selected events** and
-**Ls events** (the wide distribution of Lp rise times that we mentioned earlier is quite evident here):
+The total distribution of selected events would be the sum of the histograms labeled **Selected Hp—Lp** and
+**Ls** (the wide distribution of Lp rise times that we mentioned earlier is quite noticeable here):
 
 ```{code-cell} python
 ---
@@ -2091,23 +2091,24 @@ sel_rise_time_mask = (
 rise_time_sel_data = non_low_sec_data[sel_rise_time_mask]
 
 plt.hist(
+    (low_sec_rise_times * Quantity(20, "microsecond")).to("millisecond"),
+    bins=rise_time_bins,
+    color="crimson",
+    label="Ls",
+    alpha=1,
+    histtype="step",
+    lw=1.8,
+)
+
+plt.hist(
     (non_low_sec_rise_times * Quantity(20, "microsecond")).to("millisecond"),
     bins=rise_time_bins,
     color="navy",
     alpha=0.7,
-    label="Hp—Lp events",
+    label="Hp—Lp",
     histtype="step",
     lw=1.8,
     hatch="///",
-)
-plt.hist(
-    (low_sec_rise_times * Quantity(20, "microsecond")).to("millisecond"),
-    bins=rise_time_bins,
-    color="crimson",
-    label="Ls events",
-    alpha=1,
-    histtype="step",
-    lw=1.8,
 )
 
 plt.hist(
@@ -2116,7 +2117,7 @@ plt.hist(
     color="mediumturquoise",
     alpha=0.8,
     histtype="stepfilled",
-    label="Selected events",
+    label="Selected Hp—Lp",
 )
 
 plt.xlabel("Rise Time [ms]", fontsize=15)
@@ -2127,7 +2128,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-As a slight aside,
+Here we are interacting with the event list through the `XGA` module's EventList class, but only for convenience, they
+cannot yet be directly used to produce XRISM data products.
+
+As a slight aside, we can also compare the PI distributions of the Hp-Lp events that passed our rise time cut to the
+subset of Hp-Lp events that did not. You'll note that the distribution of PI values for the **cut events** has a
+peak at between 45000–50000 (corresponding to $\sim\:22.5-25.0$ keV); many of these events have been assigned
+high energy values, which fits with them being the product of massive energy deposition into the frame:
 
 ```{code-cell} python
 ---
@@ -2135,7 +2142,7 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-plt.figure(figsize=(5.5, 5.5))
+plt.figure(figsize=(5.5, 5.0))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
@@ -2149,7 +2156,7 @@ plt.hist(
     color="teal",
     alpha=0.8,
     histtype="stepfilled",
-    label="Selected events",
+    label="Selected Hp—Lp",
 )
 plt.hist(
     rise_time_removed_data["PI"],
@@ -2157,7 +2164,7 @@ plt.hist(
     color="goldenrod",
     alpha=0.8,
     histtype="stepfilled",
-    label="Cut Hp—Lp events",
+    label="Cut Hp—Lp",
 )
 
 plt.xlabel("PI", fontsize=15)
