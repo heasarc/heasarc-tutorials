@@ -2021,24 +2021,49 @@ copyall=yes clobber=yes history=yes
 
 #### Frame events
 
-Also in the category of
+The first type of coincident events we'll deal with are called 'frame events' – they
+occur when a significant amount of energy is absorbed into the **silicon frame *around* the XRISM-Resolve array**
 
-***<span style="color:red">CHUNK BELOW CURRENTLY JUST RIPPED FROM SECTION 6.3 OF THE XRISM ABC GUIDE</span>***
+Absorption of enough energy into the frame will measurably 'pulse' the temperature of
+the array's heat sinks, which in turn pulses the temperature of the pixels
+themselves. Given that the pixels are microcalorimeters (glorified thermometers), you
+can see how that might then affect the detection of incident photons, and the quantification
+of their energy.
 
-When energy is absorbed into the silicon frame around the Resolve array, it pulses the
-temperature of the heat sink of all of the pixels, resulting in pulses in the
-temperatures of the pixels themselves.
+Indeed, for very large depositions of energy into the frame (on the scale of MeV),
+the resulting pixel temperature pulses can produce signals that trigger the
+'Pulse Shape Processor' (PSP), and result in **false events being recorded**.
 
-For very large depositions of energy (MeV scale),
-the resulting pulses on the pixels can produce signals that trigger in the Pulse Shape
-Processor (PSP).
+If this does happen, the resulting false events tend to be clustered in time (because they occur
+when the energy is deposited in the frame), and are referred to as 'frame events'.
 
-We refer to the resulting clusters of events as frame events.
+Thankfully, there is a fairly easy way to identify frame events – they normally have a
+significantly different 'pulse rise time' than 'normal' events do. The pulse rise time
+describes how long it takes for a pulse to reach its peak and is stored in the
+'RISE_TIME' column of a XRISM-Resolve event list (in units of $20\:\rm{\micro} \rm{s}$).
 
-Most of
-these events have significantly different pulse rise times from regular events, so
-they can be removed efficiently with a rise time cut. Because Ls events have a very
-large spread in rise times, Ls events are excluded from the cut.
+Frame events can be effectively removed by applying a XRISM-Resolve-team-defined pulse
+rise time cut to the event list, selecting events that fulfil these criteria:
+>**The _RISE_TIME_ summed with _DERIV_MAX_ multiplied by a constant factor (currently set to 0.00075)
+> should be between **46** and **58** (non-inclusive).**
+
+Where _DERIV_MAX_ is the maximum time derivative of the pulse's rise – it can act as a
+proxy for the pulse height.
+
+<span style="color:red">***Would really like to include exactly what drove these choices.***</span>
+
+We also note that low-resolution secondary events (Ls) have a very large spread of rise times, and thus
+should not be considered when you perform this particular cut. That is to say, an event can be selected if it is
+EITHER a non-Ls grade event and fulfills the above criteria, OR it is a Ls grade event.
+
+Drawing on the event list we produced [when we ran the XRISM pipeline earlier in this demonstration](#running-the-xrism-pipeline-for-resolve),
+we can produce histograms showing the distribution of _RISE_TIME_ for several subsets of events:
+- **Low-resolution secondary (Ls; grade 4) events**
+- **High-resolution primary (Hp; grade 0) to low-resolution primary (Lp; grade 3) events**
+- **Hp-Lp events with the recommended _RISE_TIME_ cut applied**.
+
+The total distribution of selected events would be the sum of the histograms labeled **Selected events** and
+**Ls events** (the wide distribution of Lp rise times that we mentioned earlier is quite evident here):
 
 ```{code-cell} python
 ---
@@ -2052,7 +2077,7 @@ plt.tick_params(which="both", direction="in", top=True, right=True)
 
 rise_time_bins = np.linspace(
     cur_evt_list.data["RISE_TIME"].min(), cur_evt_list.data["RISE_TIME"].max(), 100
-)
+) * Quantity(20, "microsecond")
 
 non_low_sec_data = cur_evt_list.data[cur_evt_list.data["ITYPE"] < 4]
 non_low_sec_rise_times = non_low_sec_data["RISE_TIME"]
@@ -2066,7 +2091,7 @@ sel_rise_time_mask = (
 rise_time_sel_data = non_low_sec_data[sel_rise_time_mask]
 
 plt.hist(
-    non_low_sec_rise_times,
+    (non_low_sec_rise_times * Quantity(20, "microsecond")).to("millisecond"),
     bins=rise_time_bins,
     color="navy",
     alpha=0.7,
@@ -2076,7 +2101,7 @@ plt.hist(
     hatch="///",
 )
 plt.hist(
-    low_sec_rise_times,
+    (low_sec_rise_times * Quantity(20, "microsecond")).to("millisecond"),
     bins=rise_time_bins,
     color="crimson",
     label="Ls events",
@@ -2086,7 +2111,7 @@ plt.hist(
 )
 
 plt.hist(
-    rise_time_sel_data["RISE_TIME"],
+    (rise_time_sel_data["RISE_TIME"] * Quantity(20, "microsecond")).to("millisecond"),
     bins=rise_time_bins,
     color="mediumturquoise",
     alpha=0.8,
@@ -2101,6 +2126,8 @@ plt.legend(loc="best", fontsize=14)
 plt.tight_layout()
 plt.show()
 ```
+
+As a slight aside,
 
 ```{code-cell} python
 ---
