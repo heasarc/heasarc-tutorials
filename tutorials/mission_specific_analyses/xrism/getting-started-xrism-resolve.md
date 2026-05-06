@@ -1873,28 +1873,25 @@ This is because in this count rate regime, the second component of the anomalous
 
 #### What to do for very bright sources
 
-The Ls events of brighter sources have complicated behavior, so we do not yet have an
+<span style="color:red">The Ls events of brighter sources have complicated behavior, so we do not yet have an
 effective solution. With currently available response files, their absolute flux and
 global spectral shape are highly uncertain, so users should limit analyses to narrow
 energy bands. The XRISM-Resolve instrument team is conducting a comprehensive study to determine
-the most effective strategy for mitigating this problem.
+the most effective strategy for mitigating this problem.</span>
 
 
 ```{danger}
-It is **essential to note** that the rslmkrmf response generator divides the X-ray
-collecting area by the number ratio of the selected grade events over the total
-grade 0$-$4 events, which include the Ls events. The produced response systematically
-has a lower collective area than it should be, which overestimates the total flux.
-```
+It is **essential** to understand that some
+XRISM-Resolve analysis tasks - the `rslmkrmf` response matrix file generator, which we
+use in [a later section](#producing-redistribution-matrix-files-rmfs) in particular - will behave
+poorly if the Ls events are not excluded.
 
-
-
-
-
-```
-ftcopy infile="xa000126000 rsl_p0px1000_cl.evt[EVENTS][ITYPE$<$4]"
-outfile=xa000126000 rsl_p0px1000_wols_cl.evt copyall=yes clobber=yes
-history=yes
+`rslmkrmf`, for instance, normalizes the output response in part by the ratio of the
+number events of selected grades (Hp and Mp for instance) to the number of events of
+all grades from Hp to Ls (inclusive) - however, this normalization was intended to
+be based on 'real' Ls events, rather than the glut of anomalous events we end
+up seeing, so if they are not excluded the net effective area of the Resolve spectral
+responses could be in error by as much as a factor of $\sim2$.
 ```
 
 
