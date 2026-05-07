@@ -2180,7 +2180,44 @@ plt.tight_layout()
 plt.show()
 ```
 
+#### Thermal cross-talk
+
+<span style="color:red">***TOO SMALL TO BE WORTH BOTHERING ABOUT?***</span>
+
 #### Electrical cross-talk
+
+<span style="color:red">***The ABC guide 'screening out pixel-pixel coincident events' guide mentions
+that 'electrical cross-talk screening with status 6 is not recommended'. The status definition for [6] is
+coincidence with pixel 12 event	(status 5) & passed energy test for absorption of electron ejected from 12. I
+guess that sounds like a form of electrical cross-talk, but status 7's description is "candidate electrical
+crosstalk event or its source", which sounds even more relevant? Have to ask the XRISM team.***</span>
+
+We can now move on from the world of photons causing problems to the world of electrons causing problems.
+
+Every XRISM-Resolve pixel is a separate microcalorimeter detector, read out through a dedicated
+signal path (though some processing electronics are used by multiple pixels). The signal read-out
+paths (i.e. wires) for a XRISM-Resolve pixel will at some points be in close proximity to
+those of another pixel (or pixels) – an unfortunate necessity driven by the overall design of the
+Resolve array.
+
+It is possible for the voltage pulse produced by a XRISM-Resolve pixel detecting an incident photon to
+induce a much smaller pulse in the read-out path of an _electrically adjacent_ pixel, through capacitive
+coupling. This is called **electrical cross-talk**, and it can degrade the energy resolution
+achievable by Resolve – it is primarily high count-rate observations that are affected, mind you; this
+type of cross-talk is likely to be less of a problem for faint sources.
+
+Unlike the 'frame events' we discussed in [a previous section](#frame-events), the input
+induced by electrical cross-talk does not usually trigger the pulse shape processor (PSP), and thus
+is not generally recorded as a (false) event.
+
+```{note}
+A Resolve pixel's read-out path is not necessarily _electrically adjacent_ to those of its
+direct neighbors.
+```
+
+However, electrical cross-talk induced by an electrically adjacent pixel _can_ contaminate a **real**
+signal pulse that has occurred at around the same time - this then corrupts the eventual
+measurements of the pulse's characteristics, and everything inferred from them (including event energy).
 
 
 #### Real events contaminated by untriggered crosstalk
@@ -2320,7 +2357,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-06
+Updated On: 2026-05-07
 
 +++
 
