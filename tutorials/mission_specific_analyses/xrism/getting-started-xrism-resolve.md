@@ -2259,6 +2259,40 @@ exposure time of your observation, and every kilo-second is precious, so if remo
 background particle flux does not improve your source's signal-to-noise, the trade-off may
 not be worth it.
 
+Now that we've philosophized about whether you _should_ apply this step, we can move on to how
+it works. XRISM traces the particle background level by exploiting its inverse correlation with the
+'geomagnetic cutoff rigidity' (COR), when in low Earth orbits.
+
+The cut-off rigidity itself is a property of the Earth's geomagnetic field and is a measure
+of how much the magnetic field 'shields' XRISM from cosmic rays
+([Smart D. F., Shea M. A. 2005](https://ui.adsabs.harvard.edu/abs/2005AdSpR..36.2012S/abstract)),
+as a function of the spacecraft's location. It is not measured directly by XRISM, but
+rather is calculated from the **2020 version of the 'International Geomagnetic Reference
+Field' (IGRF-13) model** ([Alken P. et al. 2021](https://ui.adsabs.harvard.edu/abs/2021EP&S...73...49A)).
+
+All the COR information recorded for a given XRISM observation is stored in the
+'extended housekeeping file' (EHK); there are several COR-related
+columns – _COR_, _COR2_, _COR3_, and***CORTIME***. We will use the ***CORTIME***
+column, as it is calculated from the model mentioned above, whereas the other estimates
+of COR are based on older maps and models.
+
+So, to exclude periods of high particle background flux, we want to select events from
+only those periods of the observation that have a COR value **above a certain threshold** (recall
+that higher COR means lower particle background flux).
+
+We recommend selecting time periods that have a **CORTIME value of $>8$** (though you can experiment
+with this threshold and observe the effect of it on your data).
+
+The housekeeping file does not store a COR value for every single event; instead, all the
+parameters that it keeps tracked of are recorded on a regular time cadence.
+
+Thus, the most effective way of selecting events based on the COR information stored in the EHK
+is to generate a new 'Good Time Interval' (GTI) file that can be applied during event list
+cleaning. We will use two HEASoft tools to achieve this:
+1. `makefilter` - Will be used to create an FTOOLS filter file that selects time steps when **CORTIME > 8**.
+2. `maketime` - Converts the filter file created by `makefilter` into a GTI file that can be applied to the event list.
+
+
 ```{code-cell} python
 
 ```
@@ -2422,3 +2456,7 @@ Updated On: 2026-05-07
 [XRISM GOF & SDC (2026) - _XRISM POG EVENT GRADING_ [ACCESSED 05-May-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/proposals/POG/Resolve.html#sec:resolve_eventgrading)
 
 [XRISM GOF & SDC (2024) - _XRISM ABC GUIDE REMOVING ANOMALOUS LS EVENTS_ [ACCESSED 05-May-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/Resolve_Data_Analysis.html#SECTION00932000000000000000)
+
+[Smart D. F., Shea M. A. (2005) - _A review of geomagnetic cutoff rigidities for earth-orbiting spacecraft_](https://ui.adsabs.harvard.edu/abs/2005AdSpR..36.2012S/abstract)
+
+[Alken P. et al. (2021) - _International Geomagnetic Reference Field: the thirteenth generation_](https://ui.adsabs.harvard.edu/abs/2021EP&S...73...49A)
