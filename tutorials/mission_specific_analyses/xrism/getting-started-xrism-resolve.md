@@ -2236,10 +2236,28 @@ electrical cross-talk *events*, as the strongly recommended **STATUS[4]** cut di
 will achieve much the same result.
 ```
 
+We recommend that, if you are analyzing a bright source, you explore what effect excluding events
+flagged as potentially contaminated by untriggered electrical cross-talk has on the spectra you
+produce and the measurements you make from them.
 
-### Avoiding periods of high particle background flux
 
-**Depending on source flux or science goal - might be useful for low brightness sources, to improve SNR**
+### Excluding periods of high particle background flux
+
+Another cleaning step that you could _potentially_ apply to your data is to exclude all
+events that were recorded during periods of the observation that had particularly
+high particle background fluxes.
+
+We say *potentially*, because practically speaking, you might not need to worry about this if your
+observation is of any kind of bright source – you will only concievably benefit if your target is
+relatively faint.
+
+If your source of interest *is* relatively faint, you should consider comparing your output spectra
+and measured properties with and without this extra step, and make a decision based on the
+source flux and your particular science goals. We do not give a blanket recommendation to
+apply this to all faint sources because you can end up dramatically decreasing the overall
+exposure time of your observation, and every kilo-second is precious, so if removing the
+background particle flux does not improve your source's signal-to-noise, the trade-off may
+not be worth it.
 
 ```{code-cell} python
 
