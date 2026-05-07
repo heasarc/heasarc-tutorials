@@ -2217,11 +2217,24 @@ direct neighbors.
 
 However, electrical cross-talk induced by an electrically adjacent pixel _can_ contaminate a **real**
 signal pulse that has occurred at around the same time - this then corrupts the eventual
-measurements of the pulse's characteristics, and everything inferred from them (including event energy).
+measurements of the pulse's characteristics, and everything inferred from them (including the energy
+assigned to the event).
 
+The most effective way to deal with electrical cross-talk is to **exclude any events
+originating from electrically adjacent pixels that occur near simultaneously**. You
+don't have to figure out which events meet that particular criteria for yourself, as the
+**STATUS** column that we discussed at the
+[beginning of the 'excluding pixel-pixel coincident events' section](#excluding-pixel-pixel-coincident-events)
+contains entries with that information:
+- **STATUS[13]** being set to **b1** (or True) indicates that the event is likely to be contaminated by an electrical cross-talk signal that was not powerful enough to be recorded as an event (untriggered electrical cross-talk).
+- <span style="color:red">**STATUS[6]** (or is it 7?)</span> being set to **b1** (or True) indicates that the event _may_ be the result of an electrical cross-talk signal powerful enough to be recorded as an event.
 
-#### Real events contaminated by untriggered crosstalk
-
+```{caution}
+We do not currently recommend using <span style="color:red">**STATUS[6]** (or is it 7?)</span> to remove
+electrical cross-talk *events*, as the strongly recommended **STATUS[4]** cut discussed at the
+[beginning of the 'excluding pixel-pixel coincident events' section](#excluding-pixel-pixel-coincident-events)
+will achieve much the same result.
+```
 
 
 ### Avoiding periods of high particle background flux
