@@ -2497,14 +2497,15 @@ plt.show()
 ### Defining the extraction region/pixels
 
 ```{code-cell} python
-
+chosen_pixels = [pix_id for pix_id in range(0, 36) if pix_id not in [12, 27]]
+chosen_pixels
 ```
 
 ### Setting up region files
 
 ```{code-cell} python
-# det_region_from_pixels('testo.reg',
-#                        [0, 1, 2, 3, 4, 22, 23, 24, 25, 30, 31, 16, 17, 18])
+chosen_pixel_det_reg_path = os.path.join(OUT_PATH, "chosen_pixel_detxy.reg")
+det_region_from_pixels(chosen_pixel_det_reg_path, chosen_pixels)
 ```
 
 ### Generating spectral files
