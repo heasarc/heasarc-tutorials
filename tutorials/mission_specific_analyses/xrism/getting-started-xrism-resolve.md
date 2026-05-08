@@ -2020,26 +2020,32 @@ photons** that can induce XRISM-Resolve pixels to register events near simultane
 even two photons happening to arrive at the same time can, in some cases, cause the
 measured properties of the events to be biased.
 
+Amongst their other functions, the various stages of processing applied to XRISM-Resolve data
+attempt to identify pixel-pixel coincident events and to determine what caused them – the
+results of those searches (alongside other the results of other checks) are stored in
+the **STATUS** column of XRISM-Resolve event lists, with one entry per event.
 
+```{code-cell} python
+# TODO POTENTIAL DEMO OF GETTING THE EVENTS WHICH HAVE A STATUS[4] FLAG (I KNOW
+#  IT SAYS 3 BUT INDEXING IS DIFFERENT)
+cur_evt_list.data[cur_evt_list.data["STATUS"][:, 3]]
+```
 
-Now we will begin to use a small subset of the useful information stored in the
-**STATUS** column of XRISM-Resolve event lists – this column is a *16-bit-per-event flag* (with
-14 actually in use), and is fully described in the XRISM ABC guide
+The **STATUS** column entry for a particular event is a *16-bit flag* (with
+14 actually in use), and each bit represents the result of a different type of
+processing check performed for the event. The different flags are described in the XRISM ABC guide
 ([XRISM GOF & SDC (2024)](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)).
 
-A value of **b0** for a particular **STATUS** bit indicates that the flag that bit represents
-was **not**raised (a good thing), whereas **b1** indicates that the flag _was_ raised.
+If a bit value is **b0**, that means that the flag which that bit represents
+was **not** raised (a good thing), whereas **b1** indicates that the flag _was_ raised.
 
+So, we will be able to remove those events that might be problematic pixel-pixel
+coincidences by making cuts based on the value of several of the bits in the **STATUS** column.
 
-
+```{important}
+When using HEASoft tools, the indexing of the STATUS column's flags **begins at 1**, unlike
+in Python, which has zero based indexing.
 ```
-ftcopy infile="xa000126000rsl_p0px1000_cl.evt[EVENTS][(PI>=600)
-&&(((((RISE_TIME+0.00075*DERIV_MAX)>46)&&
-((RISE_TIME+0.00075*DERIV_MAX)<58))&&ITYPE<4)||(ITYPE==4))&&
-STATUS[4]==b0]" outfile=xa000126000rsl_p0px1000_cl2.evt
-copyall=yes clobber=yes history=yes
-```
-
 
 #### Frame events
 
