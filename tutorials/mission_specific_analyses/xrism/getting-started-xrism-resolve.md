@@ -105,7 +105,7 @@ from matplotlib.lines import Line2D
 
 # from matplotlib.ticker import FuncFormatter
 from packaging.version import Version
-from xga.products import EventList  # , Image
+from xga.products import EventList, Image
 ```
 
 ## Global Setup
@@ -2378,12 +2378,12 @@ arg_combs = [
         apply_unfiltered_coincident_screen,
         remove_pixel_27,
     ]
-    for oi, xfs in rel_filters.items()
+    for oi, xfs in cut_rel_filters.items()
     for xf in xfs
 ]
 
 with mp.Pool(NUM_CORES) as p:
-    sp_result = p.starmap(screen_xrism_resolve_evts, arg_combs)
+    sev_result = p.starmap(screen_xrism_resolve_evts, arg_combs)
 ```
 
 ### Further considerations for spatially-resolved analyses
@@ -2397,7 +2397,7 @@ aware that there _are_ further considerations.
 
 ## 4. Generating new XRISM-Resolve images
 
-### Images from cleaned-**un**screened event lists
+### Setting up for image generation
 
 ```{code-cell} python
 im_en_bounds = Quantity([[3.0, 10.0], [6.0, 7.0]], "keV")
@@ -2417,6 +2417,8 @@ im_sub_pixel = False
 im_bin_sub_pixel = 1
 ```
 
+### Running image generation
+
 ```{code-cell} python
 arg_combs = [
     [
@@ -2427,7 +2429,7 @@ arg_combs = [
         im_bin_sub_pixel,
         im_evt_grades,
     ]
-    for oi, xfs in rel_filters.items()
+    for oi, xfs in cut_rel_filters.items()
     for xf in xfs
     for cur_bnds in im_en_bounds
 ]
@@ -2436,20 +2438,26 @@ with mp.Pool(NUM_CORES) as p:
     sp_result = p.starmap(gen_xrism_resolve_image, arg_combs)
 ```
 
-### Images from 'for science' cleaned-screened event lists
+### Visualizing a new image
 
 ```{code-cell} python
+cur_im_path = IM_PATH_TEMP.format(
+    oi=rel_obsids[0],
+    xrf=cut_rel_filters[rel_obsids[0]][0],
+    ibf="PIX",
+    lo=im_en_bounds[0][0].to("keV").value,
+    hi=im_en_bounds[0][1].to("keV").value,
+)
 
+cur_im = Image(cur_im_path, rel_obsids[0], "Resolve", "", "", "", *im_en_bounds[0])
+
+cur_im.view(
+    zoom_in=True,
+    manual_zoom_xlims=[-0.5, 5.5],
+    manual_zoom_ylims=[-0.5, 5.5],
+    figsize=(6.7, 5.5),
+)
 ```
-
-### Comparing the new images
-
-```
-# test_im = "XRISM_output/xrism-resolve-obsid300072010-filterpx1000-imbinfactorPIX-en4.0_10.0keV-image.fits"
-# im = Image(test_im, '300072010', 'Resolve', "", "", "", Quantity(4, 'keV'), Quantity(10, 'keV'))
-# im.view(zoom_in=True, manual_zoom_xlims=[-0.5, 5.5], manual_zoom_ylims=[-0.5, 5.5])
-```
-
 
 ### Setting up region files
 
@@ -2478,7 +2486,7 @@ with mp.Pool(NUM_CORES) as p:
 #         obs_src_reg_path_temp.format(oi=oi),
 #         obs_back_reg_path_temp.format(oi=oi),
 #     ]
-#     for oi, xfs in rel_filters.items()
+#     for oi, xfs in cut_rel_filters.items()
 #     for xf in xfs
 # ]
 #
