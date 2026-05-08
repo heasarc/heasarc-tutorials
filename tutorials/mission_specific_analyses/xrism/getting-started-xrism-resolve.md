@@ -2004,6 +2004,23 @@ and [the ARF](#calculating-ancillary-response-files-arfs) generation sections of
 
 ### Excluding pixel-pixel coincident events
 
+In this part of the demonstration we're going to discuss a whole category of events that you
+should probably remove from your analysis - **pixel-pixel coincident events**.
+
+Pixel-pixel coincident events are, unsurprisingly, events whose detection occurs almost
+simultaneously with the detection of another photon in a different XRISM-Resolve pixel.
+
+Multiple events being recorded at or around the same time by multiple pixels is not
+inherently a bad thing, and of course, it will be more likely to happen the higher the
+flux of your source.
+
+Unfortunately, we often have to err on the side of caution and decide not to trust these
+events, as not only are there physical processes **other than the normal arrival of
+photons** that can induce XRISM-Resolve pixels to register events near simultaneously, but
+even two photons happening to arrive at the same time can, in some cases, cause the
+measured properties of the events to be biased.
+
+
 
 Now we will begin to use a small subset of the useful information stored in the
 **STATUS** column of XRISM-Resolve event lists – this column is a *16-bit-per-event flag* (with
@@ -2243,7 +2260,7 @@ produce and the measurements you make from them.
 
 ### Excluding periods of high particle background flux
 
-Another cleaning step that you could _potentially_ apply to your data is to exclude all
+Moving on from pixel-pixel coincidence, another cleaning step that you could _potentially_ apply to your data is to exclude all
 events that were recorded during periods of the observation that had particularly
 high particle background fluxes.
 
@@ -2286,15 +2303,29 @@ with this threshold and observe the effect of it on your data).
 The housekeeping file does not store a COR value for every single event; instead, all the
 parameters that it keeps tracked of are recorded on a regular time cadence.
 
+<span style="color:red">***ACTUALLY I DON'T UNDERSTAND WHY WE CAN'T JUST USE MAKETIME?***</span>><>
+
+
 Thus, the most effective way of selecting events based on the COR information stored in the EHK
 is to generate a new 'Good Time Interval' (GTI) file that can be applied during event list
 cleaning. We will use two HEASoft tools to achieve this:
 1. `makefilter` - Will be used to create an FTOOLS filter file that selects time steps when **CORTIME > 8**.
 2. `maketime` - Converts the filter file created by `makefilter` into a GTI file that can be applied to the event list.
 
+<span style="color:red">***NEED TO CHECK IF NEW FILTER FILE SHOULD BE COMBINED WITH EXISTING, AND HOW TO APPLY THE NEW GTI USING EXTRACTOR***</span>><>
+
+<span style="color:red">***Makefilter requires a config file to describe which columns to copy into the filter file.***</span>><>
 
 ```{code-cell} python
+# hsp.makefilter(configure=, noprompt=True)
 
+# cur_ehk = os.path.join(OUT_PATH, cur_evt_list.obs_id, f"xa{cur_evt_list.obs_id}.ehk")
+# print(cur_ehk)
+#
+# hsp.maketime(infile=cur_ehk,
+#              outfile='testo-gti.fits',
+#              expr="CORTIME.lt.8",
+#              noprompt=True)
 ```
 
 ### Making new 'cleaned' event lists
