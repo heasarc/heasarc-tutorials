@@ -2400,7 +2400,40 @@ aware that there _are_ further considerations.
 ### Images from cleaned-**un**screened event lists
 
 ```{code-cell} python
+im_en_bounds = Quantity([[3.0, 10.0], [6.0, 7.0]], "keV")
+```
 
+```{code-cell} python
+# im_evt_grades = [0, 1]
+
+im_evt_grades = None
+```
+
+```{code-cell} python
+# im_sub_pixel = True
+# im_bin_sub_pixel = 100
+
+im_sub_pixel = False
+im_bin_sub_pixel = 1
+```
+
+```{code-cell} python
+arg_combs = [
+    [
+        SCR_EVT_PATH_TEMP.format(oi=oi, xrf=xf),
+        os.path.join(OUT_PATH, oi),
+        *cur_bnds,
+        im_sub_pixel,
+        im_bin_sub_pixel,
+        im_evt_grades,
+    ]
+    for oi, xfs in rel_filters.items()
+    for xf in xfs
+    for cur_bnds in im_en_bounds
+]
+
+with mp.Pool(NUM_CORES) as p:
+    sp_result = p.starmap(gen_xrism_resolve_image, arg_combs)
 ```
 
 ### Images from 'for science' cleaned-screened event lists
