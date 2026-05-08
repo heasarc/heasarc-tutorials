@@ -2450,20 +2450,46 @@ cur_im_path = IM_PATH_TEMP.format(
 )
 
 cur_im = Image(cur_im_path, rel_obsids[0], "Resolve", "", "", "", *im_en_bounds[0])
-
-cur_im.view(
-    zoom_in=True,
-    manual_zoom_xlims=[-0.5, 5.5],
-    manual_zoom_ylims=[-0.5, 5.5],
-    figsize=(6.7, 5.5),
-)
 ```
 
-### Setting up region files
+Usually we would just call `cur_im.view()` to make a visualization of the image, but in this
+case we also want to overlay the pixel IDs, so we will fetch the base visualization produced
+for the Image view method, by calling `cur_im.get_view()`, and then modify the figure before
+displaying it:
 
 ```{code-cell} python
-# det_region_from_pixels('testo.reg',
-#                        [0, 1, 2, 3, 4, 22, 23, 24, 25, 30, 31, 16, 17, 18])
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+plt.figure(figsize=(6.7, 5.5))
+cur_ax = plt.gca()
+cur_im.get_view(
+    cur_ax, zoom_in=True, manual_zoom_xlims=[-0.5, 5.5], manual_zoom_ylims=[-0.5, 5.5]
+)
+
+for pix_id, det_reg_str in RESOLVE_PIX_DET_REGIONS.items():
+    cur_pix_detxy = np.array(det_reg_str.strip("box(").split(",")[:2]).astype(int) - 1
+
+    pix_txt_col = "black" if pix_id != 27 else "snow"
+
+    plt.text(
+        x=cur_pix_detxy[0],
+        y=cur_pix_detxy[1],
+        s=str(pix_id),
+        color=pix_txt_col,
+        fontsize=20,
+        fontweight="bold",
+        horizontalalignment="center",
+        verticalalignment="center",
+    )
+
+cbar = plt.colorbar(cur_ax.images[0])
+cbar.ax.set_ylabel("ct", fontsize=15)
+
+plt.tight_layout()
+plt.show()
 ```
 
 ## 5. Generating new XRISM-Resolve spectra
@@ -2472,6 +2498,13 @@ cur_im.view(
 
 ```{code-cell} python
 
+```
+
+### Setting up region files
+
+```{code-cell} python
+# det_region_from_pixels('testo.reg',
+#                        [0, 1, 2, 3, 4, 22, 23, 24, 25, 30, 31, 16, 17, 18])
 ```
 
 ### Generating spectral files
