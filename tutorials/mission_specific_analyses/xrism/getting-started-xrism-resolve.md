@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-05-06'
+date: '2026-05-08'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -76,7 +76,7 @@ We make use of the HEASoftPy interface to HEASoft tasks throughout this demonstr
 
 ### Runtime
 
-As of 25th March 2026, this notebook takes ~***????*** m to run to completion on Fornax using the 'Default Astrophysics' image and the medium server with 16GB RAM/ 4 cores.
+As of 8th May 2026, this notebook takes ~***????*** m to run to completion on Fornax using the 'Default Astrophysics' image and the medium server with 16GB RAM/ 4 cores.
 
 ## Imports
 
@@ -204,9 +204,9 @@ def screen_xrism_resolve_evts(
     out_dir: str,
     lo_pi: Optional[Union[int, Quantity]] = 600,
     hi_pi: Optional[Union[int, Quantity]] = None,
+    status4_screen: bool = True,
     rise_time_screen: bool = True,
-    exclude_frame_evts: bool = True,
-    elec_coinc_evt_screen: bool = False,
+    unfilt_elec_coinc_evt_screen: bool = False,
     exclude_pix27: bool = True,
 ):
     """
@@ -269,10 +269,10 @@ def screen_xrism_resolve_evts(
     if exclude_pix27:
         filt_expr.append("(PIXEL!=27)")
 
-    if exclude_frame_evts:
+    if status4_screen:
         filt_expr.append("(STATUS[4]==b0)")
 
-    if elec_coinc_evt_screen:
+    if unfilt_elec_coinc_evt_screen:
         filt_expr.append("(STATUS[13]==b0)")
 
     evt_file_filt = f"{event_file}[EVENTS][{'&&'.join(filt_expr)}]"
@@ -1991,7 +1991,7 @@ Investigations into the cause of this problem and potential strategies for mitig
 current best practice is to **exclude pixel 27 from analysis entirely**.
 
 ```{code-cell} python
-
+remove_pixel_27 = True
 ```
 
 ```{important}
@@ -2045,6 +2045,12 @@ coincidences by making cuts based on the value of several of the bits in the **S
 ```{important}
 When using HEASoft tools, the indexing of the STATUS column's flags **begins at 1**, unlike
 in Python, which has zero based indexing.
+```
+
+<span style="color:red">***DESCRIBE THE GENERAL STATUS 4 CUT WE RECOMMEND***</span>
+
+```{code-cell} python
+apply_general_coincident_screen = True
 ```
 
 #### Frame events
@@ -2203,6 +2209,15 @@ plt.tight_layout()
 plt.show()
 ```
 
+We recommend that you apply these rise time cuts in your own analysis. We have created an all-in-one
+event list cleaning function for this demonstration, which will optionally apply the various
+checks and screen we're discussing at the moment. Here we set the variable that will control
+whether the rise time screening is applied [when we call the function](#making-new-cleaned-event-lists):
+
+```{code-cell} python
+apply_rise_time_screen = True
+```
+
 #### Thermal cross-talk
 
 <span style="color:red">***TOO SMALL TO BE WORTH BOTHERING ABOUT?***</span>
@@ -2261,8 +2276,12 @@ will achieve much the same result.
 
 We recommend that, if you are analyzing a bright source, you explore what effect excluding events
 flagged as potentially contaminated by untriggered electrical cross-talk has on the spectra you
-produce and the measurements you make from them.
+produce and the measurements you make from them. <span style="color:red">***Add sentence describing whatever
+default we actually go with below***</span>
 
+```{code-cell} python
+apply_unfiltered_coincident_screen = False
+```
 
 ### Excluding periods of high particle background flux
 
@@ -2334,24 +2353,37 @@ cleaning. We will use two HEASoft tools to achieve this:
 #              noprompt=True)
 ```
 
-### Making new 'cleaned' event lists
+### PI limits
+
+<span style="color:red">***BOTH THE TITLE AND LOCATION OF THIS SUBSECTION WILL LIKELY CHANGE***</span>
 
 ```{code-cell} python
-# arg_combs = [
-#     [
-#         EVT_PATH_TEMP.format(oi=oi, xrf=xf),
-#         os.path.join(OUT_PATH, oi),
-#         src_coord,
-#         src_reg_rad,
-#         obs_src_reg_path_temp.format(oi=oi),
-#         obs_back_reg_path_temp.format(oi=oi),
-#     ]
-#     for oi, xfs in rel_filters.items()
-#     for xf in xfs
-# ]
-#
-# with mp.Pool(NUM_CORES) as p:
-#     sp_result = p.starmap(screen_xrism_resolve_evts, arg_combs)
+pi_chan_limits = Quantity([600, 20000], "chan")
+
+print((RSL_EV_PER_CHAN * pi_chan_limits).to("keV"))
+```
+
+### Making new 'cleaned' event lists
+
+<span style="color:red">***IF I MENTION AND GENERATE COR-BASED GTIS, I NEED TO BE ABLE TO PASS THEM TO THE FUNCTION BELOW***</span>
+
+```{code-cell} python
+arg_combs = [
+    [
+        EVT_PATH_TEMP.format(oi=oi, xrf=xf),
+        os.path.join(OUT_PATH, oi),
+        *pi_chan_limits,
+        apply_general_coincident_screen,
+        apply_rise_time_screen,
+        apply_unfiltered_coincident_screen,
+        remove_pixel_27,
+    ]
+    for oi, xfs in rel_filters.items()
+    for xf in xfs
+]
+
+with mp.Pool(NUM_CORES) as p:
+    sp_result = p.starmap(screen_xrism_resolve_evts, arg_combs)
 ```
 
 ### Further considerations for spatially-resolved analyses
@@ -2459,7 +2491,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-07
+Updated On: 2026-05-08
 
 +++
 
