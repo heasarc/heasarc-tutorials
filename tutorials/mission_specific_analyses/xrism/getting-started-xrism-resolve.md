@@ -658,16 +658,16 @@ def gen_xrism_resolve_spectrum(
     # Make sure to remove the temporary directory
     rmtree(temp_work_dir)
 
-    return src_out
+    return src_out, os.path.join(out_dir, sp_out), event_file, cur_obs_id
 
 
 def gen_xrism_resolve_rmf(
     event_file: str,
     spec_file: str,
     out_dir: str,
+    rmf_type: str = "L",
     include_evt_grades: List[int] = None,
     include_pixels: List[int] = None,
-    rmf_type: str = "L",
 ):
     """
     A wrapper around the XRISM-Resolve-specific RMF generation tool implemented as
@@ -2508,30 +2508,61 @@ chosen_pixel_det_reg_path = os.path.join(OUT_PATH, "chosen_pixel_detxy.reg")
 det_region_from_pixels(chosen_pixel_det_reg_path, chosen_pixels)
 ```
 
+### Choosing which event grades to include
+
+```{code-cell} python
+chosen_evt_grades = [0]
+```
+
 ### Generating spectral files
 
 ```{code-cell} python
-# arg_combs = [
-#     [
-#         EVT_PATH_TEMP.format(oi=oi, xrf=xf),
-#         os.path.join(OUT_PATH, oi),
-#         src_coord,
-#         src_reg_rad,
-#         obs_src_reg_path_temp.format(oi=oi),
-#         obs_back_reg_path_temp.format(oi=oi),
-#     ]
-#     for oi, xfs in cut_rel_filters.items()
-#     for xf in xfs
-# ]
-#
-# with mp.Pool(NUM_CORES) as p:
-#     sp_result = p.starmap(gen_xrism_resolve_spectrum, arg_combs)
+arg_combs = [
+    [
+        SCR_EVT_PATH_TEMP.format(oi=oi, xrf=xf),
+        os.path.join(OUT_PATH, oi),
+        chosen_evt_grades,
+        chosen_pixels,
+    ]
+    for oi, xfs in cut_rel_filters.items()
+    for xf in xfs
+]
+
+with mp.Pool(NUM_CORES) as p:
+    sp_result = p.starmap(gen_xrism_resolve_spectrum, arg_combs)
 ```
+
+<span style="color:red">***WRITE THIS BIT BETTER***</span>
+
+The return from this function is a little different, and includes the following:
+- Logs of the spectral extraction run <span style="color:red">***THOUGH ALL OUR FUNCTIONS RETURN THAT***</span>
+- File path of the newly generated spectrum.
+- File path to the event list used.
+- The ObsID
+
+The latter three are to make it more convenient to call the next step, RMF generation.
+
 
 ### Producing redistribution matrix files (RMFs)
 
 ```{code-cell} python
+chosen_rmf_size = "S"
+```
 
+```{code-cell} python
+arg_combs = [
+    [
+        sp_gen_output[2],
+        sp_gen_output[1],
+        os.path.join(OUT_PATH, sp_gen_output[3]),
+        chosen_rmf_size,
+    ]
+    for sp_gen_output in sp_result
+]
+
+
+with mp.Pool(NUM_CORES) as p:
+    rmf_result = p.starmap(gen_xrism_resolve_rmf, arg_combs)
 ```
 
 ### Calculating ancillary response files (ARFs)
