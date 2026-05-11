@@ -658,7 +658,7 @@ def gen_xrism_resolve_spectrum(
     # Make sure to remove the temporary directory
     rmtree(temp_work_dir)
 
-    return src_out, os.path.join(out_dir, sp_out), event_file, cur_obs_id
+    return src_out, os.path.join(out_dir, sp_out), event_file, cur_obs_id, cur_filter
 
 
 def gen_xrism_resolve_rmf(
@@ -2395,7 +2395,7 @@ aware that there _are_ further considerations.
 
 ```
 
-## 4. Generating new XRISM-Resolve images
+## 4. Generating new XRISM-Resolve images and exposure maps
 
 ### Setting up for image generation
 
@@ -2436,6 +2436,32 @@ arg_combs = [
 
 with mp.Pool(NUM_CORES) as p:
     sp_result = p.starmap(gen_xrism_resolve_image, arg_combs)
+```
+
+### Setting up for exposure map generation
+
+```{code-cell} python
+expmap_rad_delta = Quantity(20, "arcmin")
+expmap_phi_bins = 1
+```
+
+### Running exposure map generation
+
+```{code-cell} python
+arg_combs = [
+    [
+        SCR_EVT_PATH_TEMP.format(oi=oi, xrf=xf),
+        os.path.join(OUT_PATH, oi),
+        None,
+        expmap_rad_delta,
+        expmap_phi_bins,
+    ]
+    for oi, xfs in cut_rel_filters.items()
+    for xf in xfs
+]
+
+with mp.Pool(NUM_CORES) as p:
+    ex_result = p.starmap(gen_xrism_resolve_expmap, arg_combs)
 ```
 
 ### Visualizing a new image
@@ -2560,7 +2586,6 @@ arg_combs = [
     for sp_gen_output in sp_result
 ]
 
-
 with mp.Pool(NUM_CORES) as p:
     rmf_result = p.starmap(gen_xrism_resolve_rmf, arg_combs)
 ```
@@ -2568,7 +2593,32 @@ with mp.Pool(NUM_CORES) as p:
 ### Calculating ancillary response files (ARFs)
 
 ```{code-cell} python
+arf_rt_num_photons = 20000
+arf_rt_min_photons = 100
+```
 
+```{code-cell} python
+arg_combs = []
+for sp_gen_output in sp_result:
+    oi = sp_gen_output[3]
+    xf = sp_gen_output[4]
+
+    args = [
+        os.path.join(OUT_PATH, oi),
+        SRC_COORD,
+        EX_PATH_TEMP.format(
+            oi=oi, xrf=xf, rd=expmap_rad_delta.to("arcmin").value, npb=expmap_phi_bins
+        ),
+        sp_gen_output[1],
+        RMF_PATH_TEMP.format(oi=oi, xrf=xf),
+        chosen_pixel_det_reg_path,
+        arf_rt_num_photons,
+        arf_rt_min_photons,
+    ]
+    arg_combs.append(args)
+
+with mp.Pool(NUM_CORES) as p:
+    arf_result = p.starmap(gen_xrism_resolve_arf, arg_combs)
 ```
 
 ## 6. Fitting a model with PyXspec
