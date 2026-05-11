@@ -474,9 +474,7 @@ def gen_xrism_resolve_expmap(
     gti_file = event_file
 
     if pix_gti_file is None:
-        pix_gti_file = os.path.join(
-            out_dir, cur_obs_id, f"xa{cur_obs_id}rsl_{cur_filter}_exp.gti"
-        )
+        pix_gti_file = os.path.join(out_dir, f"xa{cur_obs_id}rsl_{cur_filter}_exp.gti")
     else:
         pix_gti_file = os.path.abspath(pix_gti_file)
 
