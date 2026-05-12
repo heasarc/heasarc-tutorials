@@ -2077,7 +2077,7 @@ when the energy is deposited in the frame), and are referred to as 'frame events
 Thankfully, there is a fairly easy way to identify frame events – they normally have a
 significantly different 'pulse rise time' than 'normal' events do. The pulse rise time
 describes how long it takes for a pulse to reach its peak and is stored in the
-'RISE_TIME' column of a XRISM-Resolve event list (in units of $20\:\rm{\micro} \rm{s}$).
+'RISE_TIME' column of a XRISM-Resolve event list (in units of $20\:\rm{\mu s}$).
 
 Frame events can be effectively removed by applying a XRISM-Resolve-team-defined pulse
 rise time cut to the event list, selecting events that fulfil these criteria:
