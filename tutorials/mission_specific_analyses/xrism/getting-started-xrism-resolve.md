@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-05-08'
+date: '2026-05-12'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -62,7 +62,9 @@ object that can be semi-reasonably treated as a 'point' source; the supernova-re
 
 ***~~NOT FINAL, BUT THE TARGET IS RX J1856.5-3754, ONE OF THE MAGNIFICENT SEVEN~~***
 
-***NOT FINAL, BUT PDS 456 IS THE TARGET - local ish radio quiet quasar***
+***~~NOT FINAL, BUT PDS 456 IS THE TARGET - local ish radio quiet quasar~~***
+
+***THE TARGET IS NGC 1365***
 
 We make use of the HEASoftPy interface to HEASoft tasks throughout this demonstration.
 
@@ -942,7 +944,7 @@ def gen_xrism_resolve_arf(
             instrume="RESOLVE",
             emapfile=os.path.relpath(expmap_file),
             rmffile=os.path.relpath(rmf_file),
-            regmode="RADEC",
+            regmode="DET",
             noprompt=True,
             clobber=True,
         )
@@ -1236,6 +1238,7 @@ GRP_SP_PATH_TEMP = SP_PATH_TEMP.replace("-spectrum", "-{gt}grp{gs}-spectrum")
 # --------------------------
 
 # ---------- RMF -----------
+# TODO THIS IS NOT CORRECT
 RMF_PATH_TEMP = os.path.join(
     OUT_PATH, "{oi}", "xrism-resolve-obsid{oi}-filter{xrf}.rmf"
 )
@@ -2608,7 +2611,7 @@ for sp_gen_output in sp_result:
             oi=oi, xrf=xf, rd=expmap_rad_delta.to("arcmin").value, npb=expmap_phi_bins
         ),
         sp_gen_output[1],
-        RMF_PATH_TEMP.format(oi=oi, xrf=xf),
+        sp_gen_output[1].replace("-spectrum.fits", ".rmf"),
         chosen_pixel_det_reg_path,
         arf_rt_num_photons,
         arf_rt_min_photons,
@@ -2645,7 +2648,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-08
+Updated On: 2026-05-12
 
 +++
 
