@@ -2058,7 +2058,7 @@ apply_general_coincident_screen = True
 
 #### Frame events
 
-The first type of coincident events we'll deal with are called 'frame events' – they
+The first type of coincident events we'll deal with are 'frame events' – they
 occur when a significant amount of energy is absorbed into the **silicon frame *around* the XRISM-Resolve array**
 
 Absorption of enough energy into the frame will measurably 'pulse' the temperature of
