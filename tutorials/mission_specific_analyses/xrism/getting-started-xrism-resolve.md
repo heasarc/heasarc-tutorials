@@ -70,7 +70,7 @@ We make use of the HEASoftPy interface to HEASoft tasks throughout this demonstr
 
 ### Inputs
 
-- The name of the source of interest, in this case *PDS 456*.
+- The name of the source of interest, in this case *NGC 1365*.
 
 ### Outputs
 
@@ -1005,7 +1005,7 @@ jupyter:
   source_hidden: true
 ---
 # The name of the source we're examining in this demonstration
-SRC_NAME = "PDS456"
+SRC_NAME = "NGC1365"
 
 # Controls the verbosity of all HEASoftPy tasks
 TASK_CHATTER = 2
@@ -1252,12 +1252,12 @@ ARF_PATH_TEMP = SP_PATH_TEMP.replace("-spectrum.fits", ".arf")
 
 ***
 
-## 1. Finding and downloading XRISM observations of PDS 456
+## 1. Finding and downloading XRISM observations of NGC 1365
 
 Our first task is to determine which XRISM observations are relevant to the source
 that we are interested in.
 
-We are going in with the knowledge that PDS 456 has been observed by XRISM, but of
+We are going in with the knowledge that NGC 1365 has been observed by XRISM, but of
 course, there is no guarantee that _your_ source of interest has been, so this is
 an important exploratory step.
 
@@ -1281,7 +1281,7 @@ catalog_name = Heasarc.list_catalogs(master=True, keywords="xrism")[0]["name"]
 catalog_name
 ```
 
-### What are the coordinates of PDS 456?
+### What are the coordinates of NGC 1365?
 
 To search for relevant observations, we have to know the coordinates of our
 source. The astropy module allows us to look up a source name in CDS' Sesame name
@@ -1339,14 +1339,15 @@ avail_xrism_obs = all_xrism_obs[public_times <= Time.now()]
 avail_xrism_obs
 ```
 
-We can see that there is a single public XRISM observation of PDS 456
-(as of May 2026) – with an ObsID of **300072010**. As proof against future
-observations being taken, and causing this notebook to take longer to run, we will
-specify that we are only going to use that one observation, by filtering
-the `avail_xrism_obs` table:
+We can see that there are two public XRISM observations of NGC 1365
+(as of May 2026) – with ObsIDs of **300075010** and _300075020_. To ensure that this
+demonstration notebook will run in a reasonable length of time, we
+will restrict ourselves to using one observation (300075010; chosen primarily
+because it illustrates the [problem with pixel](#pixel-27-of-xrism-resolve-is-broken)
+better than the other), by filtering the `avail_xrism_obs` table:
 
 ```{code-cell} python
-avail_xrism_obs = avail_xrism_obs[avail_xrism_obs["obsid"] == "300072010"]
+avail_xrism_obs = avail_xrism_obs[avail_xrism_obs["obsid"] == "300075010"]
 
 # Create an array of the relevant ObsIDs
 rel_obsids = avail_xrism_obs["obsid"].value.data
@@ -1363,7 +1364,7 @@ rel_filters = {
 ```
 
 ```{important}
-Though we have chosen to demonstrate using a **single observation** of PDS 456, we
+Though we have chosen to demonstrate using a **single observation** of NGC 1365, we
 note that the notebook is designed so that it can handle any number of observations. As such, if you
 wish to adapt this demonstration to examine a different source, with multiple observations, it
 should work without modification.
@@ -1623,7 +1624,7 @@ well as an event list taken with the PI's filter of choice (though it is possibl
 
 In the latter part of the [searching for relevant observations section](#searching-for-relevant-observations) we set
 up a dictionary that stores which filters were used for each observation (though this demonstration's default behavior
-is to use just one observation, **300072010**). Reminding ourselves of the contents of this dictionary, we can
+is to use just one observation, **300075010**). Reminding ourselves of the contents of this dictionary, we can
 see that the undefined, calibration, and open filters were used:
 
 ```{code-cell} python
@@ -1787,7 +1788,7 @@ Other event grades can be assigned, but are less likely to be seen in science da
 
 In an ideal world our entire event list would entirely consist of high-resolution primary events, though unfortunately,
 that is not very likely to happen. To get an idea of different event grade's relative occurrence rates, at least
-for our observation of PDS 456, we can construct a histogram from the event list we produced by
+for our observation of NGC 1365, we can construct a histogram from the event list we produced by
 [running the XRISM xapipeline in a previous section](#running-the-xrism-pipeline-for-resolve).
 
 On the left side y-axis, the histogram represents the absolute number of events which were assigned
@@ -1932,7 +1933,7 @@ of all the other pixels. The practical meaning of this is that you **cannot full
 energies assigned to pixel 27 events**.
 
 We can illustrate this problem by showing the 'gain history' of the XRISM-Resolve pixels during
-our observation of PDS 456 – read from the gain history file produced
+our observation of NGC 1365 – read from the gain history file produced
 [when we ran `xapipeline`](#running-the-xrism-pipeline-for-resolve). This figure
 plots the temperature of the pixel (as calculated using the gain information) against time, and we can
 clearly see that near the beginning of the observation, pixel 27 shows a sudden increase
