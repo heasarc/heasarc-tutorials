@@ -1935,9 +1935,10 @@ energies assigned to pixel 27 events**.
 We can illustrate this problem by showing the 'gain history' of the XRISM-Resolve pixels during
 our observation of NGC 1365 – read from the gain history file produced
 [when we ran `xapipeline`](#running-the-xrism-pipeline-for-resolve). This figure
-plots the temperature of the pixel (as calculated using the gain information) against time, and we can
-clearly see that near the beginning of the observation, pixel 27 shows a sudden increase
-in calculated temperature that the other pixels do not:
+plots the temperature of the pixel against time, and we can
+clearly see that pixel 27's gain history curve has a significantly different shape to those
+of the other pixels. In particular, it jumps up in temperature toward the end of the observation, whereas
+all other pixels decrease in temperature:
 
 ```{code-cell} python
 ---
@@ -1957,7 +1958,7 @@ with fits.open(rel_ghf_path) as gaino:
 #  time-since-start when the times actually matter
 gain_tab["TIME"] = gain_tab["TIME"] - gain_tab["TIME"][0]
 
-plt.figure(figsize=(5, 4))
+plt.figure(figsize=(6, 4.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
@@ -1966,7 +1967,6 @@ for pix_id in set(gain_tab["PIXEL"]):
     cur_sub_gain = gain_tab[gain_tab["PIXEL"] == pix_id]
 
     if pix_id != 27:
-
         plt.plot(cur_sub_gain["TIME"], cur_sub_gain["TEMP_FIT"], alpha=0.3, lw=0.5)
 
     else:
@@ -1980,8 +1980,9 @@ for pix_id in set(gain_tab["PIXEL"]):
         )
 
 plt.xlim(0, gain_tab["TIME"].max())
+plt.ylim(gain_tab["TEMP_FIT"].min() * 0.999, gain_tab["TEMP_FIT"].max() * 1.001)
 
-plt.ylabel("Average Temperature [K]")
+plt.ylabel("Fit Temperature [K]")
 plt.xlabel("Time [s]", fontsize=15)
 
 plt.legend(loc=1, fontsize=14)
