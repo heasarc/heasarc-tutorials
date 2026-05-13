@@ -78,7 +78,7 @@ We make use of the HEASoftPy interface to HEASoft tasks throughout this demonstr
 
 ### Runtime
 
-As of 8th May 2026, this notebook takes ~***????*** m to run to completion on Fornax using the 'Default Astrophysics' image and the medium server with 16GB RAM/ 4 cores.
+As of 13th May 2026, this notebook takes ~50-minutes to run to completion on Fornax using the 'Default Astrophysics' image and the small server with 8GB RAM/ 2 cores.
 
 ## Imports
 
@@ -89,7 +89,7 @@ import multiprocessing as mp
 import os
 from random import randint
 from shutil import rmtree
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 from warnings import warn
 
 import heasoftpy as hsp
@@ -103,8 +103,7 @@ from astropy.time import Time
 from astropy.units import Quantity
 from astroquery.heasarc import Heasarc
 from matplotlib.lines import Line2D
-
-# from matplotlib.ticker import FuncFormatter
+from matplotlib.ticker import FuncFormatter
 from packaging.version import Version
 from xga.products import EventList, Image
 ```
@@ -850,7 +849,7 @@ def gen_xrism_resolve_rmf(
     # Make sure to remove the temporary directory
     rmtree(temp_work_dir)
 
-    return out
+    return out, os.path.join(out_dir, rmf_out)
 
 
 def gen_xrism_resolve_arf(
@@ -913,7 +912,7 @@ def gen_xrism_resolve_arf(
     # Set up a name for the ray-traced simulated event file required for
     #  XRISM ARF generation
     ray_traced_evt_out = (
-        f"xrism-xtend-obsid{cur_obs_id}-numphoton{num_photons}-"
+        f"xrism-resolve-obsid{cur_obs_id}-numphoton{num_photons}-"
         f"enALL-raytracedevents.fits"
     )
 
@@ -960,7 +959,7 @@ def gen_xrism_resolve_arf(
     # Make sure to remove the temporary directory
     rmtree(temp_work_dir)
 
-    return out
+    return out, os.path.join(out_dir, arf_out)
 
 
 def det_region_from_pixels(new_reg_path: str, include_pixels: List[int] = None):
@@ -993,6 +992,170 @@ def det_region_from_pixels(new_reg_path: str, include_pixels: List[int] = None):
 
     with open(new_reg_path, "w") as new_rego:
         new_rego.writelines(cur_reg + "\n" for cur_reg in rel_pix_regs)
+
+
+def plot_fit_spec(
+    plot_data: dict,
+    sp_color: str = "navy",
+    mod_color: str = "firebrick",
+    res_color: str = "navy",
+    x_lims: Optional[Tuple[float, float]] = None,
+    y_lims: Optional[Tuple[float, float]] = None,
+    inst_name: Optional[str] = None,
+    mod_expr: Optional[str] = None,
+    fig_size: Tuple[float] = None,
+):
+    """
+    A convenience function used to plot the spectrum, fitted model, and residuals, at
+    various points in this demonstration. The required input is a dictionary of
+    the style constructed in various subsections of the 'alternative spectral models'
+    section.
+
+    Limited customization of the output figure is offered, but this is not intended
+    as a truly general-purpose plotting function, more as a possible inspiration
+    for your own versions.
+
+    :param dict plot_data: Dictionary containing all information necessary to produce
+        the fitted spectrum and residual visualization.
+    :param str sp_color: Matplotlib color to use for the spectral data points.
+    :param str mod_color: Matplotlib color to use for the fitted model staircase line.
+    :param str res_color: Matplotlib color to use for the residual data points.
+    :param Optional[Tuple[float, float]] x_lims: Optional limits on which parts
+        of the x-axis to plot. Must be a two-element tuple containing the lower and
+        then the upper limit.
+    :param Optional[Tuple[float, float]] y_lims: Optional limits on which parts
+        of the y-axis to plot. Must be a two-element tuple containing the lower and
+        then the upper limit.
+    :param str inst_name: Optionally, a mission/instrument name to add to the
+        legend label given to the spectral data points.
+    :param bool stepped_model: Controls whether the fitted model is plotted as a
+        staircase (to match XSPEC's plotting style) or as a smooth line. Default is
+        True, resulting in a staircase.
+    :param str mod_expr: Optionally, the 'expression' of the fitted model - to be
+        added to its legend label.
+    """
+
+    # Some basic checks to make sure the plot data is in the right format
+    # These are what we need
+    req_ents = [
+        "energy",
+        "energy_delta",
+        "rate",
+        "rate_err",
+        "model",
+        "residual",
+        "residual_err",
+    ]
+    # Raise an error before we get started plotting if any entries are missing
+    if any([en not in plot_data for en in req_ents]):
+        raise KeyError(
+            f"Plot data must contain the following keys: f{', '.join(req_ents)}"
+        )
+
+    # Basic validity check on any axis limits
+    if x_lims is not None and (len(x_lims) != 2 or np.diff(x_lims) < 0):
+        raise ValueError(
+            "Passed x-axis limits must be a two-element tuple, with the first "
+            "entry less than the second."
+        )
+    if y_lims is not None and (len(y_lims) != 2 or np.diff(y_lims) < 0):
+        raise ValueError(
+            "Passed y-axis limits must be a two-element tuple, with the first "
+            "entry less than the second."
+        )
+
+    # Determine what the label for spectrum data points should be based on input
+    #  instrument name
+    sp_label = "Spectral data" if inst_name is None else f"{inst_name} data"
+
+    # Same as above, but for the model label
+    mod_label = "Fitted model" if mod_expr is None else f"Fitted model ({mod_expr})"
+
+    if fig_size is None:
+        fig_size = (7, 6)
+
+    fig, ax_arr = plt.subplots(
+        nrows=2, figsize=fig_size, height_ratios=(3, 1.5), sharex=True
+    )
+    # Shrink the vertical gap between the panels to zero
+    fig.subplots_adjust(hspace=0)
+
+    # First axis (the large, top-most one) is where we will plot the spectrum
+    #  data points, and fitted model lines.
+    spec_ax = ax_arr[0]
+    # Turn minor axis ticks on, and configure the direction they point, and that
+    #  they also appear on the top and right sides of the plot.
+    spec_ax.minorticks_on()
+    spec_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+    # First we plot the spectrum data points, including the count rate uncertainty,
+    #  and the size of each energy bin as error bars.
+    spec_ax.errorbar(
+        plot_data["energy"],
+        plot_data["rate"],
+        xerr=plot_data["energy_delta"],
+        yerr=plot_data["rate_err"],
+        fmt="+",
+        capsize=1.5,
+        label=sp_label,
+        color=sp_color,
+    )
+
+    spec_ax.plot(
+        plot_data["energy"],
+        plot_data["model"],
+        color=mod_color,
+        label=mod_label,
+        alpha=0.8,
+        zorder=2,
+    )
+
+    # We allow the user to set specific x and y axis limits when they call this
+    #  function - if they have passed limits, we enforce them here (the residual
+    #  axis will inherit the limits as well, because we set sharex=True when
+    #  we defined the figure.
+    if x_lims is not None:
+        spec_ax.set_xlim(x_lims)
+    if y_lims is not None:
+        spec_ax.set_ylim(y_lims)
+
+    # We just assume the user wants a logged y-scale, which I don't think is too
+    #  restrictive.
+    spec_ax.set_yscale("log")
+    # Alter the formatting of the labels so that they are 0.1, 0.01, 0.001 etc.
+    spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+    # And make sure to set the y-axis label
+    spec_ax.set_ylabel(
+        r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+    )
+
+    spec_ax.legend(fontsize=14)
+
+    res_ax = ax_arr[1]
+    res_ax.minorticks_on()
+    res_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+    res_ax.errorbar(
+        plot_data["energy"],
+        plot_data["residual"],
+        xerr=plot_data["energy_delta"],
+        yerr=plot_data["residual_err"],
+        fmt="+",
+        capsize=1.5,
+        color=res_color,
+    )
+    res_ax.axhline(0, color="goldenrod", linestyle="dashed")
+
+    res_ax.set_xlabel("Energy [keV]", fontsize=15)
+    res_ax.set_ylabel(
+        r"Residuals [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+    )
+
+    res_ax.set_xscale("log")
+    res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+    res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+    plt.show()
 ```
 
 ### Constants
@@ -2629,6 +2792,47 @@ with mp.Pool(NUM_CORES) as p:
     arf_result = p.starmap(gen_xrism_resolve_arf, arg_combs)
 ```
 
+### Grouping our newly generated spectra
+
+```{code-cell} python
+spec_group_type = "optmin"
+spec_group_scale = 10
+```
+
+```{code-cell} python
+grp_spec_paths = []
+for sp_gen_ind, sp_gen_output in enumerate(sp_result):
+
+    cur_sp_path = sp_gen_output[1]
+    cur_rmf_path = rmf_result[sp_gen_ind][1]
+    cur_arf_path = arf_result[sp_gen_ind][1]
+
+    new_grp_sp_path = cur_sp_path.replace(
+        "-spectrum", f"-{spec_group_type}grp{spec_group_scale}-spectrum"
+    )
+
+    hsp.ftgrouppha(
+        infile=cur_sp_path,
+        outfile=new_grp_sp_path,
+        grouptype=spec_group_type,
+        groupscale=spec_group_scale,
+        respfile=cur_rmf_path,
+        clobber=True,
+        chatter=TASK_CHATTER,
+        noprompt=True,
+    )
+
+    # Populate the RESPFILE and ANCRFILE headers
+    with fits.open(new_grp_sp_path, mode="update") as speco:
+        del speco["SPECTRUM"].header["RESPFILE"]
+        speco["SPECTRUM"].header["RESPFILE"] = os.path.basename(cur_rmf_path)
+
+        del speco["SPECTRUM"].header["ANCRFILE"]
+        speco["SPECTRUM"].header["ANCRFILE"] = os.path.basename(cur_arf_path)
+
+    grp_spec_paths.append(new_grp_sp_path)
+```
+
 ## 6. Fitting a model with PyXspec
 
 In this section we will perform a simple model fit to our new XRISM-Resolve
@@ -2660,22 +2864,14 @@ it to take considerably longer to declare an XSPEC `Spectrum` instance when usin
 larger RMF sizes.
 
 ```{code-cell} python
-# TODO MASSIVE BODGE REMOOOOOVE
-sp_path = (
-    "XRISM_output/300075010/xrism-resolve-obsid300075010-filterpx1000-"
-    "pix0to11_13to26_28to35-resHp-enALL-spectrum.fits"
-)
-grp_sp_path = (
-    "XRISM_output/300075010/xrism-resolve-obsid300075010-filterpx1000-"
-    "pix0to11_13to26_28to35-resHp-enALL-grouped-spectrum.fits"
-)
-rmf_path = sp_path.replace("-spectrum.fits", ".rmf")
-arf_path = sp_path.replace("-spectrum.fits", ".arf")
+chosen_grp_sp_path = grp_spec_paths[0]
 ```
 
 ```{code-cell} python
 xs.AllData.clear()
-cur_sp = xs.Spectrum(grp_sp_path, respFile=rmf_path, arfFile=arf_path)
+
+with contextlib.chdir(os.dirname(chosen_grp_sp_path)):
+    cur_sp = xs.Spectrum(os.basename(chosen_grp_sp_path))
 ```
 
 ### Constraining the continuum
@@ -2692,6 +2888,20 @@ pl_cont_mod = xs.Model("powerlaw")
 ```{code-cell} python
 xs.Fit.renorm()
 xs.Fit.perform()
+```
+
+```{code-cell} python
+xs.Plot("data resid")
+
+fit_pl_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
 ```
 
 ```{code-cell} python
