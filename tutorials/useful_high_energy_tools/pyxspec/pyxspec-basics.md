@@ -24,7 +24,7 @@ kernelspec:
 title: PyXspec basics - fitting models to data
 ---
 
-# PyXspec basics - fitting models to data
+# PyXspec basics – fitting models to data
 
 ## Learning Goals
 
@@ -212,6 +212,7 @@ def plot_fit_residual_spec(
             alpha=0.8,
             label=mod_label,
             linewidth=1.4,
+            zorder=3,
         )
     # Otherwise, the model will be plotted as a smooth line.
     else:
@@ -221,6 +222,8 @@ def plot_fit_residual_spec(
             color=mod_color,
             label=mod_label,
             alpha=0.8,
+            linewidth=1.4,
+            zorder=3,
         )
 
     # We allow the user to set specific x and y axis limits when they call this
