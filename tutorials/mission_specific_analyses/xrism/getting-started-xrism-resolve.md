@@ -2891,6 +2891,11 @@ xs.Fit.perform()
 ```
 
 ```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
 xs.Plot("data resid")
 
 fit_pl_plot_data = {
@@ -2902,6 +2907,14 @@ fit_pl_plot_data = {
     "residual": np.array(xs.Plot.y(plotWindow=2)),
     "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
 }
+
+plot_fit_spec(
+    fit_pl_plot_data,
+    inst_name="XRISM-Resolve",
+    mod_expr=pl_cont_mod.expression,
+    mod_color="firebrick",
+    sp_color="teal",
+)
 ```
 
 ```{code-cell} python
@@ -2958,7 +2971,35 @@ xs.Fit.perform()
 ### Visualizing the final fit
 
 ```{code-cell} python
+xs.Plot("data resid")
 
+fit_pl_ggg_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
+
+plot_fit_spec(
+    fit_pl_ggg_plot_data,
+    inst_name="XRISM-Resolve",
+    mod_expr=pl_gauss_mod.expression,
+    mod_color="firebrick",
+    sp_color="teal",
+    figsize=(10, 6),
+)
+plot_fit_spec(
+    fit_pl_ggg_plot_data,
+    inst_name="XRISM-Resolve",
+    mod_expr=pl_gauss_mod.expression,
+    mod_color="firebrick",
+    sp_color="teal",
+    figsize=(10, 6),
+    x_lims=[5.9, 8.1],
+)
 ```
 
 ## About this notebook
