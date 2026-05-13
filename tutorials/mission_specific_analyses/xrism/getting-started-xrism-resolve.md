@@ -78,7 +78,7 @@ We make use of the HEASoftPy interface to HEASoft tasks throughout this demonstr
 
 ### Runtime
 
-As of 13th May 2026, this notebook takes ~50-minutes to run to completion on Fornax using the 'Default Astrophysics' image and the small server with 8GB RAM/ 2 cores.
+As of 13th May 2026, this notebook takes ~45-minutes to run to completion on Fornax using the 'Default Astrophysics' image and the small server with 8GB RAM/ 2 cores.
 
 ## Imports
 
@@ -1147,9 +1147,9 @@ def plot_fit_spec(
     res_ax.axhline(0, color="goldenrod", linestyle="dashed")
 
     res_ax.set_xlabel("Energy [keV]", fontsize=15)
-    res_ax.set_ylabel(
-        r"Residuals [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
-    )
+    # We don't set the spectrum to be normalized by area in this notebook, so
+    #  have y-axis labels of ct/s/keV
+    res_ax.set_ylabel(r"Residuals [$\frac{\rm{ct}}{\rm{s} \: \rm{keV}}$]", fontsize=15)
 
     res_ax.set_xscale("log")
     res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
@@ -2847,7 +2847,6 @@ in-depth spectral analysis to other demonstration notebooks.***
 ### Configuring PyXspec
 
 ```{code-cell} python
-# xs.Xset.chatter = 0
 xs.Plot.xAxis = "keV"
 xs.Fit.statMethod = "cstat"
 
@@ -2870,8 +2869,8 @@ chosen_grp_sp_path = grp_spec_paths[0]
 ```{code-cell} python
 xs.AllData.clear()
 
-with contextlib.chdir(os.dirname(chosen_grp_sp_path)):
-    cur_sp = xs.Spectrum(os.basename(chosen_grp_sp_path))
+with contextlib.chdir(os.path.dirname(chosen_grp_sp_path)):
+    cur_sp = xs.Spectrum(os.path.basename(chosen_grp_sp_path))
 ```
 
 ### Constraining the continuum
@@ -2989,7 +2988,7 @@ plot_fit_spec(
     mod_expr=pl_gauss_mod.expression,
     mod_color="firebrick",
     sp_color="teal",
-    figsize=(10, 6),
+    fig_size=(10, 6),
 )
 plot_fit_spec(
     fit_pl_ggg_plot_data,
@@ -2997,7 +2996,7 @@ plot_fit_spec(
     mod_expr=pl_gauss_mod.expression,
     mod_color="firebrick",
     sp_color="teal",
-    figsize=(10, 6),
+    fig_size=(10, 6),
     x_lims=[5.9, 8.1],
 )
 ```
