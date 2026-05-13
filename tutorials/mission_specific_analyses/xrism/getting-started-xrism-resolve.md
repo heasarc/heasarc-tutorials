@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-05-12'
+date: '2026-05-13'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -95,13 +95,12 @@ from warnings import warn
 import heasoftpy as hsp
 import matplotlib.pyplot as plt
 import numpy as np
+import xspec as xs
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
 from astropy.table import Table
 from astropy.time import Time
 from astropy.units import Quantity
-
-# , UnitConversionError
 from astroquery.heasarc import Heasarc
 from matplotlib.lines import Line2D
 
@@ -2593,6 +2592,12 @@ with mp.Pool(NUM_CORES) as p:
     rmf_result = p.starmap(gen_xrism_resolve_rmf, arg_combs)
 ```
 
+```{caution}
+We **do not** recommend using 'small' XRISM-Resolve RMFs for the measurement of final
+scientific results, but they are very useful for initial exploration and preparation
+of your analyses.
+```
+
 ### Calculating ancillary response files (ARFs)
 
 ```{code-cell} python
@@ -2626,7 +2631,10 @@ with mp.Pool(NUM_CORES) as p:
 
 ## 6. Fitting a model with PyXspec
 
-In this section we will perform a simple model fit to our new XRISM-Resolve spectra.
+In this section we will perform a simple model fit to our new XRISM-Resolve
+spectra – or rather, spectrum, as even though the rest of the demonstration is designed
+to scale to the analysis of multiple observations/filters (we selected just one to
+make the tutorial faster), this section will only handle a single spectrum.
 
 As you might imagine, spectral analysis of XRISM-Resolve data can be considerably more
 complex than spectro-imaging CCD spectra. ***We defer a full exploration of more
@@ -2635,10 +2643,109 @@ in-depth spectral analysis to other demonstration notebooks.***
 ### Configuring PyXspec
 
 ```{code-cell} python
+# xs.Xset.chatter = 0
+xs.Plot.xAxis = "keV"
+xs.Fit.statMethod = "cstat"
 
+xs.Fit.nIterations = 1000
+xs.Fit.query = "no"
 ```
 
-### Loading spectral data
+### Loading the spectrum into PyXspec
+
+Just loading a XRISM-Resolve spectrum (or more correctly, its response matrix) into
+PyXspec can take a long time, **even for the 'small' Resolve RMF** that
+[we generated in a previous section](#producing-redistribution-matrix-files-rmfs). Expect
+it to take considerably longer to declare an XSPEC `Spectrum` instance when using the
+larger RMF sizes.
+
+```{code-cell} python
+# TODO MASSIVE BODGE REMOOOOOVE
+sp_path = (
+    "XRISM_output/300075010/xrism-resolve-obsid300075010-filterpx1000-"
+    "pix0to11_13to26_28to35-resHp-enALL-spectrum.fits"
+)
+grp_sp_path = (
+    "XRISM_output/300075010/xrism-resolve-obsid300075010-filterpx1000-"
+    "pix0to11_13to26_28to35-resHp-enALL-grouped-spectrum.fits"
+)
+rmf_path = sp_path.replace("-spectrum.fits", ".rmf")
+arf_path = sp_path.replace("-spectrum.fits", ".arf")
+```
+
+```{code-cell} python
+xs.AllData.clear()
+cur_sp = xs.Spectrum(grp_sp_path, respFile=rmf_path, arfFile=arf_path)
+```
+
+### Constraining the continuum
+
+```{code-cell} python
+xs.AllData.ignore("bad")
+cur_sp.ignore("**-3. 6.-8. 10.0-**")
+```
+
+```{code-cell} python
+pl_cont_mod = xs.Model("powerlaw")
+```
+
+```{code-cell} python
+xs.Fit.renorm()
+xs.Fit.perform()
+```
+
+```{code-cell} python
+pl_norm = pl_cont_mod.powerlaw.norm.values[0]
+pl_index = pl_cont_mod.powerlaw.PhoIndex.values[0]
+
+print(pl_norm, pl_index)
+```
+
+### Adding Gaussian emission line model components
+
+```{code-cell} python
+# Resetting the noticed channels
+xs.AllData.notice("all")
+
+# Applying new ignore commands (very similar to the first)
+xs.AllData.ignore("bad")
+cur_sp.ignore("**-3. 10.0-**")
+```
+
+```{code-cell} python
+xs.AllModels.clear()
+
+pl_gauss_mod = xs.Model("powerlaw+gauss+gauss+gauss")
+
+# Set up the powerlaw component
+pl_gauss_mod.powerlaw.norm.values = pl_norm
+pl_gauss_mod.powerlaw.norm.frozen = True
+pl_gauss_mod.powerlaw.PhoIndex.values = pl_index
+pl_gauss_mod.powerlaw.PhoIndex.frozen = True
+
+# First gaussian
+pl_gauss_mod.gaussian.LineE.values = [6.38, 0.01, 0.0, 6.20, 6.50, 1000000.0]
+pl_gauss_mod.gaussian.Sigma.values = [0.02, 0.01, 0, 0.0, 0.1, 20.0]
+
+# Second gaussian
+pl_gauss_mod.gaussian_3.LineE.values = [6.65, 0.01, 0.0, 6.6, 6.75, 1000000.0]
+pl_gauss_mod.gaussian_3.Sigma.values = [0.02, 0.01, 0, 0.0, 0.05, 20.0]
+
+# Third gaussian
+pl_gauss_mod.gaussian_4.LineE.values = [7.05, 0.01, 0.0, 7, 7.1, 1000000.0]
+pl_gauss_mod.gaussian_4.Sigma.values = [0.02, 0.005, 0, 0.0, 0.05, 20.0]
+```
+
+```{code-cell} python
+pl_gauss_mod.show()
+```
+
+```{code-cell} python
+xs.Fit.renorm()
+xs.Fit.perform()
+```
+
+### Visualizing the final fit
 
 ```{code-cell} python
 
@@ -2650,7 +2757,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-12
+Updated On: 2026-05-13
 
 +++
 
