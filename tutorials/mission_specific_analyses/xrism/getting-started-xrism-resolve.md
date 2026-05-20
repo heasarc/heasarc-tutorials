@@ -212,6 +212,15 @@ def screen_xrism_resolve_evts(
     """
     DOES NOT DO GRADE SELECTION - AS NOT RECOMMENDED FOR MAKING IMAGES/LCS, SO I
     DON'T WANT TO ENFORCE IT.
+
+    :param str event_file:
+    :param str out_dir:
+    :param int/Quantity lo_pi:
+    :param int/Quantity hi_pi:
+    :param bool status4_screen:
+    :param bool rise_time_screen:
+    :param bool unfilt_elec_coinc_evt_screen:
+    :param bool exclude_pix27:
     """
 
     # We can extract the ObsID directly from the header of the event list - it is
