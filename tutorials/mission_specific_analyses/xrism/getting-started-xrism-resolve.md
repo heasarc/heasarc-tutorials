@@ -1841,6 +1841,8 @@ and deal with multiple event lists, with different filters, for each observation
 ***<span style="color:red">SHOULD MAKE CLEAR MENTION OF PIXEL 12 SOMEWHERE IN HERE, EXPLAIN THAT ITS A DEDICATED CALIBRATION PIXEL, AND THAT THEY WILL SOMETIMES SEE IT SKIPPED IN THINGS LIKE THE PIXEL NUM TO DET-REGION CONVERSION DICTIONARY BECAUSE OF THAT.</span>***
 
 ```{code-cell} python
+# Set up a two-level nested dictionary (ObsID top level keys, filter as low level keys)
+#  with EventList instances as values
 evt_lists = {
     oi: {
         cur_filt: EventList(EVT_PATH_TEMP.format(oi=oi, xrf=cur_filt))
