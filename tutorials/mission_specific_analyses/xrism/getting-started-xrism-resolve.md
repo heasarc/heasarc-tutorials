@@ -1703,6 +1703,15 @@ if HEA_VER <= Version("v6.36") and (
 
     # Set the path to the downloaded file
     RSLMPCOR_PATH = os.path.join(ROOT_DATA_DIR, caldb_ret.output[0].split(" ")[0])
+
+    # We include a small validity check to make sure we get an informative error if
+    #  something goes wrong when downloading the CALDB file.
+    if not RSLMPCOR_PATH.endswith(".fits") or not os.path.exists(RSLMPCOR_PATH):
+        # Show the output to give us a clue of what happened
+        print(caldb_ret)
+        raise FileNotFoundError(
+            "Download of the XRISM-Resolve 'RSLMPCOR' CALDB file has failed."
+        )
 ```
 
 ### Running the XRISM pipeline for Resolve
