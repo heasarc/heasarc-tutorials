@@ -964,8 +964,13 @@ def gen_xrism_resolve_arf(
 
 def det_region_from_pixels(new_reg_path: str, include_pixels: List[int] = None):
     """
+    Simply generates a region file in XRISM-Resolve detector coordinates from an
+    input set of XRISM-Resolve pixel IDs.
 
-    :param List[int] include_pixels:
+    :param List[int] include_pixels: Controls which XRISM-Resolve pixels are included
+        in the output region file. Default is None, in which case all pixels, aside
+        from the calibration pixel 12, are included. Otherwise pass a list of
+        integer pixel IDs.
     """
 
     if include_pixels is not None:
