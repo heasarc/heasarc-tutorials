@@ -1696,6 +1696,7 @@ if HEA_VER <= Version("v6.36") and (
             mission="xrism",
             instrument="resolve",
             codename="RSLMPCOR",
+            date="-",
             retrieve=True,
             noprompt=True,
             clobber=True,
