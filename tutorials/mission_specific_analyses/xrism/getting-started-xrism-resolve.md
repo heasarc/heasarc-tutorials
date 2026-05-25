@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-05-20'
+date: '2026-05-25'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -30,9 +30,8 @@ title: Getting started with XRISM-Resolve
 
 By the end of this tutorial, you will be able to:
 
-- Find...
-- BLEEP BLOOP
-- Generate a ~~**whole-array**~~ XRISM-Resolve spectrum and perform basic fits using PyXspec.
+- Search for and acquire XRISM observations of a target of interest.
+-
 
 ## Introduction
 
@@ -55,16 +54,6 @@ Our goal with this 'getting started' notebook is to give you the skills required
 to prepare XRISM-Resolve observations for scientific use and to generate data
 products tailored to your science goals. It can also serve as a template notebook
 that you can use as a foundation to build your own analyses.
-
-~~Other tutorials in this series will explore how to perform more complicated generation and analysis
-of XRISM-Xtend data, but here we will focus on making single aperture light curves and spectra for an
-object that can be semi-reasonably treated as a 'point' source; the supernova-remnant LMC N132D.~~
-
-***~~NOT FINAL, BUT THE TARGET IS RX J1856.5-3754, ONE OF THE MAGNIFICENT SEVEN~~***
-
-***~~NOT FINAL, BUT PDS 456 IS THE TARGET - local ish radio quiet quasar~~***
-
-***THE TARGET IS NGC 1365***
 
 We make use of the HEASoftPy interface to HEASoft tasks throughout this demonstration.
 
@@ -3033,7 +3022,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-20
+Updated On: 2026-05-25
 
 +++
 
