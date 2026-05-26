@@ -199,8 +199,14 @@ def screen_xrism_resolve_evts(
     exclude_pix27: bool = True,
 ):
     """
-    DOES NOT DO GRADE SELECTION - AS NOT RECOMMENDED FOR MAKING IMAGES/LCS, SO I
-    DON'T WANT TO ENFORCE IT.
+    This function wraps the HEASoftPy interface to the generic ftcopy task, which is
+    used to make a copy of the input events list file that contains a subset of events
+    which pass the screening criteria specified by the other arguments of this function.
+
+    We note that this function does not apply event grade screening (e.g. just selecting
+    high-resolution primary events), as grade-screened event lists are not recommended
+    for all product generation purposes (e.g. making images) - grade screening can
+    be applied at the time of product generation.
 
     :param str event_file:
     :param str out_dir:
