@@ -48,7 +48,7 @@ Medium Energy instrument, i.e. follow the same sort of steps as the original
 investigators ([Seward F. D., Charles P. A., Smale A. P. 1986](https://ui.adsabs.harvard.edu/abs/1986ApJ...305..814S/abstract)).
 
 The ME spectrum and corresponding response matrix were obtained from the HEASARC and
-are available either as part of a [large collection of example data](https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz) or directly
+are available either as part of a [large collection of example data](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough.tar.gz) or directly
 from the URLs defined in the [Global Setup: Constants](#constants) section.
 
 ### Inputs
