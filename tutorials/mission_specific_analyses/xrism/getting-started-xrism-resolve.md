@@ -1339,14 +1339,10 @@ BADPIX_PATH_TEMP = os.path.join(OUT_PATH, "{oi}", "xa{oi}rsl_p{sc}{xrf}.bimg")
 
 # -- SCREENED EVENT LISTS --
 # Template for the path to screened event lists
-
-
 # TODO NEED TO FINISH THIS OBV.
 SCR_EVT_PATH_TEMP = os.path.join(
     OUT_PATH, "{oi}", "xrism-resolve-obsid{oi}-filter{xrf}--clean-events.fits"
 )
-
-
 # --------------------------
 
 # --------- IMAGES ---------
@@ -2131,10 +2127,12 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
+# Set up the path to the gain history file we're using as an example
 rel_ghf_path = os.path.join(
     OUT_PATH, rel_obsids[0], f"xa{rel_obsids[0]}rsl_000_fe55.ghf"
 )
 
+# Load the file in to memory
 with fits.open(rel_ghf_path) as gaino:
     gain_tab = Table(gaino["Drift_energy"].data)[["TIME", "PIXEL", "TEMP_FIT"]]
 
