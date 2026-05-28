@@ -217,7 +217,7 @@ def screen_xrism_resolve_evts(
     :param bool rise_time_screen:
     :param bool unfilt_elec_coinc_evt_screen:
     :param bool exclude_pix27: Whether Pixel 27 should be excluded (currently exhibits
-        gain problems and is not recommended for scientific use).
+        gain problems and is not recommended for scientific use). Default is True
     """
 
     # We can extract the ObsID directly from the header of the event list - it is
