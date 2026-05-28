@@ -35,6 +35,7 @@ By the end of this tutorial, you will be able to:
 
 ## Introduction
 
+<span style="color:red">***MUST RESTORE THE XMM CACHEING IN THE CIRCLECI CONFIG***</span>
 The 'X-Ray Imaging and Spectroscopy Mission' (**XRISM**) is an X-ray telescope
 designed for high-energy-resolution spectroscopic observations of astrophysical
 sources, as well as wide-field X-ray imaging.
@@ -215,7 +216,8 @@ def screen_xrism_resolve_evts(
     :param bool status4_screen:
     :param bool rise_time_screen:
     :param bool unfilt_elec_coinc_evt_screen:
-    :param bool exclude_pix27:
+    :param bool exclude_pix27: Whether Pixel 27 should be excluded (currently exhibits
+        gain problems and is not recommended for scientific use).
     """
 
     # We can extract the ObsID directly from the header of the event list - it is

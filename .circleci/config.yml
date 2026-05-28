@@ -81,10 +81,10 @@ jobs:
           keys:
             - jupyter_ch-{{ .Branch }}-
             - jupyter_ch-
-      - restore_cache:
-          name: Restoring XMM CCF cache
-          keys:
-            - v2026-jan-xmm-ccf-
+#      - restore_cache:
+#          name: Restoring XMM CCF cache
+#          keys:
+#            - v2026-jan-xmm-ccf-
       - restore_cache:
           name: Restoring Chandra CalDB cache
           keys:
@@ -271,73 +271,47 @@ jobs:
           keys:
             - v2026-jan-xspec-models-
 
-      # Restore micromamba installation from cache if available
-#      - restore_cache:
-#          name: Restoring micromamba installation
-#          keys:
-#            - micromamba-
-
-      # Install micromamba if not restored from cache. I'm afraid I'm not
-      #  going to be picky about the version, as we only need a very small
-      #  core feature that isn't that likely to change
-#      - run:
-#          name: Installing micromamba
-#          command: |
-#            if [ ! -f $HOME/micromamba/bin/micromamba ]; then
-#              curl -L micro.mamba.pm/install.sh | bash -s -- -b -p $HOME/micromamba
-#            fi
-#
-#            # Source bashrc to activate micromamba in current shell
-#            . $HOME/.bashrc
-#            micromamba --version
-
-      # Cache micromamba installation for future runs
-#      - save_cache:
-#          key: micromamba-v1
-#          paths:
-#            - micromamba
-
       # Some missions (e.g. XMM, Chandra, eROSITA) require that their calibration files are available locally. We
       #  don't want to download them every single time, so we're going to cache them for future runs.
-      - run:
-          name: Acquiring/validating XMM-CCFs
-          no_output_timeout: 30m
-          command: |
-            # We don't include rsync in the Fornax-Slim image, so unfortunately we'll have to install it now. The
-            #  neatest way is to make a new conda environment that just contains rsync
-            micromamba create -p ~/user-envs/rsync-env -y -c conda-forge python=3.12 rsync
-
-            # If we can't see the xmm_ccf directory, or the version file we generate doesn't contain the same
-            #  version number as currently defined in the environment variable, we have to download the data
-            if [ ! -d xmm-ccf ] || [[ ! "$(<"xmm-ccf/xmm-ccf.ver")" == "$CIRCLECI_XMM_CCF_VER" ]]; then
-
-              # Makes the xmm-ccf directory, if it doesn't already exist. This is a different approach to the
-              #  what we do for the Chandra CalDB below, as rsync will update files if there are newer versions
-              #  available, so we don't want to delete the directory.
-              mkdir -p xmm-ccf/ccf-files
-
-              # We do delete the version file, if it exists, as if we get to this point then we are either downloading
-              #  the data for the first time, or the version number has changed.
-              [ -f xmm-ccf/xmm-ccf.ver ] && rm xmm-ccf/xmm-ccf.ver
-
-              # Make a new version file - this goes a level up from the directory where the files will actually
-              #  be stored (ccf-files), because the rsync process will delete the version file
-              echo "${CIRCLECI_XMM_CCF_VER}" > xmm-ccf/xmm-ccf.ver
-
-              # Actually rsync the calibration files
-              micromamba run -p ~/user-envs/rsync-env rsync -v -a --delete --delete-after --force --include='*.CCF' --exclude='*/' sasdev-xmm.esac.esa.int::XMM_VALID_CCF xmm-ccf/ccf-files
-            fi
-
-      # Cache the XMM CCFs so we don't have to download them every time - we checksum the version file
-      #  we generated because CircleCI doesn't allow you to use environment variables in cache keys. This
-      #  is a good way round that
-      # (https://devops.stackexchange.com/questions/9147/how-to-get-other-than-no-value-when-interpolating-environment-some-var)
-      - save_cache:
-          key: v2026-jan-xmm-ccf-cs{{ checksum "xmm-ccf/xmm-ccf.ver" }}
-          # Making the path relative to the working directory, in the hope it will restore
-          #  properly in the second job, on a different runner/image
-          paths:
-            - xmm-ccf
+#      - run:
+#          name: Acquiring/validating XMM-CCFs
+#          no_output_timeout: 30m
+#          command: |
+#            # We don't include rsync in the Fornax-Slim image, so unfortunately we'll have to install it now. The
+#            #  neatest way is to make a new conda environment that just contains rsync
+#            micromamba create -p ~/user-envs/rsync-env -y -c conda-forge python=3.12 rsync
+#
+#            # If we can't see the xmm_ccf directory, or the version file we generate doesn't contain the same
+#            #  version number as currently defined in the environment variable, we have to download the data
+#            if [ ! -d xmm-ccf ] || [[ ! "$(<"xmm-ccf/xmm-ccf.ver")" == "$CIRCLECI_XMM_CCF_VER" ]]; then
+#
+#              # Makes the xmm-ccf directory, if it doesn't already exist. This is a different approach to the
+#              #  what we do for the Chandra CalDB below, as rsync will update files if there are newer versions
+#              #  available, so we don't want to delete the directory.
+#              mkdir -p xmm-ccf/ccf-files
+#
+#              # We do delete the version file, if it exists, as if we get to this point then we are either downloading
+#              #  the data for the first time, or the version number has changed.
+#              [ -f xmm-ccf/xmm-ccf.ver ] && rm xmm-ccf/xmm-ccf.ver
+#
+#              # Make a new version file - this goes a level up from the directory where the files will actually
+#              #  be stored (ccf-files), because the rsync process will delete the version file
+#              echo "${CIRCLECI_XMM_CCF_VER}" > xmm-ccf/xmm-ccf.ver
+#
+#              # Actually rsync the calibration files
+#              micromamba run -p ~/user-envs/rsync-env rsync -v -a --delete --delete-after --force --include='*.CCF' --exclude='*/' sasdev-xmm.esac.esa.int::XMM_VALID_CCF xmm-ccf/ccf-files
+#            fi
+#
+#      # Cache the XMM CCFs so we don't have to download them every time - we checksum the version file
+#      #  we generated because CircleCI doesn't allow you to use environment variables in cache keys. This
+#      #  is a good way round that
+#      # (https://devops.stackexchange.com/questions/9147/how-to-get-other-than-no-value-when-interpolating-environment-some-var)
+#      - save_cache:
+#          key: v2026-jan-xmm-ccf-cs{{ checksum "xmm-ccf/xmm-ccf.ver" }}
+#          # Making the path relative to the working directory, in the hope it will restore
+#          #  properly in the second job, on a different runner/image
+#          paths:
+#            - xmm-ccf
 
       # We also download the Chandra CalDB
       - run:
