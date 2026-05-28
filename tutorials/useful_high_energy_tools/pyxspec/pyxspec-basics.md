@@ -1840,21 +1840,21 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 
 [Original PyXspec Jupyter Notebooks Repository](https://github.com/HEASARC/PyXspec-Jupyter-notebooks)
 
-[Full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/docs/xanadu/xspec/walkthrough.tar.gz)
+[Full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough.tar.gz)
 
-[XSPEC plot devices](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node110.html)
+[XSPEC plot devices](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/XScpd.html)
 
-[XSPEC plot types](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node113.html)
+[XSPEC plot types](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/XSplot.html)
 
 [XSPEC **convolution** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/Convolution.html)
 
-[XSPEC **mixing** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node330.html)
+[XSPEC **mixing** models](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/Mixing.html)
 
 [Parallelization settings in PyXspec](https://heasarc.gsfc.nasa.gov/docs/software/xspec/python/html/xspecsettings.html)
 
-[XSPEC `tclout` API reference](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node60.html#tclout)
+[XSPEC `tclout` API reference](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/XStclout.html)
 
-[XSPEC `steppar` command](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node86.html)
+[XSPEC `steppar` command](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/XSsteppar.html)
 
 ### Acknowledgements
 
