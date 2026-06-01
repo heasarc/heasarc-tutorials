@@ -23,7 +23,7 @@ parameters:
 workflows:
   build-for-PR:
     jobs:
-      - cache-support-data
+      - cache-support-data:
           required_calibration_sets: << pipeline.parameters.required_calibration_sets >>
 
       - pr-build-docs:
@@ -65,7 +65,7 @@ jobs:
     # What this job is actually going to do!
     steps:
       - attach_workspace:
-          at: ~/
+          at: ~/workspace-data
 
       # Checking out the branch we're interested in
       - checkout
@@ -87,18 +87,18 @@ jobs:
           keys:
             - jupyter_ch-{{ .Branch }}-
             - jupyter_ch-
-      - restore_cache:
-          name: Restoring XMM CCF cache
-          keys:
-            - v2026-jan-xmm-ccf-
-      - restore_cache:
-          name: Restoring Chandra CalDB cache
-          keys:
-            - v2026-jan-chandra-ciao-caldb-
-      - restore_cache:
-          name: Restoring XSPEC models directory
-          keys:
-            - v2026-jan-xspec-models-
+#      - restore_cache:
+#          name: Restoring XMM CCF cache
+#          keys:
+#            - v2026-jan-xmm-ccf-
+#      - restore_cache:
+#          name: Restoring Chandra CalDB cache
+#          keys:
+#            - v2026-jan-chandra-ciao-caldb-
+#      - restore_cache:
+#          name: Restoring XSPEC models directory
+#          keys:
+#            - v2026-jan-xspec-models-
 
       # Any calibration files we need should have been restored from the caches, but we need to make sure that
       #  the mission-specific software can find those files.
@@ -122,14 +122,27 @@ jobs:
             mkdir -p $SUPPORT_DATA_DIR
 
             # Linking the XMM CCFs to the location expected by the Fornax-Hea SAS conda environment
-            ln -s $(pwd)/xmm-ccf/ccf-files $SUPPORT_DATA_DIR/xmm_ccf
+            #ln -s $(pwd)/xmm-ccf/ccf-files $SUPPORT_DATA_DIR/xmm_ccf
 
             # Linking the Chandra CalDB
-            ln -s $(pwd)/chandra-caldb $SUPPORT_DATA_DIR/ciao-caldb-${CHANDRA_CALDB_VER}
+            #ln -s $(pwd)/chandra-caldb $SUPPORT_DATA_DIR/ciao-caldb-${CHANDRA_CALDB_VER}
 
             # Linking the XSPEC models directory
+            #rm $ENV_DIR/heasoft/heasoft/spectral/modelData
+            #ln -s $(pwd)/xspec-data/modelData $ENV_DIR/heasoft/heasoft/spectral/modelData
+
+            # Define the base directory where the workspace was attached
+            WS_DATA_DIR="$HOME/workspace-data"
+
+            # Link the XMM CCFs using the absolute workspace path
+            ln -s $WS_DATA_DIR/xmm-ccf/ccf-files $SUPPORT_DATA_DIR/xmm_ccf
+
+            # Link the Chandra CalDB
+            ln -s $WS_DATA_DIR/chandra-caldb $SUPPORT_DATA_DIR/ciao-caldb-${CHANDRA_CALDB_VER}
+
+            # Link the XSPEC models directory
             rm $ENV_DIR/heasoft/heasoft/spectral/modelData
-            ln -s $(pwd)/xspec-data/modelData $ENV_DIR/heasoft/heasoft/spectral/modelData
+            ln -s $WS_DATA_DIR/xspec-data/modelData $ENV_DIR/heasoft/heasoft/spectral/modelData
 
 #      - run:
 #          name: Installing extra dependencies
@@ -496,4 +509,17 @@ jobs:
           # Making the path relative to the working directory, in the hope it will restore
           #  properly in the second job, on a different runner/image
           paths:
+            - xspec-data
+
+      # Ensure that the directories we want to persist to the workspace actually exist,
+      #  even if they are empty, otherwise the persist_to_workspace step will fail.
+      - run:
+          name: Ensuring calibration directories exist
+          command: mkdir -p xmm-ccf chandra-caldb xspec-data
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - xmm-ccf
+            - chandra-caldb
             - xspec-data
