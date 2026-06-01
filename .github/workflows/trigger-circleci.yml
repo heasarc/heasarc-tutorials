@@ -117,6 +117,41 @@ jobs:
           # Export the variable for the next step
           echo "notebooks_to_build=$NOTEBOOKS_TO_BUILD" >> $GITHUB_OUTPUT
 
+      - name: Setup Python
+        id: setup_python
+        if: success() && steps.which_notebooks_to_build.outputs.notebooks_to_build != ''
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Jupytext
+        id: install_jupytext
+        if: success() && steps.which_notebooks_to_build.outputs.notebooks_to_build != ''
+        run: |
+          # Make a one entry requirements (the setup-python action uses it to cache
+          #  dependencies, though admittedly this is probably overkill)
+          printf '%s\n' 'jupytext' > requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Determine which calibration datasets are required
+        id: which_cal_data
+        if: success() && steps.which_notebooks_to_build.outputs.notebooks_to_build != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          NOTEBOOKS_TO_BUILD: ${{ steps.which_notebooks_to_build.outputs.notebooks_to_build }}
+        run: |
+          python .github/workflows/collate-cal-files.py
+
+      - name: Fail if any calibration metadata is invalid
+        if: steps.which_cal_data.outputs.any_bad_cal_spec == 'true'
+        env:
+          BAD_CAL_SPEC: ${{ steps.which_cal_data.outputs.bad_cal_spec }}
+        run: |
+          echo "::error title=Invalid calibration metadata::$BAD_CAL_SPEC"
+          exit 1
 
       - name: Trigger CircleCI Pipeline via API
         # Only proceed if the wait step succeeded, and the 'skip-doc-build' label wasn't added to the PR (could be
@@ -130,6 +165,7 @@ jobs:
           PROJECT_SLUG: 'circleci/LdzbTUR6aexSM6vJCVrZk5/GRoaAeYuJNgCdifZviG612'
           CHECKOUT_REPO: 'HEASARC/heasarc-tutorials'
           NOTEBOOKS_TO_BUILD: ${{ steps.which_notebooks_to_build.outputs.notebooks_to_build }}
+          REQUIRED_CALIBRATION_SETS: ${{ steps.which_cal_data.outputs.required_cal_sets }}
 
         run: |
           echo "pre-commit.ci checks passed on branch ${TARGET_BRANCH}. Triggering CircleCI."
@@ -147,6 +183,7 @@ jobs:
               "config": {"branch": "'"${TARGET_BRANCH}"'"},
               "checkout": {"branch": "'"${TARGET_BRANCH}"'"},
               "parameters": {
-                "notebooks_to_build": "'"${NOTEBOOKS_TO_BUILD}"'"
+                "notebooks_to_build": "'"${NOTEBOOKS_TO_BUILD}"'",
+                "required_calibration_sets": "'"${REQUIRED_CALIBRATION_SETS}"'"
               }
              }'
