@@ -86,7 +86,7 @@ if __name__ == '__main__':
             # Then this information will be shown to the notebook author so they can
             #  diagnose what went wrong. We don't prettify the output, as it doesn't
             #  really need to be pretty
-            gha_outo.write(str(bad_meta_spec) + "\n")
+            gha_outo.write(f"bad_cal_spec={str(bad_meta_spec)}\n")
         else:
             # We always write the 'any_bad_cal_spec entry, so the next GHA step can check to
             #  see if it's True before having to parse the actual information about what went wrong
