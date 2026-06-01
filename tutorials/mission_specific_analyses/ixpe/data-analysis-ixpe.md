@@ -542,10 +542,10 @@ then to ensure that the working directory is reset.
 ```{code-cell} python
 xs.AllData.clear()
 
+# Dictionary to store sort detector responses into - makes it neater to load them in
 resps = {det: resps[det] for det in sorted(resps)}
 
 with contextlib.chdir(OUT_PATH):
-
     x = 0  # Iterator index to keep the spectrum numbering correct
     for det, supp_files in resps.items():
         du = int(det[-1])
