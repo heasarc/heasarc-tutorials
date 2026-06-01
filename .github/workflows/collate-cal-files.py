@@ -72,10 +72,10 @@ if __name__ == '__main__':
     cur_gha_out = os.environ["GITHUB_OUTPUT"]
 
     with open(cur_gha_out, "a") as gha_outo:
-        # This writes the names of the selected calibration sets to a file that will be
-        #  read and accessible in the next GHA step (which will be the part where
-        #  the CircleCI workflow is actually triggered)
-        gha_outo.write(f"required_cal_sets={",".join(all_cal_files)}\n")
+        # This writes one variable per calibration set, describing whether that calibration
+        #  set has to be loaded or not
+        for cal_name in allowed_cal_names:
+            gha_outo.write(f"require_{cal_name}={cal_name in all_cal_files}\n")
 
         # In this case, some illegal entry was identified in one or more of the notebooks
         #  specified for building, and we need to make sure that information is available
