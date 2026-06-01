@@ -5,7 +5,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-01-19'
+date: '2026-06-01'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -18,7 +18,10 @@ kernelspec:
   language: python
   name: heasoft
 execution:
-  cal-files: ['xmm-ccf', 'chandra', 'xspec-models']
+  cal-files:
+    xmm-ccf: True
+    chandra: True
+    xspec-models: True
 title: How to make a tutorial notebook in the HEASARC-tutorials repository
 ---
 
@@ -36,7 +39,7 @@ The following information must be added:
 - Date:
   - The date this notebook was last updated, following the year-month-day format.
 - Execution:
-  - 'cal-files' specifies the calibration files that will be needed to run this notebook. This information is both useful to the user and to the HEASARC-tutorials execution infrastructure, where it ensures we don't have to load all possible calibration files for every notebook. Allowed values are shown in the template front-matter above, prepending '~' (e.g. '~xmm-ccf') will load all calibration files apart from xmm-ccf.
+  - 'cal-files' specifies the calibration files that will be needed to run this notebook. This information is both useful to the user and to the HEASARC-tutorials execution infrastructure, where it ensures we don't have to load all possible calibration files for every notebook. Each entry may have a value of True or False. HEASoft's CalDB does not have an entry because these notebooks are set up to use remote CalDB files.
 
 
 ## Learning Goals
