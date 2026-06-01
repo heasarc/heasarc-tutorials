@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # Iterate through the notebooks that we'll be executing
     for cur_nb in rel_nbs:
         # Define the full path
-        cur_nb_path = os.path.join(cur_workspace, cur_nb)
+        cur_nb_path = os.path.join(cur_workspace, "tutorials", cur_nb)
 
         # Load the file and parse with Jupytext
         with open(cur_nb_path, 'r') as md_read:
