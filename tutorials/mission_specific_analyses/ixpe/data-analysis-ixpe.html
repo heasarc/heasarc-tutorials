@@ -470,12 +470,12 @@
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-spectro-polarimetric-data-into-pyxspec-and-fitting-a-model">4. Loading spectro-polarimetric data into pyXspec and fitting a model</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-spectro-polarimetric-data-into-pyxspec-and-fitting-a-model">4. Loading spectro-polarimetric data into PyXspec and fitting a model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-pyxspec">Configuring PyXspec</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-spectra-into-pyxspec">Reading the spectra into pyXspec</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-spectra-into-pyxspec">Reading the spectra into PyXspec</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-the-energy-range-to-fit">Selecting the energy range to fit</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-spectro-polarimetric-model">Setting up the spectro-polarimetric model</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-model-fit-through-pyxspec">Running the model fit through pyXspec</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-model-fit-through-pyxspec">Running the model fit through PyXspec</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-results">5. Visualizing the results</a><ul class="nav section-nav flex-column">
@@ -591,7 +591,7 @@ this notebook.</p>
 <span class="sd">    :param inst: The instrument name (e.g. &#39;det1&#39;, &#39;det2&#39;, &#39;det3&#39;)</span>
 <span class="sd">    :param region_file: The region file to use for extraction.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="c1"># Setup the full path where we wish to write the new spectrum</span>
     <span class="n">spec_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">OUT_PATH</span><span class="p">,</span>
         <span class="s2">&quot;ixpe_</span><span class="si">{i}</span><span class="s2">_</span><span class="si">{r}</span><span class="s2">_.pha&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">inst</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">r</span><span class="o">=</span><span class="n">region_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
@@ -640,6 +640,7 @@ this notebook.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># IXPE ObsID that we will use for this example.</span>
 <span class="n">OBS_ID</span> <span class="o">=</span> <span class="s2">&quot;01004701&quot;</span>
+<span class="c1"># The source name as well</span>
 <span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">&quot;Mrk 501&quot;</span>
 
 <span class="c1"># The name of the HEASARC table that logs all IXPE observations</span>
@@ -670,11 +671,33 @@ this notebook.</p>
 
 
 <span class="c1"># ------------- Setting how many cores we can use --------------</span>
-<span class="n">NUM_CORES</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c1"># We use a service called CircleCI to execute, test, and validate these notebooks</span>
+<span class="c1">#  as we&#39;re writing and maintaining them. Unfortunately we have to treat the</span>
+<span class="c1">#  determination of the number of cores we can use differently, as the</span>
+<span class="c1">#  &#39;os.cpu_count()&#39; call will return the number of cores of the host machine, rather</span>
+<span class="c1">#  than the number that have actually been allocated to us.</span>
+<span class="k">if</span> <span class="s2">&quot;CIRCLECI&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CIRCLECI&quot;</span><span class="p">]):</span>
+    <span class="c1"># Here we read the CPU quota (total CPU time allowed) and the CPU period (how</span>
+    <span class="c1">#  long the scheduling window is) from a cgroup (a linux kernel feature) file.</span>
+    <span class="c1"># Dividing one by t&#39;other provides the number of cores we&#39;ve been allocated.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/sys/fs/cgroup/cpu.max&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cpu_maxo</span><span class="p">:</span>
+        <span class="n">quota</span><span class="p">,</span> <span class="n">period</span> <span class="o">=</span> <span class="n">cpu_maxo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">quota</span><span class="p">)</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
+
+<span class="c1"># If you, the reader, are running this notebook yourself, this is the</span>
+<span class="c1">#  part that is relevant to you - you can override the default number of cores</span>
+<span class="c1">#  used by setting this variable to an integer value.</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Determines the number of CPU cores available</span>
 <span class="n">total_cores</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
 
+<span class="c1"># If NUM_CORES is None, then we use the number of cores returned by &#39;os.cpu_count()&#39;</span>
 <span class="k">if</span> <span class="n">NUM_CORES</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="n">total_cores</span>
+<span class="c1"># Otherwise, NUM_CORES has been overridden (either by the user, or because we&#39;re</span>
+<span class="c1">#  running on CircleCI, and we do a validity check.</span>
 <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
         <span class="s2">&quot;If manually overriding &#39;NUM_CORES&#39;, you must set it to an integer value.&quot;</span>
@@ -718,7 +741,8 @@ this notebook.</p>
 explorative stage where we use the name of our target, and its coordinates, to find an appropriate observation.</p>
 <p>What we do need to know is where the data are stored, and to retrieve a link that we can use to download them - we
 can achieve this using the IXPE summary table of observations, accessed using <code class="docutils literal notranslate"><span class="pre">astroquery</span></code>.</p>
-<p>The name of the observation table is stored in the <code class="docutils literal notranslate"><span class="pre">HEASARC_TABLE_NAME</span></code> constant, set up in the collapsed ‘Global Setup: Constants’ subsection above:</p>
+<p>The name of the observation table is stored in the <code class="docutils literal notranslate"><span class="pre">HEASARC_TABLE_NAME</span></code> constant, set up in the collapsed
+<a class="reference internal" href="#constants">‘Global Setup: Constants’</a> subsection above:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">HEASARC_TABLE_NAME</span>
@@ -761,7 +785,7 @@ that corresponds to our chosen ObsID. This retrieves every column of the row who
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=1</i>
-<table id="table140151207492976" class="table-striped table-bordered table-condensed">
+<table id="table128439048812544" class="table-striped table-bordered table-condensed">
 <thead><tr><th>__row</th><th>obsid</th><th>name</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>roll_angle_req</th><th>time</th><th>end_time</th><th>fcw_1</th><th>fcw_2</th><th>fcw_3</th><th>exposure_1</th><th>exposure_2</th><th>exposure_3</th><th>ontime_1</th><th>ontime_2</th><th>ontime_3</th><th>processing_date</th><th>public_date</th><th>software_version</th><th>obs_type</th><th>coordinated</th><th>issue_flag</th><th>status</th><th>caldb_version</th><th>comments</th><th>prnb</th><th>title</th><th>pi_names</th><th>abstract</th><th>subject_category</th><th>category_code</th><th>priority</th><th>cycle</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>d</th><th>d</th><th></th><th></th><th></th><th>s</th><th>s</th><th>s</th><th>s</th><th>s</th><th>s</th><th>d</th><th>d</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>object</th><th>object</th><th>int16</th><th>object</th><th>object</th><th>object</th><th>int32</th><th>object</th><th>object</th><th>object</th><th>object</th><th>int16</th><th>object</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
@@ -779,7 +803,7 @@ to the <code class="docutils literal notranslate"><span class="pre">locate_data<
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=1</i>
-<table id="table140145642440512" class="table-striped table-bordered table-condensed">
+<table id="table128439192964944" class="table-striped table-bordered table-condensed">
 <thead><tr><th>ID</th><th>access_url</th><th>sciserver</th><th>aws</th><th>content_length</th><th>error_message</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th></th><th>byte</th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>str31</th><th>str44</th><th>int64</th><th>object</th></tr></thead>
@@ -796,6 +820,8 @@ will be downloaded into the directory specified by <code class="docutils literal
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Downloading data AWS S3 ... [astroquery.heasarc.core]
+INFO: Enabling anonymous cloud data access ... [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/ixpe/data/obs/01/01004701/ [astroquery.heasarc.core]
 INFO: Enabling anonymous cloud data access ... [astroquery.heasarc.core]
 INFO: downloading s3://nasa-heasarc/ixpe/data/obs/01/01004701/ [astroquery.heasarc.core]
 </pre></div>
@@ -905,7 +931,7 @@ going to the command line, we will simply use a HEASoftPy interface:</p>
 <p>Here we get to the fun part - the creation and analysis of some IXPE data products!</p>
 <section id="defining-source-and-background-regions">
 <h3>Defining source and background regions<a class="headerlink" href="#defining-source-and-background-regions" title="Link to this heading">#</a></h3>
-<p>To obtain source and background spectra from the ‘level 2’ files, we need to define source and background regions for
+<p>To obtain source and background spectra from the ‘level 2’ event lists, we need to define source and background regions for
 the extraction.</p>
 <p>Defining regions can be done in a number of ways, using automated source finding tools, drawing them onto
 images using <a class="reference external" href="https://sites.google.com/cfa.harvard.edu/saoimageds9">SAOImage DS9</a>, or (as we show here) by manually constructing region files.</p>
@@ -1038,23 +1064,23 @@ HEASoftPy call will also raise exceptions if the extraction fails (as we passed 
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;src.reg&#39;,
  &#39;bck.reg&#39;,
- &#39;ixpe_det3_bck_I.pha&#39;,
  &#39;ixpe_det1_bck_I.pha&#39;,
- &#39;ixpe_det2_src_I.pha&#39;,
  &#39;ixpe_det1_src_I.pha&#39;,
- &#39;ixpe_det2_bck_I.pha&#39;,
- &#39;ixpe_det3_src_I.pha&#39;,
- &#39;ixpe_det3_bck_Q.pha&#39;,
+ &#39;ixpe_det2_src_I.pha&#39;,
  &#39;ixpe_det1_bck_Q.pha&#39;,
- &#39;ixpe_det2_src_Q.pha&#39;,
- &#39;ixpe_det2_bck_Q.pha&#39;,
  &#39;ixpe_det1_src_Q.pha&#39;,
- &#39;ixpe_det3_src_Q.pha&#39;,
- &#39;ixpe_det3_bck_U.pha&#39;,
- &#39;ixpe_det2_src_U.pha&#39;,
+ &#39;ixpe_det2_src_Q.pha&#39;,
  &#39;ixpe_det1_bck_U.pha&#39;,
- &#39;ixpe_det2_bck_U.pha&#39;,
  &#39;ixpe_det1_src_U.pha&#39;,
+ &#39;ixpe_det2_src_U.pha&#39;,
+ &#39;ixpe_det2_bck_I.pha&#39;,
+ &#39;ixpe_det3_bck_I.pha&#39;,
+ &#39;ixpe_det3_src_I.pha&#39;,
+ &#39;ixpe_det2_bck_Q.pha&#39;,
+ &#39;ixpe_det3_bck_Q.pha&#39;,
+ &#39;ixpe_det3_src_Q.pha&#39;,
+ &#39;ixpe_det2_bck_U.pha&#39;,
+ &#39;ixpe_det3_bck_U.pha&#39;,
  &#39;ixpe_det3_src_U.pha&#39;]
 </pre></div>
 </div>
@@ -1149,7 +1175,6 @@ different versions of those files.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the on-axis RMFs, ARFs, and MRFs</span>
-
 <span class="n">resps</span> <span class="o">=</span> <span class="p">{</span><span class="n">det</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;rmf&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;arf&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;mrf&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">det</span> <span class="ow">in</span> <span class="n">evt_file_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
 
 <span class="k">for</span> <span class="n">det</span> <span class="ow">in</span> <span class="n">evt_file_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1208,15 +1233,15 @@ different versions of those files.</p>
 </section>
 </section>
 <section id="loading-spectro-polarimetric-data-into-pyxspec-and-fitting-a-model">
-<h2>4. Loading spectro-polarimetric data into pyXspec and fitting a model<a class="headerlink" href="#loading-spectro-polarimetric-data-into-pyxspec-and-fitting-a-model" title="Link to this heading">#</a></h2>
-<p>We now have everything we need to load the extracted spectra into pyXspec and fit a model to them!</p>
+<h2>4. Loading spectro-polarimetric data into PyXspec and fitting a model<a class="headerlink" href="#loading-spectro-polarimetric-data-into-pyxspec-and-fitting-a-model" title="Link to this heading">#</a></h2>
+<p>We now have everything we need to load the extracted spectra into PyXspec and fit a model to them!</p>
 <section id="configuring-pyxspec">
 <h3>Configuring PyXspec<a class="headerlink" href="#configuring-pyxspec" title="Link to this heading">#</a></h3>
-<p>Here we configure some of pyXspec’s behaviors. We set the verbosity to ‘0’ to suppress printed output, make sure the
+<p>Here we configure some of PyXspec’s behaviors. We set the verbosity to ‘0’ to suppress printed output, make sure the
 plot axes are energy (for the x-axis), and normalized counts per second (for the y-axis).</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Severely imits the output of pyXspec, though chatter = 0 will still</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Severely imits the output of PyXspec, though chatter = 0 will still</span>
 <span class="c1">#  let some messages through.</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Xset</span><span class="o">.</span><span class="n">chatter</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -1232,19 +1257,21 @@ plot axes are energy (for the x-axis), and normalized counts per second (for the
 </div>
 </section>
 <section id="reading-the-spectra-into-pyxspec">
-<h3>Reading the spectra into pyXspec<a class="headerlink" href="#reading-the-spectra-into-pyxspec" title="Link to this heading">#</a></h3>
+<h3>Reading the spectra into PyXspec<a class="headerlink" href="#reading-the-spectra-into-pyxspec" title="Link to this heading">#</a></h3>
 <p>This snippet uses our previously defined <code class="docutils literal notranslate"><span class="pre">resps</span></code> dictionary to load the spectra and their requisite response files
-into pyXspec. The ‘I’, ‘U’, and ‘Q’ spectra are all loaded in for each detector. The ‘contextlib.chdir’ statement is
+into PyXspec. The ‘I’, ‘U’, and ‘Q’ spectra are all loaded in for each detector. The ‘contextlib.chdir’ statement is
 used to change the working directory to the directory containing spectral files so that the spectra can be loaded, and
 then to ensure that the working directory is reset.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
+<span class="c1"># Dictionary to store sort detector responses into - makes it neater to load them in</span>
 <span class="n">resps</span> <span class="o">=</span> <span class="p">{</span><span class="n">det</span><span class="p">:</span> <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">]</span> <span class="k">for</span> <span class="n">det</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">resps</span><span class="p">)}</span>
 
+<span class="c1"># Changing directory to the directory we&#39;ve been writing spectra to, we now</span>
+<span class="c1">#  load them into PyXspec.</span>
 <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">):</span>
-
     <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Iterator index to keep the spectrum numbering correct</span>
     <span class="k">for</span> <span class="n">det</span><span class="p">,</span> <span class="n">supp_files</span> <span class="ow">in</span> <span class="n">resps</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">du</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">det</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
@@ -1346,7 +1373,7 @@ an individual instrument.</p>
 </div>
 </section>
 <section id="running-the-model-fit-through-pyxspec">
-<h3>Running the model fit through pyXspec<a class="headerlink" href="#running-the-model-fit-through-pyxspec" title="Link to this heading">#</a></h3>
+<h3>Running the model fit through PyXspec<a class="headerlink" href="#running-the-model-fit-through-pyxspec" title="Link to this heading">#</a></h3>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
@@ -1368,11 +1395,11 @@ an individual instrument.</p>
 </section>
 <section id="visualizing-the-results">
 <h2>5. Visualizing the results<a class="headerlink" href="#visualizing-the-results" title="Link to this heading">#</a></h2>
-<p>We will now extract information from pyXspec and plot various aspects of the fitted models and results using the
-<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> package. This offers more flexibility than the built-in plotting functions in pyXspec.</p>
+<p>We will now extract information from PyXspec and plot various aspects of the fitted models and results using the
+<code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> package. This offers more flexibility than the built-in plotting functions in PyXspec.</p>
 <section id="a-traditional-x-ray-spectrum">
 <h3>A ‘traditional’ X-ray spectrum<a class="headerlink" href="#a-traditional-x-ray-spectrum" title="Link to this heading">#</a></h3>
-<p>We can fetch the count rate, and energy bin centers, from pyXspec:</p>
+<p>We can fetch the count rate, and energy bin centers, from PyXspec:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This command will construct a logged-data plot of the spectrum</span>
@@ -1433,7 +1460,7 @@ an individual instrument.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/0fc39fcb8b1eed4b9a052ef2b2001f21ed15809f369e4375685f6b59a9978563.png" src="../../../_images/0fc39fcb8b1eed4b9a052ef2b2001f21ed15809f369e4375685f6b59a9978563.png" />
+<img alt="../../../_images/d43353d7b504a198954d55411944cc53bfe565012143d6d1099c470d46cf8e1b.png" src="../../../_images/d43353d7b504a198954d55411944cc53bfe565012143d6d1099c470d46cf8e1b.png" />
 </div>
 </div>
 </section>
@@ -1491,7 +1518,7 @@ an individual instrument.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/6aaa88a3ba96e8207d6f89445d48dc67bd44689a998ec7ebac6be1a5675a627d.png" src="../../../_images/6aaa88a3ba96e8207d6f89445d48dc67bd44689a998ec7ebac6be1a5675a627d.png" />
+<img alt="../../../_images/b537b4825bb59be6004b26d75dccf7546bc27dbc70852712379131a3ea92fbf8.png" src="../../../_images/b537b4825bb59be6004b26d75dccf7546bc27dbc70852712379131a3ea92fbf8.png" />
 </div>
 </div>
 </section>
@@ -1573,7 +1600,7 @@ to deduce confidence intervals for these parameters.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/4a923132db81a227ea0687c9b2679d377128f533972afb3a70d31ed8bc5fba53.png" src="../../../_images/4a923132db81a227ea0687c9b2679d377128f533972afb3a70d31ed8bc5fba53.png" />
+<img alt="../../../_images/edecade74f6c562002650005c3c0840ff05b7ba95654b572c7d4c01da168c4b5.png" src="../../../_images/edecade74f6c562002650005c3c0840ff05b7ba95654b572c7d4c01da168c4b5.png" />
 </div>
 </div>
 <section id="determining-the-flux-and-calculating-mdp">
@@ -1605,7 +1632,7 @@ to deduce confidence intervals for these parameters.</p>
 </div>
 </div>
 </div>
-<p>Now we can easily calculate a mean flux:</p>
+<p>Now we can easily calculate the mean flux:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">flux_ispec</span><span class="p">)</span>
@@ -1633,7 +1660,7 @@ to deduce confidence intervals for these parameters.</p>
 <h2>About this notebook<a class="headerlink" href="#about-this-notebook" title="Link to this heading">#</a></h2>
 <p>Author: Kavitha Arur, IXPE GOF Scientist</p>
 <p>Author: David J Turner, HEASARC Staff Scientist</p>
-<p>Updated On: 2026-02-02</p>
+<p>Updated On: 2026-06-01</p>
 <section id="additional-resources">
 <h3>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h3>
 <p>Support: <a class="reference external" href="https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=ixpe">IXPE GOF Helpdesk</a></p>
@@ -1726,12 +1753,12 @@ to deduce confidence intervals for these parameters.</p>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-spectro-polarimetric-data-into-pyxspec-and-fitting-a-model">4. Loading spectro-polarimetric data into pyXspec and fitting a model</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-spectro-polarimetric-data-into-pyxspec-and-fitting-a-model">4. Loading spectro-polarimetric data into PyXspec and fitting a model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-pyxspec">Configuring PyXspec</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-spectra-into-pyxspec">Reading the spectra into pyXspec</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-spectra-into-pyxspec">Reading the spectra into PyXspec</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-the-energy-range-to-fit">Selecting the energy range to fit</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-spectro-polarimetric-model">Setting up the spectro-polarimetric model</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-model-fit-through-pyxspec">Running the model fit through pyXspec</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-model-fit-through-pyxspec">Running the model fit through PyXspec</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-results">5. Visualizing the results</a><ul class="nav section-nav flex-column">
