@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-05-04'
+date: '2026-05-28'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -65,7 +65,7 @@ from the URLs defined in the [Global Setup: Constants](#constants) section.
 
 ### Runtime
 
-As of 8th April 2026, this notebook takes ~1-minute to run to completion on Fornax using the 'small' server with 8GB RAM/2 cores.
+As of 28th May 2026, this notebook takes ~1-minute to run to completion on Fornax using the 'small' server with 8GB RAM/2 cores.
 
 ## Imports
 
@@ -1830,7 +1830,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-04-09
+Updated On: 2026-05-28
 
 +++
 
