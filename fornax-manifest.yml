@@ -113,3 +113,12 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
+
+  - path: useful_high_energy_tools/pyxspec/pyxspec-basics.md
+    executed-path: useful_high_energy_tools/pyxspec/pyxspec-basics.ipynb
+    title: PyXspec basics – fitting models to data
+    description: An introductory notebook demonstrating how to use PyXspec to fit models to high-energy spectra, with extra information on how to inspect the statistical results to determine the quality of model fits.
+    fornax-env: heasoft
+    extra-dependencies:
+    requirements-file:
+    keywords: [ ]
