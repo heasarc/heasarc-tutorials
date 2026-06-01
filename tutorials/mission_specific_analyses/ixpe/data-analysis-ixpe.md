@@ -25,8 +25,7 @@ execution:
   cal-files:
     xmm-ccf: False
     chandra: False
-    xspec-models: ting
-    astrosat: False
+    xspec-models: True
 title: Getting started with preprocessed IXPE data
 ---
 
@@ -249,7 +248,8 @@ explorative stage where we use the name of our target, and its coordinates, to f
 What we do need to know is where the data are stored, and to retrieve a link that we can use to download them - we
 can achieve this using the IXPE summary table of observations, accessed using `astroquery`.
 
-The name of the observation table is stored in the `HEASARC_TABLE_NAME` constant, set up in the collapsed 'Global Setup: Constants' subsection above:
+The name of the observation table is stored in the `HEASARC_TABLE_NAME` constant, set up in the collapsed
+['Global Setup: Constants'](#constants) subsection above:
 
 ```{code-cell} python
 HEASARC_TABLE_NAME
@@ -459,7 +459,6 @@ Now we use the HEASARC tool to actually fetch the response files:
 
 ```{code-cell} python
 # Getting the on-axis RMFs, ARFs, and MRFs
-
 resps = {det: {"rmf": None, "arf": None, "mrf": None} for det in evt_file_paths.keys()}
 
 for det in evt_file_paths.keys():
@@ -547,6 +546,8 @@ xs.AllData.clear()
 # Dictionary to store sort detector responses into - makes it neater to load them in
 resps = {det: resps[det] for det in sorted(resps)}
 
+# Changing directory to the directory we've been writing spectra to, we now
+#  load them into PyXspec.
 with contextlib.chdir(OUT_PATH):
     x = 0  # Iterator index to keep the spectrum numbering correct
     for det, supp_files in resps.items():
