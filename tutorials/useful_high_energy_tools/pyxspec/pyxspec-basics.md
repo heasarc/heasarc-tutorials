@@ -347,6 +347,7 @@ if os.path.exists("../../../_data"):
 else:
     ROOT_DATA_DIR = "PyXSPEC/EXOSAT"
 
+# Ensure that the specified directory exists
 ROOT_DATA_DIR = os.path.abspath(ROOT_DATA_DIR)
 
 # Make sure the download directory exists.
