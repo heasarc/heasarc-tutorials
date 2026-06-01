@@ -15,13 +15,13 @@ parameters:
     type: string
     default: ""
   require_xmm_ccf:
-    type: bool
+    type: boolean
     default: False
   require_chandra:
-    type: bool
+    type: boolean
     default: False
   require_xspec_models:
-    type: bool
+    type: boolean
     default: False
 
 # Defines the different workflows that we could run on CircleCI - a workflow is a combination of
@@ -282,13 +282,13 @@ jobs:
         type: string
         default: ""
       require_xmm_ccf:
-        type: bool
+        type: boolean
         default: False
       require_chandra:
-        type: bool
+        type: boolean
         default: False
       require_xspec_models:
-        type: bool
+        type: boolean
         default: False
 
     docker:
@@ -307,7 +307,7 @@ jobs:
       # We want to restore the caches that contain calibration files, so our download steps
       #  can check to see if they need to run at all.
       - when:
-          condition: << pipeline.parameters.require_xmm_ccf >>
+          condition: << parameters.require_xmm_ccf >>
           steps:
             - restore_cache:
                 name: Restoring XMM CCF cache
@@ -356,7 +356,7 @@ jobs:
 
 
       - when:
-          condition: << pipeline.parameters.require_chandra >>
+          condition: << parameters.require_chandra >>
           steps:
             - restore_cache:
                 name: Restoring Chandra CalDB cache
@@ -429,9 +429,8 @@ jobs:
                   - chandra-caldb
 
 
-
       - when:
-          condition: << pipeline.parameters.require_xspec_models >>
+          condition: << parameters.require_xspec_models >>
           steps:
             - restore_cache:
                 name: Restoring XSPEC models directory
