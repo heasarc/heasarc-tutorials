@@ -17,10 +17,27 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files: ['xmm-ccf', 'chandra', 'xspec-models']
 title: How to make a tutorial notebook in the HEASARC-tutorials repository
 ---
 
 # Title: How to make a bite-sized HEASARC-tutorials notebook
+
+One of your first steps in adapting this template should be to fill out the 'front-matter' at the very top of the
+Markdown file - the contents of the front-matter are all metadata, to be used in different ways by different
+parts of the HEASARC-tutorials infrastructure.
+
+The following information must be added:
+- Authors:
+  - Anyone who you consider an author of this notebook, following the traditional 'first author contributed the most' ordering.
+  - Affiliations must be included, either as a list or a string.
+  - Email, ORCID, and personal website are optional, but please consider including them if you have them, as we will produce a DOI for this resource.
+- Date:
+  - The date this notebook was last updated, following the year-month-day format.
+- Execution:
+  - 'cal-files' specifies the calibration files that will be needed to run this notebook. This information is both useful to the user and to the HEASARC-tutorials execution infrastructure, where it ensures we don't have to load all possible calibration files for every notebook. Allowed values are shown in the template front-matter above, prepending '~' (e.g. '~xmm-ccf') will load all calibration files apart from xmm-ccf.
+
 
 ## Learning Goals
 
