@@ -5,7 +5,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-02-11'
+date: '2026-06-01'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -17,10 +17,30 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: True
+    chandra: True
+    xspec-models: True
 title: How to make a tutorial notebook in the HEASARC-tutorials repository
 ---
 
 # Title: How to make a bite-sized HEASARC-tutorials notebook
+
+One of your first steps in adapting this template should be to fill out the 'front-matter' at the very top of the
+Markdown file - the contents of the front-matter are all metadata, to be used in different ways by different
+parts of the HEASARC-tutorials infrastructure.
+
+The following information must be added:
+- Authors:
+  - Anyone who you consider an author of this notebook, following the traditional 'first author contributed the most' ordering.
+  - Affiliations must be included, either as a list or a string.
+  - Email, ORCID, and personal website are optional, but please consider including them if you have them, as we will produce a DOI for this resource.
+- Date:
+  - The date this notebook was last updated, following the year-month-day format.
+- Execution:
+  - 'cal-files' specifies the calibration files that will be needed to run this notebook. This information is both useful to the user and to the HEASARC-tutorials execution infrastructure, where it ensures we don't have to load all possible calibration files for every notebook. Each entry may have a value of True or False. HEASoft's CalDB does not have an entry because these notebooks are set up to use remote CalDB files.
+
 
 ## Learning Goals
 

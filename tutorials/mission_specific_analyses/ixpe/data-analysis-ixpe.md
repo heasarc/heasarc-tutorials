@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-02-02'
+date: '2026-06-01'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -21,6 +21,11 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: True
 title: Getting started with preprocessed IXPE data
 ---
 
@@ -105,7 +110,7 @@ def extract_spec(inst: str, region_file: str):
     :param inst: The instrument name (e.g. 'det1', 'det2', 'det3')
     :param region_file: The region file to use for extraction.
     """
-
+    # Setup the full path where we wish to write the new spectrum
     spec_out = os.path.join(
         OUT_PATH,
         "ixpe_{i}_{r}_.pha".format(i=inst.lower(), r=region_file.split(".")[0]),
@@ -149,6 +154,7 @@ jupyter:
 ---
 # IXPE ObsID that we will use for this example.
 OBS_ID = "01004701"
+# The source name as well
 SRC_NAME = "Mrk 501"
 
 # The name of the HEASARC table that logs all IXPE observations
@@ -174,11 +180,33 @@ mp.set_start_method("fork", force=True)
 
 
 # ------------- Setting how many cores we can use --------------
-NUM_CORES = None
+# We use a service called CircleCI to execute, test, and validate these notebooks
+#  as we're writing and maintaining them. Unfortunately we have to treat the
+#  determination of the number of cores we can use differently, as the
+#  'os.cpu_count()' call will return the number of cores of the host machine, rather
+#  than the number that have actually been allocated to us.
+if "CIRCLECI" in os.environ and bool(os.environ["CIRCLECI"]):
+    # Here we read the CPU quota (total CPU time allowed) and the CPU period (how
+    #  long the scheduling window is) from a cgroup (a linux kernel feature) file.
+    # Dividing one by t'other provides the number of cores we've been allocated.
+    with open("/sys/fs/cgroup/cpu.max", "r") as cpu_maxo:
+        quota, period = cpu_maxo.read().strip().split()
+        NUM_CORES = int(quota) // int(period)
+
+# If you, the reader, are running this notebook yourself, this is the
+#  part that is relevant to you - you can override the default number of cores
+#  used by setting this variable to an integer value.
+else:
+    NUM_CORES = None
+
+# Determines the number of CPU cores available
 total_cores = os.cpu_count()
 
+# If NUM_CORES is None, then we use the number of cores returned by 'os.cpu_count()'
 if NUM_CORES is None:
     NUM_CORES = total_cores
+# Otherwise, NUM_CORES has been overridden (either by the user, or because we're
+#  running on CircleCI, and we do a validity check.
 elif not isinstance(NUM_CORES, int):
     raise TypeError(
         "If manually overriding 'NUM_CORES', you must set it to an integer value."
@@ -220,7 +248,8 @@ explorative stage where we use the name of our target, and its coordinates, to f
 What we do need to know is where the data are stored, and to retrieve a link that we can use to download them - we
 can achieve this using the IXPE summary table of observations, accessed using `astroquery`.
 
-The name of the observation table is stored in the `HEASARC_TABLE_NAME` constant, set up in the collapsed 'Global Setup: Constants' subsection above:
+The name of the observation table is stored in the `HEASARC_TABLE_NAME` constant, set up in the collapsed
+['Global Setup: Constants'](#constants) subsection above:
 
 ```{code-cell} python
 HEASARC_TABLE_NAME
@@ -316,7 +345,7 @@ Here we get to the fun part - the creation and analysis of some IXPE data produc
 
 ### Defining source and background regions
 
-To obtain source and background spectra from the 'level 2' files, we need to define source and background regions for
+To obtain source and background spectra from the 'level 2' event lists, we need to define source and background regions for
 the extraction.
 
 Defining regions can be done in a number of ways, using automated source finding tools, drawing them onto
@@ -430,7 +459,6 @@ Now we use the HEASARC tool to actually fetch the response files:
 
 ```{code-cell} python
 # Getting the on-axis RMFs, ARFs, and MRFs
-
 resps = {det: {"rmf": None, "arf": None, "mrf": None} for det in evt_file_paths.keys()}
 
 for det in evt_file_paths.keys():
@@ -483,17 +511,17 @@ for det in evt_file_paths.keys():
     ][0]
 ```
 
-## 4. Loading spectro-polarimetric data into pyXspec and fitting a model
+## 4. Loading spectro-polarimetric data into PyXspec and fitting a model
 
-We now have everything we need to load the extracted spectra into pyXspec and fit a model to them!
+We now have everything we need to load the extracted spectra into PyXspec and fit a model to them!
 
 ### Configuring PyXspec
 
-Here we configure some of pyXspec's behaviors. We set the verbosity to '0' to suppress printed output, make sure the
+Here we configure some of PyXspec's behaviors. We set the verbosity to '0' to suppress printed output, make sure the
 plot axes are energy (for the x-axis), and normalized counts per second (for the y-axis).
 
 ```{code-cell} python
-# Severely imits the output of pyXspec, though chatter = 0 will still
+# Severely imits the output of PyXspec, though chatter = 0 will still
 #  let some messages through.
 xs.Xset.chatter = 0
 
@@ -505,20 +533,22 @@ xs.Fit.query = "no"
 xs.Fit.nIterations = 500
 ```
 
-### Reading the spectra into pyXspec
+### Reading the spectra into PyXspec
 
 This snippet uses our previously defined `resps` dictionary to load the spectra and their requisite response files
-into pyXspec. The 'I', 'U', and 'Q' spectra are all loaded in for each detector. The 'contextlib.chdir' statement is
+into PyXspec. The 'I', 'U', and 'Q' spectra are all loaded in for each detector. The 'contextlib.chdir' statement is
 used to change the working directory to the directory containing spectral files so that the spectra can be loaded, and
 then to ensure that the working directory is reset.
 
 ```{code-cell} python
 xs.AllData.clear()
 
+# Dictionary to store sort detector responses into - makes it neater to load them in
 resps = {det: resps[det] for det in sorted(resps)}
 
+# Changing directory to the directory we've been writing spectra to, we now
+#  load them into PyXspec.
 with contextlib.chdir(OUT_PATH):
-
     x = 0  # Iterator index to keep the spectrum numbering correct
     for det, supp_files in resps.items():
         du = int(det[-1])
@@ -609,7 +639,7 @@ m2.constant.factor = 0.8
 m3.constant.factor = 0.9
 ```
 
-### Running the model fit through pyXspec
+### Running the model fit through PyXspec
 
 ```{code-cell} python
 xs.Fit.perform()
@@ -625,12 +655,12 @@ xs.Xset.chatter = 0
 
 ## 5. Visualizing the results
 
-We will now extract information from pyXspec and plot various aspects of the fitted models and results using the
-`matplotlib` package. This offers more flexibility than the built-in plotting functions in pyXspec.
+We will now extract information from PyXspec and plot various aspects of the fitted models and results using the
+`matplotlib` package. This offers more flexibility than the built-in plotting functions in PyXspec.
 
 ### A 'traditional' X-ray spectrum
 
-We can fetch the count rate, and energy bin centers, from pyXspec:
+We can fetch the count rate, and energy bin centers, from PyXspec:
 
 ```{code-cell} python
 # This command will construct a logged-data plot of the spectrum
@@ -827,7 +857,7 @@ for sp_ind in [1, 4, 7]:
 flux_ispec
 ```
 
-Now we can easily calculate a mean flux:
+Now we can easily calculate the mean flux:
 
 ```{code-cell} python
 np.mean(flux_ispec)
@@ -851,7 +881,7 @@ Author: Kavitha Arur, IXPE GOF Scientist
 
 Author: David J Turner, HEASARC Staff Scientist
 
-Updated On: 2026-02-02
+Updated On: 2026-06-01
 
 +++
 
