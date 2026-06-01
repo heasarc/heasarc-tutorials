@@ -306,15 +306,25 @@ jobs:
 
             if [[ "$REQUIRED_CAL_SETS" == *",xmm-ccf,"* ]]; then
               echo "export RUN_XMM=true" >> "$BASH_ENV"
+            else
+              echo "export RUN_XMM=false" >> "$BASH_ENV"
             fi
 
             if [[ "$REQUIRED_CAL_SETS" == *",chandra,"* ]]; then
               echo "export RUN_CHANDRA=true" >> "$BASH_ENV"
+            else
+              echo "export RUN_CHANDRA=false" >> "$BASH_ENV"
             fi
 
             if [[ "$REQUIRED_CAL_SETS" == *",xspec-models,"* ]]; then
               echo "export RUN_XSPEC=true" >> "$BASH_ENV"
+            else
+              echo "export RUN_XSPEC=false" >> "$BASH_ENV"
             fi
+
+            echo $RUN_XMM
+            echo $RUN_CHANDRA
+            echo $RUN_XSPEC
 
       # Some missions (e.g. XMM, Chandra, eROSITA) require that their calibration files are available locally. We
       #  don't want to download them every single time, so we're going to cache them for future runs.
