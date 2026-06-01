@@ -183,7 +183,7 @@ jobs:
               "parameters": {
                 "notebooks_to_build": "'"${NOTEBOOKS_TO_BUILD}"'",
                 "require_xmm_ccf": "'"${REQUIRE_XMM_CCF}"'",
-                "require_chandra": "'"${REQUIRE_CHANDRA}"'",
-                "require_xspec_models": "'"${REQUIRE_XSPEC_MODELS}"'"
+                "require_chandra": ${REQUIRE_CHANDRA},
+                "require_xspec_models": ${REQUIRE_XSPEC_MODELS}
               }
              }'
