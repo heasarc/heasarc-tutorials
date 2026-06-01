@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-05-28'
+date: '2026-06-01'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -21,6 +21,11 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: True
 title: PyXspec basics - fitting models to data
 ---
 
@@ -1696,15 +1701,18 @@ plt.figure(figsize=(7, 4.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
+# Set the colours for each component we're plotting
 cur_sp_color = "navy"
 cur_tot_mod_color = "firebrick"
 cur_pl_mod_color = "darkorchid"
 cur_bb_mod_color = "peru"
 
+# Then set the linestyles
 cur_tot_mod_ls = "solid"
 cur_pl_mod_ls = "dashed"
 cur_bb_mod_ls = (0, (3, 1, 1, 1))
 
+# This adds the spectrum data points to the figure
 plt.errorbar(
     fit_pl_bb_plot_data["energy"],
     fit_pl_bb_plot_data["rate"],
@@ -1755,17 +1763,20 @@ plt.stairs(
     linestyle=cur_bb_mod_ls,
 )
 
+# Set the axis scales
 plt.xscale("log")
 plt.yscale("log")
 
+# Here we tell matplotlib how to format the labels it applies to the ticks on
+#  each axis; e.g. should we see 10^2 or 100. This configures the tick labels to
+#  avoid scientific notation (i.e. 100 instead of 10^2)
 plt.gca().xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 plt.gca().xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 
 plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 
-
+# Add the x and y axis labels
 plt.xlabel("Energy [keV]", fontsize=15)
-
 plt.ylabel(
     r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
 )
@@ -1830,7 +1841,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-05-28
+Updated On: 2026-06-01
 
 +++
 
