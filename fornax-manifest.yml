@@ -122,3 +122,12 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
+
+  - path: heasarc_service_skills/heasarc_data/pyvo-data-acquisition.md
+    executed-path: heasarc_service_skills/heasarc_data/pyvo-data-acquisition.ipynb
+    title: Using PyVO to find and acquire HEASARC data
+    description: This tutorial notebook shows you how to access HEASARC data using the virtual observatory (VO) Python client.
+    fornax-env: heasoft
+    extra-dependencies:
+    requirements-file:
+    keywords: [ ]
