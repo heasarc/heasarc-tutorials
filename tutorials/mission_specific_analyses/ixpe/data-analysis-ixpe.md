@@ -25,7 +25,8 @@ execution:
   cal-files:
     xmm-ccf: False
     chandra: False
-    xspec-models: True
+    xspec-models: ting
+    astrosat: False
 title: Getting started with preprocessed IXPE data
 ---
 
@@ -154,6 +155,7 @@ jupyter:
 ---
 # IXPE ObsID that we will use for this example.
 OBS_ID = "01004701"
+# The source name as well
 SRC_NAME = "Mrk 501"
 
 # The name of the HEASARC table that logs all IXPE observations
