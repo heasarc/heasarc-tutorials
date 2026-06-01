@@ -75,7 +75,7 @@ if __name__ == '__main__':
         # This writes one variable per calibration set, describing whether that calibration
         #  set has to be loaded or not
         for cal_name in allowed_cal_names:
-            gha_outo.write(f"require_{cal_name}={cal_name in all_cal_files}\n")
+            gha_outo.write(f"require_{cal_name}={"true" if cal_name in all_cal_files else "false"}\n")
 
         # In this case, some illegal entry was identified in one or more of the notebooks
         #  specified for building, and we need to make sure that information is available
