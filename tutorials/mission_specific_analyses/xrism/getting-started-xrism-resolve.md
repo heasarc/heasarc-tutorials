@@ -21,6 +21,11 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: True
 title: Getting started with XRISM-Resolve
 ---
 
@@ -122,7 +127,6 @@ def process_xrism_resolve(
     :param str out_dir: The directory where output files should be written.
     :param str file_stem:
     :param str rslmpcor_caldb:
-
     :return: A tuple containing the processed ObsID, the log output of the
         pipeline, and a boolean flag indicating success (True) or failure (False).
     :rtype: Tuple[str, hsp.core.HSPResult, bool]
@@ -217,7 +221,7 @@ def screen_xrism_resolve_evts(
     :param bool rise_time_screen:
     :param bool unfilt_elec_coinc_evt_screen:
     :param bool exclude_pix27: Whether Pixel 27 should be excluded (currently exhibits
-        gain problems and is not recommended for scientific use). Default is True
+        gain problems and is not recommended for scientific use). Default is True.
     """
 
     # We can extract the ObsID directly from the header of the event list - it is
@@ -235,6 +239,8 @@ def screen_xrism_resolve_evts(
     # DO NOT CURRENTLY UNDERSTAND THE RECOMMENDED RISE TIME CUTS - THEY AREN'T
     #  EXPLAINED IN THE ABC THAT I CAN SEE...
 
+    # Checks the validity of the input lower PI channel value, and converts
+    #  to energy values.
     if isinstance(lo_pi, int):
         pass
     elif isinstance(lo_pi, Quantity) and lo_pi.unit.is_equivalent("chan"):
@@ -246,7 +252,8 @@ def screen_xrism_resolve_evts(
             "If set, 'lo_pi' must be an integer PI value, or an Astropy quantity "
             "convertible to 'eV' - otherwise it must be None."
         )
-
+    # Checks the validity of the input upper PI channel value, and converts
+    #  to energy values.
     if isinstance(hi_pi, int):
         pass
     elif isinstance(hi_pi, Quantity) and hi_pi.unit.is_equivalent("chan"):
@@ -259,6 +266,7 @@ def screen_xrism_resolve_evts(
             "convertible to 'eV' - otherwise it must be None."
         )
 
+    # We'll append filter expressions to this list
     filt_expr = []
 
     if lo_pi is not None:
