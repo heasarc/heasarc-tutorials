@@ -36,7 +36,10 @@ title: Getting started with XRISM-Resolve
 By the end of this tutorial, you will be able to:
 
 - Search for and acquire XRISM observations of a target of interest.
--
+- Process the observation data to a science ready state.
+- Make informed decisions on which XRISM-Resolve events are best for your science case.
+- Generate XRISM-Resolve data products (images, exposure maps, spectra and supporting files).
+- Fit a simple PyXspec model to a XRISM-Resolve spectrum.
 
 ## Introduction
 
