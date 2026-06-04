@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-05-25'
+date: '2026-06-04'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -40,7 +40,6 @@ By the end of this tutorial, you will be able to:
 
 ## Introduction
 
-<span style="color:red">***MUST RESTORE THE XMM CACHEING IN THE CIRCLECI CONFIG***</span>
 The 'X-Ray Imaging and Spectroscopy Mission' (**XRISM**) is an X-ray telescope
 designed for high-energy-resolution spectroscopic observations of astrophysical
 sources, as well as wide-field X-ray imaging.
@@ -69,7 +68,15 @@ We make use of the HEASoftPy interface to HEASoft tasks throughout this demonstr
 
 ### Outputs
 
-- THINGS
+- Processed XRISM-Resolve event lists.
+- Figures illustrating different properties of, or issues with, XRISM-Resolve data.
+- New data products:
+  - Images and exposure maps in specified energy ranges.
+  - Simple region files defining which XRISM pixels should be extracted from.
+  - XRISM-Resolve spectra, ancillary response files (ARFs) and response matrix files (RMFs).
+- XSPEC model fit results:
+  - Parameter values measured for a simple model fit to the new spectra.
+  - Visualizations of the fitted spectrum.
 
 ### Runtime
 
@@ -3036,7 +3043,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-05-25
+Updated On: 2026-06-04
 
 +++
 
