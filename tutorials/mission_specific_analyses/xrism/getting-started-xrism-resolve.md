@@ -2611,6 +2611,7 @@ aware that there _are_ further considerations.
 ### Setting up for image generation
 
 ```{code-cell} python
+# Define pairs of lower/upper energy bounds within which to generate images
 im_en_bounds = Quantity([[3.0, 10.0], [6.0, 7.0]], "keV")
 ```
 
