@@ -1603,18 +1603,15 @@ glob.glob(os.path.join(ROOT_DATA_DIR, rel_obsids[0], "resolve", "") + "**/*")
 There are multiple steps involved in processing XRISM-Resolve data into a
 science-ready state.
 
-
-~~As with many NASA-affiliated high-energy missions, HEASoft
+As with many NASA-affiliated high-energy missions, HEASoft
 includes a beginning-to-end pipeline to streamline this process for XRISM data - the
-XRISM-Resolve and Xtend instruments both have their own pipelines.~~
+XRISM-Resolve and Xtend instruments both have their own pipelines.
 
-~~In this tutorial we are focused only on preparing and using data from XRISM's Xtend
-instrument and will not discuss how to handle XRISM-Resolve data; we note however that
-there is a third XRISM pipeline task in HEASoft called `xapipeline`, which can be used
-to run either or both the Xtend and Resolve pipelines. It contains some convenient
-functionality that can identify and automatically pass the attitude, housekeeping, etc. files.~~
+XRISM also has an overall pipeline that orchestrates the running of both instrument
+specific pipelines, as well as automatically determining the paths to the various
+housekeeping files included in the data download necessary for processing the data.
 
-We will show you how to run the top-level pipeline `xapipeline` XRISM pipeline, but
+We will show you how to run this top-level XRISM pipeline (`xapipeline`), but
 will limit it to processing only XRISM-Resolve data (though it is quite capable of
 preparing both Resolve and Xtend data).
 
@@ -2246,7 +2243,7 @@ cur_evt_list.data[cur_evt_list.data["STATUS"][:, 3]]
 The **STATUS** column entry for a particular event is a *16-bit flag* (with
 14 bits actually in use), and each bit represents the result of a different type of
 processing check performed for the event. The different flags are described in the XRISM ABC guide
-([XRISM GOF & SDC (2024)](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)).
+([XRISM GOF & SDC 2024](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)).
 
 If a bit value is **b0**, that means that the flag which that bit represents
 was **not** raised (a good thing), whereas **b1** indicates that the flag _was_ raised.
@@ -2259,7 +2256,9 @@ When using HEASoft tools, the indexing of the STATUS column's flags **begins at 
 in Python, which has zero based indexing.
 ```
 
-<span style="color:red">***DESCRIBE THE GENERAL STATUS 4 CUT WE RECOMMEND***</span>
+We recommend excluding all events with a **STATUS[4]** flag raised - this is a generic check
+for event coincidence and will help to filter out the majority of events that might
+not have trustworthy properties.
 
 ```{code-cell} python
 apply_general_coincident_screen = True
@@ -2268,13 +2267,17 @@ apply_general_coincident_screen = True
 #### Frame events
 
 The first type of coincident events we'll deal with are 'frame events' – they
-occur when a significant amount of energy is absorbed into the **silicon frame *around* the XRISM-Resolve array**
+occur when a significant amount of energy is absorbed into the **silicon frame *around*
+the XRISM-Resolve array**
 
 Absorption of enough energy into the frame will measurably 'pulse' the temperature of
 the array's heat sinks, which in turn pulses the temperature of the pixels
-themselves. Given that the pixels are microcalorimeters (glorified thermometers), you
-can see how that might then affect the detection of incident photons, and the quantification
-of their energy.
+themselves. This is a type of 'thermal cross-talk'; we will discuss the related concept
+of 'electrical cross-talk' [the next section](#electrical-cross-talk).
+
+Given that the pixels are microcalorimeters (glorified thermometers), you can see how
+that might then affect the detection of incident photons, and the quantification of
+their energy.
 
 Indeed, for very large depositions of energy into the frame (on the scale of MeV),
 the resulting pixel temperature pulses can produce signals that trigger the
@@ -2429,10 +2432,6 @@ whether the rise time screening is applied [when we call the function](#making-n
 ```{code-cell} python
 apply_rise_time_screen = True
 ```
-
-#### Thermal cross-talk
-
-<span style="color:red">***TOO SMALL TO BE WORTH BOTHERING ABOUT?***</span>
 
 #### Electrical cross-talk
 
