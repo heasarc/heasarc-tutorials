@@ -2497,7 +2497,7 @@ apply_unfiltered_coincident_screen = False
 ### Excluding periods of high particle background flux
 
 Moving on from pixel-pixel coincidence, another cleaning step that you could _potentially_ apply
-to your data is to exclude all events that were recorded during periods of the observation
+to your data is to exclude all events recorded during periods of the observation
 that had particularly high particle background fluxes.
 
 We say *potentially*, because practically speaking, you might not need to worry about
@@ -2567,8 +2567,10 @@ cleaning. We will use two HEASoft tools to achieve this:
 <span style="color:red">***BOTH THE TITLE AND LOCATION OF THIS SUBSECTION WILL LIKELY CHANGE***</span>
 
 ```{code-cell} python
+# Define lower and upper PI channel limits for product extraction
 pi_chan_limits = Quantity([600, 20000], "chan")
 
+# Show the PI limits as energies, for context
 print((RSL_EV_PER_CHAN * pi_chan_limits).to("keV"))
 ```
 
