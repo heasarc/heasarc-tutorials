@@ -1460,7 +1460,7 @@ mission.
 
 Using the AstroQuery Python module (specifically this Heasarc object), we list all
 catalogs that are **(a)** related to XRISM, and **(b)** are flagged as 'master' (meaning the
-summary table of observations). This should only return one catalog for any
+table summarising all observations). This should only return one catalog for any
 mission you pass to 'keywords':
 
 ```{code-cell} python
@@ -1526,11 +1526,15 @@ avail_xrism_obs = all_xrism_obs[public_times <= Time.now()]
 avail_xrism_obs
 ```
 
+Its also worth noting that _scheduled but not yet taken_ observations are also included
+in the XRISM master table, and the filtering we just performed will also exclude those
+cases.
+
 We can see that there are two public XRISM observations of NGC 1365
 (as of May 2026) – with ObsIDs of **300075010** and _300075020_. To ensure that this
 demonstration notebook will run in a reasonable length of time, we
 will restrict ourselves to using one observation (300075010; chosen primarily
-because it illustrates the [problem with pixel](#pixel-27-of-xrism-resolve-is-broken)
+because it illustrates the [problem with pixel 27](#pixel-27-of-xrism-resolve-is-broken)
 better than the other), by filtering the `avail_xrism_obs` table:
 
 ```{code-cell} python
@@ -1611,7 +1615,8 @@ to run either or both the Xtend and Resolve pipelines. It contains some convenie
 functionality that can identify and automatically pass the attitude, housekeeping, etc. files.~~
 
 We will show you how to run the top-level pipeline `xapipeline` XRISM pipeline, but
-will limit it to processing only XRISM-Resolve data.
+will limit it to processing only XRISM-Resolve data (though it is quite capable of
+preparing both Resolve and Xtend data).
 
 The Python interface to HEASoft, HEASoftPy, is used throughout this tutorial, and we
 will implement parallel observation processing wherever possible (even though we have
@@ -1697,7 +1702,7 @@ if HEA_VER <= Version("v6.36") and (
     warn(
         "Downloading the XRISM-Resolve 'RSLMPCOR' CALDB file to avoid HEASoft v6.36's "
         "small incompatibility with a remote XRISM-Resolve CALDB.",
-        stacklevel=2,
+        stacklevel=1,
     )
 
     # This will find and download (retrieve=True) the XRISM-Resolve mid-resolution
@@ -1726,6 +1731,14 @@ if HEA_VER <= Version("v6.36") and (
         )
 ```
 
+```{note}
+This notebook is configured to acquire XRISM CALDB files from the HEASARC
+Amazon Web Services S3 bucket - this can greatly improve the speed of some
+steps later in the notebook, particularly when running on the Fornax Science Console.
+
+CALDB location configuration can be found in the [Global Setup: Configuration](#configuration) section.
+```
+
 ### Running the XRISM pipeline for Resolve
 
 `xapipeline` needs the 'stem' of the input file names to be defined, so that it
@@ -1741,9 +1754,12 @@ at any of those stages; this can be useful if you wish to re-run a stage with sl
 different configuration without repeating the entire pipeline run.
 
 A stage is a collection of different tasks, and have the following general goals:
-- **Stage 1** -
-- **Stage 2** -
-- **Stage 3** -
+- **Stage 1** - Calibrating the events.
+- **Stage 2** - Screening the events.
+- **Stage 3** - Producing quick-look data products.
+
+The [**`xapipeline` documentation**](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xapipeline.html) breaks down
+exactly which HEASoft tools are during each stage.
 
 ```{note}
 We will stop the execution of `xapipeline` at **Stage 2**, as the latter part of this
@@ -1785,14 +1801,6 @@ if len(xa_pipe_problem_ois) != 0:
         if all_out[0] in xa_pipe_problem_ois:
             print(all_out[1])
             print("\n\n")
-```
-
-```{note}
-This notebook is configured to acquire XRISM CALDB files from the HEASARC
-Amazon Web Services S3 bucket - this can greatly improve the speed of some
-steps later in the notebook, particularly when running on the Fornax Science Console.
-
-CALDB location configuration can be found in the [Global Setup: Configuration](#configuration) section.
 ```
 
 ## 3. Choosing the events to consider for data product generation
@@ -2053,13 +2061,13 @@ moment, so we currently recommend limiting analysis to events with a grade of **
 
 The histogram of event grade counts and branching ratios we constructed
 [in the last section](#event-grades-and-branching-ratios) demonstrates a serious issue
-currently affecting the majority of XRISM-Resolve observations – **there is a severe overabundance of low-resolution secondary events (Ls).**
+currently affecting the majority of XRISM-Resolve observations – **a severe overabundance of low-resolution secondary events (Ls).**
 
 This problem is discussed in the XRISM ABC guide
 ([XRISM GOF & SDC 2024](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/Resolve_Data_Analysis.html#SECTION00932000000000000000)),
 which provides recommendations on how to handle these anomalous Ls events.
 
-Anomalous Ls events **do not represent real, celestial, X-ray photons** instead they are currently
+Anomalous Ls events **do not represent real, celestial, X-ray photons**. Instead, they are currently
 believed to have two distinct origins:
 1. The first component, dominating the 'low count rate' regime ($\lesssim 0.4$ [$\rm{ct}\:\rm{pix}^{-1}\:s^{-1}$]), likely derives "from cosmic-ray particles, or instrumental X-rays induced by cosmic rays".
 2. The second, which occurs for observations with count rates significantly higher than $\sim 1$ [$\rm{ct}\:\rm{pix}^{-1}\:s^{-1}$], is likely due to "secondary signals produced by initial (probably energetic) X-rays".
@@ -2073,7 +2081,7 @@ strongly recommend that you also check the XRISM ABC guide to see if any new rec
 
 #### What to do for faint sources
 
-**We currently recommend that all Ls events be excluded from analysis for observations with per-pixel count rates of
+We currently recommend that **all Ls events be excluded from analysis for observations with per-pixel count rates of
 $\lesssim 0.4$ [$\rm{ct}\:\rm{pix}^{-1}\:s^{-1}$]**, which translates to a total of $\lesssim 1$ [$\rm{ct}\:s^{-1}$] for
 a point source.
 
@@ -2082,9 +2090,9 @@ a point source.
 
 For moderately bright emission, up to a total of $\sim 10$ [$\rm{ct}\:s^{-1}$] for a point source, the
 recommendation is to:
-1. **Remove all Ls events, just as [for faint sources](#what-to-do-for-faint-sources)**.
-2. **To restrict yourself to analyzing events between 3–10 keV**.
-3. **Assume that whatever source fluxes you derive are lower limits, as a not-entirely-negligible fraction of the excluded Ls events will have been real.**
+1. **Remove all Ls events**, just as [for faint sources](#what-to-do-for-faint-sources).
+2. Restrict yourself to analyzing **events with energies between 3–10 keV**.
+3. Assume that **whatever source fluxes you derive are lower limits**, as a not-entirely-negligible fraction of the excluded Ls events will have been real.
 
 This is because in this count rate regime, the second component of the anomalous Ls event abundance comes into play (see the [beginning of this section](#overabundance-of-low-resolution-secondary-ls-events)).
 
@@ -2236,7 +2244,7 @@ cur_evt_list.data[cur_evt_list.data["STATUS"][:, 3]]
 ```
 
 The **STATUS** column entry for a particular event is a *16-bit flag* (with
-14 actually in use), and each bit represents the result of a different type of
+14 bits actually in use), and each bit represents the result of a different type of
 processing check performed for the event. The different flags are described in the XRISM ABC guide
 ([XRISM GOF & SDC (2024)](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)).
 
@@ -2489,21 +2497,20 @@ apply_unfiltered_coincident_screen = False
 
 ### Excluding periods of high particle background flux
 
-Moving on from pixel-pixel coincidence, another cleaning step that you could _potentially_ apply to your data is to exclude all
-events that were recorded during periods of the observation that had particularly
-high particle background fluxes.
+Moving on from pixel-pixel coincidence, another cleaning step that you could _potentially_ apply
+to your data is to exclude all events that were recorded during periods of the observation
+that had particularly high particle background fluxes.
 
-We say *potentially*, because practically speaking, you might not need to worry about this if your
-observation is of any kind of bright source – you will only concievably benefit if your target is
-relatively faint.
+We say *potentially*, because practically speaking, you might not need to worry about
+this if your observation is of a bright source.
 
-If your source of interest *is* relatively faint, you should consider comparing your output spectra
-and measured properties with and without this extra step, and make a decision based on the
-source flux and your particular science goals. We do not give a blanket recommendation to
-apply this to all faint sources because you can end up dramatically decreasing the overall
-exposure time of your observation, and every kilo-second is precious, so if removing the
-background particle flux does not improve your source's signal-to-noise, the trade-off may
-not be worth it.
+If your source of interest **is relatively faint**, however, you should consider comparing
+your output spectra and measured properties with and without this extra step, and make a
+decision based on the source flux and your particular science goals. We cannot give a
+blanket recommendation to apply this to all faint sources, because you can end up
+dramatically decreasing the overall exposure time of your observation, and every
+kilo-second is precious. So, if removing the background particle flux does not improve
+your source's signal-to-noise, the trade-off may not be worth it.
 
 Now that we've philosophized about whether you _should_ apply this step, we can move on to how
 it works. XRISM traces the particle background level by exploiting its inverse correlation with the
@@ -2511,14 +2518,13 @@ it works. XRISM traces the particle background level by exploiting its inverse c
 
 The cut-off rigidity itself is a property of the Earth's geomagnetic field and is a measure
 of how much the magnetic field 'shields' XRISM from cosmic rays
-([Smart D. F., Shea M. A. 2005](https://ui.adsabs.harvard.edu/abs/2005AdSpR..36.2012S/abstract)),
-as a function of the spacecraft's location. It is not measured directly by XRISM, but
-rather is calculated from the **2020 version of the 'International Geomagnetic Reference
-Field' (IGRF-13) model** ([Alken P. et al. 2021](https://ui.adsabs.harvard.edu/abs/2021EP&S...73...49A)).
+([Smart D. F., Shea M. A. 2005](https://ui.adsabs.harvard.edu/abs/2005AdSpR..36.2012S/abstract)), as a function of the spacecraft's location. It is
+not measured directly by XRISM, but rather is calculated from the **2020 version of
+the 'International Geomagnetic Reference Field' (IGRF-13) model** ([Alken P. et al. 2021](https://ui.adsabs.harvard.edu/abs/2021EP&S...73...49A)).
 
 All the COR information recorded for a given XRISM observation is stored in the
 'extended housekeeping file' (EHK); there are several COR-related
-columns – _COR_, _COR2_, _COR3_, and***CORTIME***. We will use the ***CORTIME***
+columns – _COR_, _COR2_, _COR3_, and ***CORTIME***. We will use the ***CORTIME***
 column, as it is calculated from the model mentioned above, whereas the other estimates
 of COR are based on older maps and models.
 
@@ -2530,7 +2536,7 @@ We recommend selecting time periods that have a **CORTIME value of $>8$** (thoug
 with this threshold and observe the effect of it on your data).
 
 The housekeeping file does not store a COR value for every single event; instead, all the
-parameters that it keeps tracked of are recorded on a regular time cadence.
+parameters that it keeps track of are recorded on a regular time cadence.
 
 <span style="color:red">***ACTUALLY I DON'T UNDERSTAND WHY WE CAN'T JUST USE MAKETIME?***</span>><>
 
@@ -2881,7 +2887,7 @@ make the tutorial faster), this section will only handle a single spectrum.
 
 As you might imagine, spectral analysis of XRISM-Resolve data can be considerably more
 complex than spectro-imaging CCD spectra. ***We defer a full exploration of more
-in-depth spectral analysis to other demonstration notebooks.***
+in-depth spectral analysis to future demonstration notebooks.***
 
 ### Configuring PyXspec
 
@@ -3052,19 +3058,19 @@ Updated On: 2026-06-04
 
 ### Additional Resources
 
-**XRISM Help Desk**: https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=xrism
+**XRISM Help Desk**: [https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=xrism](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=xrism)
 
-**XRISM Data Reduction (ABC) Guide**: https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide
+**XRISM Data Reduction (ABC) Guide**: [https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide)
 
-**HEASoftPy GitHub Repository**: https://github.com/HEASARC/heasoftpy
+**HEASoftPy GitHub Repository**: [https://github.com/HEASARC/heasoftpy](https://github.com/HEASARC/heasoftpy)
 
-**HEASoftPy HEASARC Page**: https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/heasoftpy.html
+**HEASoftPy HEASARC Page**: [https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/heasoftpy.html](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/heasoftpy.html)
 
-**HEASoft XRISM Resolve/Xtend `xapipeline` help file**: https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xapipeline.html
+**HEASoft XRISM Resolve/Xtend `xapipeline` help file**: [https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xapipeline.html](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xapipeline.html)
 
-**HEASoft XRISM `xaexpmap` help file**: https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xaexpmap.html
+**HEASoft XRISM `xaexpmap` help file**: [https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xaexpmap.html](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xaexpmap.html)
 
-**XSPEC Model Components**: https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node128.html
+**XSPEC Model Components**: [https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node128.html](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node128.html)
 
 ### Acknowledgements
 
