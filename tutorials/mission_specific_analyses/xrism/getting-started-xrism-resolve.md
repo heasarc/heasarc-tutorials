@@ -340,9 +340,9 @@ def gen_xrism_resolve_image(
     out_dir: str,
     lo_en: Quantity,
     hi_en: Quantity,
+    include_evt_grades: list = None,
     sub_pixel: bool = False,
     im_bin_sub_pixel: int = 1,
-    include_evt_grades: list = None,
 ):
     """
     This function wraps the HEASoft 'extractor' tool and is used to spatially bin
@@ -360,13 +360,13 @@ def gen_xrism_resolve_image(
         generate the image.
     :param Quantity hi_en: Upper bound of the energy band within which we will
         generate the image.
+    :param List[int] include_evt_grades:
     :param bool sub_pixel: If False (default), then the output image pixels match
         will match the Resolve's array's pixels. If True, then the output image
         will be generated using the XY coordinates, and binned according to the
         'im_bin_sub_pixel' argument, over-sampling the instruments spatial resolution.
     :param int im_bin_sub_pixel: Number of XRISM-Resolve SKY X-Y coordinate system
         'pixels' to bin into a single image pixel. Only used if 'sub_pixel' is True.
-    :param List[int] include_evt_grades:
     """
 
     # We can extract the ObsID directly from the header of the event list - it is
@@ -2595,6 +2595,13 @@ pi_chan_limits = Quantity([600, 20000], "chan")
 print((RSL_EV_PER_CHAN * pi_chan_limits).to("keV"))
 ```
 
+```{important}
+The lower bound of XRISM-Resolve's effective energy range is currently limited to
+approximately **2 keV**, as the **gate valve** that protected the XRISM-Resolve instrument
+during launch failed to open. This gate valve is a highly effective absorber of low
+energy X-rays.
+```
+
 ### Making new 'cleaned' event lists
 
 <span style="color:red">***IF I MENTION AND GENERATE COR-BASED GTIS, I NEED TO BE ABLE TO PASS THEM TO THE FUNCTION BELOW***</span>
@@ -2637,30 +2644,67 @@ All this is to say that many XRISM-Resolve observations will be of extended sour
 they will provide many measurements impossible with previous missions, their analysis
 is far more complex, with extra considerations, and we will not demonstrate it in this notebook.
 
+
 ## 4. Generating new XRISM-Resolve images and exposure maps
 
+At this point we have processed the raw XRISM-Resolve data, and then applied various cleaning
+steps to remove anomalous or unhelpful events. From here on we will produce data products
+useful for analysis of the observed source.
+
 ### Setting up for image generation
+
+We start by producing XRISM-Resolve images, within specified energy bands. Due to the
+very low spatial resolution of XRISM-Resolve, they will appear neither spectacular nor
+particularly informative, but they will at least allow us to ascertain if most of
+the emission is concentrated in the central few pixels, as we expect for a well-targeted
+point source.
+
+First, we decide which energy bounds we wish to generate images within. Those we
+choose here have no particular meaning, but in order to demonstrate the generation
+of multiple images from multiple energy bands in parallel, we define two.
+
+You can easily adjust these limits, if you're using this notebook as a template or a
+basis for your own analysis - this Astropy Quantity is a set of lower and upper
+bounds, and will result in images between 3.0-10.0 keV and 6.0-7.0 keV being
+generated. If you wish to specify a single energy band, simply define the variable
+as `Quantity([[3.5, 5.5]], "keV")`.
 
 ```{code-cell} python
 # Define pairs of lower/upper energy bounds within which to generate images
 im_en_bounds = Quantity([[3.0, 10.0], [6.0, 7.0]], "keV")
 ```
 
-```{code-cell} python
-# im_evt_grades = [0, 1]
+Next, we decide which grades of event to include in the final images. In our case
+we choose to include all grades, which is **recommended for the estimation of
+source flux from images**.
 
+<span style="color:red">That last may not be right?</span>
+
+If you are modifying this demonstration and wish to define which grades
+should be used, you may set the variable to a list of integer grade identifiers (e.g.
+`im_evt_grades = [0, 1]` for high resolution primary and high resolution secondary events).
+
+```{code-cell} python
 im_evt_grades = None
 ```
 
-```{code-cell} python
-# im_sub_pixel = True
-# im_bin_sub_pixel = 100
-
-im_sub_pixel = False
-im_bin_sub_pixel = 1
-```
-
 ### Running image generation
+
+We have implemented a convenient function to generate XRISM-Resolve images in the
+['Global Setup: Functions'](#functions) section near the beginning of this notebook.
+
+It makes use of the HEASoft `extractor` task behind the scenes, and is designed to be
+easily run in parallel, which is what we will be doing below.
+
+As the event lists we're using have already been screened for anomalous events (see
+[the previous section](#3-choosing-the-events-to-consider-for-data-product-generation)),
+we just need to pass the variables defined in
+[the 'setting up for image generation' subsection](#setting-up-for-image-generation) to
+the image generation function.
+
+This will parallelize image generation so that different combinations of ObsID, X-ray
+filter, and specified energy bounds are run simultaneously across as many cores as
+are available (though by default this demonstration only uses one ObsID and one filter):
 
 ```{code-cell} python
 arg_combs = [
@@ -2668,8 +2712,6 @@ arg_combs = [
         SCR_EVT_PATH_TEMP.format(oi=oi, xrf=xf),
         os.path.join(OUT_PATH, oi),
         *cur_bnds,
-        im_sub_pixel,
-        im_bin_sub_pixel,
         im_evt_grades,
     ]
     for oi, xfs in cut_rel_filters.items()
@@ -2682,6 +2724,8 @@ with mp.Pool(NUM_CORES) as p:
 ```
 
 ### Setting up for exposure map generation
+
+
 
 ```{code-cell} python
 expmap_rad_delta = Quantity(20, "arcmin")
