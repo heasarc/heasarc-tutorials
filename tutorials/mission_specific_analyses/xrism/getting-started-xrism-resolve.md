@@ -1854,8 +1854,6 @@ and deal with multiple event lists, with different filters, for each observation
 
 ### Loading event lists into Python
 
-***<span style="color:red">SHOULD MAKE CLEAR MENTION OF PIXEL 12 SOMEWHERE IN HERE, EXPLAIN THAT ITS A DEDICATED CALIBRATION PIXEL, AND THAT THEY WILL SOMETIMES SEE IT SKIPPED IN THINGS LIKE THE PIXEL NUM TO DET-REGION CONVERSION DICTIONARY BECAUSE OF THAT.</span>***
-
 ```{code-cell} python
 # Set up a two-level nested dictionary (ObsID top level keys, filter as low level keys)
 #  with EventList instances as values
@@ -2095,11 +2093,18 @@ This is because in this count rate regime, the second component of the anomalous
 
 #### What to do for very bright sources
 
-<span style="color:red">The Ls events of brighter sources have complicated behavior, so we do not yet have an
-effective solution. With currently available response files, their absolute flux and
-global spectral shape are highly uncertain, so users should limit analyses to narrow
-energy bands. The XRISM-Resolve instrument team is conducting a comprehensive study to determine
-the most effective strategy for mitigating this problem.</span>
+The low-resolution secondary (Ls) events recorded for very bright sources exhibit
+complicated behaviors, and the XRISM-Resolve instrument team is still working to develop
+the most effective methods of analyzing Ls data for very bright sources.
+
+This is one area in which the current best practises are likely to evolve rapidly, so be sure
+to check the latest version of the XRISM ABC guide. The XRISM-Resolve instrument team is conducting
+a comprehensive study to determine the most effective strategies for very bright sources.
+
+Currently available XRISM-Resolve response files are highly uncertain for very high count rate data, which
+in makes the derived absolute flux and global spectral shape highly uncertain. Our current advice
+is that, when analyzing very high count rate data, users should currently limit analyzes to narrow
+energy bands.
 
 
 ```{danger}
