@@ -2567,9 +2567,25 @@ cleaning. We will use two HEASoft tools to achieve this:
 #              noprompt=True)
 ```
 
-### PI limits
+### Selecting events within PI limits
 
-<span style="color:red">***BOTH THE TITLE AND LOCATION OF THIS SUBSECTION WILL LIKELY CHANGE***</span>
+When creating event lists that will be used to generate data products such as spectra, images,
+light curves, etc. we recommend selecting the widest possible energy range (or rather, PI
+channel range, as is stored in event lists) - in most cases it is best to select the entire valid
+energy range of the instrument, it provides the most flexibility.
+
+With that said, you will find that XRISM-Resolve event lists (like most X-ray instruments) records
+events that are outside the viable range of the detector, so we do need to apply _some_ PI
+filtering - indeed the second figure in [the 'frame events' section](#frame-events) highlights
+that many events have been recorded with a PI of zero. Definitely not physical.
+
+The exact PI filtering applied will vary depending on your science case - we do not recommend setting
+a limit any lower than PI=600, as excluding those very low energy events helps, in concert with other
+screening methods (such as those discussed in [the electrical cross-talk section](#electrical-cross-talk))
+to screen out coincident events.
+
+Our upper limit is set to PI=20000, which corresponds to 10 keV - XRISM-Resolve is not currently
+well calibrated at energies much higher than this.
 
 ```{code-cell} python
 # Define lower and upper PI channel limits for product extraction
@@ -2604,12 +2620,22 @@ with mp.Pool(NUM_CORES) as p:
 
 ### Further considerations for spatially-resolved analyses
 
-Something something out of the scope something something but still need you to be
-aware that there _are_ further considerations.
+The source we are using for our example, NGC 1365, is a point source. However, one of
+XRISM-Resolve's unique capabilities is that of performing **spatially resolved** very high energy
+resolution (high resolution for X-ray observations at least) for extended sources.
 
-```{code-cell} python
+Other high energy resolution X-ray instruments use fundamentally different technologies to
+the microcalorimeters that make up XRISM-Resolve, they are typically dispersive grating
+spectrometers.
 
-```
+It is extremely difficult to perform spatially resolved spectroscopic
+analyses with such instruments, and they are poorly suited to the observation
+of extended sources. Such observations of tend to run afoul of instrumental line broadening
+effects, rendering the derivation of well constrained line widths much harder.
+
+All this is to say that many XRISM-Resolve observations will be of extended sources, and while
+they will provide many measurements impossible with previous missions, their analysis
+is far more complex, with extra considerations, and we will not demonstrate it in this notebook.
 
 ## 4. Generating new XRISM-Resolve images and exposure maps
 
