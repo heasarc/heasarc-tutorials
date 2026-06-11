@@ -10,6 +10,11 @@ authors:
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
 date: '2026-06-11'
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: true
 file_format: mystnb
 jupytext:
   text_representation:
@@ -21,11 +26,6 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-execution:
-  cal-files:
-    xmm-ccf: False
-    chandra: False
-    xspec-models: True
 title: Getting started with XRISM-Resolve
 ---
 
@@ -695,6 +695,12 @@ def gen_xrism_resolve_rmf(
     :param str out_dir: The directory where output files should be written.
     :param List[int] rel_pixels:
     """
+
+    if rmf_type.lower() == "x":
+        raise NotImplementedError(
+            "This convenience function does not currently support the generation "
+            "of X-large RMFs."
+        )
 
     #
     sp_include_evt_grades = None
@@ -2892,11 +2898,29 @@ det_region_from_pixels(chosen_pixel_det_reg_path, chosen_pixels)
 
 ### Choosing which event grades to include
 
+We [discussed XRISM-Resolve event grading in a previous section](#event-grades-and-branching-ratios), and you will
+ultimately have to make your own choices as to which are appropriate to include in spectrum extraction for
+your science case.
+
+Here, we are only going to use the very highest resolution events, and we generally recommend that you do the same if
+your observation is of a high enough SNR. The list definition below will be passed to a convenience
+function for XRISM-Resolve spectral generation and should include at least one entry of an integer
+grade ID (e.g. the ITYPE column in XRISM-Resolve event lists):
+
 ```{code-cell} python
 chosen_evt_grades = [0]
 ```
 
 ### Generating spectral files
+
+As with the generation of images and exposure maps, we have set up spectrum generation in
+this notebook so that extraction from different ObsID-filter combinations can be performed
+in parallel, across as many cores as are available.
+
+Also, as with those previous data product generation steps, we are not making full use
+of the parallelization capability as early on in this tutorial we selected as a single
+ObsID and a single filter to minimize the default run time. If you decide to alter this
+notebook to use multiple ObsIDs/filters, then more cores will be utilized.
 
 ```{code-cell} python
 arg_combs = [
@@ -2914,21 +2938,68 @@ with mp.Pool(NUM_CORES) as p:
     sp_result = p.starmap(gen_xrism_resolve_spectrum, arg_combs)
 ```
 
-<span style="color:red">***WRITE THIS BIT BETTER***</span>
-
-The return from this function is a little different, and includes the following:
-- Logs of the spectral extraction run <span style="color:red">***THOUGH ALL OUR FUNCTIONS RETURN THAT***</span>
+The return from the `gen_xrism_resolve_spectrum` function includes the following information:
+- HEASoft logs of the spectral extraction process.
 - File path of the newly generated spectrum.
-- File path to the event list used.
-- The ObsID
+- File path to the source event list (this is for convenience when generating the spectra's ancillary files).
+- The ObsID that the spectrum is associated with.
+- The X-ray filter that the spectrum is associated with.
 
-The latter three are to make it more convenient to call the next step, RMF generation.
-
+As we are using a multiprocessing pool to enable the generation of multiple spectra in parallel, all
+returns from `gen_xrism_resolve_spectrum` are stored in the `sp_result` list. This list
+has one entry per function call, and is in the same order as the `arg_combs` variable.
 
 ### Producing redistribution matrix files (RMFs)
 
+There are two crucial ancillary files required to analyze high-energy spectra – the first
+is the redistribution matrix file (RMF). This is what describes the mapping between
+detector channel and incident photon energy, including uncertainties introduced by
+the fact that no detector (or its electronics) is entirely perfect.
+
+Without this, we would be only be able to deal with spectra in terms of the channel,
+rather than energy, assigned to an event – this would essentially remove our ability
+to draw physical conclusions about the origin of the emission.
+
+XRISM-Resolve RMFs are uniquely large (in terms of storage and memory use) because of
+the very high energy resolution of the detector – higher resolution means more detector
+channels, which not only increases the length of a one table in the RMF file, but dramatically
+increases the size of the 'matrix' part of the RMF.
+
+All that said, anything that involves producing, reading, or using an RMF is going to
+take longer than you are used to, if you have never used XRISM-Resolve data before.
+
+With that in mind, the HEASoft task used to generate the RMFs for Resolve allows the
+user to select the 'size' of RMF, with the different sizes having different levels
+of complexity in their modeling of the detector channel to energy mapping:
+- **Small [S]** – Suitable **only for analysis development**, but not final scientific results, this RMF only models the Gaussian core of the line broadening function.
+- **Medium [M]** – Additionally includes the exponential tail and Si K alpha emission line.
+- **Large [L]** – Suitable for some scientific analyses, this also includes the escape peaks.
+- **X-Large [X]** – Includes the electron loss continuum in addition to every other effect.
+
+The line spread function is discussed in the proposer's observatory guide
+[XRISM GOF & SDC 2026](https://heasarc.gsfc.nasa.gov/docs/xrism/proposals/POG/Resolve.html#sec:resolve_LSF).
+
+
+Larger RMFs reproduce the XRISM-Resolve response more accurately, but unfortunately increase the fitting
+time required for each spectrum. As such we recommend that exploratory model fits, and the development
+of your analyses, make use of 'small' or 'medium' RMFs, and that larger RMFs are only used when
+you are sure of your fitting setup.
+
+The X-large class of XRISM-Resolve RMF often produces files with sizes in excess of 7GB. Consider
+the implications of that in terms of storage use, and in memory use when loaded into XSPEC, before
+utilizing them. We **strongly** recommend that X-large RMFs are split into multiple files using
+the `splitrmf` and `splitcomb` arguments of the `rslmkrmf` task, though the convenience function
+for RMF generation that we are about to use does not support this.
+
+For demonstrative purposes, we will use the **small** RMF type:
+
 ```{code-cell} python
 chosen_rmf_size = "S"
+```
+
+```{seealso}
+See the [HEASoft `rslmkrmf` help file](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/rslmkrmf.html), specifically
+the parts about the 'whichrmf' parameter, for more information on RMF sizes.
 ```
 
 ```{code-cell} python
@@ -3216,6 +3287,8 @@ Updated On: 2026-06-11
 
 **HEASoft XRISM `xaexpmap` help file**: [https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xaexpmap.html](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xaexpmap.html)
 
+**HEASoft XRISM `rslmkrmf` help file**: [https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/rslmkrmf.html](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/rslmkrmf.html)
+
 **XSPEC Model Components**: [https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node128.html](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node128.html)
 
 ### Acknowledgements
@@ -3230,6 +3303,8 @@ Updated On: 2026-06-11
 [XRISM GOF & SDC (2024) - _XRISM ABC GUIDE EVENT TABLE COLUMNS_ [ACCESSED 26-Mar-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/XRISM_Data_Specifics.html#SECTION00770000000000000000)
 
 [XRISM GOF & SDC (2026) - _XRISM POG EVENT GRADING_ [ACCESSED 05-May-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/proposals/POG/Resolve.html#sec:resolve_eventgrading)
+
+[XRISM GOF & SDC (2026) - _XRISM POG RESOLVE LINE SPREAD FUNCTION_ [ACCESSED 11-June-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/proposals/POG/Resolve.html#sec:resolve_LSF)
 
 [XRISM GOF & SDC (2024) - _XRISM ABC GUIDE REMOVING ANOMALOUS LS EVENTS_ [ACCESSED 05-May-2026]](https://heasarc.gsfc.nasa.gov/docs/xrism/analysis/abc_guide/Resolve_Data_Analysis.html#SECTION00932000000000000000)
 
