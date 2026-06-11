@@ -3025,10 +3025,89 @@ of your analyses.
 
 ### Calculating ancillary response files (ARFs)
 
+```{danger}
+The HEASoft task we use to generate ARFs is called **`xaarfgen`**. There is
+another, very similarly named, HEASoft tool related to the construction of XRISM
+ARFs, **`xaxmaarfgen`**. Be sure which one you are using!
+```
+
+ARFs are the final type of supporting file required to make our spectra usable and
+describe the effective area (i.e., the sensitivity) of XRISM-Xtend as a function of
+energy.
+
+The effective area has to be understood (and well calibrated) as we need it to help
+map a spectral model, which hopefully describes what the object of interest
+is _actually_ emitting (and how), to the _observed_ spectrum; that observed spectrum
+has been altered across its energy range by how good XRISM-Resolve is at detecting
+photons at different points in that range.
+
+The sensitivity of an X-ray detector is a combination of the X-ray optic's (on XRISM
+this is the called X-ray Mirror Assembly, or XMA) effective area and the detector's
+quantum efficiency. They are both independently a function of energy.
+
+ARFs are standard products for most high-energy missions, but the methods implemented
+to calculate them for XRISM's instruments are quite unusual.
+
+The HEASoft task we need to call (`xaarfgen`) calls further HEASoft tools that perform
+ray-tracing simulations of XRISM XMAs, for the location of your source on the
+detector, and use those to define the X-ray optic's collecting area for a wide range
+of energies.
+
+```{note}
+If you have to generate multiple ARFs for the same source, in the same observation, you
+should be aware that the raytraced event lists can be re-used (though only in this
+particular scenario).
+```
+
+Raytracing can be a slow process, as individual events and their path through the
+XMA are being simulated, but it does help to produce very accurate ARFs. There are ways
+that it can be sped up, though at the cost of that accuracy – the most direct way is
+to limit the number of events that are simulated.
+
+Rather than setting an overall number of events to simulate, the `xaarfgen` task provides
+an argument ('numphoton') to set the number of photons allocated to each attitude
+histogram bin (in the exposure map file), per grid point in the internal energy grid.
+
+An argument specifying the number of events ('numphoton') can be passed to `xaarfgen`, and for
+our demonstration we are going to use a very small sample - this is primarily so the
+notebook can run in a reasonable amount of time.
+
+A second argument, `minphoton`, specifies the minimum acceptable number of raytracing photons that
+successfully reach the focal plane for each raytracing energy grid point. If that minimum number is
+not reached for each energy grid point during the raytracing process, ARF production will fail.
+
+The `xaarfgen` documentation provides the following guidance on choosing the number of
+events to simulate:
+
+```{seealso}
+Note that even if `minphoton` is exceeded at all energies, this does not guarantee
+that the resulting ARF is robust and sufficiently accurate.
+
+In general, about 5000 or more photons per energy (over the extraction region) give
+good results, but the actual minimum number varies case-by-case, and fewer may be
+sufficient in some cases.
+
+The default value of `minphoton` is deliberately very small, in order that the
+ARF is made and available for diagnostic evaluation. In general, it is not
+recommended to set `minphoton` to a high value in the first place, because it is
+not possible to reliably estimate what `minphoton` should be in advance of
+running raytracing within `xaarfgen`, in order for that value of 'photon' to be
+satisfied for all energies, which could result in repeated failures after very long
+run times. It could also run into memory problems and/or a raytracing file size that
+is unmanageable.
+```
+
+We choose the default values for both the `minphoton` and `numphoton` arguments:
+
 ```{code-cell} python
 arf_rt_num_photons = 20000
 arf_rt_min_photons = 100
 ```
+
+So now we move onto actually running the ARF generation – using the
+`gen_xrism_resolve_arf` function defined in the Global Setup: Functions section (near the top of
+the notebook), which wraps the HEASoftPy interface to the `xaarfgen` task. We now use it
+to generate ARFs in parallel for all of our new spectra:
 
 ```{code-cell} python
 arg_combs = []
@@ -3056,10 +3135,32 @@ with mp.Pool(NUM_CORES) as p:
 
 ### Grouping our newly generated spectra
 
+We also need to group the spectra [we just generated](#generating-spectral-files). Grouping
+essentially combines spectral channels until some minimum quality threshold is reached. We
+use the HEASoft `ftgrouppha` tool to do this, once again through HEASoftPy.
+
+Various quality metrics can be used; for instance, it is quite common to group high-energy
+spectra so that there is at least one count per channel, in order to make the use of the
+Cash statistic during spectral fitting valid.
+
+In this case we select the 'optmin' binning technique, which implements the optimum binning
+method described by [Kaastra J. S. and Bleeker J. A. M. (2016)](https://ui.adsabs.harvard.edu/abs/arXiv:1601.05309), while
+also including a requirement for a minimum number of counts per channel (10 in this case).
+
+
 ```{code-cell} python
 spec_group_type = "optmin"
 spec_group_scale = 10
 ```
+
+We do not parallelize the grouping of spectra, as it is a fairly computationally
+inexpensive task. However, if you are dealing with many spectra you may wish to implement
+a multicore version, taking the parallelized functions we have implemented in this
+notebook as a template.
+
+This loops through the spectra produced in the ['generating spectral files'](#generating-spectral-files)
+subsection and applies the grouping, while also writing the relative paths to RMF and ARF files
+into each spectrum's header:
 
 ```{code-cell} python
 grp_spec_paths = []
@@ -3311,3 +3412,5 @@ Updated On: 2026-06-11
 [Smart D. F., Shea M. A. (2005) - _A review of geomagnetic cutoff rigidities for earth-orbiting spacecraft_](https://ui.adsabs.harvard.edu/abs/2005AdSpR..36.2012S/abstract)
 
 [Alken P. et al. (2021) - _International Geomagnetic Reference Field: the thirteenth generation_](https://ui.adsabs.harvard.edu/abs/2021EP&S...73...49A)
+
+[Kaastra J. S. and Bleeker J. A. M. (2016) - _Optimal binning of X-ray spectra and response matrix design_](https://ui.adsabs.harvard.edu/abs/arXiv:1601.05309)
