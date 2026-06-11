@@ -2725,7 +2725,31 @@ with mp.Pool(NUM_CORES) as p:
 
 ### Setting up for exposure map generation
 
+Exposure maps describe the effective exposure of each pixel in the XRISM-Resolve
+array, and are a prerequisite for the generation of ancillary response files ([which we
+will be doing in a later section](#calculating-ancillary-response-files-arfs)).
 
+Exposure maps are also a useful way to tell exactly which parts of the sky
+are covered by the observation.
+
+Unlike for image creation, there is a dedicated HEASoft task for the generation of
+XRISM exposure maps; `xaexpmap` - just as we did with image generation in
+[the last subsection](#running-image-generation), we have set up a wrapper function
+for this task in the ['Global Setup: Functions'](#functions) section near the beginning
+of this notebook, allowing us to easily run generation of different exposure maps in
+parallel.
+
+There are two `xaexpmap` configuration options which control how the
+attitude (essentially where the telescope is pointing) of XRISM over the course of
+the observation is binned spatially. These bins ('off-axis wedges' as the
+[`xaexpmap` documentation](https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/help/xaexpmap.html)
+describes them) are where the initial 'time intervals' of observation coverage are calculated:
+- **Radial Delta** - Passed to `xaexpmap` as `delta`. Radial increment (in arcmin) for the annular grid for which the attitude histogram will be calculated. The annuli are centered on the optical axis (off-axis angle = 0), and the central circle has a radius equal to `delta`.
+- **Number of azimuthal bins** - Passed to `xaexpmap` as `numphi`. Number of azimuth (phi) bins in the first annular region over which attitude histogram bins will be calculated (i.e., this annular region lies between `delta` and 2*`delta` arcmin from the center of the annuli). The zeroth annular region is a full circle of radius `delta` and the nth annular region has an outer radius of (n+1)*`delta`, and `numphi`*n azimuthal bins.
+
+The documentation for `xaexpmap` notes that you can force the attitude histogram to have a single bin, by choosing a radial delta that is much larger than any expected attitude variation during an observation.
+
+We choose to create exposure maps from only one attitude histogram bin, by passing a large radial delta and requiring a single azimuthal bin:
 
 ```{code-cell} python
 expmap_rad_delta = Quantity(20, "arcmin")
