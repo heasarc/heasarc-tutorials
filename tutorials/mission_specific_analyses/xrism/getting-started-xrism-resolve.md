@@ -3265,11 +3265,11 @@ spec_plot_data = {
 }
 ```
 
-You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/finding_relevant_heasarc_catalog>`' tutorial useful.
+You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/pyxspec-basics>`' tutorial useful.
 
 ```{seealso}
 THIS IS A CHECK TO SEE IF IT WORKS IN AN ADMONITION
-You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/finding_relevant_heasarc_catalog>`' tutorial useful.
+You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/pyxspec-basics>`' tutorial useful.
 ```
 
 ```{code-cell} python
@@ -3294,6 +3294,9 @@ plt.errorbar(
 
 plt.xscale("log")
 
+# Approximate valid energy range.
+plt.xlim(1.7, 12)
+
 ax = plt.gca()
 ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 ax.xaxis.set_minor_formatter(
@@ -3312,21 +3315,43 @@ plt.show()
 
 ### Constraining the continuum
 
-This simple demonstration is not meant to be a comprehensive guide to fitting high-resolution
-X-ray spectra, and the many pieces of work produced by the XRISM performance verification team
-contain much more sophisticated approaches applicable to a range of different source types.
+This is not meant to be a comprehensive guide to fitting high-resolution
+X-ray spectra. The many pieces of work produced by the XRISM performance verification team
+contain much more sophisticated approaches applicable to a range of different source types, and
+should be considered as a useful resource by anyone new to XRISM data.
 
-However, we will take a slightly more sophisticated approach than just fitting a single model
-and calling it a day.
+For instance, the XRISM-Resolve observations of our example source, NGC 1365, were carefully investigated
+by [Zaidouni F. et al. (2026)](https://ui.adsabs.harvard.edu/abs/arXiv:2601.00795). They used the
+SPEX X-ray spectral fitting package (rather than XSPEC) and modeled the partial covering absorption
+of this changing-look AGN, as well as the emission and continuum features, using various photo-ionization
+and absorption models.
+
+We will take a slightly more sophisticated approach than just fitting a single model
+and calling it a day, however. As the figure in [the previous section](#initial-visual-examination-of-the-spectrum)
+illustrates, the X-ray spectrum of NGC 1365 is relatively featureless outside of the Fe complex
+from ${\sim}6$ keV onwards.
+
+Clearly our final model is going to need to account for the obvious
+emission lines, but we might see an improvement in the constraints we can place on those emission
+lines if we can constrain and fix the continuum first.
+
+To achieve this goal, we will take the slightly crude approach of ignoring all
+data points between 6-8 keV, approximately where the main emission line features are. We also
+put lower (3 keV) and upper (10 keV) energy bounds on the data points considered for fitting, as the
+data appear very low signal-to-noise outside of these energies:
 
 ```{code-cell} python
 xs.AllData.ignore("bad")
 cur_sp.ignore("**-3. 6.-8. 10.0-**")
 ```
 
+We then set up a simple power law model:
+
 ```{code-cell} python
 pl_cont_mod = xs.Model("powerlaw")
 ```
+
+
 
 ```{code-cell} python
 xs.Fit.renorm()
@@ -3495,3 +3520,5 @@ Updated On: 2026-06-11
 [Alken P. et al. (2021) - _International Geomagnetic Reference Field: the thirteenth generation_](https://ui.adsabs.harvard.edu/abs/2021EP&S...73...49A)
 
 [Kaastra J. S. and Bleeker J. A. M. (2016) - _Optimal binning of X-ray spectra and response matrix design_](https://ui.adsabs.harvard.edu/abs/arXiv:1601.05309)
+
+[Zaidouni Fatima et al. (2026) - _XRISM Finds the Changing-look Active Galactic Nucleus NGC 1365 in an Extended Low State: A Dense, Highly Ionized Outflow Obscures the Central Source_](https://ui.adsabs.harvard.edu/abs/arXiv:2601.00795)
