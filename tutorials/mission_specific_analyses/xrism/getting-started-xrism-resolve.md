@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, College Park', 'XRISM GOF, NASA Goddard']
   website: https://www.astro.umd.edu/people/anna-ogorzalek
   orcid: 0000-0003-4504-2557
-date: '2026-06-04'
+date: '2026-06-11'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -531,10 +531,6 @@ def gen_xrism_resolve_expmap(
         oi=cur_obs_id, xrf=cur_filter, rd=radial_delta, npb=num_phi_bin
     )
 
-    # Create a temporary working directory
-    temp_work_dir = os.path.join(out_dir, "xaexpmap_{}".format(randint(0, int(1e8))))
-    os.makedirs(temp_work_dir)
-
     # Using dual contexts, one that moves us into the output directory for the
     #  duration, and another that creates a new set of HEASoft parameter files (so
     #  there are no clashes with other processes).
@@ -1032,7 +1028,7 @@ def plot_fit_spec(
     y_lims: Optional[Tuple[float, float]] = None,
     inst_name: Optional[str] = None,
     mod_expr: Optional[str] = None,
-    fig_size: Tuple[float] = None,
+    fig_size: Optional[Tuple[Union[float, int]]] = None,
 ):
     """
     A convenience function used to plot the spectrum, fitted model, and residuals, at
@@ -1057,11 +1053,11 @@ def plot_fit_spec(
         then the upper limit.
     :param str inst_name: Optionally, a mission/instrument name to add to the
         legend label given to the spectral data points.
-    :param bool stepped_model: Controls whether the fitted model is plotted as a
-        staircase (to match XSPEC's plotting style) or as a smooth line. Default is
-        True, resulting in a staircase.
     :param str mod_expr: Optionally, the 'expression' of the fitted model - to be
         added to its legend label.
+    :param Optional[Tuple[Union[float, int]]] fig_size: Optionally, a tuple controlling
+        the size of the figure producted by this function. Default is None, which
+        corresponds to a size of (7, 6).
     """
 
     # Some basic checks to make sure the plot data is in the right format
@@ -1078,7 +1074,7 @@ def plot_fit_spec(
     # Raise an error before we get started plotting if any entries are missing
     if any([en not in plot_data for en in req_ents]):
         raise KeyError(
-            f"Plot data must contain the following keys: f{', '.join(req_ents)}"
+            f"Plot data must contain the following keys: {', '.join(req_ents)}"
         )
 
     # Basic validity check on any axis limits
@@ -1526,7 +1522,7 @@ avail_xrism_obs = all_xrism_obs[public_times <= Time.now()]
 avail_xrism_obs
 ```
 
-Its also worth noting that _scheduled but not yet taken_ observations are also included
+It's also worth noting that _scheduled but not yet taken_ observations are also included
 in the XRISM master table, and the filtering we just performed will also exclude those
 cases.
 
@@ -1979,7 +1975,7 @@ grades (TYPE column in the event list) can be assigned to an event (the value in
 - **Mp (1)** – Mid-resolution primary
 - **Ms (2)** – Mid-resolution secondary
 - **Lp (3)** – Low-resolution primary
-- **Ls (4)** – Low-resolution primary
+- **Ls (4)** – Low-resolution secondary
 
 Other event grades can be assigned, but are less likely to be seen in science data:
 - **Bl (5)** – Baseline event (diagnostic)
@@ -2121,7 +2117,7 @@ up seeing, so if they are not excluded the net effective area of the Resolve spe
 responses could be in error by as much as a factor of $\sim2$.
 ```
 
-<span style="color:red>***Now need to talk about how we're going to handle this in the demonstration.***</span>
+<span style="color:red">***Now need to talk about how we're going to handle this in the demonstration.***</span>
 
 
 ### Pixel 27 of XRISM-Resolve is broken
@@ -2563,7 +2559,7 @@ cleaning. We will use two HEASoft tools to achieve this:
 #
 # hsp.maketime(infile=cur_ehk,
 #              outfile='testo-gti.fits',
-#              expr="CORTIME.lt.8",
+#              expr="CORTIME.gt.8",
 #              noprompt=True)
 ```
 
@@ -2597,7 +2593,7 @@ print((RSL_EV_PER_CHAN * pi_chan_limits).to("keV"))
 
 ```{important}
 The lower bound of XRISM-Resolve's effective energy range is currently limited to
-approximately **2 keV**, as the **gate valve** that protected the XRISM-Resolve instrument
+approximately **1.7 keV**, as the **gate valve** that protected the XRISM-Resolve instrument
 during launch failed to open. This gate valve is a highly effective absorber of low
 energy X-rays.
 ```
@@ -2625,7 +2621,9 @@ with mp.Pool(NUM_CORES) as p:
     sev_result = p.starmap(screen_xrism_resolve_evts, arg_combs)
 ```
 
-### Further considerations for spatially-resolved analyses
+### There are considerations for extended sources
+
+<span style="color:red">***THIS DOESN'T BELONG HERE, AND DOESN'T MATCH WHAT I ORIGINALLY THOUGHT I'D WRITE HERE***</span>
 
 The source we are using for our example, NGC 1365, is a point source. However, one of
 XRISM-Resolve's unique capabilities is that of performing **spatially resolved** very high energy
@@ -2682,7 +2680,7 @@ source flux from images**.
 
 If you are modifying this demonstration and wish to define which grades
 should be used, you may set the variable to a list of integer grade identifiers (e.g.
-`im_evt_grades = [0, 1]` for high resolution primary and high resolution secondary events).
+`im_evt_grades = [0, 1]` for high-resolution primary and medium-resolution primary events).
 
 ```{code-cell} python
 im_evt_grades = None
@@ -2758,6 +2756,12 @@ expmap_phi_bins = 1
 
 ### Running exposure map generation
 
+Now to run our exposure map generation, parallelizing over all relevant ObsIDs
+and X-ray filters – note that this will only produce a single exposure map for
+the default configuration of this demonstration notebook, as we selected a single
+ObsID and filter earlier on, though it will handle having multiple ObsIDs/filters
+selected.
+
 ```{code-cell} python
 arg_combs = [
     [
@@ -2776,6 +2780,14 @@ with mp.Pool(NUM_CORES) as p:
 ```
 
 ### Visualizing a new image
+
+Our final act of this section is to take a quick look at one of the XRISM-Resolve images
+that we just generated, with the pixel IDs overlaid on top. That's going to give us some
+context when we define the region file that we want to extract spectra from.
+
+Firstly, we load a just generated image into an XGA Image instance (just because there
+are useful inbuilt visualization capabilities). Which exact image we've selected isn't particularly
+important in this case.
 
 ```{code-cell} python
 cur_im_path = IM_PATH_TEMP.format(
@@ -2829,9 +2841,30 @@ plt.tight_layout()
 plt.show()
 ```
 
+So now we can easily find each pixel's ID, and from there decide whether to include
+or exclude it from our spectral extraction.
+
+
 ## 5. Generating new XRISM-Resolve spectra
 
+Generating and analyzing high-resolution X-ray spectra is the most likely reason for you
+to use XRISM-Resolve data, so the next data products we create are spectra and all the
+supporting files required for their analysis.
+
 ### Defining the extraction region/pixels
+
+As is the case for generation of spectra from any high-energy mission's data, the first
+decision we have to make is what spatial region the events used to create the spectrum
+are to be extracted from.
+
+In this demonstration we're only addressing the analysis of point sources, so we don't
+have to concern ourselves with splitting the observation of NGC 1365 into multiple
+spatial regions. Instead, we're going to make a simple 'global' spectrum by using
+events from **all valid pixels**.
+
+We define a list below that includes every valid pixel ID, excluding
+**pixel 12** [as it is a calibration pixel](#pixel-12-is-a-dedicated-calibration-pixel) and
+**pixel 27** [as it is broken](#pixel-27-of-xrism-resolve-is-broken).
 
 ```{code-cell} python
 chosen_pixels = [pix_id for pix_id in range(0, 36) if pix_id not in [12, 27]]
@@ -2839,6 +2872,18 @@ chosen_pixels
 ```
 
 ### Setting up region files
+
+We have defined a simple convenience function called `det_region_from_pixels` in the
+[Global Setup: Functions](#functions) section near the top of this notebook. As you
+may have gathered from its name, the function takes a list of XRISM-Resolve pixel IDs
+and uses them to produce a region file **in detector coordinates**, selecting every pixel
+specified.
+
+This is useful because HEASoft tool we use for spectral extraction wants
+the input region files to be in detector coordinates, and because there are so few
+pixels in the XRISM-Resolve array, we can often just look at a visualization (such as
+[was shown at the end of the last section](#visualizing-a-new-image)) and determine
+which pixel IDs we want to use.
 
 ```{code-cell} python
 chosen_pixel_det_reg_path = os.path.join(OUT_PATH, "chosen_pixel_detxy.reg")
@@ -3153,7 +3198,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Anna Ogorzałek, XRISM GOF Scientist.
 
-Updated On: 2026-06-04
+Updated On: 2026-06-11
 
 +++
 
