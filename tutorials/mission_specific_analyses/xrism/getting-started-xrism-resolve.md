@@ -3147,7 +3147,6 @@ In this case we select the 'optmin' binning technique, which implements the opti
 method described by [Kaastra J. S. and Bleeker J. A. M. (2016)](https://ui.adsabs.harvard.edu/abs/arXiv:1601.05309), while
 also including a requirement for a minimum number of counts per channel (10 in this case).
 
-
 ```{code-cell} python
 spec_group_type = "optmin"
 spec_group_scale = 10
@@ -3203,6 +3202,10 @@ spectra – or rather, spectrum, as even though the rest of the demonstration is
 to scale to the analysis of multiple observations/filters (we selected just one to
 make the tutorial faster), this section will only handle a single spectrum.
 
+```{code-cell} python
+chosen_grp_sp_path = grp_spec_paths[0]
+```
+
 As you might imagine, spectral analysis of XRISM-Resolve data can be considerably more
 complex than spectro-imaging CCD spectra. ***We defer a full exploration of more
 in-depth spectral analysis to future demonstration notebooks.***
@@ -3231,9 +3234,9 @@ PyXspec can take a long time, **even for the 'small' Resolve RMF** that
 it to take considerably longer to declare an XSPEC `Spectrum` instance when using the
 larger RMF sizes.
 
-```{code-cell} python
-chosen_grp_sp_path = grp_spec_paths[0]
-```
+You can see that we use the `chdir` context here to switch to the directory containing
+our chosen spectrum, then set up the PyXspec `Spectrum` instance. Once complete, the
+current working directory is then changed back to its original location.
 
 ```{code-cell} python
 xs.AllData.clear()
@@ -3242,7 +3245,79 @@ with contextlib.chdir(os.path.dirname(chosen_grp_sp_path)):
     cur_sp = xs.Spectrum(os.path.basename(chosen_grp_sp_path))
 ```
 
+### Initial visual examination of the spectrum
+
+It's always a good idea to examine the newly generated spectrum, just as a validity check, and
+to get an idea of what spectral features you have to work with/might find interesting.
+
+Here we use the PyXspec plot manager to set up the data arrays necessary for a visualization
+of the spectrum, prior to any models being fit or energy limits being applied. We then
+retrieve the relevant data from PyXspec and store it in a dictionary, for easy access later:
+
+```{code-cell} python
+xs.Plot("data")
+
+spec_plot_data = {
+    "energy": np.array(xs.Plot.x()),
+    "energy_delta": np.array(xs.Plot.xErr()),
+    "rate": np.array(xs.Plot.y()),
+    "rate_err": np.array(xs.Plot.yErr()),
+}
+```
+
+You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/finding_relevant_heasarc_catalog>`' tutorial useful.
+
+```{seealso}
+THIS IS A CHECK TO SEE IF IT WORKS IN AN ADMONITION
+You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/finding_relevant_heasarc_catalog>`' tutorial useful.
+```
+
+```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+plt.figure(figsize=(7, 4.5))
+plt.minorticks_on()
+plt.tick_params(which="both", direction="in", top=True, right=True)
+
+plt.errorbar(
+    spec_plot_data["energy"],
+    spec_plot_data["rate"],
+    xerr=spec_plot_data["energy_delta"],
+    yerr=spec_plot_data["rate_err"],
+    fmt="+",
+    color="navy",
+    label="XRISM-Resolve data",
+)
+
+plt.xscale("log")
+
+ax = plt.gca()
+ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+ax.xaxis.set_minor_formatter(
+    FuncFormatter(lambda inp, _: "{:g}".format(inp) if inp >= 1 else "")
+)
+
+plt.xlabel("Energy [keV]", fontsize=15)
+plt.ylabel(
+    r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+)
+
+plt.legend(fontsize=14)
+plt.tight_layout()
+plt.show()
+```
+
 ### Constraining the continuum
+
+This simple demonstration is not meant to be a comprehensive guide to fitting high-resolution
+X-ray spectra, and the many pieces of work produced by the XRISM performance verification team
+contain much more sophisticated approaches applicable to a range of different source types.
+
+However, we will take a slightly more sophisticated approach than just fitting a single model
+and calling it a day.
 
 ```{code-cell} python
 xs.AllData.ignore("bad")
