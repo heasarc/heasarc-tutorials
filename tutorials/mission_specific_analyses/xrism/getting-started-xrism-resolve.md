@@ -3209,6 +3209,12 @@ in-depth spectral analysis to future demonstration notebooks.***
 
 ### Configuring PyXspec
 
+Before we start using PyXspec in earnest, we configure some of its behaviors:
+- _xs.Plot.xAxis = "keV"_ – Ensures that the x-axis of any plot data we retrieve from PyXspec is in energy, rather than channel, units.
+- _xs.Fit.statMethod = "cstat"_ – Tells PyXspec to use the Cash statistic for model fits.
+- _xs.Fit.nIterations = 1000_ – Sets the maximum number of iterations during a model fit.
+- _xs.Fit.query = "no"_ – Disables PyXspec prompts asking whether to continue or not.
+
 ```{code-cell} python
 xs.Plot.xAxis = "keV"
 xs.Fit.statMethod = "cstat"
