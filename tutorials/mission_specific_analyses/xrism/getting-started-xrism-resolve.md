@@ -3265,11 +3265,10 @@ spec_plot_data = {
 }
 ```
 
-You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/pyxspec-basics>`' tutorial useful.
-
 ```{seealso}
-THIS IS A CHECK TO SEE IF IT WORKS IN AN ADMONITION
-You may find the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/pyxspec-basics>`' tutorial useful.
+For more information on the fundamentals of fitting models using PyXspec, we direct you
+to the '{doc}`PyXspec basics <../../useful_high_energy_tools/pyxspec/pyxspec-basics>`'
+tutorial.
 ```
 
 ```{code-cell} python
@@ -3295,7 +3294,7 @@ plt.errorbar(
 plt.xscale("log")
 
 # Approximate valid energy range.
-plt.xlim(1.7, 12)
+plt.xlim(1.7, 10)
 
 ax = plt.gca()
 ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
@@ -3308,7 +3307,7 @@ plt.ylabel(
     r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
 )
 
-plt.legend(fontsize=14)
+plt.legend(fontsize=14, loc="upper left")
 plt.tight_layout()
 plt.show()
 ```
@@ -3351,12 +3350,24 @@ We then set up a simple power law model:
 pl_cont_mod = xs.Model("powerlaw")
 ```
 
-
+Renormalize and fit it:
 
 ```{code-cell} python
 xs.Fit.renorm()
 xs.Fit.perform()
 ```
+
+Now we want to visually examine the quality of the fit. Just as we did in
+[the last subsection](#initial-visual-examination-of-the-spectrum), we extract the
+plotting data from PyXspec using `xs.Plot()`. Note that this time we are passing
+"data resid" rather than just "data", as we want to plot the fit residuals as well.
+
+The plotting data is stored in a dictionary, and then passed to the `plot_fit_spec()`
+convenience function implemented in the [Global Setup: Functions](#functions) section
+near the beginning of this notebook.
+
+Our visual inspection shows that the power seems to do an acceptable job of describing
+the continuum emission from NGC 1365:
 
 ```{code-cell} python
 ---
@@ -3385,6 +3396,9 @@ plot_fit_spec(
 )
 ```
 
+As we're going to use this fitted power law model as the basis for a more complex
+model, we read out and store the power law index and normalization:
+
 ```{code-cell} python
 pl_norm = pl_cont_mod.powerlaw.norm.values[0]
 pl_index = pl_cont_mod.powerlaw.PhoIndex.values[0]
@@ -3394,6 +3408,20 @@ print(pl_norm, pl_index)
 
 ### Adding Gaussian emission line model components
 
+Our final model will be a combination of the power law we constrained in
+[the last subsection](#constraining-the-continuum) and a series of three Gaussian
+emission components placed to empirically fall near the main emission lines we
+see in the Fe complex.
+
+This is a demonstration of how you might manually add emission components undescribed
+by your base models, rather than necessarily being how you should analyze a complex
+X-ray spectrum produced by an AGN like NGC 1365.
+
+Our first step is to undo the limits we placed on which channels should be used for
+fitting our model (remember that in the continuum-constraining subsection we ignored
+the entire Fe complex), and then re-add the lower (3 keV) and upper (10 keV) limits
+that we previously imposed:
+
 ```{code-cell} python
 # Resetting the noticed channels
 xs.AllData.notice("all")
@@ -3402,6 +3430,27 @@ xs.AllData.notice("all")
 xs.AllData.ignore("bad")
 cur_sp.ignore("**-3. 10.0-**")
 ```
+
+Now we've set up the spectrum data for our next fit, we have to get rid of the
+existing power law model and set up our new, more complicated, model.
+
+That process needs to start with us calling the `clear()` method of PyXspec's
+model manager class `AllModels`.
+
+From there we initialize a new model, made up of a powerlaw and three additive
+Gaussian emission components. We set the power law parameters (photon index and
+normalization) to the values we constrained in [the last subsection](#constraining-the-continuum),
+and then **freeze them** – PyXspec will not vary them during the next model fit.
+
+We then set up the three Gaussian emission components, giving them empirical starting
+energies based on an examination of the figure in the
+[initial spectrum visualization](#initial-visual-examination-of-the-spectrum) subsection. The
+line-broadening velocity dispersions are set in the same way.
+
+We also configure the line energy and dispersion parameters to have 'soft' minimum and
+maximum values, so that PyXspec will preferentially try to keep their parameters within
+those boundaries – this is to try and avoid the line models swapping places at any point
+during the fitting process:
 
 ```{code-cell} python
 xs.AllModels.clear()
@@ -3415,6 +3464,8 @@ pl_gauss_mod.powerlaw.PhoIndex.values = pl_index
 pl_gauss_mod.powerlaw.PhoIndex.frozen = True
 
 # First gaussian
+# When setting XSPEC parameter values, the list elements represent the following:
+#  [par value, fit delta step, par hard min, par soft min, par soft max, par hard max]
 pl_gauss_mod.gaussian.LineE.values = [6.38, 0.01, 0.0, 6.20, 6.50, 1000000.0]
 pl_gauss_mod.gaussian.Sigma.values = [0.02, 0.01, 0, 0.0, 0.1, 20.0]
 
