@@ -3363,7 +3363,7 @@ plotting data from PyXspec using `xs.Plot()`. Note that this time we are passing
 "data resid" rather than just "data", as we want to plot the fit residuals as well.
 
 The plotting data is stored in a dictionary, and then passed to the `plot_fit_spec()`
-convenience function implemented in the [Global Setup: Functions](#functions) section
+convenience function, `plot_fit_spec()`, implemented in the [Global Setup: Functions](#functions) section
 near the beginning of this notebook.
 
 Our visual inspection shows that the power seems to do an acceptable job of describing
@@ -3478,9 +3478,14 @@ pl_gauss_mod.gaussian_4.LineE.values = [7.05, 0.01, 0.0, 7, 7.1, 1000000.0]
 pl_gauss_mod.gaussian_4.Sigma.values = [0.02, 0.005, 0, 0.0, 0.05, 20.0]
 ```
 
+We can use the `show()` method of the model instance to make sure that all the parameter
+values were set correctly:
+
 ```{code-cell} python
 pl_gauss_mod.show()
 ```
+
+Then we can once again renormalize, and fit, the model:
 
 ```{code-cell} python
 xs.Fit.renorm()
@@ -3488,6 +3493,12 @@ xs.Fit.perform()
 ```
 
 ### Visualizing the final fit
+
+Finally, we can see what our final model looks like now we've fit it to the data. This
+process is identical to how we visualized the power law fit in
+[the last subsection](#constraining-the-continuum), but in this case we call
+the `plot_fit_spec()` function twice, the second time specifying lower and upper
+x-axis (energy) limits, so that we zoom-in on the Fe complex:
 
 ```{code-cell} python
 xs.Plot("data resid")
