@@ -484,19 +484,15 @@ jobs:
                 no_output_timeout: 30m
                 command: |
 
-                  # Check if we need to have the XSPEC models available for the notebooks that are due to be built
-                  [ "$RUN_XSPEC" = "true" ] || exit 0
-
-                  echo "Attempting to restore the XSPEC-models cache"
-                  circleci-agent cache restore --key "v2026-jan-xspec-models-"
+                  micromamba create -p ~/user-envs/xspec-mod-fetch-env -y -c conda-forge python=3.12 rsync
 
                   # Make sure that jq is installed
-                  micromamba -p ~/user-envs/rsync-env install -y -c conda-forge jq
+                  micromamba -p ~/user-envs/xspec-mod-fetch-env install -y -c conda-forge jq
 
 
-                  CONDA_OUTPUT=$(micromamba -p ~/user-envs/rsync-env install -c https://heasarc.gsfc.nasa.gov/FTP/software/conda/ --dry-run --json xspec-data=$XSPEC_DATA_VER 2>/dev/null)
+                  CONDA_OUTPUT=$(micromamba -p ~/user-envs/xspec-mod-fetch-env install -c https://heasarc.gsfc.nasa.gov/FTP/software/conda/ --dry-run --json xspec-data=$XSPEC_DATA_VER 2>/dev/null)
 
-                  XSPEC_DATA_LINK=$(echo "$CONDA_OUTPUT" | micromamba -p ~/user-envs/rsync-env run jq -r '.actions.LINK[] | select(.name == "xspec-data") | .url')
+                  XSPEC_DATA_LINK=$(echo "$CONDA_OUTPUT" | micromamba -p ~/user-envs/xspec-mod-fetch-env run jq -r '.actions.LINK[] | select(.name == "xspec-data") | .url')
 
                   # Show the XSPEC data version and link
                   echo $XSPEC_DATA_VER
@@ -522,13 +518,13 @@ jobs:
                     wget $XSPEC_DATA_LINK -O xspec-data.zip
 
                     # Install unzip, as the *.conda file we just downloaded is a zip archive
-                    micromamba -p ~/user-envs/rsync-env install -y -c conda-forge unzip zstd
+                    micromamba -p ~/user-envs/xspec-mod-fetch-env install -y -c conda-forge unzip zstd
                     # Unzip the archive
-                    micromamba -p ~/user-envs/rsync-env run unzip xspec-data.zip
+                    micromamba -p ~/user-envs/xspec-mod-fetch-env run unzip xspec-data.zip
 
                     # Untar and decompress the part of the *.conda package file that contains the package contents, as
                     #  opposed to the metadata.
-                    micromamba -p ~/user-envs/rsync-env run tar --use-compress-program=unzstd -xvf pkg-xspec-data-*.tar.zst
+                    micromamba -p ~/user-envs/xspec-mod-fetch-env run tar --use-compress-program=unzstd -xvf pkg-xspec-data-*.tar.zst
 
                     # Move the extracted files into the xspec-data directory, going up a level
                     #  because we cd-ed into the temporary working directory
