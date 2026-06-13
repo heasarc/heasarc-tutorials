@@ -21,6 +21,11 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: True
 title: Getting started with ROSAT All Sky Survey data
 ---
 
@@ -613,7 +618,7 @@ returned catalog:
 cat_search = viz.find_catalogs(["CARMENES", "input"])
 
 # Return is an ordered dictionary, with bibcode keys and catalog object values
-for cur_bibcode, cur_cat in viz.find_catalogs(["CARMENES", "input"]).items():
+for cur_bibcode, cur_cat in cat_search.items():
     print(cur_bibcode, "-", cur_cat.description)
 ```
 
