@@ -650,10 +650,10 @@ analyze the data, rather than rely solely on catalogs, may help you with your ow
   warn(&quot;SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such &quot;
 /opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you&#39;ve used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
   from .utils import xga_conf, CENSUS, OUTPUT, NUM_CORES, XGA_EXTRACT, BASE_XSPEC_SCRIPT, CROSS_ARF_XSPEC_SCRIPT, \
-/opt/envs/heasoft/lib/python3.12/site-packages/xga/products/relation.py:12: DeprecationWarning: `scipy.odr` is deprecated as of version 1.17.0 and will be removed in SciPy 1.19.0. Please use `https://pypi.org/project/odrpack/` instead.
-  import scipy.odr as odr
-/opt/envs/heasoft/lib/python3.12/site-packages/xga/products/relation.py:12: DeprecationWarning: `scipy.odr` is deprecated as of version 1.17.0 and will be removed in SciPy 1.19.0. Please use `https://pypi.org/project/odrpack/` instead.
-  import scipy.odr as odr
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/utils.py:619: UserWarning: SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such all functions in xga.sas will not work.
+  warn(&quot;SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such &quot;
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you&#39;ve used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
+  from .utils import xga_conf, CENSUS, OUTPUT, NUM_CORES, XGA_EXTRACT, BASE_XSPEC_SCRIPT, CROSS_ARF_XSPEC_SCRIPT, \
 </pre></div>
 </div>
 </div>
@@ -1142,7 +1142,7 @@ well as the VizieR-standard decimal degree RA and Dec values):</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;astroquery.vizier.core.VizierClass at 0x76a5f8948890&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;astroquery.vizier.core.VizierClass at 0x7e4b515f1a30&gt;
 </pre></div>
 </div>
 </div>
@@ -1158,7 +1158,7 @@ returned catalog:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_search</span> <span class="o">=</span> <span class="n">viz</span><span class="o">.</span><span class="n">find_catalogs</span><span class="p">([</span><span class="s2">&quot;CARMENES&quot;</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">])</span>
 
 <span class="c1"># Return is an ordered dictionary, with bibcode keys and catalog object values</span>
-<span class="k">for</span> <span class="n">cur_bibcode</span><span class="p">,</span> <span class="n">cur_cat</span> <span class="ow">in</span> <span class="n">viz</span><span class="o">.</span><span class="n">find_catalogs</span><span class="p">([</span><span class="s2">&quot;CARMENES&quot;</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">cur_bibcode</span><span class="p">,</span> <span class="n">cur_cat</span> <span class="ow">in</span> <span class="n">cat_search</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">cur_bibcode</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">cur_cat</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1212,7 +1212,7 @@ catalog.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=753</i>
-<table id="table130455215294272" class="table-striped table-bordered table-condensed">
+<table id="table138869335551840" class="table-striped table-bordered table-condensed">
 <thead><tr><th>_RAJ2000</th><th>_DEJ2000</th><th>recno</th><th>No</th><th>Karmn</th><th>Name</th><th>Gl/GJ</th><th>RAJ2000</th><th>DEJ2000</th><th>Jmag</th><th>Date</th><th>Nexp</th><th>texp</th><th>Nexp2</th><th>texp2</th><th>PC1</th><th>TiO2</th><th>TiO5</th><th>VO</th><th>Col-M</th><th>CaH2</th><th>CaH3</th><th>zeta</th><th>pEWa</th><th>e_pEWa</th><th>E_pEWa</th><th>SpTl</th><th>r_SpTl</th><th>l_SpTb</th><th>SpTb</th><th>l_SpTc</th><th>SpTc</th><th>SpT2</th><th>SpT5</th><th>SpTP</th><th>SpTR</th><th>SpTC</th><th>l_SpT</th><th>SpT</th><th>Simbad</th></tr></thead>
 <thead><tr><th>deg</th><th>deg</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>mag</th><th></th><th></th><th>s</th><th></th><th>s</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>0.1 nm</th><th>0.1 nm</th><th>0.1 nm</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>float64</th><th>float64</th><th>int32</th><th>int16</th><th>str13</th><th>str23</th><th>str8</th><th>str11</th><th>str11</th><th>float32</th><th>str10</th><th>uint8</th><th>float32</th><th>uint8</th><th>int16</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>str15</th><th>str16</th><th>str2</th><th>float32</th><th>str2</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>str1</th><th>str7</th><th>str6</th></tr></thead>
@@ -1421,7 +1421,7 @@ argument must match the name of the table in the query
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=83</i>
-<table id="table130455211906576" class="table-striped table-bordered table-condensed">
+<table id="table138863042054528" class="table-striped table-bordered table-condensed">
 <thead><tr><th>rasscat___row</th><th>rasscat_entry_number</th><th>rasscat_name</th><th>rasscat_skyfield_number</th><th>rasscat_skyfield_source_number</th><th>rasscat_detection_likelihood</th><th>rasscat_counts</th><th>rasscat_counts_error</th><th>rasscat_count_rate</th><th>rasscat_count_rate_error</th><th>rasscat_exposure</th><th>rasscat_ra</th><th>rasscat_dec</th><th>rasscat_lii</th><th>rasscat_bii</th><th>rasscat_lambda</th><th>rasscat_beta</th><th>rasscat_source_extent</th><th>rasscat_source_extent_error</th><th>rasscat_source_extent_prob</th><th>rasscat_hardness_ratio_1</th><th>rasscat_hardness_ratio_1_error</th><th>rasscat_hardness_ratio_2</th><th>rasscat_hardness_ratio_2_error</th><th>rasscat_unique_flag</th><th>rasscat_extended_region_flag</th><th>rasscat_nearby_src_det_flag</th><th>rasscat_source_quality_flag</th><th>rasscat_max_amplitude</th><th>rasscat_mean_count_rate</th><th>rasscat_mean_count_rate_error</th><th>rasscat_lc_counts</th><th>rasscat_min_count_rate</th><th>rasscat_min_count_rate_error</th><th>rasscat_max_count_rate</th><th>rasscat_max_count_rate_error</th><th>rasscat_lc_chi2</th><th>rasscat_excess_variance</th><th>rasscat_excess_variance_error</th><th>rasscat_excess_variance_sigma</th><th>rasscat_nh_gal</th><th>rasscat_plaw_nh</th><th>rasscat_plaw_nh_error</th><th>rasscat_plaw_norm</th><th>rasscat_plaw_norm_error</th><th>rasscat_plaw_photon_index</th><th>rasscat_plaw_photon_index_error</th><th>rasscat_plaw_count_rate</th><th>rasscat_plaw_flux</th><th>rasscat_plaw_chi2_reduced</th><th>rasscat_plaw_chi2</th><th>rasscat_plaw_number_data_pts</th><th>rasscat_plaw_dof</th><th>rasscat_mekal_nh</th><th>rasscat_mekal_nh_error</th><th>rasscat_mekal_norm</th><th>rasscat_mekal_norm_error</th><th>rasscat_mekal_temperature</th><th>rasscat_mekal_temperature_error</th><th>rasscat_mekal_count_rate</th><th>rasscat_mekal_flux</th><th>rasscat_mekal_chi2_reduced</th><th>rasscat_mekal_chi2</th><th>rasscat_mekal_number_data_pts</th><th>rasscat_mekal_dof</th><th>rasscat_bb_nh</th><th>rasscat_bb_nh_error</th><th>rasscat_bb_norm</th><th>rasscat_bb_norm_error</th><th>rasscat_bb_temperature</th><th>rasscat_bb_temperature_error</th><th>rasscat_bb_count_rate</th><th>rasscat_bb_flux</th><th>rasscat_bb_chi2_reduced</th><th>rasscat_bb_chi2</th><th>rasscat_bb_number_data_pts</th><th>rasscat_bb_dof</th><th>rasscat_x_pixel</th><th>rasscat_x_pixel_error</th><th>rasscat_y_pixel</th><th>rasscat_y_pixel_error</th><th>rasscat_x_sky_pixel</th><th>rasscat_y_sky_pixel</th><th>rasscat_extraction_radius</th><th>rasscat_extraction_radius_frac</th><th>rasscat_total_photons</th><th>rasscat_bkg_in_extr_reg</th><th>rasscat_vignetting_factor</th><th>rasscat_remarks</th><th>rasscat_band_a_tot_counts</th><th>rasscat_band_b_tot_counts</th><th>rasscat_band_c_tot_counts</th><th>rasscat_band_d_tot_counts</th><th>rasscat_band_a_bkg_counts</th><th>rasscat_band_b_bkg_counts</th><th>rasscat_band_c_bkg_counts</th><th>rasscat_band_d_bkg_counts</th><th>rasscat_remaining_bkg_area</th><th>rasscat_band_a_counts</th><th>rasscat_band_b_counts</th><th>rasscat_band_c_counts</th><th>rasscat_band_d_counts</th><th>rasscat_xmmsl1_number_ctrprts</th><th>rasscat_xmmsl1_nearest</th><th>rasscat_xmmsl1_separation</th><th>rasscat_xmmsl1_name</th><th>rasscat_xmmsl1_ra</th><th>rasscat_xmmsl1_dec</th><th>rasscat_xmmsl1_bb_count_rate</th><th>rasscat_xmmsl1_bb_count_rate_err</th><th>rasscat_xmmsl1_sb_count_rate</th><th>rasscat_xmmsl1_sb_count_rate_err</th><th>rasscat_threexmm_number_ctrprts</th><th>rasscat_threexmm_nearest</th><th>rasscat_threexmm_separation</th><th>rasscat_threexmm_name</th><th>rasscat_threexmm_ra</th><th>rasscat_threexmm_dec</th><th>rasscat_threexmm_count_rate</th><th>rasscat_threexmm_count_rate_err</th><th>rasscat_threexmm_flux</th><th>rasscat_threexmm_flux_error</th><th>rasscat_tworxp_number_ctrprts</th><th>rasscat_tworxp_nearest</th><th>rasscat_tworxp_separation</th><th>rasscat_tworxp_name</th><th>rasscat_tworxp_ra</th><th>rasscat_tworxp_dec</th><th>rasscat_tworxp_count_rate</th><th>rasscat_tworxp_count_rate_error</th><th>rasscat_tworxp_exposure</th><th>rasscat_tworxp_obsid</th><th>rasscat_onerxs_number_ctrprts</th><th>rasscat_onerxs_nearest</th><th>rasscat_onerxs_separation</th><th>rasscat_onerxs_name</th><th>rasscat_onerxs_ra</th><th>rasscat_onerxs_dec</th><th>rasscat_onerxs_count_rate</th><th>rasscat_onerxs_count_rate_error</th><th>rasscat_onerxs_counts</th><th>rasscat_onerxs_counts_error</th><th>rasscat_onerxs_det_likelihood</th><th>rasscat_onerxs_exposure</th><th>rasscat_onerxs_hr_1</th><th>rasscat_onerxs_hr_1_error</th><th>rasscat_onerxs_hr_2</th><th>rasscat_onerxs_hr_2_error</th><th>rasscat_veron_number_ctrprts</th><th>rasscat_veron_nearest</th><th>rasscat_veron_separation</th><th>rasscat_veron_name</th><th>rasscat_veron_type</th><th>rasscat_veron_vmag</th><th>rasscat_veron_redshift</th><th>rasscat_veron_source_number</th><th>rasscat_veron_ra</th><th>rasscat_veron_dec</th><th>rasscat_tycho2_number_ctrprts</th><th>rasscat_tycho2_nearest</th><th>rasscat_tycho2_separation</th><th>rasscat_tycho2_ra</th><th>rasscat_tycho2_dec</th><th>rasscat_tycho2_source_number</th><th>rasscat_tycho2_vmag</th><th>rasscat_tycho2_bmag</th><th>rasscat_tycho2_tyc1_number</th><th>rasscat_tycho2_tyc2_number</th><th>rasscat_tycho2_tyc3_number</th><th>rasscat_bsc_number_ctrprts</th><th>rasscat_bsc_nearest</th><th>rasscat_bsc_separation</th><th>rasscat_bsc_ra</th><th>rasscat_bsc_dec</th><th>rasscat_bsc_vmag</th><th>rasscat_bsc_spect_type</th><th>rasscat_bsc_source_number</th><th>rasscat_hd_source_number</th><th>rasscat_hmxb_number_ctrprts</th><th>rasscat_hmxb_nearest</th><th>rasscat_hmxb_separation</th><th>rasscat_hmxb_name</th><th>rasscat_hmxb_alt_name</th><th>rasscat_hmxb_ra</th><th>rasscat_hmxb_dec</th><th>rasscat_hmxb_vmag</th><th>rasscat_lmxb_number_ctrprts</th><th>rasscat_lmxb_nearest</th><th>rasscat_lmxb_separation</th><th>rasscat_lmxb_name</th><th>rasscat_lmxb_alt_name</th><th>rasscat_lmxb_ra</th><th>rasscat_lmxb_dec</th><th>rasscat_lmxb_vmag</th><th>rasscat_atnf_number_ctrprts</th><th>rasscat_atnf_nearest</th><th>rasscat_atnf_separation</th><th>rasscat_atnf_name</th><th>rasscat_atnf_ra</th><th>rasscat_atnf_dec</th><th>rasscat_atnf_pulsar_type</th><th>rasscat_atnf_pulse_period</th><th>rasscat_fuhr_number_ctrprts</th><th>rasscat_fuhr_nearest</th><th>rasscat_fuhr_separation</th><th>rasscat_fuhr_name</th><th>rasscat_fuhr_ra</th><th>rasscat_fuhr_dec</th><th>rasscat_fuhr_source_number</th><th>rasscat_onesxps_number_ctrprts</th><th>rasscat_onesxps_nearest</th><th>rasscat_onesxps_separation</th><th>rasscat_onesxps_ra</th><th>rasscat_onesxps_dec</th><th>rasscat_onesxps_exposure</th><th>rasscat_onesxps_det_flag</th><th>rasscat_onesxps_total_det_flag</th><th>rasscat_onesxps_soft_det_flag</th><th>rasscat_onesxps_medium_det_flag</th><th>rasscat_onesxps_hard_det_flag</th><th>rasscat_onesxps_source_number</th><th>rasscat_onesxps_count_rate</th><th>rasscat_onesxps_count_rate_error</th><th>rasscat_onerxh_number_ctrprts</th><th>rasscat_onerxh_nearest</th><th>rasscat_onerxh_separation</th><th>rasscat_onerxh_name</th><th>rasscat_onerxh_ra</th><th>rasscat_onerxh_dec</th><th>rasscat_onerxh_count_rate</th><th>rasscat_onerxh_count_rate_error</th><th>rasscat_onerxh_exposure</th><th>rasscat_onerxh_snr</th><th>rasscat_flem_number_ctrprts</th><th>rasscat_flem_nearest</th><th>rasscat_flem_separation</th><th>rasscat_flem_name</th><th>rasscat_flem_ra</th><th>rasscat_flem_dec</th><th>rasscat_flem_type</th><th>rasscat_flem_wfc_detection_flag</th><th>rasscat_flem_count_rate</th><th>rasscat_flem_count_rate_error</th><th>rasscat_wdcat_number_ctrprts</th><th>rasscat_wdcat_nearest</th><th>rasscat_wdcat_separation</th><th>rasscat_wdcat_name</th><th>rasscat_wdcat_ra</th><th>rasscat_wdcat_dec</th><th>rasscat_wdcat_vmag</th><th>rasscat_wdcat_vsphot</th><th>rasscat_sdss_number_ctrprts</th><th>rasscat_sdss_nearest</th><th>rasscat_sdss_separation</th><th>rasscat_sdss_name</th><th>rasscat_sdss_ra</th><th>rasscat_sdss_dec</th><th>rasscat_sdss_lambda</th><th>rasscat_sdss_beta</th><th>rasscat_tworxs_number_ctrprts</th><th>rasscat_tworxs_nearest_src_num</th><th>rasscat_tworxs_nearest_src_index</th><th>rasscat_tworxs_separation</th><th>rasscat_tworxs_skyfield_number</th><th>rasscat_tworxs_skyfield_src_num</th><th>rasscat_tworxs_det_likelihood</th><th>rasscat_tworxs_count_rate</th><th>rasscat_tworxs_ra</th><th>rasscat_tworxs_dec</th><th>rasscat_tworxs_subfield_det_cell</th><th>rasscat_tworxs_nearby_flag</th><th>rasscat_tworxs_selected_bkg</th><th>rasscat_tworxs_x_pixel_sky_bkg1</th><th>rasscat_tworxs_y_pixel_sky_bkg1</th><th>rasscat_tworxs_x_pixel_sky_bkg2</th><th>rasscat_tworxs_y_pixel_sky_bkg2</th><th>rasscat_onerxs_bkg_count_rate</th><th>rasscat_tworxs_bkg_count_rate</th><th>rasscat_var_flag</th><th>rasscat_count_rate_6s</th><th>rasscat_count_rate_6s_error</th><th>rasscat_excess_var_6s</th><th>rasscat_excess_var_6s_error</th><th>rasscat_number_pts_in_lc</th><th>rasscat_number_pts_lessthan_6s</th><th>rasscat_number_pts_lessthan_1s</th><th>rasscat_number_pts_gtrthan_6s</th><th>rasscat_min_count_rate_6s</th><th>rasscat_max_count_rate_6s</th><th>rasscat_min_count_rate_6s_error</th><th>rasscat_max_count_rate_6s_error</th><th>rasscat_counts_notused_6</th><th>rasscat_excess_var_lessthan_6</th><th>rasscat_sum_count_rate_sigma</th><th>rasscat_spect_plot_flag</th><th>rasscat_lc_plot_flag</th><th>rasscat_clock_time</th><th>rasscat_clock_end_time</th><th>rasscat_time</th><th>rasscat_end_time</th><th>rasscat___x_ra_dec</th><th>rasscat___y_ra_dec</th><th>rasscat___z_ra_dec</th><th>carm__raj2000</th><th>carm__dej2000</th><th>carm_recno</th><th>carm_no</th><th>carm_karmn</th><th>carm_name</th><th>carm_gl_gj</th><th>carm_jmag</th><th>carm_date</th><th>carm_nexp</th><th>carm_texp</th><th>carm_nexp2</th><th>carm_texp2</th><th>carm_pc1</th><th>carm_tio2</th><th>carm_tio5</th><th>carm_vo</th><th>carm_col_m</th><th>carm_cah2</th><th>carm_cah3</th><th>carm_zeta</th><th>carm_pewa</th><th>carm_pewa_errmi</th><th>carm_pewa_errpl</th><th>carm_sptl</th><th>carm_r_sptl</th><th>carm_l_sptb</th><th>carm_sptb</th><th>carm_l_sptc</th><th>carm_sptc</th><th>carm_spt2</th><th>carm_spt5</th><th>carm_sptp</th><th>carm_sptr</th><th>carm_sptcolor</th><th>carm_l_spt</th><th>carm_spt</th><th>carm_simbad</th><th>carm_id_name</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th></th><th></th><th></th><th>ct</th><th>ct</th><th>ct / s</th><th>ct / s</th><th>s</th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>pix</th><th>pix</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>ct / s</th><th>ct / s</th><th>ct</th><th>ct / s</th><th>ct / s</th><th>ct / s</th><th>ct / s</th><th></th><th></th><th></th><th>sigma</th><th>1 / cm2</th><th>1 / cm2</th><th>1 / cm2</th><th></th><th></th><th></th><th></th><th>ct / s</th><th>erg/s/cm^2</th><th></th><th></th><th></th><th></th><th>1 / cm2</th><th>1 / cm2</th><th></th><th></th><th></th><th></th><th>ct / s</th><th>erg/s/cm^2</th><th></th><th></th><th></th><th></th><th>1 / cm2</th><th>1 / cm2</th><th></th><th></th><th></th><th></th><th>ct / s</th><th>erg/s/cm^2</th><th></th><th></th><th></th><th></th><th>pix</th><th>pix</th><th>pix</th><th>pix</th><th>pix</th><th>pix</th><th>pix</th><th></th><th></th><th>1 / pix</th><th></th><th></th><th>ct</th><th>ct</th><th>ct</th><th>ct</th><th>ct</th><th>ct</th><th>ct</th><th>ct</th><th>arcmin2</th><th>ct</th><th>ct</th><th>ct</th><th>ct</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th>ct / s</th><th>ct / s</th><th>c / s</th><th>c / s</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th>ct / s</th><th>ct / s</th><th>erg/s/cm^2</th><th>erg/s/cm^2</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th>ct / s</th><th>ct / s</th><th>s</th><th></th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th>ct / s</th><th>ct / s</th><th></th><th></th><th></th><th>s</th><th></th><th></th><th></th><th></th><th></th><th></th><th>arcsec</th><th></th><th></th><th>mag</th><th></th><th></th><th>deg</th><th>deg</th><th></th><th></th><th>arcsec</th><th>deg</th><th>deg</th><th></th><th>mag</th><th>mag</th><th></th><th></th><th></th><th></th><th></th><th>arcsec</th><th>deg</th><th>deg</th><th>mag</th><th></th><th></th><th></th><th></th><th></th><th>arcsec</th><th></th><th></th><th>deg</th><th>deg</th><th>mag</th><th></th><th></th><th>arcsec</th><th></th><th></th><th>deg</th><th>deg</th><th>mag</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th></th><th>s</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th></th><th></th><th></th><th>arcsec</th><th>deg</th><th>deg</th><th>s</th><th></th><th></th><th></th><th></th><th></th><th></th><th>ct / s</th><th>ct / s</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th>ct / s</th><th>ct / s</th><th>s</th><th></th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th></th><th></th><th>ct / s</th><th>ct / s</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th>mag</th><th>mag</th><th></th><th></th><th>arcsec</th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th></th><th></th><th></th><th>arcsec</th><th></th><th></th><th></th><th>ct / s</th><th>deg</th><th>deg</th><th></th><th></th><th></th><th>pix</th><th>pix</th><th>pix</th><th>pix</th><th>ct/s/arcmin^2</th><th>ct/s/arcmin^2</th><th></th><th>ct / s</th><th>ct / s</th><th></th><th></th><th></th><th></th><th></th><th></th><th>ct / s</th><th>ct / s</th><th>ct / s</th><th>ct / s</th><th></th><th></th><th></th><th></th><th></th><th>s</th><th>s</th><th>d</th><th>d</th><th></th><th></th><th></th><th>deg</th><th>deg</th><th></th><th></th><th></th><th></th><th></th><th>mag</th><th></th><th></th><th>s</th><th></th><th>s</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>0.1 nm</th><th>0.1 nm</th><th>0.1 nm</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>int32</th><th>int32</th><th>object</th><th>int32</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>int16</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>object</th><th>int16</th><th>int32</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>int32</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>int16</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>int16</th><th>int32</th><th>int16</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>object</th><th>object</th><th>int16</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>object</th><th>int16</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>int16</th><th>int16</th><th>int16</th><th>int16</th><th>int16</th><th>int32</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int32</th><th>int32</th><th>float64</th><th>int32</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>int16</th><th>object</th><th>object</th><th>object</th><th>float32</th><th>object</th><th>int32</th><th>float32</th><th>int32</th><th>int16</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>object</th><th>object</th><th>object</th><th>float32</th><th>object</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th><th>object</th><th>object</th><th>object</th><th>object</th></tr></thead>
@@ -2078,7 +2078,7 @@ return is converted to an Astropy <code class="docutils literal notranslate"><sp
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=79</i>
-<table id="table130455211840848" class="table-striped table-bordered table-condensed">
+<table id="table138861952823856" class="table-striped table-bordered table-condensed">
 <thead><tr><th>__row</th><th>seq_id</th><th>instrument</th><th>filter</th><th>site</th><th>exposure</th><th>fits_type</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>start_date</th><th>end_date</th><th>dist_date</th><th>public_date</th><th>ror</th><th>index_id</th><th>proc_rev</th><th>title</th><th>qa_number</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th></th><th></th><th>s</th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>d</th><th>d</th><th>d</th><th>d</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>object</th><th>object</th><th>object</th><th>int32</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>int32</th><th>int32</th><th>int32</th><th>int32</th><th>object</th><th>int16</th><th>object</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
@@ -2114,7 +2114,7 @@ return a table containing the links to the actual locations of the relevant data
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=79</i>
-<table id="table130455197315632" class="table-striped table-bordered table-condensed">
+<table id="table138861949067936" class="table-striped table-bordered table-condensed">
 <thead><tr><th>ID</th><th>access_url</th><th>sciserver</th><th>aws</th><th>content_length</th><th>error_message</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th></th><th>byte</th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>str55</th><th>str68</th><th>int64</th><th>object</th></tr></thead>
@@ -2509,7 +2509,7 @@ meant for scientific interpretation, merely visual inspection:</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/881a2418ab31a02906aff704d915feb61f112b63e1ba61654803e3750f0a1c7c.png" src="../../../_images/881a2418ab31a02906aff704d915feb61f112b63e1ba61654803e3750f0a1c7c.png" />
+<img alt="../../../_images/0117880d2ad6731cc5c435cc572d53aa5965250e23df9b4aff229d9eb8a8eafc.png" src="../../../_images/0117880d2ad6731cc5c435cc572d53aa5965250e23df9b4aff229d9eb8a8eafc.png" />
 </div>
 </div>
 <p>An important part of working with large datasets, be they of one object or
@@ -2583,89 +2583,89 @@ so that data won’t be required).</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;CARMENES-2&#39;: &lt;xga.products.misc.EventList at 0x76a5eaeae990&gt;,
- &#39;CARMENES-35&#39;: &lt;xga.products.misc.EventList at 0x76a5eae83860&gt;,
- &#39;CARMENES-37&#39;: &lt;xga.products.misc.EventList at 0x76a5ea5f5130&gt;,
- &#39;CARMENES-63&#39;: &lt;xga.products.misc.EventList at 0x76a5e8f0bf50&gt;,
- &#39;CARMENES-64&#39;: &lt;xga.products.misc.EventList at 0x76a5ea4b4830&gt;,
- &#39;CARMENES-67&#39;: &lt;xga.products.misc.EventList at 0x76a5e8cfd7f0&gt;,
- &#39;CARMENES-79&#39;: &lt;xga.products.misc.EventList at 0x76a5e8d4b920&gt;,
- &#39;CARMENES-103&#39;: &lt;xga.products.misc.EventList at 0x76a5ea6d4b60&gt;,
- &#39;CARMENES-118&#39;: &lt;xga.products.misc.EventList at 0x76a5ea24e000&gt;,
- &#39;CARMENES-139&#39;: &lt;xga.products.misc.EventList at 0x76a5f05fbc50&gt;,
- &#39;CARMENES-151&#39;: &lt;xga.products.misc.EventList at 0x76a5e964d490&gt;,
- &#39;CARMENES-155&#39;: &lt;xga.products.misc.EventList at 0x76a5ea7dc1a0&gt;,
- &#39;CARMENES-157&#39;: &lt;xga.products.misc.EventList at 0x76a5e9164620&gt;,
- &#39;CARMENES-161&#39;: &lt;xga.products.misc.EventList at 0x76a5e8fb0410&gt;,
- &#39;CARMENES-168&#39;: &lt;xga.products.misc.EventList at 0x76a5e8fd3fe0&gt;,
- &#39;CARMENES-169&#39;: &lt;xga.products.misc.EventList at 0x76a5ea46fe00&gt;,
- &#39;CARMENES-173&#39;: &lt;xga.products.misc.EventList at 0x76a5e90c84a0&gt;,
- &#39;CARMENES-174&#39;: &lt;xga.products.misc.EventList at 0x76a5e9485fa0&gt;,
- &#39;CARMENES-183&#39;: &lt;xga.products.misc.EventList at 0x76a5e8f3d010&gt;,
- &#39;CARMENES-196&#39;: &lt;xga.products.misc.EventList at 0x76a5eaa9f920&gt;,
- &#39;CARMENES-216&#39;: &lt;xga.products.misc.EventList at 0x76a5ea34a270&gt;,
- &#39;CARMENES-224&#39;: &lt;xga.products.misc.EventList at 0x76a5ea2bcbf0&gt;,
- &#39;CARMENES-226&#39;: &lt;xga.products.misc.EventList at 0x76a5e8f97fe0&gt;,
- &#39;CARMENES-233&#39;: &lt;xga.products.misc.EventList at 0x76a5e8d8dc40&gt;,
- &#39;CARMENES-234&#39;: &lt;xga.products.misc.EventList at 0x76a5f0606a20&gt;,
- &#39;CARMENES-266&#39;: &lt;xga.products.misc.EventList at 0x76a5ea0b9490&gt;,
- &#39;CARMENES-284&#39;: &lt;xga.products.misc.EventList at 0x76a5f060fa10&gt;,
- &#39;CARMENES-301&#39;: &lt;xga.products.misc.EventList at 0x76a5e8ec4f50&gt;,
- &#39;CARMENES-307&#39;: &lt;xga.products.misc.EventList at 0x76a5e97baf90&gt;,
- &#39;CARMENES-342&#39;: &lt;xga.products.misc.EventList at 0x76a5e8f76e10&gt;,
- &#39;CARMENES-355&#39;: &lt;xga.products.misc.EventList at 0x76a5e8da4050&gt;,
- &#39;CARMENES-358&#39;: &lt;xga.products.misc.EventList at 0x76a5e8da4260&gt;,
- &#39;CARMENES-359&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dc40e0&gt;,
- &#39;CARMENES-363&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dc8170&gt;,
- &#39;CARMENES-371&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dedcd0&gt;,
- &#39;CARMENES-377&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c44740&gt;,
- &#39;CARMENES-378&#39;: &lt;xga.products.misc.EventList at 0x76a5e8eafc80&gt;,
- &#39;CARMENES-387&#39;: &lt;xga.products.misc.EventList at 0x76a5e8d7c890&gt;,
- &#39;CARMENES-391&#39;: &lt;xga.products.misc.EventList at 0x76a5e908cf20&gt;,
- &#39;CARMENES-396&#39;: &lt;xga.products.misc.EventList at 0x76a5e95db9e0&gt;,
- &#39;CARMENES-399&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c4d760&gt;,
- &#39;CARMENES-411&#39;: &lt;xga.products.misc.EventList at 0x76a5ea7bc4d0&gt;,
- &#39;CARMENES-412&#39;: &lt;xga.products.misc.EventList at 0x76a5e8fb0350&gt;,
- &#39;CARMENES-413&#39;: &lt;xga.products.misc.EventList at 0x76a5e9484890&gt;,
- &#39;CARMENES-417&#39;: &lt;xga.products.misc.EventList at 0x76a5e94852b0&gt;,
- &#39;CARMENES-424&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c33f20&gt;,
- &#39;CARMENES-430&#39;: &lt;xga.products.misc.EventList at 0x76a5f0637590&gt;,
- &#39;CARMENES-456&#39;: &lt;xga.products.misc.EventList at 0x76a5e9384410&gt;,
- &#39;CARMENES-491&#39;: &lt;xga.products.misc.EventList at 0x76a5ea5c30b0&gt;,
- &#39;CARMENES-517&#39;: &lt;xga.products.misc.EventList at 0x76a5e8f09130&gt;,
- &#39;CARMENES-524&#39;: &lt;xga.products.misc.EventList at 0x76a5e90cbec0&gt;,
- &#39;CARMENES-526&#39;: &lt;xga.products.misc.EventList at 0x76a5e9415130&gt;,
- &#39;CARMENES-537&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c98d40&gt;,
- &#39;CARMENES-559&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dc61e0&gt;,
- &#39;CARMENES-561&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dc8320&gt;,
- &#39;CARMENES-563&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dec7d0&gt;,
- &#39;CARMENES-564&#39;: &lt;xga.products.misc.EventList at 0x76a5e8ca9160&gt;,
- &#39;CARMENES-578&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c714f0&gt;,
- &#39;CARMENES-585&#39;: &lt;xga.products.misc.EventList at 0x76a5e908f9e0&gt;,
- &#39;CARMENES-594&#39;: &lt;xga.products.misc.EventList at 0x76a5f1223ec0&gt;,
- &#39;CARMENES-603&#39;: &lt;xga.products.misc.EventList at 0x76a5e8d7c590&gt;,
- &#39;CARMENES-605&#39;: &lt;xga.products.misc.EventList at 0x76a5e8cba840&gt;,
- &#39;CARMENES-613&#39;: &lt;xga.products.misc.EventList at 0x76a5e8eacb30&gt;,
- &#39;CARMENES-618&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c4c110&gt;,
- &#39;CARMENES-630&#39;: &lt;xga.products.misc.EventList at 0x76a5e8cbb230&gt;,
- &#39;CARMENES-632&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c472f0&gt;,
- &#39;CARMENES-633&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c14110&gt;,
- &#39;CARMENES-641&#39;: &lt;xga.products.misc.EventList at 0x76a5f0620ad0&gt;,
- &#39;CARMENES-645&#39;: &lt;xga.products.misc.EventList at 0x76a5e8ce1b80&gt;,
- &#39;CARMENES-646&#39;: &lt;xga.products.misc.EventList at 0x76a5e8ccef90&gt;,
- &#39;CARMENES-669&#39;: &lt;xga.products.misc.EventList at 0x76a5f05fb530&gt;,
- &#39;CARMENES-675&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c30c20&gt;,
- &#39;CARMENES-678&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c98350&gt;,
- &#39;CARMENES-681&#39;: &lt;xga.products.misc.EventList at 0x76a5f060f140&gt;,
- &#39;CARMENES-694&#39;: &lt;xga.products.misc.EventList at 0x76a5f0606ba0&gt;,
- &#39;CARMENES-705&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c33560&gt;,
- &#39;CARMENES-708&#39;: &lt;xga.products.misc.EventList at 0x76a5e8ed5ac0&gt;,
- &#39;CARMENES-715&#39;: &lt;xga.products.misc.EventList at 0x76a5e8caa3c0&gt;,
- &#39;CARMENES-718&#39;: &lt;xga.products.misc.EventList at 0x76a5e8c721b0&gt;,
- &#39;CARMENES-724&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dc94c0&gt;,
- &#39;CARMENES-733&#39;: &lt;xga.products.misc.EventList at 0x76a5e8def980&gt;,
- &#39;CARMENES-744&#39;: &lt;xga.products.misc.EventList at 0x76a5e8dec260&gt;,
- &#39;CARMENES-749&#39;: &lt;xga.products.misc.EventList at 0x76a5e908d190&gt;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;CARMENES-2&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d8c23c0&gt;,
+ &#39;CARMENES-35&#39;: &lt;xga.products.misc.EventList at 0x7e4b3da88b60&gt;,
+ &#39;CARMENES-37&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d1cee70&gt;,
+ &#39;CARMENES-63&#39;: &lt;xga.products.misc.EventList at 0x7e4b454cb4a0&gt;,
+ &#39;CARMENES-64&#39;: &lt;xga.products.misc.EventList at 0x7e4b3dfe5ca0&gt;,
+ &#39;CARMENES-67&#39;: &lt;xga.products.misc.EventList at 0x7e4b3db8d790&gt;,
+ &#39;CARMENES-79&#39;: &lt;xga.products.misc.EventList at 0x7e4b45427b90&gt;,
+ &#39;CARMENES-103&#39;: &lt;xga.products.misc.EventList at 0x7e4b3f1b5ee0&gt;,
+ &#39;CARMENES-118&#39;: &lt;xga.products.misc.EventList at 0x7e4b3db34c20&gt;,
+ &#39;CARMENES-139&#39;: &lt;xga.products.misc.EventList at 0x7e4b3f07e060&gt;,
+ &#39;CARMENES-151&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d3ef560&gt;,
+ &#39;CARMENES-155&#39;: &lt;xga.products.misc.EventList at 0x7e4b3f233ad0&gt;,
+ &#39;CARMENES-157&#39;: &lt;xga.products.misc.EventList at 0x7e4b3f0b2870&gt;,
+ &#39;CARMENES-161&#39;: &lt;xga.products.misc.EventList at 0x7e4b44091010&gt;,
+ &#39;CARMENES-168&#39;: &lt;xga.products.misc.EventList at 0x7e4b3dd35250&gt;,
+ &#39;CARMENES-169&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d15efc0&gt;,
+ &#39;CARMENES-173&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d15fd10&gt;,
+ &#39;CARMENES-174&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d2dfcb0&gt;,
+ &#39;CARMENES-183&#39;: &lt;xga.products.misc.EventList at 0x7e4b3de5b950&gt;,
+ &#39;CARMENES-196&#39;: &lt;xga.products.misc.EventList at 0x7e4b44093260&gt;,
+ &#39;CARMENES-216&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d373590&gt;,
+ &#39;CARMENES-224&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d1cdf40&gt;,
+ &#39;CARMENES-226&#39;: &lt;xga.products.misc.EventList at 0x7e4b44c2da00&gt;,
+ &#39;CARMENES-233&#39;: &lt;xga.products.misc.EventList at 0x7e4b44093e00&gt;,
+ &#39;CARMENES-234&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d082330&gt;,
+ &#39;CARMENES-266&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d094050&gt;,
+ &#39;CARMENES-284&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d098140&gt;,
+ &#39;CARMENES-301&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d0c39b0&gt;,
+ &#39;CARMENES-307&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d0c0590&gt;,
+ &#39;CARMENES-342&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf10080&gt;,
+ &#39;CARMENES-355&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d6ef350&gt;,
+ &#39;CARMENES-358&#39;: &lt;xga.products.misc.EventList at 0x7e4b440b7110&gt;,
+ &#39;CARMENES-359&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d175880&gt;,
+ &#39;CARMENES-363&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d674e00&gt;,
+ &#39;CARMENES-371&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d675fd0&gt;,
+ &#39;CARMENES-377&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d030740&gt;,
+ &#39;CARMENES-378&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d54aa50&gt;,
+ &#39;CARMENES-387&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d1a8da0&gt;,
+ &#39;CARMENES-391&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d373cb0&gt;,
+ &#39;CARMENES-396&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf1df10&gt;,
+ &#39;CARMENES-399&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d3d5130&gt;,
+ &#39;CARMENES-411&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d061580&gt;,
+ &#39;CARMENES-412&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf35af0&gt;,
+ &#39;CARMENES-413&#39;: &lt;xga.products.misc.EventList at 0x7e4b44082000&gt;,
+ &#39;CARMENES-417&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d0601a0&gt;,
+ &#39;CARMENES-424&#39;: &lt;xga.products.misc.EventList at 0x7e4b44083380&gt;,
+ &#39;CARMENES-430&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d063a40&gt;,
+ &#39;CARMENES-456&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d09a720&gt;,
+ &#39;CARMENES-491&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d0c0470&gt;,
+ &#39;CARMENES-517&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf5d040&gt;,
+ &#39;CARMENES-524&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d094080&gt;,
+ &#39;CARMENES-526&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf4fa40&gt;,
+ &#39;CARMENES-537&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf08da0&gt;,
+ &#39;CARMENES-559&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d3b6060&gt;,
+ &#39;CARMENES-561&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf27bf0&gt;,
+ &#39;CARMENES-563&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d3ed400&gt;,
+ &#39;CARMENES-564&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf726c0&gt;,
+ &#39;CARMENES-578&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d39f1a0&gt;,
+ &#39;CARMENES-585&#39;: &lt;xga.products.misc.EventList at 0x7e4b440b7b60&gt;,
+ &#39;CARMENES-594&#39;: &lt;xga.products.misc.EventList at 0x7e4b44076600&gt;,
+ &#39;CARMENES-603&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d059940&gt;,
+ &#39;CARMENES-605&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d373680&gt;,
+ &#39;CARMENES-613&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf1e6c0&gt;,
+ &#39;CARMENES-618&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf8a8d0&gt;,
+ &#39;CARMENES-630&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d033920&gt;,
+ &#39;CARMENES-632&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cfafe60&gt;,
+ &#39;CARMENES-633&#39;: &lt;xga.products.misc.EventList at 0x7e4b44082570&gt;,
+ &#39;CARMENES-641&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf37230&gt;,
+ &#39;CARMENES-645&#39;: &lt;xga.products.misc.EventList at 0x7e4b440932c0&gt;,
+ &#39;CARMENES-646&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf379b0&gt;,
+ &#39;CARMENES-669&#39;: &lt;xga.products.misc.EventList at 0x7e4b440908c0&gt;,
+ &#39;CARMENES-675&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf4fc50&gt;,
+ &#39;CARMENES-678&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf0a510&gt;,
+ &#39;CARMENES-681&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cfc0f80&gt;,
+ &#39;CARMENES-694&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d0824e0&gt;,
+ &#39;CARMENES-705&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf5f290&gt;,
+ &#39;CARMENES-708&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf5fbf0&gt;,
+ &#39;CARMENES-715&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d0c0d70&gt;,
+ &#39;CARMENES-718&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d0c0140&gt;,
+ &#39;CARMENES-724&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf9a750&gt;,
+ &#39;CARMENES-733&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d39d7c0&gt;,
+ &#39;CARMENES-744&#39;: &lt;xga.products.misc.EventList at 0x7e4b3cf73710&gt;,
+ &#39;CARMENES-749&#39;: &lt;xga.products.misc.EventList at 0x7e4b3d39f170&gt;}
 </pre></div>
 </div>
 </div>
@@ -2824,7 +2824,7 @@ can easily run the generation of new images in parallel:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=938) is multi-threaded, use of fork() may lead to deadlocks in the child.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=875) is multi-threaded, use of fork() may lead to deadlocks in the child.
   self.pid = os.fork()
 </pre></div>
 </div>
@@ -2887,7 +2887,7 @@ corresponds to a different energy band, and each row to a different binning fact
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/074dc349a4e12a14942b828f4939882bd0713c30d15b7cd5706298c28a3fd02f.png" src="../../../_images/074dc349a4e12a14942b828f4939882bd0713c30d15b7cd5706298c28a3fd02f.png" />
+<img alt="../../../_images/d9cd60293525ccc21e7a4baf7f118921e0564518d63880d9b6d2aca7cb8f932b.png" src="../../../_images/d9cd60293525ccc21e7a4baf7f118921e0564518d63880d9b6d2aca7cb8f932b.png" />
 </div>
 </div>
 </section>
@@ -3149,7 +3149,7 @@ included in the file name), and the binning factor we <a class="reference intern
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=938) is multi-threaded, use of fork() may lead to deadlocks in the child.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=875) is multi-threaded, use of fork() may lead to deadlocks in the child.
   self.pid = os.fork()
 </pre></div>
 </div>
@@ -3630,65 +3630,8 @@ problems with a particular model parameter’s uncertainty calculation.</p>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PyXspec - loading RASS spectra:   0% 0/83 [00:00&lt;?, ?it/s]
 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:   2% 2/83 [00:00&lt;00:06, 11.62it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:   5% 4/83 [00:00&lt;00:06, 12.28it/s]or:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:   7% 6/83 [00:00&lt;00:06, 11.57it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Erro
-r:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  10% 8/83 [00:00&lt;00:07, 10.53it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  12% 10/83 [00:00&lt;00:06, 10.98it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  14% 12/83 [00:01&lt;00:06, 10.52it/s]
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  17% 14/83 [00:01&lt;00:06, 11.33it/s]
-:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  19% 16/83 [00:01&lt;00:05, 12.13it/s]
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  22% 18/83 [00:01&lt;00:05, 12.59it/s]
-PyXspec - loading RASS spectra:  24% 20/83 [00:01&lt;00:04, 13.07it/s]
-
+PyXspec - loading RASS spectra:   2% 2/83 [00:00&lt;00:06, 11.69it/s]
+:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
@@ -3696,274 +3639,177 @@ PyXspec - loading RASS spectra:  24% 20/83 [00:01&lt;00:04, 13.07it/s]
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
-PyXspec - loading RASS spectra:  27% 22/83 [00:01&lt;00:05, 10.38it/s]
+PyXspec - loading RASS spectra:   5% 4/83 [00:00&lt;00:06, 12.10it/s]
 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Err
+or:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  29% 24/83 [00:02&lt;00:05, 10.11it/s]
-
-PyXspec - loading RASS spectra:  31% 26/83 [00:02&lt;00:05, 10.88it/s]
-PyXspec - loading RASS spectra:  34% 28/83 [00:02&lt;00:04, 11.18it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  36% 30/83 [00:02&lt;00:04, 10.96it/s]
-PyXspec - loading RASS spectra:  39% 32/83 [00:02&lt;00:04, 11.63it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  41% 34/83 [00:03&lt;00:04, 11.42it/s]
-
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:
-PyXspec - loading RASS spectra:  43% 36/83 [00:03&lt;00:04, 11.43it/s]  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  46% 38/83 [00:03&lt;00:04, 10.99it/s]**XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  48% 40/83 [00:03&lt;00:04, 10.66it/s]
-Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  51% 42/83 [00:03&lt;00:03, 11.09it/s]C Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:   7% 6/83 [00:00&lt;00:06, 11.45it/s]
 
 ***XSP
 EC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  53% 44/83 [00:03&lt;00:03, 10.82it/s]
-***XSP
-EC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  55% 46/83 [00:04&lt;00:03, 11.11it/s]EC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  58% 48/83 [00:04&lt;00:02, 12.02it/s]
-
-PyXspec - loading RASS spectra:  60% 50/83 [00:04&lt;00:02, 11.46it/s]
-ror:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  10% 8/83 [00:00&lt;00:07, 10.50it/s]
+  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
+PyXspec - loading RASS spectra:  12% 10/83 [00:00&lt;00:06, 11.01it/s]Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit
+
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  63% 52/83 [00:04&lt;00:02, 11.84it/s]
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  14% 12/83 [00:01&lt;00:06, 10.62it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  17% 14/83 [00:01&lt;00:05, 11.55it/s]
+ variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  19% 16/83 [00:01&lt;00:05, 11.64it/s]
+
+***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:  22% 18/83 [00:01&lt;00:05, 12.23it/s]
+PyXspec - loading RASS spectra:  24% 20/83 [00:01&lt;00:04, 12.62it/s]
+
+***XSPEC Error:  No
+variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:  27% 22/83 [00:01&lt;00:05, 10.57it/s]Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC E
+rror:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  29% 24/83 [00:02&lt;00:05,  9.91it/s]
+
+PyXspec - loading RASS spectra:  31% 26/83 [00:02&lt;00:05, 10.61it/s]
+PyXspec - loading RASS spectra:  34% 28/83 [00:02&lt;00:05, 10.84it/s]
+
+PyXspec - loading RASS spectra:  36% 30/83 [00:02&lt;00:04, 10.71it/s]
+rror:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  39% 32/83 [00:02&lt;00:04, 11.37it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  41% 34/83 [00:03&lt;00:04, 11.29it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  43% 36/83 [00:03&lt;00:04, 11.40it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  46% 38/83 [00:03&lt;00:03, 11.28it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  48% 40/83 [00:03&lt;00:03, 11.08it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  51% 42/83 [00:03&lt;00:03, 11.47it/s]
 
 ***XSPEC Erro
 r:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  65% 54/83 [00:04&lt;00:02, 11.39it/s]
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  53% 44/83 [00:03&lt;00:03, 11.40it/s]
+***XSPEC Error:
+  No variable parameters for fit
 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  55% 46/83 [00:04&lt;00:03, 11.49it/s]
+PyXspec - loading RASS spectra:  58% 48/83 [00:04&lt;00:02, 12.39it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  60% 50/83 [00:04&lt;00:02, 11.98it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  63% 52/83 [00:04&lt;00:02, 12.49it/s]  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
-PyXspec - loading RASS spectra:  67% 56/83 [00:04&lt;00:02, 10.99it/s]rror:  No variable parameters for fit 
+***XSPEC Error:  No
+ variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  70% 58/83 [00:05&lt;00:02, 11.19it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  72% 60/83 [00:05&lt;00:02, 10.52it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  75% 62/83 [00:05&lt;00:02, 10.33it/s]
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  77% 64/83 [00:05&lt;00:02,  8.07it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  80% 66/83 [00:06&lt;00:01,  9.20it/s]
-
-PyXspec - loading RASS spectra:  82% 68/83 [00:06&lt;00:01,  9.80it/s]ariable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  84% 70/83 [00:06&lt;00:01, 10.78it/s]
-
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  87% 72/83 [00:06&lt;00:01, 10.74it/s]
-
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  89% 74/83 [00:06&lt;00:00, 10.38it/s]PEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  92% 76/83 [00:06&lt;00:00, 10.54it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  94% 78/83 [00:07&lt;00:00, 10.57it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  96% 80/83 [00:07&lt;00:00, 10.95it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  99% 82/83 [00:07&lt;00:00, 11.69it/s]
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra: 100% 83/83 [00:07&lt;00:00, 10.97it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:   2% 2/83 [00:00&lt;00:06, 11.62it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:   5% 4/83 [00:00&lt;00:06, 12.28it/s]or:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:   7% 6/83 [00:00&lt;00:06, 11.57it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Erro
-r:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  10% 8/83 [00:00&lt;00:07, 10.53it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  12% 10/83 [00:00&lt;00:06, 10.98it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  14% 12/83 [00:01&lt;00:06, 10.52it/s]
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  17% 14/83 [00:01&lt;00:06, 11.33it/s]
-:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  19% 16/83 [00:01&lt;00:05, 12.13it/s]
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  22% 18/83 [00:01&lt;00:05, 12.59it/s]
-PyXspec - loading RASS spectra:  24% 20/83 [00:01&lt;00:04, 13.07it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  27% 22/83 [00:01&lt;00:05, 10.38it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  29% 24/83 [00:02&lt;00:05, 10.11it/s]
-
-PyXspec - loading RASS spectra:  31% 26/83 [00:02&lt;00:05, 10.88it/s]
-PyXspec - loading RASS spectra:  34% 28/83 [00:02&lt;00:04, 11.18it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  36% 30/83 [00:02&lt;00:04, 10.96it/s]
-PyXspec - loading RASS spectra:  39% 32/83 [00:02&lt;00:04, 11.63it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  41% 34/83 [00:03&lt;00:04, 11.42it/s]
-
-***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  65% 54/83 [00:04&lt;00:02, 12.37it/s]
 
 ***XSPEC Error:
-PyXspec - loading RASS spectra:  43% 36/83 [00:03&lt;00:04, 11.43it/s]  No variable parameters for fit 
+ No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  67% 56/83 [00:04&lt;00:02, 11.66it/s]SPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Er
+PyXspec - loading RASS spectra:  70% 58/83 [00:05&lt;00:02, 11.66it/s]
+
+***XSPEC
+PyXspec - loading RASS spectra:  72% 60/83 [00:05&lt;00:02, 10.82it/s]Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  75% 62/83 [00:05&lt;00:02, 10.38it/s]rror:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPE
+C Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  77% 64/83 [00:05&lt;00:02,  8.28it/s]
+
+PyXspec - loading RASS spectra:  80% 66/83 [00:06&lt;00:01,  9.36it/s]riable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
 ***XSPEC Error:  No variable parameters for fit 
@@ -3971,136 +3817,304 @@ PyXspec - loading RASS spectra:  43% 36/83 [00:03&lt;00:04, 11.43it/s]  No varia
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  82% 68/83 [00:06&lt;00:01,  9.85it/s]
+PyXspec - loading RASS spectra:  84% 70/83 [00:06&lt;00:01, 10.77it/s]
+
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  46% 38/83 [00:03&lt;00:04, 10.99it/s]**XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  87% 72/83 [00:06&lt;00:01, 10.63it/s]
 ***XSPEC Error:  No variable parameters for fit
 
-PyXspec - loading RASS spectra:  48% 40/83 [00:03&lt;00:04, 10.66it/s]
-Error:  No variable parameters for fit 
+***XS
+PEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  51% 42/83 [00:03&lt;00:03, 11.09it/s]C Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  89% 74/83 [00:06&lt;00:00, 10.29it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  92% 76/83 [00:06&lt;00:00, 10.45it/s]
+
+***XSPEC E
+PyXspec - loading RASS spectra:  94% 78/83 [00:07&lt;00:00, 10.04it/s]rror:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC E
+PyXspec - loading RASS spectra:  96% 80/83 [00:07&lt;00:00, 10.63it/s]rror:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:  99% 82/83 [00:07&lt;00:00, 11.27it/s]EC Error:  No variable parameters for fit
+
+***XSPE
+PyXspec - loading RASS spectra: 100% 83/83 [00:07&lt;00:00, 11.02it/s]
+C Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:   2% 2/83 [00:00&lt;00:06, 11.69it/s]
+:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:   5% 4/83 [00:00&lt;00:06, 12.10it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Err
+or:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:   7% 6/83 [00:00&lt;00:06, 11.45it/s]
 
 ***XSP
 EC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  53% 44/83 [00:03&lt;00:03, 10.82it/s]
-***XSP
-EC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  55% 46/83 [00:04&lt;00:03, 11.11it/s]EC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  58% 48/83 [00:04&lt;00:02, 12.02it/s]
-
-PyXspec - loading RASS spectra:  60% 50/83 [00:04&lt;00:02, 11.46it/s]
-ror:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  10% 8/83 [00:00&lt;00:07, 10.50it/s]
+  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
+PyXspec - loading RASS spectra:  12% 10/83 [00:00&lt;00:06, 11.01it/s]Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit
+
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  63% 52/83 [00:04&lt;00:02, 11.84it/s]
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  14% 12/83 [00:01&lt;00:06, 10.62it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  17% 14/83 [00:01&lt;00:05, 11.55it/s]
+ variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  19% 16/83 [00:01&lt;00:05, 11.64it/s]
+
+***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:  22% 18/83 [00:01&lt;00:05, 12.23it/s]
+PyXspec - loading RASS spectra:  24% 20/83 [00:01&lt;00:04, 12.62it/s]
+
+***XSPEC Error:  No
+variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:  27% 22/83 [00:01&lt;00:05, 10.57it/s]Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC E
+rror:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  29% 24/83 [00:02&lt;00:05,  9.91it/s]
+
+PyXspec - loading RASS spectra:  31% 26/83 [00:02&lt;00:05, 10.61it/s]
+PyXspec - loading RASS spectra:  34% 28/83 [00:02&lt;00:05, 10.84it/s]
+
+PyXspec - loading RASS spectra:  36% 30/83 [00:02&lt;00:04, 10.71it/s]
+rror:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  39% 32/83 [00:02&lt;00:04, 11.37it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  41% 34/83 [00:03&lt;00:04, 11.29it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  43% 36/83 [00:03&lt;00:04, 11.40it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  46% 38/83 [00:03&lt;00:03, 11.28it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  48% 40/83 [00:03&lt;00:03, 11.08it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  51% 42/83 [00:03&lt;00:03, 11.47it/s]
 
 ***XSPEC Erro
 r:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  65% 54/83 [00:04&lt;00:02, 11.39it/s]
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+PyXspec - loading RASS spectra:  53% 44/83 [00:03&lt;00:03, 11.40it/s]
+***XSPEC Error:
+  No variable parameters for fit
 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  55% 46/83 [00:04&lt;00:03, 11.49it/s]
+PyXspec - loading RASS spectra:  58% 48/83 [00:04&lt;00:02, 12.39it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  60% 50/83 [00:04&lt;00:02, 11.98it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  63% 52/83 [00:04&lt;00:02, 12.49it/s]  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
-PyXspec - loading RASS spectra:  67% 56/83 [00:04&lt;00:02, 10.99it/s]rror:  No variable parameters for fit 
+***XSPEC Error:  No
+ variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  65% 54/83 [00:04&lt;00:02, 12.37it/s]
+
+***XSPEC Error:
+ No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  67% 56/83 [00:04&lt;00:02, 11.66it/s]SPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
-PyXspec - loading RASS spectra:  70% 58/83 [00:05&lt;00:02, 11.19it/s]
+***XSPEC Er
+PyXspec - loading RASS spectra:  70% 58/83 [00:05&lt;00:02, 11.66it/s]
 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  72% 60/83 [00:05&lt;00:02, 10.52it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  75% 62/83 [00:05&lt;00:02, 10.33it/s]
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  77% 64/83 [00:05&lt;00:02,  8.07it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  80% 66/83 [00:06&lt;00:01,  9.20it/s]
-
-PyXspec - loading RASS spectra:  82% 68/83 [00:06&lt;00:01,  9.80it/s]ariable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit
-PyXspec - loading RASS spectra:  84% 70/83 [00:06&lt;00:01, 10.78it/s]
-
-***XSPEC Error:  No variable parameters for fit
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  87% 72/83 [00:06&lt;00:01, 10.74it/s]
-
-***XSPEC Error:  No variable parameters for fit
-
-PyXspec - loading RASS spectra:  89% 74/83 [00:06&lt;00:00, 10.38it/s]PEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
+***XSPEC
+PyXspec - loading RASS spectra:  72% 60/83 [00:05&lt;00:02, 10.82it/s]Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  92% 76/83 [00:06&lt;00:00, 10.54it/s]
-
-***XSPEC Error:  No variable parameters for fit 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  94% 78/83 [00:07&lt;00:00, 10.57it/s]
+PyXspec - loading RASS spectra:  75% 62/83 [00:05&lt;00:02, 10.38it/s]rror:  No variable parameters for fit
 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
+***XSPE
+C Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  96% 80/83 [00:07&lt;00:00, 10.95it/s]
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  77% 64/83 [00:05&lt;00:02,  8.28it/s]
 
-***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra:  99% 82/83 [00:07&lt;00:00, 11.69it/s]
+PyXspec - loading RASS spectra:  80% 66/83 [00:06&lt;00:01,  9.36it/s]riable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit
 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
 ***XSPEC Error:  No variable parameters for fit 
-PyXspec - loading RASS spectra: 100% 83/83 [00:07&lt;00:00, 10.97it/s]
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  82% 68/83 [00:06&lt;00:01,  9.85it/s]
+PyXspec - loading RASS spectra:  84% 70/83 [00:06&lt;00:01, 10.77it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  87% 72/83 [00:06&lt;00:01, 10.63it/s]
+***XSPEC Error:  No variable parameters for fit
+
+***XS
+PEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  89% 74/83 [00:06&lt;00:00, 10.29it/s]
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+PyXspec - loading RASS spectra:  92% 76/83 [00:06&lt;00:00, 10.45it/s]
+
+***XSPEC E
+PyXspec - loading RASS spectra:  94% 78/83 [00:07&lt;00:00, 10.04it/s]rror:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC E
+PyXspec - loading RASS spectra:  96% 80/83 [00:07&lt;00:00, 10.63it/s]rror:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
+
+PyXspec - loading RASS spectra:  99% 82/83 [00:07&lt;00:00, 11.27it/s]EC Error:  No variable parameters for fit
+
+***XSPE
+PyXspec - loading RASS spectra: 100% 83/83 [00:07&lt;00:00, 11.02it/s]
+C Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit 
+***XSPEC Error:  No variable parameters for fit
 </pre></div>
 </div>
 </div>
@@ -4221,7 +4235,7 @@ and the y-axis scale is consistent across <em>rows</em>.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/be93a23d358aa1a8c8209cc525f3453d6c57080dcaed8c4b17b6784b47cf241c.png" src="../../../_images/be93a23d358aa1a8c8209cc525f3453d6c57080dcaed8c4b17b6784b47cf241c.png" />
+<img alt="../../../_images/333f5e95095e59cc25b69db37eb758d670282dc0771be42f2fc5a16438509c5b.png" src="../../../_images/333f5e95095e59cc25b69db37eb758d670282dc0771be42f2fc5a16438509c5b.png" />
 </div>
 </div>
 </section>
@@ -4357,11 +4371,11 @@ dataframe indexes (which, due to the way we created the dataframes, are the
       <td>0.00270</td>
       <td>True</td>
       <td>5.649700e-12</td>
-      <td>3.232400e-12</td>
-      <td>7.584400e-12</td>
+      <td>2.723500e-12</td>
+      <td>8.319200e-12</td>
       <td>8.359300e-12</td>
-      <td>5.365400e-12</td>
-      <td>1.173900e-11</td>
+      <td>5.760300e-12</td>
+      <td>1.191050e-11</td>
     </tr>
     <tr>
       <th>CARMENES-35</th>
@@ -4381,11 +4395,11 @@ dataframe indexes (which, due to the way we created the dataframes, are the
       <td>0.00443</td>
       <td>True</td>
       <td>8.756700e-12</td>
-      <td>3.722600e-12</td>
-      <td>1.087490e-11</td>
+      <td>4.229700e-12</td>
+      <td>1.232530e-11</td>
       <td>1.570520e-11</td>
-      <td>1.032890e-11</td>
-      <td>2.456970e-11</td>
+      <td>9.329300e-12</td>
+      <td>2.374540e-11</td>
     </tr>
     <tr>
       <th>CARMENES-37</th>
@@ -4405,11 +4419,11 @@ dataframe indexes (which, due to the way we created the dataframes, are the
       <td>0.00272</td>
       <td>True</td>
       <td>6.361300e-12</td>
-      <td>0.000000e+00</td>
-      <td>8.165400e-12</td>
+      <td>1.660000e-14</td>
+      <td>8.642800e-12</td>
       <td>8.219500e-12</td>
-      <td>3.422000e-12</td>
-      <td>1.655730e-11</td>
+      <td>4.167800e-12</td>
+      <td>1.541120e-11</td>
     </tr>
     <tr>
       <th>CARMENES-63</th>
@@ -4430,10 +4444,10 @@ dataframe indexes (which, due to the way we created the dataframes, are the
       <td>True</td>
       <td>1.730010e-11</td>
       <td>0.000000e+00</td>
-      <td>4.007000e-13</td>
+      <td>6.639000e-13</td>
       <td>9.360400e-12</td>
-      <td>6.027800e-12</td>
-      <td>1.427760e-11</td>
+      <td>5.693200e-12</td>
+      <td>1.468650e-11</td>
     </tr>
     <tr>
       <th>CARMENES-64</th>
@@ -4454,10 +4468,10 @@ dataframe indexes (which, due to the way we created the dataframes, are the
       <td>False</td>
       <td>4.280000e-12</td>
       <td>0.000000e+00</td>
-      <td>3.929000e-13</td>
+      <td>6.060000e-13</td>
       <td>1.002590e-11</td>
-      <td>3.223800e-12</td>
-      <td>1.753530e-11</td>
+      <td>3.625200e-12</td>
+      <td>2.057080e-11</td>
     </tr>
     <tr>
       <th>CARMENES-67</th>
@@ -4477,11 +4491,11 @@ dataframe indexes (which, due to the way we created the dataframes, are the
       <td>0.00482</td>
       <td>True</td>
       <td>1.245000e-11</td>
-      <td>7.935700e-12</td>
-      <td>1.522280e-11</td>
+      <td>9.483400e-12</td>
+      <td>1.520140e-11</td>
       <td>1.687610e-11</td>
-      <td>1.005530e-11</td>
-      <td>2.388580e-11</td>
+      <td>1.004450e-11</td>
+      <td>2.240540e-11</td>
     </tr>
   </tbody>
 </table>
@@ -4567,7 +4581,7 @@ Data columns (total 24 columns):
  22  powerlaw_0.5-2.0keV_flux_err-  48 non-null     float64
  23  powerlaw_0.5-2.0keV_flux_err+  48 non-null     float64
 dtypes: bool(4), float64(18), str(2)
-memory usage: 9.1+ KB
+memory usage: 10.7 KB
 </pre></div>
 </div>
 </div>
@@ -4613,7 +4627,7 @@ cooler outer atmospheres, peaking around 0.12 keV (~1.4 million Kelvin):</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/e94cd4026d23f25c116f4f625e11373a8e94ca475d0da83279e50da22b604573.png" src="../../../_images/e94cd4026d23f25c116f4f625e11373a8e94ca475d0da83279e50da22b604573.png" />
+<img alt="../../../_images/7c2e809fe5efc61056657fe48200a6398b45cef432bca32860e424eae8644b32.png" src="../../../_images/7c2e809fe5efc61056657fe48200a6398b45cef432bca32860e424eae8644b32.png" />
 </div>
 </div>
 </section>
@@ -4677,7 +4691,7 @@ Data columns (total 24 columns):
  22  powerlaw_0.5-2.0keV_flux_err-  65 non-null     float64
  23  powerlaw_0.5-2.0keV_flux_err+  65 non-null     float64
 dtypes: bool(4), float64(18), str(2)
-memory usage: 10.9+ KB
+memory usage: 13.1 KB
 </pre></div>
 </div>
 </div>
@@ -4716,7 +4730,7 @@ memory usage: 10.9+ KB
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/d4abf4bc569fc3b8497d2e0997e6c9dd0d79a6a1c17f7ab6d84d79e96988fab0.png" src="../../../_images/d4abf4bc569fc3b8497d2e0997e6c9dd0d79a6a1c17f7ab6d84d79e96988fab0.png" />
+<img alt="../../../_images/ff61a4863dc1553b28ba47a108aa3db8de26f2f29a9820c88443d7f39b691ea4.png" src="../../../_images/ff61a4863dc1553b28ba47a108aa3db8de26f2f29a9820c88443d7f39b691ea4.png" />
 </div>
 </div>
 </section>
