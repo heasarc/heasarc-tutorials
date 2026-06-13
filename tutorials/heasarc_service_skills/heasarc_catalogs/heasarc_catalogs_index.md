@@ -9,4 +9,6 @@ caption: HEASARC catalog tutorials
 ---
 
 finding_relevant_heasarc_catalog
+heasarc_catalog_contents
+uploading_matching_table_heasarc_catalogs
 ```

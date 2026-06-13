@@ -38,6 +38,7 @@ tutorials/mission_specific_analyses/rxte/rxte_index
 tutorials/mission_specific_analyses/nicer/nicer_index
 tutorials/mission_specific_analyses/ixpe/ixpe_index
 tutorials/mission_specific_analyses/swift/swift_index
+tutorials/mission_specific_analyses/rosat/rosat_index
 tutorials/mission_specific_analyses/xrism/xrism_index
 ```
 
@@ -47,6 +48,7 @@ tutorials/mission_specific_analyses/xrism/xrism_index
 maxdepth: 2
 caption: Useful high-energy tools
 ---
+tutorials/useful_high_energy_tools/pyxspec/pyxspec_index
 tutorials/useful_high_energy_tools/heasoftpy/heasoftpy_index
 tutorials/useful_high_energy_tools/pysas/pysas_index
 

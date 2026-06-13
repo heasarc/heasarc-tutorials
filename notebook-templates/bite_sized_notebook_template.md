@@ -5,7 +5,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-01-19'
+date: '2026-06-01'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -17,12 +17,29 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: True
+    chandra: True
+    xspec-models: True
 title: How to make a tutorial notebook in the HEASARC-tutorials repository
 ---
 
 # Title: How to make a bite-sized HEASARC-tutorials notebook
 
-_Please include 'bite-sized', 'bite sized', or 'bite size(d)' in the title above._
+One of your first steps in adapting this template should be to fill out the 'front-matter' at the very top of the
+Markdown file - the contents of the front-matter are all metadata, to be used in different ways by different
+parts of the HEASARC-tutorials infrastructure.
+
+The following information must be added:
+- Authors:
+  - Anyone who you consider an author of this notebook, following the traditional 'first author contributed the most' ordering.
+  - Affiliations must be included, either as a list or a string.
+  - Email, ORCID, and personal website are optional, but please consider including them if you have them, as we will produce a DOI for this resource.
+- Date:
+  - The date this notebook was last updated, following the year-month-day format.
+- Execution:
+  - 'cal-files' specifies the calibration files that will be needed to run this notebook. This information is both useful to the user and to the HEASARC-tutorials execution infrastructure, where it ensures we don't have to load all possible calibration files for every notebook. Each entry may have a value of True or False. HEASoft's CalDB does not have an entry because these notebooks are set up to use remote CalDB files.
 
 
 ## Learning Goals
@@ -33,6 +50,8 @@ By the end of this tutorial, you will:
 - Understand what has to be present in a **bite-sized** tutorial notebook.
 
 ## Introduction
+
+_Please include 'bite-sized', 'bite sized', or 'bite size(d)' in the title or introduction._
 
 Alter this file according to your use case but retain the basic structure and try to
 use the same syntax for things like section headings, numbering schemes, and bullet points.
@@ -58,7 +77,7 @@ Also, if querying archives, please include a statement like:
 "This notebook depends on external services, such as the HEASARC archive, and therefore the runtime may vary for users."
 
 Here is a template runtime statement:
-As of {Date}, this notebook takes ~{N}s to run to completion on Fornax using the 'Default Astrophysics' image and the '{name: size}' server with NGB RAM/ N cores.
+As of {Date}, this notebook takes ~{N}s to run to completion on Fornax using the '{name: size}' server with NGB RAM/ N cores.
 
 ## Imports
 
