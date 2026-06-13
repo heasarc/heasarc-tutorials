@@ -9,7 +9,7 @@ authors:
   affiliations: ['University of Maryland, Baltimore County', 'XRISM GOF, NASA Goddard']
   website: https://science.gsfc.nasa.gov/sci/bio/kenji.hamaguchi-1
   orcid: 0000-0001-7515-2779
-date: '2026-03-03'
+date: '2026-06-13'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -21,6 +21,11 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: True
 title: Getting started with XRISM-Xtend
 ---
 
@@ -2928,7 +2933,7 @@ Author: David J Turner, HEASARC Staff Scientist.
 
 Author: Kenji Hamaguchi, XRISM GOF Scientist.
 
-Updated On: 2026-03-03
+Updated On: 2026-06-13
 
 +++
 
