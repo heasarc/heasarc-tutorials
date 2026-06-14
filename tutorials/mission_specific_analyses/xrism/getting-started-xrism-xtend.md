@@ -1013,7 +1013,7 @@ ARF_PATH_TEMP = SP_PATH_TEMP.replace("-spectrum.fits", ".arf")
 
 ***
 
-## 1. Finding and downloading XRISM observations of LMC N132D
+## 1. Acquiring XRISM observations of LMC N132D
 
 Our first task is to determine which XRISM observations are relevant to the source
 that we are interested in.
@@ -1022,7 +1022,7 @@ We are going in with the knowledge that LMC N132D has been observed by XRISM, bu
 course, there is no guarantee that _your_ source of interest has been, so this is
 an important exploratory step.
 
-### Determining the name of the XRISM observation summary table
+### Finding the name of the XRISM observation summary table
 
 HEASARC maintains tables that contain information about every observation taken by
 each of the missions in its archive. We will use XRISM's table to find observations
@@ -1366,7 +1366,7 @@ very precise timings and count-rates.
 
 Though we are using the HEASoftPy `xtdpipeline` function, called
 as `hsp.xtdpipeline(indir=...)`, we wrap it in a function defined in
-the 'Global Setup: Functions' section of this notebook. The `process_xrism_xtend`
+the ['Global Setup: Functions'](#functions) section of this notebook. The `process_xrism_xtend`
 wrapper function exists primarily to let us run the processing of different XRISM-Xtend
 observations in parallel.
 
@@ -1432,7 +1432,7 @@ This notebook is configured to acquire XRISM CALDB files from the HEASARC
 Amazon Web Services S3 bucket - this can greatly improve the speed of some
 steps later in the notebook when running on the Fornax Science Console.
 
-CALDB location configuration can be found in the 'Global Setup: Configuration' section.
+CALDB location configuration can be found in the ['Global Setup: Configuration'](#configuration) section.
 ```
 
 ## 3. Generating new XRISM-Xtend images and exposure maps
@@ -1668,7 +1668,7 @@ will now use to demonstrate the creation of XRISM-Xtend images.
 As with all uses of HEASoft tasks in this notebook, our call to `extractor` will be
 through the HEASoftPy Python interface - specifically the `hsp.extractor` function.
 
-We have implemented a wrapper to this function in the 'Global Setup: Functions' section
+We have implemented a wrapper to this function in the ['Global Setup: Functions'](#functions) section
 of this notebook, primarily so that we can easily multiprocess the generation of images
 in different energy bands, binning factors, observations, and dataclasses.
 
@@ -1708,7 +1708,7 @@ effective sensitivity of Xtend as a function of energy.
 
 Unlike for image creation, XRISM does have a dedicated HEASoft task for the
 generation of exposure maps; `xaexpmap`. We have once again set up a wrapper function
-in the 'Global Setup: Functions' section of this notebook to make it easier to run
+in the ['Global Setup: Functions'](#functions) section of this notebook to make it easier to run
 this task in parallel.
 
 There are two `xaexpmap` configuration options which control how the
@@ -1793,7 +1793,7 @@ That would result in empty light curve and spectrum products, and errors
 from 'BACKSCAL' calculation, and RMF and ARF generation.
 
 
-### Visualize separate XRISM-Xtend 000128000 dataclass images
+### Examining different dataclass images
 
 To make our point, and to give an example of the inspection you may want to perform
 before choosing the right dataclass for your target, we will visualize
@@ -2043,9 +2043,9 @@ back_reg = CircleSkyRegion(
 )
 ```
 
-#### Visualizing the source and background extraction regions on XRISM-Xtend images
+#### Visualizing source and background extraction regions
 
-We should inspect the regions in-situ to make sure they look sensible - first, our
+We should inspect the regions in-situ to make sure they look sensible – first, our
 previously generated images are loaded in as `Image` class (from the `XGA` Python
 module) instances.
 
@@ -2166,7 +2166,7 @@ required to actually fit models to the spectra.
 #### Generating the spectral files
 
 We set up a spectrum-generation-specific region wrapper function for the HEASoftPy
-interface to the `extractor` task (see the Global Setup: Functions section near the
+interface to the `extractor` task (see the ['Global Setup: Functions'](#functions) section near the
 top of the notebook).
 
 This once again allows us to parallelize the generation of spectra for different
@@ -2281,7 +2281,7 @@ spec_group_scale = 1
 
 Now we run the grouping tool - though this time we do not parallelize the task, as
 the grouping process is fast, and we wish to demonstrate how you use a HEASoftPy
-function directly. Though remember to look at the Global Setup section of this notebook
+function directly. Though remember to look at the ['Global Setup'](#global-setup) section of this notebook
 to see how we call HEASoftPy tools in the wrapper functions used to parallelize those
 tasks.
 
@@ -2333,7 +2333,7 @@ Now we wish to generate new RMFs, so we can ensure they are entirely up to date!
 We make use of the XRISM-Xtend specific HEASoft task `xtdrmf` - the only input it
 requires is the path to the spectral file for which we wish to generate an RMF.
 
-Our `gen_xrism_xtend_rmf` function (defined in the Global Setup: Functions section near
+Our `gen_xrism_xtend_rmf` function (defined in the ['Global Setup: Functions'](#functions) section near
 the top of the notebook) wraps the HEASoftPy interface to the `xtdrmf` task. We now use
 it to generate RMFs in parallel for all of our new spectra:
 
@@ -2438,8 +2438,8 @@ arf_rt_num_photons = 20000
 arf_rt_min_photons = 100
 ```
 
-So now we move onto actually running the ARF generation - using the
-`gen_xrism_xtend_arf` function defined in the Global Setup: Functions section (near the top of
+So now we move onto actually running the ARF generation – using the
+`gen_xrism_xtend_arf` function defined in the ['Global Setup: Functions'](#functions) section (near the top of
 the notebook), which wraps the HEASoftPy interface to the `xaarfgen` task. We now use it
 to generate ARFs in parallel for all of our new spectra:
 
@@ -2534,7 +2534,7 @@ now generate the light curves within the source and background regions, for each
 the specified energy bands.
 
 As with previous steps, our motivation for writing a wrapper function (defined in the
-Global Setup section) is to make it easy for us to run generation of different
+['Global Setup'](#global-setup) section) is to make it easy for us to run generation of different
 light curves simultaneously:
 
 ```{code-cell} python
@@ -2689,11 +2689,13 @@ demo_lc = LightCurve(
     lc_time_bin,
 )
 
+demo_lc.src_name = SRC_NAME
+
 # Show a visualization of the LightCurve
 demo_lc.view()
 ```
 
-## 6. Fitting a spectral model to an XRISM-Xtend spectrum
+## 6. Fitting a model to a XRISM-Xtend spectrum
 
 Finally, to show off the XRISM-Xtend products we just generated, we will perform
 a simple model fit to one of our spectra.
