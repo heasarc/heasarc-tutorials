@@ -7,6 +7,11 @@ authors:
   website: https://davidt3.github.io/
 - name: NICER Team
 date: '2026-06-22'
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: true
 file_format: mystnb
 jupytext:
   text_representation:
@@ -18,12 +23,7 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-execution:
-  cal-files:
-    xmm-ccf: False
-    chandra: False
-    xspec-models: True
-title: Getting started with ROSAT All Sky Survey data
+title: Combining NICER observations and generating spectra
 ---
 
 # Combining NICER observations and generating spectra
@@ -68,27 +68,21 @@ As of 2026-06-18, this notebook takes ~180s to run to completion (heavily depend
 ## Imports
 
 ```{code-cell} python
-# %pip install --pre astroquery --upgrade
-```
-
-```{code-cell} python
-# Uncomment the next line to install dependencies if needed.
-# %pip install -r requirements_nicer_spectral_pipeline.txt
-
 import contextlib
 import multiprocessing as mp
 import os
 from random import randint
 from shutil import rmtree
+from typing import List
 
 import heasoftpy as hsp
 import matplotlib.pyplot as plt
 import numpy as np
-import xspec as xs
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
 from astroquery.heasarc import Heasarc
 from IPython.display import display
+from tqdm import tqdm
 ```
 
 ## Global Setup
@@ -98,7 +92,7 @@ from IPython.display import display
 ```{code-cell} python
 :tags: [hide-input]
 
-def process_nicer_xti(obs_dir: str, cur_obs_id: str):
+def process_nicer_xti(obs_dir: str, cur_obs_id: str, out_dir: str):
     """
     A wrapper function for nicerl2, designed to be passed to a
     multiprocessing pool to process multiple observations in parallel.
@@ -115,6 +109,11 @@ def process_nicer_xti(obs_dir: str, cur_obs_id: str):
     temp_work_dir = os.path.join(out_dir, f"nicerl2_{randint(0, int(1e8))}")
     os.makedirs(temp_work_dir)
 
+    # Set up the output file names
+    evt_out = os.path.basename(EVT_PATH_TEMP).format(oi=cur_obs_id, m="mpuall")
+
+    uf_evt_out = os.path.basename(UFEVT_PATH_TEMP).format(oi=cur_obs_id, m="mpuall")
+
     # Using dual contexts, one that moves us into the output directory for the
     #  duration, and another that creates a new set of HEASoft parameter files (so
     #  there are no clashes with other processes).
@@ -125,6 +124,8 @@ def process_nicer_xti(obs_dir: str, cur_obs_id: str):
         try:
             out = hsp.nicerl2(
                 indir=os.path.relpath(obs_dir),
+                ufafile=uf_evt_out,
+                clfile=evt_out,
                 geomag_path=GEOMAG_PATH,
                 clobber=True,
                 noprompt=True,
@@ -137,54 +138,163 @@ def process_nicer_xti(obs_dir: str, cur_obs_id: str):
             task_success = False
             out = str(err)
 
+    prod_lookup = {}
+
     # Moves files from the temporary output directory into the
     #  final output directory
     if os.path.exists(temp_work_dir) and len(os.listdir(temp_work_dir)) != 0:
-        for f in os.listdir(temp_work_dir):
-            os.rename(os.path.join(temp_work_dir, f), os.path.join(out_dir, f))
+
+        final_evt = os.path.join(out_dir, evt_out)
+        os.rename(os.path.join(temp_work_dir, evt_out), final_evt)
+
+        final_uf_evt = os.path.join(out_dir, uf_evt_out)
+        os.rename(os.path.join(temp_work_dir, uf_evt_out), final_uf_evt)
 
         # Make sure to remove the temporary directory
         rmtree(temp_work_dir)
 
         # This task should have updated an auxiliary file as well, we need to copy it
+        final_make_filt = os.path.join(out_dir, f"ni{cur_obs_id}.mkf")
         os.rename(
-            os.path.join(obs_dir, "auxil", f"ni{cur_obs_id}.mkf"),
-            os.path.join(out_dir, f"ni{cur_obs_id}.mkf"),
+            os.path.join(obs_dir, "auxil", f"ni{cur_obs_id}.mkf"), final_make_filt
         )
 
-    return cur_obs_id, out, task_success
+        # Populate a dictionary with the paths to generated products
+        prod_lookup["events"] = final_evt
+        prod_lookup["uf_events"] = final_uf_evt
+        prod_lookup["make_filter"] = final_make_filt
+
+    return cur_obs_id, out, task_success, prod_lookup
+
+
+def combine_nicer_xti(
+    src_name,
+    event_files: List[str],
+    uf_event_files: List[str],
+    makefilt_files: List[str],
+    orbit_files: List[str],
+    out_dir: str,
+):
+    """ """
+
+    event_files = list(map(lambda x: os.path.abspath(x), event_files))
+    uf_event_files = list(map(lambda x: os.path.abspath(x), uf_event_files))
+    makefilt_files = list(map(lambda x: os.path.abspath(x), makefilt_files))
+    orbit_files = list(map(lambda x: os.path.abspath(x), orbit_files))
+
+    out_dir = os.path.abspath(out_dir)
+
+    cur_obs_ids = []
+    for cur_evt in event_files:
+        # We can extract the ObsID directly from the header of the event list - it is
+        #  safer than having them be passed to this function separately.
+        with fits.open(cur_evt) as read_evto:
+            cur_obs_ids.append(read_evto["EVENTS"].header["OBS_ID"])
+
+    # Create a temporary working directory
+    temp_work_dir = os.path.join(out_dir, f"niobsmerge_{randint(0, int(1e8))}")
+    os.makedirs(temp_work_dir)
+
+    # Set up list files of parameter inputs
+    with open(os.path.join(temp_work_dir, "events.lis"), "w") as evento:
+        evento.writelines([f + "\n" for f in event_files])
+
+    with open(os.path.join(temp_work_dir, "uf_events.lis"), "w") as uf_evento:
+        uf_evento.writelines([f + "\n" for f in uf_event_files])
+
+    with open(os.path.join(temp_work_dir, "makefilts.lis"), "w") as makefilto:
+        makefilto.writelines([f + "\n" for f in makefilt_files])
+
+    with open(os.path.join(temp_work_dir, "orbs.lis"), "w") as orbo:
+        orbo.writelines([f + "\n" for f in orbit_files])
+
+    # We write the ObsIDs to a file, so there is a quick way to tell which
+    #  were combined for a given output directory.
+    with open(os.path.join(temp_work_dir, "OBSIDS.md"), "w") as obsido:
+        obsido.writelines([f + "\n" for f in cur_obs_ids])
+
+    # Set up the output file names
+    evt_out = os.path.basename(EVT_PATH_TEMP).format(oi="COMBINED", m="mpuall")
+
+    uf_evt_out = os.path.basename(UFEVT_PATH_TEMP).format(oi="COMBINED", m="mpuall")
+
+    # Using dual contexts, one that moves us into the output directory for the
+    #  duration, and another that creates a new set of HEASoft parameter files (so
+    #  there are no clashes with other processes).
+    with contextlib.chdir(temp_work_dir), hsp.utils.local_pfiles_context():
+        try:
+            out = hsp.niobsmerge(
+                indirs="NONE",
+                outdir=".",
+                doorbfiles=True,
+                inclfiles="@events.lis",
+                inufafiles="@uf_events.lis",
+                inmkfiles="@makefilts.lis",
+                inorbfiles="@orbs.lis",
+                clfile=evt_out,
+                ufafile=uf_evt_out,
+                clobber=True,
+                noprompt=True,
+                chatter=TASK_CHATTER,
+            )
+
+            task_success = True
+
+        except hsp.HSPTaskException as err:
+            task_success = False
+            out = str(err)
+
+    prod_lookup = {}
+
+    # Moves files from the temporary output directory into the
+    #  final output directory
+    if os.path.exists(temp_work_dir) and len(os.listdir(temp_work_dir)) != 0:
+
+        final_evt = os.path.join(out_dir, evt_out)
+        os.rename(os.path.join(temp_work_dir, evt_out), final_evt)
+
+        final_uf_evt = os.path.join(out_dir, uf_evt_out)
+        os.rename(os.path.join(temp_work_dir, uf_evt_out), final_uf_evt)
+
+        final_make_filt = os.path.join(out_dir, "nimerged.mkf")
+        os.rename(os.path.join(temp_work_dir, "nimerged.mkf"), final_make_filt)
+
+        final_orbit = os.path.join(out_dir, "nimerged.orb")
+        os.rename(os.path.join(temp_work_dir, "nimerged.orb"), final_orbit)
+
+        # Make sure to remove the temporary directory
+        rmtree(temp_work_dir)
+
+        # Populate a dictionary with the paths to generated products
+        prod_lookup["events"] = final_evt
+        prod_lookup["uf_events"] = final_uf_evt
+        prod_lookup["make_filter"] = final_make_filt
+        prod_lookup["orbit"] = final_orbit
+
+    return src_name, cur_obs_ids, out, task_success, prod_lookup
 
 
 def gen_nicer_xti_spectrum(
-    event_file,
     src_name,
+    event_file,
+    uf_event_file,
+    makefilt_file,
     out_dir,
     bkg_model: str = "scorpeon",
-    ufa_file: str = None,
-    make_filt_file: str = None,
 ):
     """
     A wrapper function for nicerl3-spect, processing spectral extraction
     tasks in parallel across independent working directories.
     """
     event_file = os.path.abspath(event_file)
+    uf_event_file = os.path.abspath(uf_event_file)
+    makefilt_file = os.path.abspath(makefilt_file)
+    out_dir = os.path.abspath(out_dir)
 
     # We can extract the ObsID directly from the header of the event list - it is
     #  safer than having them be passed to this function separately.
     with fits.open(event_file) as read_evto:
         cur_obs_id = read_evto["EVENTS"].header["OBS_ID"]
-
-    if ufa_file is None:
-        ufa_file = os.path.join(
-            os.path.dirname(event_file), f"ni{cur_obs_id}_0mpu7_ufa.evt"
-        )
-
-    if make_filt_file is None:
-        make_filt_file = os.path.join(
-            os.path.dirname(event_file), f"ni{cur_obs_id}.mkf"
-        )
-
-    out_dir = os.path.abspath(out_dir)
 
     # Set up the output file names for the source spectrum we're about to generate.
     sp_out = os.path.basename(SP_PATH_TEMP).format(
@@ -214,17 +324,17 @@ def gen_nicer_xti_spectrum(
                 indir="",
                 cldir=".",
                 clfile=os.path.relpath(event_file),
-                ufafile=os.path.relpath(ufa_file),
-                mkfile=os.path.relpath(make_filt_file),
+                ufafile=os.path.relpath(uf_event_file),
+                mkfile=os.path.relpath(makefilt_file),
                 phafile=sp_out,
                 arffile=arf_out,
                 rmffile=rmf_out,
                 bkgmodeltype=bkg_model,
-                outlang="python",
                 clobber=True,
                 noprompt=True,
                 chatter=TASK_CHATTER,
             )
+            # outlang="python",
 
             task_success = True
 
@@ -343,6 +453,20 @@ out = hsp.nigeodown(outdir=GEOMAG_PATH)
 
 
 # ------------- Set up output file path templates --------------
+EVT_PATH_TEMP = os.path.join(
+    OUT_PATH,
+    "{src_name}",
+    "{oi}",
+    "nicer-xti-{m}-obsid{oi}-enALL-events.fits",
+)
+
+UFEVT_PATH_TEMP = os.path.join(
+    OUT_PATH,
+    "{src_name}",
+    "{oi}",
+    "nicer-xti-{m}-obsid{oi}-enALL-unfilteredevents.fits",
+)
+
 SP_PATH_TEMP = os.path.join(
     OUT_PATH,
     "{src_name}",
@@ -433,45 +557,131 @@ for cur_name, cur_ois in rel_obsids.items():
 
         arg_combs_l2.append([cur_obs_dir, cur_oi, cur_out_dir])
 
+
 with mp.Pool(NUM_CORES) as p:
-    l2_results = p.starmap(process_nicer_xti, arg_combs_l2)
+    with tqdm(total=len(arg_combs_l2), desc="Processing NICER XTI") as onwards:
+        jobs = [
+            p.apply_async(
+                process_nicer_xti, args=item, callback=lambda _: onwards.update(1)
+            )
+            for item in arg_combs_l2
+        ]
+        l2_results = [job.get() for job in jobs]
+
+l2_out_prods = {cur_res[0]: cur_res[3] for cur_res in l2_results if cur_res[2]}
 ```
+
+## 3. Combining NICER observations
 
 ```{code-cell} python
-process_nicer_xti(*arg_combs_l2[0])
+arg_combs_nicomb = []
+for cur_name, cur_ois in rel_obsids.items():
+    cur_args = [cur_name]
+
+    cur_args.append([l2_out_prods[oi]["events"] for oi in cur_ois])
+    cur_args.append([l2_out_prods[oi]["uf_events"] for oi in cur_ois])
+    cur_args.append([l2_out_prods[oi]["make_filter"] for oi in cur_ois])
+    cur_args.append(
+        [os.path.join(ROOT_DATA_DIR, oi, "auxil", f"ni{oi}.orb.gz") for oi in cur_ois]
+    )
+
+    cur_args.append(os.path.join(OUT_PATH, cur_name, "combined"))
+    arg_combs_nicomb.append(cur_args)
+
+
+with mp.Pool(NUM_CORES) as p:
+    with tqdm(
+        total=len(arg_combs_nicomb), desc="Combining NICER observations"
+    ) as onwards:
+        jobs = [
+            p.apply_async(
+                combine_nicer_xti, args=item, callback=lambda _: onwards.update(1)
+            )
+            for item in arg_combs_nicomb
+        ]
+        nicomb_results = [job.get() for job in jobs]
+
+nicomb_out_prods = {cur_res[0]: cur_res[4] for cur_res in nicomb_results if cur_res[3]}
 ```
 
-## 3. Extract Spectral Products
+## 4. Extracting NICER spectra
 
 Once you have your cleaned events, you are ready to make a spectrum.
 
 <span style="color:red">Run the nicerl3-spect spectral product pipeline task with the following command.</span>
 
-### Running nicerl3-spect in Parallel
++++
 
-*Just as we did with `nicerl2`, we map our spectral extraction wrapper across all targets and observations in parallel.*
+### Generating combined spectra
 
 +++
 
-def gen_nicer_xti_spectrum(event_file, src_name, out_dir, bkg_model: str = "scorpeon", ufa_file: str = None, make_filt_file: str = None):
+*Just as we did with `nicerl2`, we map our spectral extraction wrapper across all targets and observations in parallel.*
 
 ```{code-cell} python
-# arg_combs_l3 = []
-# for src, obs_list in TARGET_LIST.items():
-#     for obs in obs_list:
-#         obs_dir = os.path.join(ROOT_DATA_DIR, src, obs)
-#         arg_combs_l3.append([obs_dir, "scorpeon"])
-
-# with mp.Pool(NUM_CORES) as p:
-#     l3_results = p.starmap(gen_nicer_xti_spectrum, arg_combs_l3)
+nicer_back_mod = "scorpeon"
 ```
 
 ```{code-cell} python
-test_evt = os.path.join(
-    OUT_PATH, "RXJ2143.0+0654", "5617010105", "ni5617010105_0mpu7_cl.evt"
-)
-out_dir = os.path.join(OUT_PATH, "RXJ2143.0+0654", "5617010105")
-gen_nicer_xti_spectrum(test_evt, "RXJ2143.0+0654", out_dir)
+arg_combs_comb_sp = []
+for cur_name, cur_prods in nicomb_out_prods.items():
+
+    arg_combs_comb_sp.append(
+        [
+            cur_name,
+            cur_prods["events"],
+            cur_prods["uf_events"],
+            cur_prods["make_filter"],
+            os.path.join(OUT_PATH, cur_name, "combined"),
+            nicer_back_mod,
+        ]
+    )
+
+
+with mp.Pool(NUM_CORES) as p:
+    with tqdm(
+        total=len(arg_combs_comb_sp), desc="Generating combined NICER spectra"
+    ) as onwards:
+        jobs = [
+            p.apply_async(
+                gen_nicer_xti_spectrum, args=item, callback=lambda _: onwards.update(1)
+            )
+            for item in arg_combs_comb_sp
+        ]
+        comb_spec_results = [job.get() for job in jobs]
+```
+
+### Generating individual spectra
+
+```{code-cell} python
+arg_combs_indiv_sp = []
+
+for cur_name, cur_ois in rel_obsids.items():
+    for cur_oi in cur_ois:
+        cur_prods = l2_out_prods[cur_oi]
+        arg_combs_indiv_sp.append(
+            [
+                cur_name,
+                cur_prods["events"],
+                cur_prods["uf_events"],
+                cur_prods["make_filter"],
+                os.path.join(OUT_PATH, cur_name, cur_oi),
+                nicer_back_mod,
+            ]
+        )
+
+
+with mp.Pool(NUM_CORES) as p:
+    with tqdm(
+        total=len(arg_combs_indiv_sp), desc="Generating individual NICER spectra"
+    ) as onwards:
+        jobs = [
+            p.apply_async(
+                gen_nicer_xti_spectrum, args=item, callback=lambda _: onwards.update(1)
+            )
+            for item in arg_combs_indiv_sp
+        ]
+        indiv_spec_results = [job.get() for job in jobs]
 ```
 
 As the task runs, you will see a lot of output on the screen, detailing each step in the process. Depending on the size of the observation and the processing speed of your computer, `nicerl3-spect` may take anywhere from 10 seconds to several minutes to run.
@@ -484,7 +694,7 @@ The "load" file will help get the user started quickly by giving an example scri
 
 Although individual manual tasks are provided, the NICER team recommends to use `nicerl3-spect` to generate all spectral products in a consistent manner.
 
-## 4. Background Models
+## 5. Background Models
 
 The NICER background has variations. To account for this, the NICER team has devised several empirical background models.
 
@@ -500,13 +710,13 @@ For example, to run with the 3C50 model, <span style="color:red">use the followi
 
 Each of the background models has additional parameters or settings that allow more in-depth control of the model generation. `nicerl3-spect` does support these. For the SCORPEON model, the `bkgcomponents`, `bkgvariant`, `bkgsoftlanding` and `bkgver` parameters are passed to the SCORPEON modeling tasks.
 
-## 5. Variation: Choosing Different Input File Names
+## 6. Variation: Choosing Different Input File Names
 
 `nicerl3-spect` is designed by default to work with NICER observation data within its standard observation directory.
 
 However, in some cases the user will have done their "own" analysis and thus generated their own cleaned event files. It is still possible to use `nicerl3-spect` to generate spectral products. You can specify the exact name of the cleaned event file, UFA file, and MPU good time files using the `clfile`, `ufafile`, and `mkfile` parameters.
 
-## 6. What Can Go Wrong
+## 7. What Can Go Wrong
 
 ### No Good Time
 
@@ -520,7 +730,7 @@ However, occasionally, the environmental conditions are so bad that the entire o
 
 This simply means there is no good time. Unfortunately there is no easy fix for this, other than perhaps to relax the screening criteria you used in `nicerl2` to allow slightly more marginal data.
 
-## 7. Next Steps: Spectral Analysis
+## 8. Next Steps: Spectral Analysis
 
 What happens next is really about the science. At this point, the scientist needs to understand and apply the correct spectral model to their data.
 
@@ -533,6 +743,13 @@ Instead of using the `.xcm` script in the CLI, we can natively load the generate
 +++
 
 xspec.Xset.restore('mymodel.xcm')
+
+```{code-cell} python
+# The strange comment on the end of this line is for the benefit of our
+#  automated code-checking processes. You shouldn't import modules anywhere but
+#  the top of your file, but this is unfortunately necessary at the moment
+import xspec as xs  # noqa: E402
+```
 
 ```{code-cell} python
 # Configure PyXspec plotting device and energy axis
