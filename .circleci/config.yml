@@ -74,7 +74,7 @@ jobs:
       # The Fornax-Hea images can definitely be used here, just we're having some issues with what supporting files
       #  software are included at the moment, so it is easier to use a different image and just install HEASoft
       #  at the moment
-      - image: ghcr.io/nasa-fornax/fornax-images/fornax-hea:main
+      - image: ghcr.io/nasa-fornax/fornax-images/fornax-hea:break-software
     # This sets the amount of compute that we'll use to run the on-PR builds/tests - this particular setup corresponds
     #  to 2 CPUs and 4GB of RAM as of 16th September 2025
     resource_class: medium+

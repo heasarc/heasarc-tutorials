@@ -154,6 +154,7 @@ jupyter:
 ---
 # IXPE ObsID that we will use for this example.
 OBS_ID = "01004701"
+
 # The source name as well
 SRC_NAME = "Mrk 501"
 
