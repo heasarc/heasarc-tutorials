@@ -6,7 +6,7 @@ authors:
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
 - name: NICER Team
-date: '2026-06-22'
+date: '2026-06-26'
 execution:
   cal-files:
     xmm-ccf: false
@@ -63,7 +63,7 @@ Outputs
 
 Runtime
 
-As of 2026-06-18, this notebook takes ~180s to run to completion (heavily dependent on archive server download speeds and local processing power, as well as the number of parallel targets chosen).
+As of 25th June 2026, this notebook takes ~<span style="color:red">***??***</span>-minutes to run to completion on Fornax using the 'medium' server with 8GB RAM/ 2 cores.
 
 ## Imports
 
@@ -71,9 +71,10 @@ As of 2026-06-18, this notebook takes ~180s to run to completion (heavily depend
 import contextlib
 import multiprocessing as mp
 import os
+import re
 from random import randint
 from shutil import rmtree
-from typing import List
+from typing import List, Optional, Tuple
 
 import heasoftpy as hsp
 import matplotlib.pyplot as plt
@@ -82,6 +83,7 @@ from astropy.coordinates import SkyCoord
 from astropy.io import fits
 from astroquery.heasarc import Heasarc
 from IPython.display import display
+from matplotlib.ticker import FuncFormatter
 from tqdm import tqdm
 ```
 
@@ -142,7 +144,11 @@ def process_nicer_xti(obs_dir: str, cur_obs_id: str, out_dir: str):
 
     # Moves files from the temporary output directory into the
     #  final output directory
-    if os.path.exists(temp_work_dir) and len(os.listdir(temp_work_dir)) != 0:
+    if (
+        os.path.exists(temp_work_dir)
+        and len(os.listdir(temp_work_dir)) != 0
+        and task_success
+    ):
 
         final_evt = os.path.join(out_dir, evt_out)
         os.rename(os.path.join(temp_work_dir, evt_out), final_evt)
@@ -248,7 +254,11 @@ def combine_nicer_xti(
 
     # Moves files from the temporary output directory into the
     #  final output directory
-    if os.path.exists(temp_work_dir) and len(os.listdir(temp_work_dir)) != 0:
+    if (
+        os.path.exists(temp_work_dir)
+        and len(os.listdir(temp_work_dir)) != 0
+        and task_success
+    ):
 
         final_evt = os.path.join(out_dir, evt_out)
         os.rename(os.path.join(temp_work_dir, evt_out), final_evt)
@@ -312,6 +322,11 @@ def gen_nicer_xti_spectrum(
         src_name=src_name,
     )
 
+    # This tool will output a Python file with the background model
+    #  definition - we define the name of the Python file here so
+    #  it is easy for us to use later.
+    bg_script_out = sp_out.replace(".fits", "_bg_script.py")
+
     # Create a temporary working directory
     temp_work_dir = os.path.join(out_dir, f"nicerl3_spect_{randint(0, int(1e8))}")
     os.makedirs(temp_work_dir)
@@ -333,8 +348,10 @@ def gen_nicer_xti_spectrum(
                 clobber=True,
                 noprompt=True,
                 chatter=TASK_CHATTER,
+                cleanup=True,
+                outlang="python",
+                bkgscript=bg_script_out,
             )
-            # outlang="python",
 
             task_success = True
 
@@ -342,16 +359,249 @@ def gen_nicer_xti_spectrum(
             task_success = False
             out = str(err)
 
+    prod_lookup = {}
+
     # Moves files from the temporary output directory into the
     #  final output directory
-    if os.path.exists(temp_work_dir) and len(os.listdir(temp_work_dir)) != 0:
-        for f in os.listdir(temp_work_dir):
-            os.rename(os.path.join(temp_work_dir, f), os.path.join(out_dir, f))
+    if (
+        os.path.exists(temp_work_dir)
+        and len(os.listdir(temp_work_dir)) != 0
+        and task_success
+    ):
+
+        final_sp = os.path.join(out_dir, sp_out)
+        os.rename(os.path.join(temp_work_dir, sp_out), final_sp)
+
+        final_rmf = os.path.join(out_dir, rmf_out)
+        os.rename(os.path.join(temp_work_dir, rmf_out), final_rmf)
+
+        final_arf = os.path.join(out_dir, arf_out)
+        os.rename(os.path.join(temp_work_dir, arf_out), final_arf)
+
+        final_bg_script = os.path.join(out_dir, bg_script_out)
+        os.rename(os.path.join(temp_work_dir, bg_script_out), final_bg_script)
 
         # Make sure to remove the temporary directory
         rmtree(temp_work_dir)
 
-    return cur_obs_id, out, task_success
+        # Populate a dictionary with the paths to generated products
+        prod_lookup["spec"] = final_sp
+        prod_lookup["rmf"] = final_rmf
+        prod_lookup["arf"] = final_arf
+        prod_lookup["bg_script"] = final_bg_script
+
+    return src_name, cur_obs_id, out, task_success, prod_lookup
+
+
+def correct_scorpeon_script(script_path: str) -> str:
+    with open(script_path, "r") as scripto:
+        script_cont = scripto.read()
+
+    # For some reason these scripts are sometimes written with paths that
+    #  erroneously point to a level above the current directory.
+    script_cont = script_cont.replace("../", "")
+
+    # Not sure the import of sys is necessary
+    # script_cont = script_cont.replace("import sys", "# import sys")
+
+    # Use re.escape in case the substring contains special regex characters
+    patterns = {
+        "AllData": rf"(?=({re.escape('AllData')}))",
+        "AllModels": rf"(?=({re.escape('AllModels')}))",
+    }
+
+    # re.findall returns a list of matched strings, so we extract the span indices
+    all_to_rep = [
+        f"{script_cont[match.start()-1]}{patt_name}"
+        for patt_name, cur_patt in patterns.items()
+        for match in re.finditer(cur_patt, script_cont)
+        if script_cont[match.start() - 3 : match.start()] != "xs."
+    ]
+
+    for to_rep in set(all_to_rep):
+        script_cont = script_cont.replace(to_rep, f"{to_rep[0]}xs.{to_rep[1:]}")
+
+    return script_cont
+
+
+def plot_fit_residual_spec(
+    plot_data: dict,
+    sp_color: str = "navy",
+    mod_color: str = "firebrick",
+    res_color: str = "navy",
+    x_lims: Optional[Tuple[float, float]] = None,
+    y_lims: Optional[Tuple[float, float]] = None,
+    inst_name: Optional[str] = None,
+    stepped_model: bool = True,
+    mod_expr: Optional[str] = None,
+):
+    """
+    A convenience function used to plot the spectrum, fitted model, and residuals, at
+    various points in this demonstration. The required input is a dictionary of
+    the style constructed in various subsections of the 'alternative spectral models'
+    section.
+
+    Limited customization of the output figure is offered, but this is not intended
+    as a truly general-purpose plotting function, more as a possible inspiration
+    for your own versions.
+
+    :param dict plot_data: Dictionary containing all information necessary to produce
+        the fitted spectrum and residual visualization.
+    :param str sp_color: Matplotlib color to use for the spectral data points.
+    :param str mod_color: Matplotlib color to use for the fitted model staircase line.
+    :param str res_color: Matplotlib color to use for the residual data points.
+    :param Optional[Tuple[float, float]] x_lims: Optional limits on which parts
+        of the x-axis to plot. Must be a two-element tuple containing the lower and
+        then the upper limit.
+    :param Optional[Tuple[float, float]] y_lims: Optional limits on which parts
+        of the y-axis to plot. Must be a two-element tuple containing the lower and
+        then the upper limit.
+    :param str inst_name: Optionally, a mission/instrument name to add to the
+        legend label given to the spectral data points.
+    :param bool stepped_model: Controls whether the fitted model is plotted as a
+        staircase (to match XSPEC's plotting style) or as a smooth line. Default is
+        True, resulting in a staircase.
+    :param str mod_expr: Optionally, the 'expression' of the fitted model - to be
+        added to its legend label.
+    """
+
+    # Some basic checks to make sure the plot data is in the right format
+    # These are what we need
+    req_ents = [
+        "energy",
+        "energy_delta",
+        "rate",
+        "rate_err",
+        "model",
+        "residual",
+        "residual_err",
+        "energy_step",
+    ]
+    # Raise an error before we get started plotting if any entries are missing
+    if any([en not in plot_data for en in req_ents]):
+        raise KeyError(
+            f"Plot data must contain the following keys: f{', '.join(req_ents)}"
+        )
+
+    # Basic validity check on any axis limits
+    if x_lims is not None and (len(x_lims) != 2 or np.diff(x_lims) < 0):
+        raise ValueError(
+            "Passed x-axis limits must be a two-element tuple, with the first "
+            "entry less than the second."
+        )
+    if y_lims is not None and (len(y_lims) != 2 or np.diff(y_lims) < 0):
+        raise ValueError(
+            "Passed y-axis limits must be a two-element tuple, with the first "
+            "entry less than the second."
+        )
+
+    # Determine what the label for spectrum data points should be based on input
+    #  instrument name
+    sp_label = "Spectral data" if inst_name is None else f"{inst_name} data"
+
+    # Same as above, but for the model label
+    mod_label = "Fitted model" if mod_expr is None else f"Fitted model ({mod_expr})"
+
+    fig, ax_arr = plt.subplots(
+        nrows=2, figsize=(7, 6), height_ratios=(3, 1.5), sharex=True
+    )
+    # Shrink the vertical gap between the panels to zero
+    fig.subplots_adjust(hspace=0)
+
+    # First axis (the large, top-most one) is where we will plot the spectrum
+    #  data points, and fitted model lines.
+    spec_ax = ax_arr[0]
+    # Turn minor axis ticks on, and configure the direction they point, and that
+    #  they also appear on the top and right sides of the plot.
+    spec_ax.minorticks_on()
+    spec_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+    # First we plot the spectrum data points, including the count rate uncertainty,
+    #  and the size of each energy bin as error bars.
+    spec_ax.errorbar(
+        plot_data["energy"],
+        plot_data["rate"],
+        xerr=plot_data["energy_delta"],
+        yerr=plot_data["rate_err"],
+        fmt="+",
+        capsize=1.5,
+        label=sp_label,
+        color=sp_color,
+    )
+
+    # If the user has requested that the model fit be shown as a 'stepped' line (i.e.
+    #  what the standard XSPEC plots look like), we have to use the 'stairs' method
+    #  rather than the standard 'plot' method.
+    if stepped_model:
+        spec_ax.stairs(
+            plot_data["model"],
+            plot_data["energy_step"],
+            baseline=None,
+            fill=False,
+            color=mod_color,
+            alpha=0.8,
+            label=mod_label,
+            linewidth=1.4,
+            zorder=3,
+        )
+    # Otherwise, the model will be plotted as a smooth line.
+    else:
+        spec_ax.plot(
+            plot_data["energy"],
+            plot_data["model"],
+            color=mod_color,
+            label=mod_label,
+            alpha=0.8,
+            linewidth=1.4,
+            zorder=3,
+        )
+
+    # We allow the user to set specific x and y axis limits when they call this
+    #  function - if they have passed limits, we enforce them here (the residual
+    #  axis will inherit the limits as well, because we set sharex=True when
+    #  we defined the figure.
+    if x_lims is not None:
+        spec_ax.set_xlim(x_lims)
+    if y_lims is not None:
+        spec_ax.set_ylim(y_lims)
+
+    # We just assume the user wants a logged y-scale, which I don't think is too
+    #  restrictive.
+    spec_ax.set_yscale("log")
+    # Alter the formatting of the labels so that they are 0.1, 0.01, 0.001 etc.
+    spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+    # And make sure to set the y-axis label
+    spec_ax.set_ylabel(
+        r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+    )
+
+    spec_ax.legend(fontsize=14)
+
+    res_ax = ax_arr[1]
+    res_ax.minorticks_on()
+    res_ax.tick_params(which="both", direction="in", top=True, right=True)
+
+    res_ax.errorbar(
+        plot_data["energy"],
+        plot_data["residual"],
+        xerr=plot_data["energy_delta"],
+        yerr=plot_data["residual_err"],
+        fmt="+",
+        capsize=1.5,
+        color=res_color,
+    )
+    res_ax.axhline(0, color="goldenrod", linestyle="dashed")
+
+    res_ax.set_xlabel("Energy [keV]", fontsize=15)
+    res_ax.set_ylabel(
+        r"Residuals [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+    )
+
+    res_ax.set_xscale("log")
+    res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+    res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+    plt.show()
 ```
 
 ### Constants
@@ -534,10 +784,10 @@ for cur_name in TARGET_LIST:
 *Now that we have identified the data links for each observation, we iterate through our dictionary and download the raw data into subdirectories named after the respective target.*
 
 ```{code-cell} python
-for cur_name, cur_res in search_results.items():
-    cur_datalinks = Heasarc.locate_data(cur_res)
+# for cur_name, cur_res in search_results.items():
+#     cur_datalinks = Heasarc.locate_data(cur_res)
 
-    Heasarc.download_data(cur_datalinks, host="aws", location=ROOT_DATA_DIR)
+#     Heasarc.download_data(cur_datalinks, host="aws", location=ROOT_DATA_DIR)
 ```
 
 ## 2. Data Preparation
@@ -612,6 +862,32 @@ Once you have your cleaned events, you are ready to make a spectrum.
 
 +++
 
+`nicerl3-spect` is designed by default to work with NICER observation data within its standard observation directory.
+
+However, in some cases the user will have done their "own" analysis and thus generated their own cleaned event files. It is still possible to use `nicerl3-spect` to generate spectral products. You can specify the exact name of the cleaned event file, UFA file, and MPU good time files using the `clfile`, `ufafile`, and `mkfile` parameters.
+
++++
+
+### What can go wrong?
+
++++
+
+#### No Good Time
+
++++
+
+One of the most common failures of `nicerl3-spect` occurs when there is no good time. Because NICER observes targets in low Earth orbit, it is subject to many extreme variations in background and visibility. Usually `nicerl2` screens out extreme variations automatically, leaving "Good Time" (also known as a Good Time Interval or GTI).
+
+However, occasionally, the environmental conditions are so bad that the entire observation is screened out, leaving 0 seconds of good time. When there is no good time, there are no events to extract.
+
+`nicerl3-spect` will fail with <span style="color:red">Status 218</span> and you will see the following on the console output:
+
+<span style="color:red">ERROR: spectrum has zero good exposure time ... ERROR: niextspect failed nicerl3-spect: ERROR: Error extracting target spectrum</span>
+
+This simply means there is no good time. Unfortunately there is no easy fix for this, other than perhaps to relax the screening criteria you used in `nicerl2` to allow slightly more marginal data.
+
++++
+
 ### Generating combined spectra
 
 +++
@@ -637,7 +913,6 @@ for cur_name, cur_prods in nicomb_out_prods.items():
         ]
     )
 
-
 with mp.Pool(NUM_CORES) as p:
     with tqdm(
         total=len(arg_combs_comb_sp), desc="Generating combined NICER spectra"
@@ -649,6 +924,10 @@ with mp.Pool(NUM_CORES) as p:
             for item in arg_combs_comb_sp
         ]
         comb_spec_results = [job.get() for job in jobs]
+
+comb_spec_prods = {
+    cur_res[0]: cur_res[4] for cur_res in comb_spec_results if cur_res[3]
+}
 ```
 
 ### Generating individual spectra
@@ -670,7 +949,6 @@ for cur_name, cur_ois in rel_obsids.items():
             ]
         )
 
-
 with mp.Pool(NUM_CORES) as p:
     with tqdm(
         total=len(arg_combs_indiv_sp), desc="Generating individual NICER spectra"
@@ -682,6 +960,10 @@ with mp.Pool(NUM_CORES) as p:
             for item in arg_combs_indiv_sp
         ]
         indiv_spec_results = [job.get() for job in jobs]
+
+indiv_spec_prods = {
+    cur_res[1]: cur_res[4] for cur_res in indiv_spec_results if cur_res[3]
+}
 ```
 
 As the task runs, you will see a lot of output on the screen, detailing each step in the process. Depending on the size of the observation and the processing speed of your computer, `nicerl3-spect` may take anywhere from 10 seconds to several minutes to run.
@@ -710,27 +992,11 @@ For example, to run with the 3C50 model, <span style="color:red">use the followi
 
 Each of the background models has additional parameters or settings that allow more in-depth control of the model generation. `nicerl3-spect` does support these. For the SCORPEON model, the `bkgcomponents`, `bkgvariant`, `bkgsoftlanding` and `bkgver` parameters are passed to the SCORPEON modeling tasks.
 
-## 6. Variation: Choosing Different Input File Names
++++
 
-`nicerl3-spect` is designed by default to work with NICER observation data within its standard observation directory.
+## 5. Fitting NICER spectra with PyXspec
 
-However, in some cases the user will have done their "own" analysis and thus generated their own cleaned event files. It is still possible to use `nicerl3-spect` to generate spectral products. You can specify the exact name of the cleaned event file, UFA file, and MPU good time files using the `clfile`, `ufafile`, and `mkfile` parameters.
-
-## 7. What Can Go Wrong
-
-### No Good Time
-
-One of the most common failures of `nicerl3-spect` occurs when there is no good time. Because NICER observes targets in low Earth orbit, it is subject to many extreme variations in background and visibility. Usually `nicerl2` screens out extreme variations automatically, leaving "Good Time" (also known as a Good Time Interval or GTI).
-
-However, occasionally, the environmental conditions are so bad that the entire observation is screened out, leaving 0 seconds of good time. When there is no good time, there are no events to extract.
-
-`nicerl3-spect` will fail with <span style="color:red">Status 218</span> and you will see the following on the console output:
-
-<span style="color:red">ERROR: spectrum has zero good exposure time ... ERROR: niextspect failed nicerl3-spect: ERROR: Error extracting target spectrum</span>
-
-This simply means there is no good time. Unfortunately there is no easy fix for this, other than perhaps to relax the screening criteria you used in `nicerl2` to allow slightly more marginal data.
-
-## 8. Next Steps: Spectral Analysis
++++
 
 What happens next is really about the science. At this point, the scientist needs to understand and apply the correct spectral model to their data.
 
@@ -742,101 +1008,129 @@ Instead of using the `.xcm` script in the CLI, we can natively load the generate
 
 +++
 
-xspec.Xset.restore('mymodel.xcm')
+### Setting up PyXspec
 
 ```{code-cell} python
 # The strange comment on the end of this line is for the benefit of our
 #  automated code-checking processes. You shouldn't import modules anywhere but
 #  the top of your file, but this is unfortunately necessary at the moment
 import xspec as xs  # noqa: E402
+
+# Limits the amount of output from XSPEC that PyXspec will display
+# xs.Xset.chatter = 0
+
+
+# Stops any XSPEC figure output on the usual plot devices
+xs.Plot.device = "/null"
+
+
+# Other xspec settings
+xs.Plot.xAxis = "keV"
+xs.Plot.background = True
+xs.Fit.statMethod = "cstat"
+xs.Fit.query = "no"
+xs.Fit.nIterations = 500
+```
+
+### Combined spectra
+
+```{code-cell} python
+xs.AllData.clear()
+xs.AllModels.clear()
+
+cur_sps = {}
+cur_iter = 1
+# for cur_name, cur_comb_sp_prods in comb_spec_prods.items():
+for cur_name, cur_comb_sp_prods in [
+    ["RXJ2143.0+0654", comb_spec_prods["RXJ2143.0+0654"]]
+]:
+
+    with contextlib.chdir(os.path.dirname(cur_comb_sp_prods["spec"])):
+        xs.AllData(f"{cur_iter}:{cur_iter} {cur_comb_sp_prods['spec']}")
+
+        cur_spec = xs.AllData(cur_iter)
+        cur_spec.response = cur_comb_sp_prods["rmf"]
+        cur_spec.response.arf = cur_comb_sp_prods["arf"]
+
+        # This function prepares the auto-generated script for use in this notebook
+        cur_bg_script_cont = correct_scorpeon_script(cur_comb_sp_prods["bg_script"])
+
+        #
+        nicer_bkgspect = cur_iter
+
+        # This executes the string 'cur_bg_script_cont' (which contains the contents
+        #  of the 'corrected' version of the background-loading script produced
+        #  by nicerl3-spect) as Python code.
+        # WE GENERALLY CAUTION AGAINST USING EXEC AT ALL, IT ISN'T CONSIDERED
+        #  PARTICULARLY SAFE, but it is the most robust approach to loading
+        #  the background models in this notebook.
+        exec(cur_bg_script_cont)
+
+        cur_iter += 1
+
+xs.Model("tbabs*bbody", setPars={1: 0.0522, 2: 1.1})
+# for data_group_ind in  range(2, len(comb_spec_prods)+1):
+#     xs.AllModels(data_group_ind).untie()
+
+xs.AllData.ignore("bad")
 ```
 
 ```{code-cell} python
-# Configure PyXspec plotting device and energy axis
-xs.Plot.device = "/null"
-xs.Plot.xAxis = "keV"
+xs.AllData.show()
+```
 
-# Prepare a multi-axes figure
-fig, ax_arr = plt.subplots(
-    len(TARGET_LIST), 1, figsize=(8, 4.5 * len(TARGET_LIST)), sharex=True
+```{code-cell} python
+xs.AllModels.show()
+```
+
+```{code-cell} python
+xs.Fit.renorm()
+xs.Fit.perform()
+```
+
+```{code-cell} python
+xs.Plot("data resid")
+
+cur_plot_data = {
+    "energy": np.array(xs.Plot.x(plotWindow=1)),
+    "energy_delta": np.array(xs.Plot.xErr(plotWindow=1)),
+    "rate": np.array(xs.Plot.y(plotWindow=1)),
+    "rate_err": np.array(xs.Plot.yErr(plotWindow=1)),
+    "model": np.array(xs.Plot.model(plotWindow=1)),
+    "residual": np.array(xs.Plot.y(plotWindow=2)),
+    "residual_err": np.array(xs.Plot.yErr(plotWindow=2)),
+}
+
+cur_plot_data["energy_step"] = np.append(
+    cur_plot_data["energy"] - cur_plot_data["energy_delta"],
+    cur_plot_data["energy"][-1] + cur_plot_data["energy_delta"][-1],
 )
+```
 
-# Ensure ax_arr is iterable if there is only 1 target
-if len(TARGET_LIST) == 1:
-    ax_arr = [ax_arr]
-
-for i, (src, obs_list) in enumerate(TARGET_LIST.items()):
-    ax = ax_arr[i]
-    ax.minorticks_on()
-    ax.tick_params(which="both", direction="in", top=True, right=True)
-
-    for obs in obs_list:
-        obs_dir = os.path.join(ROOT_DATA_DIR, src, obs)
-        spec_file = os.path.join(obs_dir, f"ni{obs}mpu7_sr.pha")
-
-        # Guard against observations that failed extraction (No Good Time)
-        if not os.path.exists(spec_file):
-            print(f"Skipping ObsID {obs} for {src}: No valid spectrum found.")
-            continue
-
-        xs.AllData.clear()
-        s = xs.Spectrum(spec_file)
-
-        xs.Plot("ldata")
-        x_vals = np.array(xs.Plot.x())
-        x_errs = np.array(xs.Plot.xErr())
-        y_vals = np.array(xs.Plot.y())
-        y_errs = np.array(xs.Plot.yErr())
-
-        ax.errorbar(
-            x_vals,
-            y_vals,
-            xerr=x_errs,
-            yerr=y_errs,
-            fmt="+",
-            label=f"ObsID {obs}",
-            capsize=2,
-            alpha=0.8,
-        )
-
-    ax.set_yscale("log")
-    ax.set_xscale("log")
-    ax.set_ylabel("Counts s$$^{-1}$$ keV$$^{-1}$$", fontsize=15)
-    ax.set_title(f"Target: {src}", fontsize=15)
-    ax.legend(fontsize=12)
-
-ax_arr[-1].set_xlabel("Energy [keV]", fontsize=15)
-ax_arr[-1].set_xlim(0.2, 10.0)
-
-plt.tight_layout()
-plt.show()
+```{code-cell} python
+plot_fit_residual_spec(cur_plot_data, inst_name="EXOSAT-ME", mod_expr="tbabsxbbody")
 ```
 
 ## About this notebook
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-06-22
+Author: NICER Team
+
+Updated On: 2026-06-26
 
 +++
 
 ## Additional Resources
 
-- NICER Data Analysis Threads: https://heasarc.gsfc.nasa.gov/docs/nicer/analysis_threads/
+NICER Support: [NICER Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=nicer)
+
+HEASARC Support: [HEASARC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc)
+
+[NICER Data Analysis Threads](https://heasarc.gsfc.nasa.gov/docs/nicer/analysis_threads/)
 
 ## Acknowledgements
 
+This demonstration was based off the ['Complete Spectral Product Pipeline'](https://heasarc.gsfc.nasa.gov/docs/nicer/analysis_threads/nicerl3-spect/) and ['Combining Multiple NICER Observations'](https://heasarc.gsfc.nasa.gov/docs/nicer/analysis_threads/combine-obs/) NICER data analysis threads.
 
 ## References
-
-This work made use of:
-- HEASoft and HEASoftPy
-- PyXspec
-
-+++
-
-About this notebook
-
-Authors: HEASARC Team, and the Fornax team.
-
-Contact: For help with this notebook, please open a topic in the Fornax Community Forum "Support" category.
