@@ -1040,10 +1040,7 @@ xs.AllModels.clear()
 
 cur_sps = {}
 cur_iter = 1
-# for cur_name, cur_comb_sp_prods in comb_spec_prods.items():
-for cur_name, cur_comb_sp_prods in [
-    ["RXJ2143.0+0654", comb_spec_prods["RXJ2143.0+0654"]]
-]:
+for cur_name, cur_comb_sp_prods in comb_spec_prods.items():
 
     with contextlib.chdir(os.path.dirname(cur_comb_sp_prods["spec"])):
         xs.AllData(f"{cur_iter}:{cur_iter} {cur_comb_sp_prods['spec']}")
