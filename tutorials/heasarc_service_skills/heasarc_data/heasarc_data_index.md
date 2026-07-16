@@ -8,6 +8,6 @@ maxdepth: 2
 caption: HEASARC data tutorials
 ---
 
-astroquery-data-acquisition
+astroquery_data_acquisition
 pyvo-data-acquisition
 ```
