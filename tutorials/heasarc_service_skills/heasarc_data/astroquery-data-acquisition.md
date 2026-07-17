@@ -173,6 +173,7 @@ Finally, we can run the query that will filter our table of observations:
 source_obs_res = Heasarc.query_region(
     position=source_name, catalog=obs_cat_name, radius=custom_search_rad
 )
+
 source_obs_res
 ```
 
