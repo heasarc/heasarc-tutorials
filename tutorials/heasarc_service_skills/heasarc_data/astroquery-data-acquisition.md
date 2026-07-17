@@ -6,11 +6,6 @@ authors:
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
 date: '2026-07-16'
-execution:
-  cal-files:
-    xmm-ccf: false
-    chandra: false
-    xspec-models: false
 file_format: mystnb
 jupytext:
   text_representation:
@@ -22,15 +17,20 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: Using Astroquery to download observation data from HEASARC
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: false
+title: Using Astroquery to download HEASARC observation data
 ---
 
-# Using Astroquery to download observation data from HEASARC
+# Using Astroquery to download HEASARC observation data
 
 ## Learning Goals
 
 This notebook will teach you:
-- How to retrieve HEASARC 'master' catalogs, which summarize the observations taken by a particular telescope.
+- How to retrieve HEASARC 'master' catalogs, which summarize all observations taken by a particular telescope.
 - How to filter an observation summary table to find relevant observations for a single source, based on how close the observation was to the source.
 - How to download the data files associated with those relevant observations.
 
@@ -39,9 +39,8 @@ This notebook will teach you:
 This bite-sized tutorial will show you how to find and retrieve observation data files from HEASARC using Astroquery.
 
 HEASARC hosts a large number of catalogs; the vast majority relate to the properties and/or locations
-of astrophysical sources and have been produced by scientists during their research.
-
-A small subset of the catalogs served by HEASARC are 'master' (or 'observation summary') catalogs, which
+of astrophysical sources and have been produced by scientists during their research. A small subset
+of the catalogs served by HEASARC are 'master' (or 'observation summary') catalogs, which
 act as the primary index of every observation taken by a particular telescope.
 
 We will filter an 'observation summary' catalog to find 'relevant' observations and then
@@ -53,7 +52,7 @@ As of 17th July 2026, this notebook takes ~5-minutes to run to completion
 on [Fornax](https://docs.fornax.sciencecloud.nasa.gov/) using the 'small' server with 8GB RAM/ 2 cores.
 
 Please note that this runtime is heavily dependent on archive servers, and the speed of
-your internet connection, which means runtime will likely vary for users.
+your internet connection, which means runtime may vary.
 
 ## Imports
 
@@ -68,14 +67,13 @@ from astroquery.heasarc import Heasarc
 
 ***
 
-## 1. Listing HEASARC's observation summary catalogs
+## 1. Listing HEASARC's master catalogs
 
 We assume that you already have a basic understanding of HEASARC's Astroquery interface and how you search for
 HEASARC catalogs – if not, please see the '{doc}`Find specific HEASARC catalogs using Python <../heasarc_catalogs/finding_relevant_heasarc_catalog>`'
 bite-sized tutorial.
 
-To fetch a list of every 'observation summary' catalog (see the [introduction](#introduction)) hosted by HEASARC, we
-can simply run:
+To list the 'observation summary' catalogs (see the [introduction](#introduction)) hosted by HEASARC, we run:
 
 ```{code-cell} python
 all_obs_cat = Heasarc.list_catalogs(master=True)
@@ -90,7 +88,7 @@ tutorial, for an explanation of why we use `pprint_all()`) we can run:
 all_obs_cat.pprint_all()
 ```
 
-## 2. Selecting the observation summary catalog for your mission
+## 2. Choosing an observation summary catalog
 
 We can pick out the name of a particular summary catalog by examining the `name` column, or we can
 introduce a keyword search to find a more specific match (see the '{doc}`Find specific HEASARC catalogs using Python <../heasarc_catalogs/finding_relevant_heasarc_catalog>`'
