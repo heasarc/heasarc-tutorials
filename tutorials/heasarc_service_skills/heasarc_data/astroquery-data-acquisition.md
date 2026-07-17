@@ -90,8 +90,9 @@ all_obs_cat.pprint_all()
 
 ## 2. Choosing an observation summary catalog
 
-We can pick out the name of a particular summary catalog by examining the `name` column, or we can
-introduce a keyword search to find a more specific match (see the '{doc}`Find specific HEASARC catalogs using Python <../heasarc_catalogs/finding_relevant_heasarc_catalog>`'
+We can pick out the name of the observation summary catalog we want by examining the `name` and
+description columns in the table above, or we can use a keyword search to find a more specific
+match. See the '{doc}`Find specific HEASARC catalogs using Python <../heasarc_catalogs/finding_relevant_heasarc_catalog>`'
 tutorial for an explanation of keyword searches):
 
 ```{code-cell} python
@@ -102,6 +103,7 @@ filt_obs_cat
 Then extract the name of the catalog:
 
 ```{code-cell} python
+# The filtered table has one row (accessed using [0])
 obs_cat_name = filt_obs_cat[0]["name"]
 obs_cat_name
 ```
@@ -113,7 +115,7 @@ the nominal central coordinate of the pointing (or 'sky tile', for all-sky surve
 within some radius of the source of interest.
 
 The specific matching radius you choose will depend on:
-1. The mission whose observations you're searching (every mission will have a different field of view, or FoV).
+1. The mission you need observations from - every mission has a different field of view (FoV).
 2. Which instrument you are most interested in (different instruments on the same mission will oftentimes have different FoVs).
 3. Whether the instrument's FoV is circular, square, or rectangular (Chandra's ACIS-S, for instance, is often used in a rectangular configuration that is much longer than it is wide).
 4. Your source and science goal – a low-redshift galaxy cluster, for instance, might motivate a larger matching radius as the whole source may not fit within the instrument's FoV.
@@ -134,7 +136,8 @@ custom_search_rad = Quantity(3, "arcmin")
 custom_search_rad
 ```
 
-Speaking of our source, we will search for Suzaku observations of PDS 456, a nearby radio-quiet quasar:
+Speaking of sources, for this demonstration we're going to search for Suzaku observations
+of **PDS 456**, a nearby radio-quiet quasar:
 
 ```{code-cell} python
 # Blank space can be included in names passed to a name resolver
@@ -142,8 +145,8 @@ source_name = "PDS 456"
 ```
 
 A string source name variable can be passed directly into the search function we're about to use, which
-will then use a name resolver to fetch the coordinate. Alternatively, we could do that ourselves and
-pass the coordinate in:
+will then use a name resolver to fetch the coordinate. Alternatively, we can trigger a name
+resolver ourselves and pass the coordinate in to the search function:
 
 ```{code-cell} python
 source_coord = SkyCoord.from_name(source_name)
@@ -184,11 +187,10 @@ Now that we've identified some observations that are relevant to our source of i
 the end of [Section 3](#3-filtering-observations-by-distance-from-a-source)), we
 can move on to downloading their data files.
 
-The first step is to pass the return from our `Heasarc.query_region(...)` call (in our
-case the Astropy `Table` assigned to `source_obs_res`) and pass it to the `locate_data(...)`
-method of `Heasarc`. This function will construct a table of 'datalinks', which
-describe where the relevant observation data are actually stored, and will provide us an
-easy way of accessing them:
+The first step is to pass the return from our `Heasarc.query_region(...)` call (an Astropy `Table`
+assigned to `source_obs_res`) and pass it to the `locate_data(...)` method of `Heasarc`. This function
+will construct a table of 'datalinks', which describe where the relevant observation data are
+actually stored, and provide us an easy way of accessing them:
 
 ```{code-cell} python
 source_obs_datalinks = Heasarc.locate_data(source_obs_res)
@@ -198,7 +200,7 @@ source_obs_datalinks
 The table has several columns, including:
 - **ID** – A unique International Virtual Observatory (IVO) ID for the data.
 - **access_url** – A URL to one of the locations the data are stored, HEASARC's FTP server.
-- **sciserver** – The path to the data if you are working on SciServer (see the [HEASARC@SciServer user guide](https://heasarc.gsfc.nasa.gov/docs/sciserver/)).
+- **sciserver** – Path to the data if working on SciServer (see the [HEASARC@SciServer user guide](https://heasarc.gsfc.nasa.gov/docs/sciserver/)).
 - **aws** – A URI that points to where the data are stored in the HEASARC Amazon Web Services (AWS) S3 bucket (see the [registry of open data on AWS](https://registry.opendata.aws/nasa-heasarc/)).
 
 This means that when we come to download the data, we have a choice of _where to download it from_. Unless you are
