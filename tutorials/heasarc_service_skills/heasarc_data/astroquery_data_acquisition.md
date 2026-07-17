@@ -54,19 +54,6 @@ As of 17th July 2026, this notebook takes ~<span style="color:red">**??**</span>
 
 ## Imports
 
-This notebook uses features from an Astroquery pre-release. You will need to install
-the latest version using the command below. We will remove this once Astroquery
-v0.4.12 is officially released.
-
-```{code-cell} python
----
-tags: [hide-output]
-jupyter:
-  output_hidden: true
----
-%pip install --pre astroquery --upgrade
-```
-
 ```{code-cell} python
 import os
 
