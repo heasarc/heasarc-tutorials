@@ -256,12 +256,4 @@ We provide several bite-sized tutorials on accessing HEASARC catalogs using Pyth
 
 ### References
 
-[Ginsburg, Sipőcz, Brasseur et al. (2019)](https://ui.adsabs.harvard.edu/abs/2019AJ....157...98G/abstract) - _astroquery: An Astronomical Web-querying Package in Python_
-
-[Cavagnolo K. W., Donahue M., Voit G. M., Sun M. (2009)](https://ui.adsabs.harvard.edu/abs/2009ApJS..182...12C/abstract) - _Intracluster Medium Entropy Profiles for a Chandra Archival Sample of Galaxy Clusters_
-
-[Evans I. N., Evans J. D., Martínez-Galarza J. R., Miller J. B. et al. (2024)](https://ui.adsabs.harvard.edu/abs/2024ApJS..274...22E/abstract) - _The Chandra Source Catalog Release 2 Series_
-
-[Chandra Source Catalog 2 DOI - doi:10.25574/csc2](https://doi.org/10.25574/csc2)
-
-[Demleitner M. and Heinl H. (2024)](https://dc.g-vo.org/voidoi/q/lp/custom/10.21938/uH0_xl5a6F7tKkXBSPnZxg) - _A Short Course on ADQL; Virtual Observatory Resource_
+[Ginsburg, Sipőcz, Brasseur et al. (2019)](https://ui.adsabs.harvard.edu/abs/2019AJ....157...98G/abstract) – _astroquery: An Astronomical Web-querying Package in Python_
