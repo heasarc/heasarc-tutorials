@@ -6,11 +6,6 @@ authors:
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
 date: '2026-07-16'
-execution:
-  cal-files:
-    xmm-ccf: false
-    chandra: false
-    xspec-models: false
 file_format: mystnb
 jupytext:
   text_representation:
@@ -22,8 +17,12 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: Downloading HEASARC-held observation data for a single source using separation
-  matching and Astroquery
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: false
+title: Downloading HEASARC-held observation data for a single source using separation matching and Astroquery
 ---
 
 # Downloading HEASARC-held observation data for a single source using separation matching and Astroquery
