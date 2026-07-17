@@ -208,7 +208,7 @@ directory specified by `download_dir` (they would be placed in your current dire
 you didn't pass anything to the `location=` argument):
 
 ```{code-cell} python
-download_dir = "heasarc_data"
+download_dir = f"heasarc_data/{obs_cat_name}"
 os.makedirs(download_dir, exist_ok=True)
 
 Heasarc.download_data(links=source_obs_datalinks, host="aws", location=download_dir)
