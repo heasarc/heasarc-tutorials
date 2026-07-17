@@ -131,3 +131,12 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
+
+  - path: heasarc_service_skills/heasarc_data/astroquery-data-acquisition.md
+    executed-path: heasarc_service_skills/heasarc_data/astroquery-data-acquisition.ipynb
+    title: Using Astroquery to download HEASARC observation data
+    description: This bite-sized tutorial will show you how to find and retrieve observation data files from HEASARC using Astroquery.
+    fornax-env: heasoft
+    extra-dependencies:
+    requirements-file:
+    keywords: [ ]

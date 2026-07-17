@@ -342,7 +342,11 @@ jobs:
       # Some missions (e.g. XMM, Chandra, eROSITA) need their calibration files to be available locally. We
       #  don't want to download them every single time, so we're going to cache them for future runs.
 
-      # Don't need a checkout step here, as we're just going to be downloading things.
+      # Don't need a checkout step here, as we're just going to be downloading things, but there
+      #  must be an unconditional step to appease CircleCI's config schema checker.
+      - run:
+          name: Start cache-support-data
+          command: echo "Checking required calibration data"
 
       # We want to restore the caches that contain calibration files, so our download steps
       #  can check to see if they need to run at all.

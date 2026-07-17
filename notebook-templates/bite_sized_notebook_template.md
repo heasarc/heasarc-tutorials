@@ -72,12 +72,15 @@ TEACHES TOO MANY SKILLS THEN YOU WILL NEED TO REWRITE IT AS A FULL NOTEBOOK**
 ### Runtime
 
 Please report actual numbers and machine details for your notebook if it is expected to run longer or requires specific machines, for example, on Fornax.
-
 Also, if querying archives, please include a statement like:
+"This runtime is heavily dependent on archive servers, which means that the runtime may vary for users".
+
+**OR**
+
 "This notebook depends on external services, such as the HEASARC archive, and therefore the runtime may vary for users."
 
 Here is a template runtime statement:
-As of {Date}, this notebook takes ~{N}s to run to completion on Fornax using the '{name: size}' server with NGB RAM/ N cores.
+As of {Date}, this notebook takes ~{N}-seconds to run to completion on [Fornax](https://docs.fornax.sciencecloud.nasa.gov/) using the '{name: size}' server with NGB RAM/ N cores.
 
 ## Imports
 
