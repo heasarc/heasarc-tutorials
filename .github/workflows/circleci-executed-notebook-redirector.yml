@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Run executed notebook redirector
         id: step1
-        uses: DavidT3/circleci-artifacts-redirector-action@bug/parseCircleCIURL
+        uses: DavidT3/circleci-artifacts-redirector-action@master
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           api-token: ${{ secrets.HEASARC_TUTORIALS_CIRCLECI_TOKEN }}
