@@ -159,6 +159,8 @@ exactly what coordinate has been returned.
 In fact, you might want to define your own coordinate directly:
 
 ```{code-cell} python
+# The same coordinate we got from the name lookup, but demonstrates how to
+#  manually define a coordinate object.
 manual_source_coord = SkyCoord(262.0825, -14.2655, unit="deg")
 manual_source_coord
 ```
