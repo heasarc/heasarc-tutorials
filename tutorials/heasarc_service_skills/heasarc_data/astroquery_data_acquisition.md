@@ -22,10 +22,10 @@ execution:
     xmm-ccf: false
     chandra: false
     xspec-models: false
-title: Downloading HEASARC-held observation data for a single source using separation matching and Astroquery
+title: Using Astroquery to download observation data from HEASARC
 ---
 
-# Downloading HEASARC-held observation data for a single source using separation matching and Astroquery
+# Using Astroquery to download observation data from HEASARC
 
 ## Learning Goals
 
@@ -50,8 +50,7 @@ show you how to acquire those data files.
 ### Runtime
 
 As of 17th July 2026, this notebook takes ~5-minutes to run to completion
-on [Fornax](https://docs.fornax.sciencecloud.nasa.gov/) using the'small' server
-with 8GB RAM/ 2 cores.
+on [Fornax](https://docs.fornax.sciencecloud.nasa.gov/) using the 'small' server with 8GB RAM/ 2 cores.
 
 Please note that this runtime is heavily dependent on archive servers, and the speed of
 your internet connection, which means runtime will likely vary for users.
@@ -212,6 +211,7 @@ directory specified by `download_dir` (they would be placed in your current dire
 you didn't pass anything to the `location=` argument):
 
 ```{code-cell} python
+# Define download path
 download_dir = f"heasarc_data/{obs_cat_name}"
 os.makedirs(download_dir, exist_ok=True)
 
