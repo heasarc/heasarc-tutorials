@@ -1,0 +1,1000 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Using Astroquery to download HEASARC observation data &#8212; HEASARC Tutorial Notebooks</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-R7YGYK7HYQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-R7YGYK7HYQ');
+            </script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/heasarc_service_skills/heasarc_data/astroquery-data-acquisition';</script>
+    <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Using PyVO to find and acquire HEASARC data" href="pyvo-data-acquisition.html" />
+    <link rel="prev" title="Accessing HEASARC Data" href="heasarc_data_index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content"><p class='beta-banner'>The HEASARC tutorials resource is in <strong>BETA</strong> and may be subject to significant changes.</p></div>
+</aside>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/heasarc_logo.png" class="logo__image only-light" alt="High Energy Astrophysics Science Archive Research Center - Home"/>
+    <img src="../../../_static/heasarc_logo.png" class="logo__image only-dark pst-js-only" alt="High Energy Astrophysics Science Archive Research Center - Home"/>
+  
+  
+    <p class="title logo__title">v0.1</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/HEASARC/heasarc-tutorials" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../about/about_index.html">About</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about/authors.html">Contributors</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developing skills with HEASARC services</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="heasarc_data_index.html">Accessing HEASARC Data</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Using Astroquery to download HEASARC observation data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyvo-data-acquisition.html">Using PyVO to find and acquire HEASARC data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../heasarc_catalogs/heasarc_catalogs_index.html">Accessing HEASARC Catalogs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../heasarc_catalogs/finding_relevant_heasarc_catalog.html">Find specific HEASARC catalogs using Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../heasarc_catalogs/heasarc_catalog_contents.html">Exploring the contents of HEASARC catalogs using Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../heasarc_catalogs/uploading_matching_table_heasarc_catalogs.html">Cross-matching local and HEASARC catalogs using Python</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Mission specific tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/nustar/nustar_index.html">NuSTAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/nustar/data-analysis-nustar.html">Analyzing a single NuSTAR observation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/rxte/rxte_index.html">RXTE</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/rxte/analyze-rxte-spectra.html">Exploring RXTE spectral observations of Eta Car</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/rxte/analyze-rxte-lightcurves.html">Using archived and newly generated RXTE light curves</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/nicer/nicer_index.html">NICER</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/nicer/data-analysis-nicer.html">Getting started with NICER data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/ixpe/ixpe_index.html">IXPE</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/ixpe/data-analysis-ixpe.html">Getting started with preprocessed IXPE data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/swift/swift_index.html">Swift</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/swift/getting-started-swift-xrt.html">Getting started with Swift-XRT</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/rosat/rosat_index.html">ROSAT</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/rosat/getting-started-rosat-all-sky-survey.html">Getting started with ROSAT All Sky Survey data</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Useful high-energy tools</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pyxspec/pyxspec_index.html">PyXspec</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pyxspec/pyxspec-basics.html">PyXspec basics – fitting models to data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/heasoftpy/heasoftpy_index.html">HEASoftPy</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/heasoftpy/heasoftpy-getting-started.html">Getting started with HEASoftPy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas_index.html">pySAS</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas-short-intro.html">Short introduction to pySAS</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/HEASARC/heasarc-tutorials" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/HEASARC/heasarc-tutorials/edit/main/tutorials/heasarc_service_skills/heasarc_data/astroquery-data-acquisition.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/HEASARC/heasarc-tutorials/issues/new?title=Issue%20on%20page%20%2Ftutorials/heasarc_service_skills/heasarc_data/astroquery-data-acquisition.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/tutorials/heasarc_service_skills/heasarc_data/astroquery-data-acquisition.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Using Astroquery to download HEASARC observation data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#listing-heasarcs-master-catalogs">1. Listing HEASARC’s master catalogs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-an-observation-summary-catalog">2. Choosing an observation summary catalog</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering-observations-by-distance-from-a-source">3. Filtering observations by distance from a source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-observation-data-files">4. Downloading observation data files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-this-notebook">About this notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">Additional Resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="using-astroquery-to-download-heasarc-observation-data">
+<h1>Using Astroquery to download HEASARC observation data<a class="headerlink" href="#using-astroquery-to-download-heasarc-observation-data" title="Link to this heading">#</a></h1>
+<section id="learning-goals">
+<h2>Learning Goals<a class="headerlink" href="#learning-goals" title="Link to this heading">#</a></h2>
+<p>This notebook will teach you:</p>
+<ul class="simple">
+<li><p>How to retrieve HEASARC ‘master’ catalogs, which summarize all observations taken by a particular telescope.</p></li>
+<li><p>How to filter an observation summary table to find relevant observations for a single source, based on how close the observation was to the source.</p></li>
+<li><p>How to download the data files associated with those relevant observations.</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>This bite-sized tutorial will show you how to find and retrieve observation data files from HEASARC using Astroquery.</p>
+<p>HEASARC hosts a large number of catalogs; the vast majority relate to the properties and/or locations
+of astrophysical sources and have been produced by scientists during their research. A small subset
+of the catalogs served by HEASARC are ‘master’ (or ‘observation summary’) catalogs, which
+act as the primary index of every observation taken by a particular telescope.</p>
+<p>We will filter an ‘observation summary’ catalog to find ‘relevant’ observations and then
+show you how to acquire those data files.</p>
+<section id="runtime">
+<h3>Runtime<a class="headerlink" href="#runtime" title="Link to this heading">#</a></h3>
+<p>As of 17th July 2026, this notebook takes ~5-minutes to run to completion
+on <a class="reference external" href="https://docs.fornax.sciencecloud.nasa.gov/">Fornax</a> using the ‘small’ server with 8GB RAM/ 2 cores.</p>
+<p>Please note that this runtime is heavily dependent on archive servers, and the speed of
+your internet connection, which means runtime may vary.</p>
+</section>
+</section>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy.coordinates</span><span class="w"> </span><span class="kn">import</span> <span class="n">SkyCoord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy.units</span><span class="w"> </span><span class="kn">import</span> <span class="n">Quantity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astroquery.heasarc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Heasarc</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="listing-heasarcs-master-catalogs">
+<h2>1. Listing HEASARC’s master catalogs<a class="headerlink" href="#listing-heasarcs-master-catalogs" title="Link to this heading">#</a></h2>
+<p>We assume that you already have a basic understanding of HEASARC’s Astroquery interface and how you search for
+HEASARC catalogs – if not, please see the ‘<a class="reference internal" href="../heasarc_catalogs/finding_relevant_heasarc_catalog.html"><span class="doc">Find specific HEASARC catalogs using Python</span></a>’
+bite-sized tutorial.</p>
+<p>To list the ‘observation summary’ catalogs (see the <a class="reference internal" href="#introduction">introduction</a>) hosted by HEASARC, we run:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_obs_cat</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_catalogs</span><span class="p">(</span><span class="n">master</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To examine the contents of the returned table (see the
+‘<a class="reference internal" href="../heasarc_catalogs/heasarc_catalog_contents.html"><span class="doc">Exploring the contents of HEASARC catalogs using Python</span></a>’
+tutorial, for an explanation of why we use <code class="docutils literal notranslate"><span class="pre">pprint_all()</span></code>) we can run:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The &#39;pprint&#39; stands for &#39;pretty print&#39;</span>
+<span class="n">all_obs_cat</span><span class="o">.</span><span class="n">pprint_all</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   name                             description                         
+---------- -------------------------------------------------------------
+ascamaster                                           ASCA Master Catalog
+burcbmastr                          BurstCube Master Observation Catalog
+chanmaster                                          Chandra Observations
+ cmbmaster LAMBDA Cosmic Microwave Background Experiments Master Catalog
+erassmastr                         eROSITA All-Sky Survey Master Catalog
+erosmaster                           eROSITA Observations Master Catalog
+euvemaster                              EUVE Archive and Observation Log
+ exomaster                                EXOSAT Master Observation List
+halomaster                                        HaloSat Master Catalog
+hitomaster                                         Hitomi Master Catalog
+  ixmaster                                           IXPE Master Catalog
+maximaster                                           MAXI Master Catalog
+nicermastr                                          NICER Master Catalog
+  numaster                                         NuSTAR Master Catalog
+rassmaster                            ROSAT All-Sky Survey Archival Data
+ rosmaster                                           ROSAT Archival Data
+spitzmastr                       Spitzer Space Telescope Observation Log
+suzamaster                                         Suzaku Master Catalog
+swiftmastr                                          Swift Master Catalog
+ uitmaster                  Ultraviolet Imaging Telescope Master Catalog
+verimaster                                        VERITAS Source Catalog
+xlcalmastr                                     XL-Calibur Master Catalog
+ xmmmaster                        XMM-Newton Master Log &amp; Public Archive
+xrismmastr                                          XRISM Master Catalog
+ xtemaster                                            XTE Master Catalog
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="choosing-an-observation-summary-catalog">
+<h2>2. Choosing an observation summary catalog<a class="headerlink" href="#choosing-an-observation-summary-catalog" title="Link to this heading">#</a></h2>
+<p>We can pick out the name of the observation summary catalog we want by examining the <code class="docutils literal notranslate"><span class="pre">name</span></code> and
+description columns in the table above, or we can use a keyword search to find a more specific
+match. See the ‘<a class="reference internal" href="../heasarc_catalogs/finding_relevant_heasarc_catalog.html"><span class="doc">Find specific HEASARC catalogs using Python</span></a>’
+tutorial for an explanation of keyword searches):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filt_obs_cat</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_catalogs</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="s2">&quot;suzaku&quot;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">filt_obs_cat</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><i>Table length=1</i>
+<table id="table127174549578160" class="table-striped table-bordered table-condensed">
+<thead><tr><th>name</th><th>description</th></tr></thead>
+<thead><tr><th>str10</th><th>str21</th></tr></thead>
+<tr><td>suzamaster</td><td>Suzaku Master Catalog</td></tr>
+</table></div></div></div>
+</div>
+<p>Then extract the name of the catalog:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The filtered table has one row (accessed using [0])</span>
+<span class="n">obs_cat_name</span> <span class="o">=</span> <span class="n">filt_obs_cat</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+<span class="n">obs_cat_name</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.str_(&#39;suzamaster&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="filtering-observations-by-distance-from-a-source">
+<h2>3. Filtering observations by distance from a source<a class="headerlink" href="#filtering-observations-by-distance-from-a-source" title="Link to this heading">#</a></h2>
+<p>One of the most common ways to select observations relevant to your science goal is to require
+the nominal central coordinate of the pointing (or ‘sky tile’, for all-sky surveys) to be
+within some radius of the source of interest.</p>
+<p>The specific matching radius you choose will depend on:</p>
+<ol class="arabic simple">
+<li><p>The mission you need observations from - every mission has a different field of view (FoV).</p></li>
+<li><p>Which instrument you are most interested in (different instruments on the same mission will oftentimes have different FoVs).</p></li>
+<li><p>Whether the instrument’s FoV is circular, square, or rectangular (Chandra’s ACIS-S, for instance, is often used in a rectangular configuration that is much longer than it is wide).</p></li>
+<li><p>Your source and science goal – a low-redshift galaxy cluster, for instance, might motivate a larger matching radius as the whole source may not fit within the instrument’s FoV.</p></li>
+<li><p>If you only want observations where your source is near the center of the field, where many high-energy telescopes are the most sensitive and have the smallest point spread function (PSF).</p></li>
+</ol>
+<p>Each of HEASARC’s observation summary catalogs has a default search radius, which can be found using:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">default_search_rad</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">get_default_radius</span><span class="p">(</span><span class="n">obs_cat_name</span><span class="p">)</span>
+<span class="n">default_search_rad</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[10\mathrm{{}^{\prime}}\]</div>
+</div>
+</div>
+<p>We can also define our own search radius – in this instance let’s assume we only want to
+select observations that have our source in the very center of the FoV:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">custom_search_rad</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;arcmin&quot;</span><span class="p">)</span>
+<span class="n">custom_search_rad</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[3\mathrm{{}^{\prime}}\]</div>
+</div>
+</div>
+<p>Speaking of sources, for this demonstration we’re going to search for Suzaku observations
+of <strong>PDS 456</strong>, a nearby radio-quiet quasar:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Blank space can be included in names passed to a name resolver</span>
+<span class="n">source_name</span> <span class="o">=</span> <span class="s2">&quot;PDS 456&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>A string source name variable can be passed directly into the search function we’re about to use, which
+will then use a name resolver to fetch the coordinate. Alternatively, we can trigger a name
+resolver ourselves and pass the coordinate in to the search function:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_coord</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">source_name</span><span class="p">)</span>
+<span class="n">source_coord</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;SkyCoord (ICRS): (ra, dec) in deg
+    (262.08245562, -14.26551526)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>You should always treat the output coordinates of a name resolver with a little caution. They
+are likely to be very reliable for point-like sources, but <strong>for extended sources in particular</strong>
+there is often not a single ‘correct’ position definition, and you will want to check
+exactly what coordinate has been returned.</p>
+<p>In fact, you might want to define your own coordinate directly:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The same coordinate we got from the name lookup, but demonstrates how to</span>
+<span class="c1">#  manually define a coordinate object.</span>
+<span class="n">manual_source_coord</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="mf">262.0825</span><span class="p">,</span> <span class="o">-</span><span class="mf">14.2655</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;deg&quot;</span><span class="p">)</span>
+<span class="n">manual_source_coord</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;SkyCoord (ICRS): (ra, dec) in deg
+    (262.0825, -14.2655)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we can run the query that will filter our table of observations:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_obs_res</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_region</span><span class="p">(</span>
+    <span class="n">position</span><span class="o">=</span><span class="n">source_name</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="n">obs_cat_name</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">custom_search_rad</span>
+<span class="p">)</span>
+
+<span class="n">source_obs_res</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><i>Table length=5</i>
+<table id="table127174548223184" class="table-striped table-bordered table-condensed">
+<thead><tr><th>name</th><th>ra</th><th>dec</th><th>time</th><th>obsid</th><th>exposure</th><th>processing_date</th><th>public_date</th><th>__row</th></tr></thead>
+<thead><tr><th></th><th>deg</th><th>deg</th><th>d</th><th></th><th>s</th><th>d</th><th>d</th><th></th></tr></thead>
+<thead><tr><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>object</th></tr></thead>
+<tr><td>PDS 456</td><td>262.08050</td><td>-14.26170</td><td>56354.821597222224</td><td>707035020</td><td>164810.70000</td><td>57610.834282407406</td><td>56018.0</td><td>1283</td></tr>
+<tr><td>PDS 456</td><td>262.08060</td><td>-14.26170</td><td>56359.50015046296</td><td>707035030</td><td>108339.70000</td><td>57610.79914351852</td><td>56018.0</td><td>1284</td></tr>
+<tr><td>PDS 456</td><td>262.08020</td><td>-14.26100</td><td>56344.89074074074</td><td>707035010</td><td>182299.00000</td><td>57610.75497685185</td><td>56018.0</td><td>1285</td></tr>
+<tr><td>PDS 456</td><td>262.08070</td><td>-14.26040</td><td>54155.74865740741</td><td>701056010</td><td>190600.20000</td><td>57537.58505787037</td><td>54757.0</td><td>1286</td></tr>
+<tr><td>PDS 456</td><td>262.08090</td><td>-14.25370</td><td>55636.62546296296</td><td>705041010</td><td>125527.20000</td><td>57601.286261574074</td><td>56050.0</td><td>1287</td></tr>
+</table></div></div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We could have passed <code class="docutils literal notranslate"><span class="pre">position=source_coord</span></code> or <code class="docutils literal notranslate"><span class="pre">position=manual_source_coord</span></code> to the
+above query, as we defined those coordinates in the discussion above.</p>
+</div>
+</section>
+<section id="downloading-observation-data-files">
+<h2>4. Downloading observation data files<a class="headerlink" href="#downloading-observation-data-files" title="Link to this heading">#</a></h2>
+<p>Now that we’ve identified some observations that are relevant to our source of interest (see
+the end of <a class="reference internal" href="#filtering-observations-by-distance-from-a-source">Section 3</a>), we
+can move on to downloading their data files.</p>
+<p>The first step is to pass the return from our <code class="docutils literal notranslate"><span class="pre">Heasarc.query_region(...)</span></code> call (an Astropy <code class="docutils literal notranslate"><span class="pre">Table</span></code>
+assigned to <code class="docutils literal notranslate"><span class="pre">source_obs_res</span></code>) and pass it to the <code class="docutils literal notranslate"><span class="pre">locate_data(...)</span></code> method of <code class="docutils literal notranslate"><span class="pre">Heasarc</span></code>. This function
+will construct a table of ‘datalinks’, which describe where the relevant observation data are
+actually stored, and provide us an easy way of accessing them:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_obs_datalinks</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">locate_data</span><span class="p">(</span><span class="n">source_obs_res</span><span class="p">)</span>
+<span class="n">source_obs_datalinks</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><i>Table length=5</i>
+<table id="table127174453538032" class="table-striped table-bordered table-condensed">
+<thead><tr><th>ID</th><th>access_url</th><th>sciserver</th><th>aws</th><th>content_length</th><th>error_message</th></tr></thead>
+<thead><tr><th></th><th></th><th></th><th></th><th>byte</th><th></th></tr></thead>
+<thead><tr><th>object</th><th>object</th><th>str33</th><th>str46</th><th>int64</th><th>object</th></tr></thead>
+<tr><td>ivo://nasa.heasarc/suzamaster?1283</td><td>https://heasarc.gsfc.nasa.gov/FTP/suzaku/data/obs/7//707035020/</td><td>/FTP/suzaku/data/obs/7/707035020/</td><td>s3://nasa-heasarc/suzaku/data/obs/7/707035020/</td><td>5196242980</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/suzamaster?1284</td><td>https://heasarc.gsfc.nasa.gov/FTP/suzaku/data/obs/7//707035030/</td><td>/FTP/suzaku/data/obs/7/707035030/</td><td>s3://nasa-heasarc/suzaku/data/obs/7/707035030/</td><td>2688162469</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/suzamaster?1285</td><td>https://heasarc.gsfc.nasa.gov/FTP/suzaku/data/obs/7//707035010/</td><td>/FTP/suzaku/data/obs/7/707035010/</td><td>s3://nasa-heasarc/suzaku/data/obs/7/707035010/</td><td>5097270881</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/suzamaster?1286</td><td>https://heasarc.gsfc.nasa.gov/FTP/suzaku/data/obs/7//701056010/</td><td>/FTP/suzaku/data/obs/7/701056010/</td><td>s3://nasa-heasarc/suzaku/data/obs/7/701056010/</td><td>4423025493</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/suzamaster?1287</td><td>https://heasarc.gsfc.nasa.gov/FTP/suzaku/data/obs/7//705041010/</td><td>/FTP/suzaku/data/obs/7/705041010/</td><td>s3://nasa-heasarc/suzaku/data/obs/7/705041010/</td><td>3790196712</td><td></td></tr>
+</table></div></div></div>
+</div>
+<p>The table has several columns, including:</p>
+<ul class="simple">
+<li><p><strong>ID</strong> – A unique International Virtual Observatory (IVO) ID for the data.</p></li>
+<li><p><strong>access_url</strong> – A URL to one of the locations the data are stored, HEASARC’s FTP server.</p></li>
+<li><p><strong>sciserver</strong> – Path to the data if working on SciServer (see the <a class="reference external" href="https://heasarc.gsfc.nasa.gov/docs/sciserver/">HEASARC&#64;SciServer user guide</a>).</p></li>
+<li><p><strong>aws</strong> – A URI that points to where the data are stored in the HEASARC Amazon Web Services (AWS) S3 bucket (see the <a class="reference external" href="https://registry.opendata.aws/nasa-heasarc/">registry of open data on AWS</a>).</p></li>
+</ul>
+<p>This means that when we come to download the data, we have a choice of <em>where to download it from</em>. Unless you are
+working on SciServer, we generally recommend pulling data from our S3 bucket.</p>
+<p>Now we set up a new directory using <code class="docutils literal notranslate"><span class="pre">os.makedirs(...)</span></code> (the <code class="docutils literal notranslate"><span class="pre">exist_ok=True</span></code> argument ensures that no
+error is raised if that directory already exists), and start the download.</p>
+<p>We pass our datalink table (<code class="docutils literal notranslate"><span class="pre">source_obs_datalinks</span></code>), tell the function to download from the
+HEASARC S3 bucket (<code class="docutils literal notranslate"><span class="pre">host='aws'</span></code>), and make sure the downloaded files are placed in the
+directory specified by <code class="docutils literal notranslate"><span class="pre">download_dir</span></code> (they would be placed in your current directory if
+you didn’t pass anything to the <code class="docutils literal notranslate"><span class="pre">location=</span></code> argument):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define download path, and create the directories</span>
+<span class="n">download_dir</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;heasarc_data/</span><span class="si">{</span><span class="n">obs_cat_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Triggers the download</span>
+<span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">source_obs_datalinks</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">download_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Downloading data AWS S3 ... [astroquery.heasarc.core]
+INFO: Enabling anonymous cloud data access ... [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/707035020/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/707035030/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/707035010/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/701056010/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/705041010/ [astroquery.heasarc.core]
+INFO: Enabling anonymous cloud data access ... [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/707035020/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/707035030/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/707035010/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/701056010/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/suzaku/data/obs/7/705041010/ [astroquery.heasarc.core]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>If the specified data files already exist in your <code class="docutils literal notranslate"><span class="pre">download_dir</span></code>, then this process will
+overwrite them.</p>
+</div>
+<p>Finally, we can take a look at the contents of the download directory:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">download_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;707035020&#39;, &#39;707035030&#39;, &#39;707035010&#39;, &#39;701056010&#39;, &#39;705041010&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>As well as the contents of one of the observation directories:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="s2">&quot;707035020&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;**/*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;heasarc_data/suzamaster/707035020/auxil&#39;,
+ &#39;heasarc_data/suzamaster/707035020/hxd&#39;,
+ &#39;heasarc_data/suzamaster/707035020/log&#39;,
+ &#39;heasarc_data/suzamaster/707035020/xis&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then a specific instrument directory:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">download_dir</span><span class="p">,</span> <span class="s2">&quot;707035020&quot;</span><span class="p">,</span> <span class="s2">&quot;xis&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;**/*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;heasarc_data/suzamaster/707035020/xis/event_cl&#39;,
+ &#39;heasarc_data/suzamaster/707035020/xis/event_uf&#39;,
+ &#39;heasarc_data/suzamaster/707035020/xis/hk&#39;,
+ &#39;heasarc_data/suzamaster/707035020/xis/products&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="about-this-notebook">
+<h2>About this notebook<a class="headerlink" href="#about-this-notebook" title="Link to this heading">#</a></h2>
+<p>Author: David Turner, HEASARC Staff Scientist</p>
+<p>Updated On: 2026-07-16</p>
+<section id="additional-resources">
+<h3>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h3>
+<p>Support: <a class="reference external" href="https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc">HEASARC Helpdesk</a></p>
+<p><a class="reference external" href="https://astroquery.readthedocs.io/en/latest/">Latest Astroquery Documentation</a></p>
+<p>We provide several bite-sized tutorials on accessing HEASARC catalogs using Python and Astroquery:</p>
+<ul class="simple">
+<li><p>To learn how to use Python and Astroquery to search for a particular HEASARC catalog, please see the ‘<a class="reference internal" href="../heasarc_catalogs/finding_relevant_heasarc_catalog.html"><span class="doc">Find specific HEASARC catalogs using Python</span></a>’ tutorial.</p></li>
+<li><p>To learn how to use Python and Astroquery to retrieve and explore the contents of HEASARC catalogs, please see the ‘<a class="reference internal" href="../heasarc_catalogs/heasarc_catalog_contents.html"><span class="doc">Exploring the contents of HEASARC catalogs using Python</span></a>’ tutorial.</p></li>
+<li><p>To learn how to use Python and Astroquery to cross-match a local catalog (either locally on-disk or loaded into local memory) to a catalog hosted by HEASARC, please see the ‘<a class="reference internal" href="../heasarc_catalogs/uploading_matching_table_heasarc_catalogs.html"><span class="doc">Cross-matching local and HEASARC catalogs using Python</span></a>’ tutorial.</p></li>
+</ul>
+</section>
+<section id="acknowledgements">
+<h3>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Link to this heading">#</a></h3>
+</section>
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
+<p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2019AJ....157...98G/abstract">Ginsburg, Sipőcz, Brasseur et al. (2019)</a> – <em>astroquery: An Astronomical Web-querying Package in Python</em></p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="heasarc_data_index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Accessing HEASARC Data</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="pyvo-data-acquisition.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Using PyVO to find and acquire HEASARC data</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#listing-heasarcs-master-catalogs">1. Listing HEASARC’s master catalogs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choosing-an-observation-summary-catalog">2. Choosing an observation summary catalog</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering-observations-by-distance-from-a-source">3. Filtering observations by distance from a source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-observation-data-files">4. Downloading observation data files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-this-notebook">About this notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">Additional Resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By HEASARC developers
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, HEASARC developers.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
