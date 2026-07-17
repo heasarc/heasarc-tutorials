@@ -6,6 +6,11 @@ authors:
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
 date: '2026-07-16'
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: false
 file_format: mystnb
 jupytext:
   text_representation:
@@ -17,11 +22,6 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-execution:
-  cal-files:
-    xmm-ccf: false
-    chandra: false
-    xspec-models: false
 title: Using Astroquery to download observation data from HEASARC
 ---
 
@@ -58,6 +58,7 @@ your internet connection, which means runtime will likely vary for users.
 ## Imports
 
 ```{code-cell} python
+import glob
 import os
 
 from astropy.coordinates import SkyCoord
@@ -211,16 +212,29 @@ directory specified by `download_dir` (they would be placed in your current dire
 you didn't pass anything to the `location=` argument):
 
 ```{code-cell} python
-# Define download path
+# Define download path, and create the directories
 download_dir = f"heasarc_data/{obs_cat_name}"
 os.makedirs(download_dir, exist_ok=True)
 
+# Triggers the download
 Heasarc.download_data(links=source_obs_datalinks, host="aws", location=download_dir)
 ```
 
 ```{caution}
 If the specified data files already exist in your `download_dir`, then this process will
 overwrite them.
+```
+
+Finally, we can take a look at the contents of the download directory:
+
+```{code-cell} python
+os.listdir(download_dir)
+```
+
+As well as the contents of one of the observation directories:
+
+```{code-cell} python
+glob.glob(os.path.join(download_dir, "707035020") + "**/*")
 ```
 
 ## About this notebook
