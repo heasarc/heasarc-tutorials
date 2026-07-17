@@ -5,7 +5,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-03-16'
+date: '2026-07-17'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -17,6 +17,11 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: False
 title: Exploring the contents of HEASARC catalogs using Python
 ---
 
@@ -112,28 +117,20 @@ all_accept_cols.pprint_all()
 The simplest use case of a HEASARC catalog is that you want to retrieve the
 entire table.
 
-We can easily fetch the entire catalog using Astroquery functions, but
-before we do, we should check how many rows there are - we want to know what we're
+We can easily fetch an entire catalog using Astroquery's HEASARC submodule, but
+before we do, we should check how many rows there are – we want to know what we're
 getting into with respect to the size of the table.
 
-Counting the rows in a HEASARC catalog involves writing a very simple 'Astronomical
-Data Query Language' (ADQL) query.
-
-ADQL is a cousin of the extremely popular 'Structured Query Language' (SQL) that has
-been used for database management in industry for many years; the syntax is similar, but
-with additions specific to astronomical searches.
-
-We use the `COUNT(*)` function to return the number of rows in a table:
+We can very easily use the `Heasarc.count_rows(...)` method to return the number of rows
+in our catalog:
 
 ```{code-cell} python
-# Send query designed to count the rows of a catalog
-accept_nrow_res = Heasarc.query_tap("SELECT COUNT(*) FROM acceptcat")
+accept_nrows = Heasarc.count_rows(catalog="acceptcat")
+accept_nrows
+```
 
-# Store the integer number of rows in a variable
-accept_nrows = accept_nrow_res["count"][0]
-
-# Visualize the returned table
-accept_nrow_res
+```{note}
+The `Heasarc.count_rows(...)` method was added to Astroquery in version 0.4.12.
 ```
 
 From the output above, we can see that there are 'only' 240 rows in the catalog; combine that information with
@@ -143,21 +140,13 @@ get a sense of the table's scale.
 As the ACCEPT catalog is quite small (relatively speaking), we can retrieve the whole table without worrying
 about download time or memory issues.
 
-```{seealso}
-A general tutorial on the many uses and features of ADQL is out of the scope of this
-bite-sized demonstration. Various resources for learning ADQL are available online, such
-as [this short course](https://docs.g-vo.org/adql/) ([Demleitner M. and Heinl H. 2024](https://dc.g-vo.org/voidoi/q/lp/custom/10.21938/uH0_xl5a6F7tKkXBSPnZxg)),
-or the NASA Astronomical Virtual Observatories (NAVO)
-[catalog queries tutorial](https://nasa-navo.github.io/navo-workshop/content/reference_notebooks/catalog_queries.html).
-```
-
 On the other hand, HEASARC hosts much larger catalogs than ACCEPT. The Chandra Source
 Catalog 2 (CSC 2; [Evans I. N. et al. 2024](https://ui.adsabs.harvard.edu/abs/2024ApJS..274...22E/abstract)),
 for instance:
 
 ```{code-cell} python
 # Same again, but CSC
-Heasarc.query_tap("SELECT COUNT(*) FROM csc")
+Heasarc.count_rows(catalog="csc")
 ```
 
 ```{warning}
@@ -248,7 +237,7 @@ accept_cat_higherz_lowk_pd
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-03-16
+Updated On: 2026-07-17
 
 +++
 
