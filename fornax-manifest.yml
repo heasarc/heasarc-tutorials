@@ -7,7 +7,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: mission_specific_analyses/nicer/data-analysis-nicer.md
     executed-path: mission_specific_analyses/nicer/data-analysis-nicer.ipynb
     title: Getting started with NICER data
@@ -16,7 +16,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: mission_specific_analyses/nustar/data-analysis-nustar.md
     executed-path: mission_specific_analyses/nustar/data-analysis-nustar.ipynb
     title: Analysing a single NuSTAR observation
@@ -25,7 +25,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: mission_specific_analyses/rxte/analyze-rxte-lightcurves.md
     executed-path: mission_specific_analyses/rxte/analyze-rxte-lightcurves.ipynb
     title: Using archived and newly generated RXTE light curves
@@ -36,7 +36,7 @@ notebooks:
       - pandas>=2.3
     requirements-file:
     keywords: [ ]
-
+  
   - path: mission_specific_analyses/rxte/analyze-rxte-spectra.md
     executed-path: mission_specific_analyses/rxte/analyze-rxte-spectra.ipynb
     title: Exploring RXTE spectral observations of Eta Car
@@ -48,7 +48,7 @@ notebooks:
       - umap-learn>=0.5.8
     requirements-file:
     keywords: [ ]
-
+  
   - path: mission_specific_analyses/swift/getting-started-swift-xrt.md
     executed-path: mission_specific_analyses/swift/getting-started-swift-xrt.ipynb
     title: Getting started with Swift-XRT
@@ -59,7 +59,7 @@ notebooks:
       - tqdm>=4.67.1
     requirements-file:
     keywords: [ ]
-
+  
   - path: useful_high_energy_tools/heasoftpy/heasoftpy-getting-started.md
     executed-path: useful_high_energy_tools/heasoftpy/heasoftpy-getting-started.ipynb
     title: Getting started with HEASoftPy
@@ -68,7 +68,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: useful_high_energy_tools/pysas/pysas-short-intro.md
     executed-path: useful_high_energy_tools/pysas/pysas-short-intro.ipynb
     title: Short introduction to pySAS
@@ -77,7 +77,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: heasarc_service_skills/heasarc_catalogs/finding_relevant_heasarc_catalog.md
     executed-path: heasarc_service_skills/heasarc_catalogs/finding_relevant_heasarc_catalog.ipynb
     title: Find specific HEASARC catalogs using Python
@@ -86,7 +86,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: heasarc_service_skills/heasarc_catalogs/heasarc_catalog_contents.md
     executed-path: heasarc_service_skills/heasarc_catalogs/heasarc_catalog_contents.ipynb
     title: Exploring the contents of HEASARC catalogs using Python
@@ -95,7 +95,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: heasarc_service_skills/heasarc_catalogs/uploading_matching_table_heasarc_catalogs.md
     executed-path: heasarc_service_skills/heasarc_catalogs/uploading_matching_table_heasarc_catalogs.ipynb
     title: Cross-matching local and HEASARC catalogs using Python
@@ -104,7 +104,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: mission_specific_analyses/rosat/getting-started-rosat-all-sky-survey.md
     executed-path: mission_specific_analyses/rosat/getting-started-rosat-all-sky-survey.ipynb
     title: Getting started with ROSAT All Sky Survey data
@@ -113,7 +113,7 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: useful_high_energy_tools/pyxspec/pyxspec-basics.md
     executed-path: useful_high_energy_tools/pyxspec/pyxspec-basics.ipynb
     title: PyXspec basics – fitting models to data
@@ -122,11 +122,20 @@ notebooks:
     extra-dependencies:
     requirements-file:
     keywords: [ ]
-
+  
   - path: heasarc_service_skills/heasarc_data/pyvo-data-acquisition.md
     executed-path: heasarc_service_skills/heasarc_data/pyvo-data-acquisition.ipynb
     title: Using PyVO to find and acquire HEASARC data
     description: This tutorial notebook shows you how to access HEASARC data using the virtual observatory (VO) Python client.
+    fornax-env: heasoft
+    extra-dependencies:
+    requirements-file:
+    keywords: [ ]
+  
+  - path: heasarc_service_skills/heasarc_data/astroquery-data-acquisition.md
+    executed-path: heasarc_service_skills/heasarc_data/astroquery-data-acquisition.ipynb
+    title: Using Astroquery to download HEASARC observation data
+    description: This bite-sized tutorial will show you how to find and retrieve observation data files from HEASARC using Astroquery.
     fornax-env: heasoft
     extra-dependencies:
     requirements-file:
