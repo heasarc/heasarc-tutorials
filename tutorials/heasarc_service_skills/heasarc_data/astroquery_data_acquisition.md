@@ -22,16 +22,17 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: Using Astroquery to find and acquire HEASARC data
+title: Downloading HEASARC-held observation data for a single source using separation
+  matching and Astroquery
 ---
 
-# Using Astroquery to find and acquire HEASARC data
+# Downloading HEASARC-held observation data for a single source using separation matching and Astroquery
 
 ## Learning Goals
 
 This notebook will teach you:
 - How to retrieve HEASARC 'master' catalogs, which summarize the observations taken by a particular telescope.
-- How to filter an observation summary table to find relevant observations.
+- How to filter an observation summary table to find relevant observations for a single source, based on how close the observation was to the source.
 - How to download the data files associated with those relevant observations.
 
 ## Introduction
@@ -67,6 +68,8 @@ jupyter:
 ```
 
 ```{code-cell} python
+import os
+
 from astropy.coordinates import SkyCoord
 from astropy.units import Quantity
 from astroquery.heasarc import Heasarc
@@ -169,14 +172,64 @@ manual_source_coord = SkyCoord(262.0825, -14.2655, unit="deg")
 manual_source_coord
 ```
 
-## ??. Downloading observation data files
+Finally, we can run the query that will filter our table of observations:
 
 ```{code-cell} python
-Heasarc.locate_data()
+source_obs_res = Heasarc.query_region(
+    position=source_name, catalog=obs_cat_name, radius=custom_search_rad
+)
+source_obs_res
 ```
 
+```{note}
+We could have passed `position=source_coord` or `position=manual_source_coord` to the
+above query, as we defined those coordinates in the discussion above.
+```
+
+## 4. Downloading observation data files
+
+Now that we've identified some observations that are relevant to our source of interest (see
+the end of [Section 3](#3-filtering-observations-by-distance-from-a-source)), we
+can move on to downloading their data files.
+
+The first step is to pass the return from our `Heasarc.query_region(...)` call (in our
+case the Astropy `Table` assigned to `source_obs_res`) and pass it to the `locate_data(...)`
+method of `Heasarc`. This function will construct a table of 'datalinks', which
+describe where the relevant observation data are actually stored, and will provide us an
+easy way of accessing them:
+
 ```{code-cell} python
-Heasarc.download_data()
+source_obs_datalinks = Heasarc.locate_data(source_obs_res)
+source_obs_datalinks
+```
+
+The table has several columns, including:
+- **ID** – A unique International Virtual Observatory (IVO) ID for the data.
+- **access_url** – A URL to one of the locations the data are stored, HEASARC's FTP server.
+- **sciserver** – The path to the data if you are working on SciServer (see the [HEASARC@SciServer user guide](https://heasarc.gsfc.nasa.gov/docs/sciserver/)).
+- **aws** – A URI that points to where the data are stored in the HEASARC Amazon Web Services (AWS) S3 bucket (see the [registry of open data on AWS](https://registry.opendata.aws/nasa-heasarc/)).
+
+This means that when we come to download the data, we have a choice of _where to download it from_. Unless you are
+working on SciServer, we generally recommend pulling data from our S3 bucket.
+
+Now we set up a new directory using `os.makedirs(...)` (the `exist_ok=True` argument ensures that no
+error is raised if that directory already exists), and start the download.
+
+We pass our datalink table (`source_obs_datalinks`), tell the function to download from the
+HEASARC S3 bucket (`host='aws'`), and make sure the downloaded files are placed in the
+directory specified by `download_dir` (they would be placed in your current directory if
+you didn't pass anything to the `location=` argument):
+
+```{code-cell} python
+download_dir = "heasarc_data"
+os.makedirs(download_dir, exist_ok=True)
+
+Heasarc.download_data(links=source_obs_datalinks, host="aws", location=download_dir)
+```
+
+```{caution}
+If the specified data files already exist in your `download_dir`, then this process will
+overwrite them.
 ```
 
 ## About this notebook
