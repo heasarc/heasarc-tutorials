@@ -515,86 +515,86 @@ v0.4.12 is officially released.</p>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: astroquery in /opt/envs/heasoft/lib/python3.12/site-packages (0.4.11)
 Collecting astroquery
-  Downloading astroquery-0.4.12.dev10525-py3-none-any.whl.metadata (6.5 kB)
-Requirement already satisfied: numpy&gt;=1.20 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.2)
-Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (7.2.0)
-Requirement already satisfied: requests&gt;=2.19 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.32.5)
-Requirement already satisfied: beautifulsoup4&gt;=4.8 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.14.3)
+  Downloading astroquery-0.4.12.dev10885-py3-none-any.whl.metadata (6.5 kB)
+Requirement already satisfied: numpy&gt;=1.22 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.6)
+Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (8.0.0)
+Requirement already satisfied: requests&gt;=2.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.34.2)
+Requirement already satisfied: beautifulsoup4&gt;=4.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.15.0)
 Requirement already satisfied: html5lib&gt;=0.999 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.1)
-Requirement already satisfied: keyring&gt;=15.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
-Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.8.1)
-Requirement already satisfied: pyerfa&gt;=2.0.1.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
-Requirement already satisfied: astropy-iers-data&gt;=0.2025.10.27.0.39.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.2.23.0.48.33)
+Requirement already satisfied: keyring&gt;=23.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
+Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.9.1)
+Requirement already satisfied: astropy-iers-data&gt;=0.2026.6.1.17.39.59 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.6.22.1.23.34)
+Requirement already satisfied: packaging&gt;=25.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.2)
+Requirement already satisfied: pyerfa&gt;=2.0.1.3 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
 Requirement already satisfied: PyYAML&gt;=6.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (6.0.3)
-Requirement already satisfied: packaging&gt;=22.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.0)
-Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.8-&gt;astroquery) (2.8.3)
-Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.8-&gt;astroquery) (4.15.0)
+Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (2.8.4)
+Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (4.16.0)
 Requirement already satisfied: six&gt;=1.9 in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (1.17.0)
 Requirement already satisfied: webencodings in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (0.5.1)
-Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (3.5.0)
-Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (0.9.0)
-Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (3.4.0)
-Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (4.4.0)
-Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (6.1.0)
-Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (3.4.4)
-Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (3.11)
-Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (2.6.3)
-Requirement already satisfied: certifi&gt;=2017.4.17 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (2026.1.4)
-Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=15.0-&gt;astroquery) (46.0.5)
-Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=15.0-&gt;astroquery) (2.0.0)
-Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=15.0-&gt;astroquery) (3.0)
-Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=15.0-&gt;astroquery) (10.8.0)
-Downloading astroquery-0.4.12.dev10525-py3-none-any.whl (11.2 MB)
-?25l   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/11.2 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">11.2/11.2 MB</span> <span class=" -Color -Color-Red">56.4 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.5.0)
+Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (0.9.0)
+Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.4.0)
+Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (4.5.0)
+Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (6.1.2)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.4.7)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.18)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2.7.0)
+Requirement already satisfied: certifi&gt;=2023.5.7 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2026.6.17)
+Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (49.0.0)
+Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (2.0.0)
+Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (3.0)
+Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=23.0-&gt;astroquery) (11.1.0)
+Downloading astroquery-0.4.12.dev10885-py3-none-any.whl (11.3 MB)
+?25l   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/11.3 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">11.3/11.3 MB</span> <span class=" -Color -Color-Red">109.2 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
 ?25h
 Installing collected packages: astroquery
   Attempting uninstall: astroquery
     Found existing installation: astroquery 0.4.11
     Uninstalling astroquery-0.4.11:
       Successfully uninstalled astroquery-0.4.11
-Successfully installed astroquery-0.4.12.dev10525
+Successfully installed astroquery-0.4.12.dev10885
 Note: you may need to restart the kernel to use updated packages.
 Collecting astroquery
-  Downloading astroquery-0.4.12.dev10525-py3-none-any.whl.metadata (6.5 kB)
-Requirement already satisfied: numpy&gt;=1.20 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.2)
-Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (7.2.0)
-Requirement already satisfied: requests&gt;=2.19 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.32.5)
-Requirement already satisfied: beautifulsoup4&gt;=4.8 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.14.3)
+  Downloading astroquery-0.4.12.dev10885-py3-none-any.whl.metadata (6.5 kB)
+Requirement already satisfied: numpy&gt;=1.22 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.6)
+Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (8.0.0)
+Requirement already satisfied: requests&gt;=2.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.34.2)
+Requirement already satisfied: beautifulsoup4&gt;=4.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.15.0)
 Requirement already satisfied: html5lib&gt;=0.999 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.1)
-Requirement already satisfied: keyring&gt;=15.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
-Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.8.1)
-Requirement already satisfied: pyerfa&gt;=2.0.1.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
-Requirement already satisfied: astropy-iers-data&gt;=0.2025.10.27.0.39.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.2.23.0.48.33)
+Requirement already satisfied: keyring&gt;=23.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
+Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.9.1)
+Requirement already satisfied: astropy-iers-data&gt;=0.2026.6.1.17.39.59 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.6.22.1.23.34)
+Requirement already satisfied: packaging&gt;=25.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.2)
+Requirement already satisfied: pyerfa&gt;=2.0.1.3 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
 Requirement already satisfied: PyYAML&gt;=6.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (6.0.3)
-Requirement already satisfied: packaging&gt;=22.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.0)
-Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.8-&gt;astroquery) (2.8.3)
-Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.8-&gt;astroquery) (4.15.0)
+Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (2.8.4)
+Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (4.16.0)
 Requirement already satisfied: six&gt;=1.9 in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (1.17.0)
 Requirement already satisfied: webencodings in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (0.5.1)
-Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (3.5.0)
-Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (0.9.0)
-Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (3.4.0)
-Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (4.4.0)
-Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=15.0-&gt;astroquery) (6.1.0)
-Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (3.4.4)
-Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (3.11)
-Requirement already satisfied: urllib3&lt;3,&gt;=1.21.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (2.6.3)
-Requirement already satisfied: certifi&gt;=2017.4.17 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.19-&gt;astroquery) (2026.1.4)
-Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=15.0-&gt;astroquery) (46.0.5)
-Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=15.0-&gt;astroquery) (2.0.0)
-Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=15.0-&gt;astroquery) (3.0)
-Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=15.0-&gt;astroquery) (10.8.0)
-Downloading astroquery-0.4.12.dev10525-py3-none-any.whl (11.2 MB)
-?25l   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/11.2 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">11.2/11.2 MB</span> <span class=" -Color -Color-Red">56.4 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.5.0)
+Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (0.9.0)
+Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.4.0)
+Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (4.5.0)
+Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (6.1.2)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.4.7)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.18)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2.7.0)
+Requirement already satisfied: certifi&gt;=2023.5.7 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2026.6.17)
+Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (49.0.0)
+Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (2.0.0)
+Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (3.0)
+Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=23.0-&gt;astroquery) (11.1.0)
+Downloading astroquery-0.4.12.dev10885-py3-none-any.whl (11.3 MB)
+?25l   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/11.3 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">11.3/11.3 MB</span> <span class=" -Color -Color-Red">109.2 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
 ?25h
 Installing collected packages: astroquery
   Attempting uninstall: astroquery
     Found existing installation: astroquery 0.4.11
     Uninstalling astroquery-0.4.11:
       Successfully uninstalled astroquery-0.4.11
-Successfully installed astroquery-0.4.12.dev10525
+Successfully installed astroquery-0.4.12.dev10885
 Note: you may need to restart the kernel to use updated packages.
 </pre></div>
 </div>
@@ -634,20 +634,20 @@ units even though this catalog has <em>79</em> columns:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=11</i>
-<table id="table138123961954336" class="table-striped table-bordered table-condensed">
+<table id="table134704140532864" class="table-striped table-bordered table-condensed">
 <thead><tr><th>name</th><th>description</th><th>unit</th></tr></thead>
 <thead><tr><th>str15</th><th>str80</th><th>str6</th></tr></thead>
-<tr><td>ra</td><td>Right Ascension</td><td>degree</td></tr>
 <tr><td>name</td><td>Cluster Designation</td><td></td></tr>
-<tr><td>chi_squared_1</td><td>Chi-Squared of Best-Fit Model</td><td></td></tr>
-<tr><td>alpha_1</td><td>Best-Fit Power-Law Index</td><td></td></tr>
-<tr><td>num_radial_bins</td><td>Number of Radial Bins in Fit</td><td></td></tr>
-<tr><td>alpha_1_error</td><td>Uncertainty in Best-Fit Power-Law Index</td><td></td></tr>
-<tr><td>fit_method_1</td><td>Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)</td><td></td></tr>
-<tr><td>redshift</td><td>Redshift</td><td></td></tr>
-<tr><td>dof_1</td><td>Degrees of Freedom in Fit</td><td></td></tr>
-<tr><td>kt</td><td>Average Cluster Temperature</td><td>keV</td></tr>
+<tr><td>ra</td><td>Right Ascension</td><td>degree</td></tr>
 <tr><td>dec</td><td>Declination</td><td>degree</td></tr>
+<tr><td>redshift</td><td>Redshift</td><td></td></tr>
+<tr><td>kt</td><td>Average Cluster Temperature</td><td>keV</td></tr>
+<tr><td>fit_method_1</td><td>Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)</td><td></td></tr>
+<tr><td>num_radial_bins</td><td>Number of Radial Bins in Fit</td><td></td></tr>
+<tr><td>alpha_1</td><td>Best-Fit Power-Law Index</td><td></td></tr>
+<tr><td>alpha_1_error</td><td>Uncertainty in Best-Fit Power-Law Index</td><td></td></tr>
+<tr><td>dof_1</td><td>Degrees of Freedom in Fit</td><td></td></tr>
+<tr><td>chi_squared_1</td><td>Chi-Squared of Best-Fit Model</td><td></td></tr>
 </table></div></div></div>
 </div>
 <p>If, as is likely, you want to examine the full set of columns, you can pass the
@@ -662,29 +662,29 @@ units even though this catalog has <em>79</em> columns:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=79</i>
-<table id="table138123961419632" class="table-striped table-bordered table-condensed">
+<table id="table134704138105584" class="table-striped table-bordered table-condensed">
 <thead><tr><th>name</th><th>description</th><th>unit</th></tr></thead>
 <thead><tr><th>str23</th><th>str80</th><th>str8</th></tr></thead>
-<tr><td>fit_method_4</td><td>Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)</td><td></td></tr>
-<tr><td>ra</td><td>Right Ascension</td><td>degree</td></tr>
-<tr><td>bf_core_entropy_2</td><td>Best-Fit Core Entropy, K_0</td><td>keV.cm^2</td></tr>
-<tr><td>exposure_obsid_3</td><td>Exposure Time for Chandra Observation 3</td><td>s</td></tr>
 <tr><td>name</td><td>Cluster Designation</td><td></td></tr>
-<tr><td>bii</td><td>Galactic Latitude</td><td>degree</td></tr>
-<tr><td>bf_100k_entropy_4</td><td>Best-Fit Entropy at 100 kpc</td><td>keV.cm^2</td></tr>
+<tr><td>ra</td><td>Right Ascension</td><td>degree</td></tr>
+<tr><td>dec</td><td>Declination</td><td>degree</td></tr>
+<tr><td>redshift</td><td>Redshift</td><td></td></tr>
+<tr><td>kt</td><td>Average Cluster Temperature</td><td>keV</td></tr>
+<tr><td>fit_method_1</td><td>Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)</td><td></td></tr>
+<tr><td>num_radial_bins</td><td>Number of Radial Bins in Fit</td><td></td></tr>
+<tr><td>alpha_1</td><td>Best-Fit Power-Law Index</td><td></td></tr>
+<tr><td>alpha_1_error</td><td>Uncertainty in Best-Fit Power-Law Index</td><td></td></tr>
+<tr><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>center_ccd_obsid_3</td><td>CCD Location of Cluster Center in Chandra Observation 3</td><td></td></tr>
+<tr><td>exposure_obsid_6</td><td>Exposure Time for Chandra Observation 6</td><td>s</td></tr>
+<tr><td>bf_100k_entropy_4_error</td><td>Uncertainty in Best-Fit Entropy at 100 kpc</td><td>keV.cm^2</td></tr>
+<tr><td>p_value_1</td><td>Probability of Worse Fit Given Chi-Squared and DOF</td><td></td></tr>
 <tr><td>exposure_obsid_2</td><td>Exposure Time for Chandra Observation 2</td><td>s</td></tr>
 <tr><td>center_ccd_obsid_2</td><td>CCD Location of Cluster Center in Chandra Observation 2</td><td></td></tr>
-<tr><td>...</td><td>...</td><td>...</td></tr>
-<tr><td>dof_4</td><td>Degrees of Freedom in Fit</td><td></td></tr>
-<tr><td>num_sigma_k0_gt_0_2</td><td>Number of Sigma Best-Fit Core Entropy Is Away from Zero</td><td></td></tr>
-<tr><td>dof_3</td><td>Degrees of Freedom in Fit</td><td></td></tr>
-<tr><td>chi_squared_4</td><td>Chi-Squared of Best-Fit Model</td><td></td></tr>
-<tr><td>obsid_5</td><td>Chandra Observation Identifier 5</td><td></td></tr>
-<tr><td>p_value_4</td><td>Probability of Worse Fit Given Chi-Squared and DOF</td><td></td></tr>
-<tr><td>alpha_4</td><td>Best-Fit Power-Law Index</td><td></td></tr>
-<tr><td>bf_core_entropy_2_error</td><td>Uncertainty in Best-Fit Core Entropy, K_0</td><td>keV.cm^2</td></tr>
-<tr><td>obsid_1</td><td>Chandra Observation Identifier 1</td><td></td></tr>
-<tr><td>center_ccd_obsid_4</td><td>CCD Location of Cluster Center in Chandra Observation 4</td><td></td></tr>
+<tr><td>&quot;__x_ra_dec&quot;</td><td>System unit vector column</td><td></td></tr>
+<tr><td>&quot;__y_ra_dec&quot;</td><td>System unit vector column</td><td></td></tr>
+<tr><td>&quot;__z_ra_dec&quot;</td><td>System unit vector column</td><td></td></tr>
+<tr><td>&quot;__row&quot;</td><td>System index column</td><td></td></tr>
 </table></div></div></div>
 </div>
 <p>If you examine the output of the above cell, you’ll notice that only part of the
@@ -704,85 +704,85 @@ output (an Astropy <code class="docutils literal notranslate"><span class="pre">
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          name                                            description                                      unit  
 ----------------------- -------------------------------------------------------------------------------- --------
-           fit_method_4 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
-                     ra                                                                  Right Ascension   degree
-      bf_core_entropy_2                                                       Best-Fit Core Entropy, K_0 keV.cm^2
-       exposure_obsid_3                                          Exposure Time for Chandra Observation 3        s
                    name                                                              Cluster Designation         
-                    bii                                                                Galactic Latitude   degree
-      bf_100k_entropy_4                                                      Best-Fit Entropy at 100 kpc keV.cm^2
-       exposure_obsid_2                                          Exposure Time for Chandra Observation 2        s
-     center_ccd_obsid_2                          CCD Location of Cluster Center in Chandra Observation 2         
-          alpha_4_error                                          Uncertainty in Best-Fit Power-Law Index         
-bf_100k_entropy_3_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
+                     ra                                                                  Right Ascension   degree
+                    dec                                                                      Declination   degree
+               redshift                                                                         Redshift         
+                     kt                                                      Average Cluster Temperature      keV
+           fit_method_1 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
+        num_radial_bins                                                     Number of Radial Bins in Fit         
+                alpha_1                                                         Best-Fit Power-Law Index         
+          alpha_1_error                                          Uncertainty in Best-Fit Power-Law Index         
+                  dof_1                                                        Degrees of Freedom in Fit         
           chi_squared_1                                                    Chi-Squared of Best-Fit Model         
-                &quot;__row&quot;                                                              System index column         
-bf_core_entropy_1_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
-       exposure_obsid_5                                          Exposure Time for Chandra Observation 5        s
+          chi_squared_3                                                    Chi-Squared of Best-Fit Model         
        exposure_obsid_4                                          Exposure Time for Chandra Observation 4        s
-                obsid_7                                                 Chandra Observation Identifier 7         
-              p_value_1                               Probability of Worse Fit Given Chi-Squared and DOF         
-     center_ccd_obsid_1                          CCD Location of Cluster Center in Chandra Observation 1         
-           fit_method_3 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
-           &quot;__z_ra_dec&quot;                                                        System unit vector column         
-    num_sigma_k0_gt_0_3                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
+              p_value_4                               Probability of Worse Fit Given Chi-Squared and DOF         
+    num_sigma_k0_gt_0_1                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
+           fit_method_4 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
+     center_ccd_obsid_4                          CCD Location of Cluster Center in Chandra Observation 4         
+                alpha_4                                                         Best-Fit Power-Law Index         
+bf_core_entropy_3_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
+bf_core_entropy_4_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
+                  dof_2                                                        Degrees of Freedom in Fit         
+                  notes                                                                 Assigned Note(s)         
+          chi_squared_4                                                    Chi-Squared of Best-Fit Model         
+       exposure_obsid_3                                          Exposure Time for Chandra Observation 3        s
+       exposure_obsid_5                                          Exposure Time for Chandra Observation 5        s
       bf_core_entropy_3                                                       Best-Fit Core Entropy, K_0 keV.cm^2
-           &quot;__x_ra_dec&quot;                                                        System unit vector column         
+                obsid_3                                                 Chandra Observation Identifier 3         
+     center_ccd_obsid_6                          CCD Location of Cluster Center in Chandra Observation 6         
+       exposure_obsid_7                                          Exposure Time for Chandra Observation 7        s
+      bf_100k_entropy_1                                                      Best-Fit Entropy at 100 kpc keV.cm^2
+                obsid_6                                                 Chandra Observation Identifier 6         
+              p_value_2                               Probability of Worse Fit Given Chi-Squared and DOF         
+          alpha_3_error                                          Uncertainty in Best-Fit Power-Law Index         
+bf_core_entropy_1_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
+      bf_core_entropy_4                                                       Best-Fit Core Entropy, K_0 keV.cm^2
+                  dof_4                                                        Degrees of Freedom in Fit         
+      bf_100k_entropy_3                                                      Best-Fit Entropy at 100 kpc keV.cm^2
+     center_ccd_obsid_1                          CCD Location of Cluster Center in Chandra Observation 1         
+      bf_100k_entropy_2                                                      Best-Fit Entropy at 100 kpc keV.cm^2
+                obsid_7                                                 Chandra Observation Identifier 7         
+                alpha_2                                                         Best-Fit Power-Law Index         
+          alpha_2_error                                          Uncertainty in Best-Fit Power-Law Index         
+bf_100k_entropy_3_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
+                obsid_1                                                 Chandra Observation Identifier 1         
+         max_fit_radius                                                           Maximum Radius for Fit      Mpc
+bf_100k_entropy_1_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
+              p_value_3                               Probability of Worse Fit Given Chi-Squared and DOF         
+                obsid_5                                                 Chandra Observation Identifier 5         
+bf_100k_entropy_2_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
+    num_sigma_k0_gt_0_2                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
+           fit_method_3 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
+                  dof_3                                                        Degrees of Freedom in Fit         
+                obsid_2                                                 Chandra Observation Identifier 2         
+                alpha_3                                                         Best-Fit Power-Law Index         
+bf_core_entropy_2_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
+          chi_squared_2                                                    Chi-Squared of Best-Fit Model         
+    num_sigma_k0_gt_0_4                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
+      bf_core_entropy_2                                                       Best-Fit Core Entropy, K_0 keV.cm^2
+     center_ccd_obsid_7                          CCD Location of Cluster Center in Chandra Observation 7         
+      bf_core_entropy_1                                                       Best-Fit Core Entropy, K_0 keV.cm^2
+      bf_100k_entropy_4                                                      Best-Fit Entropy at 100 kpc keV.cm^2
+          alpha_4_error                                          Uncertainty in Best-Fit Power-Law Index         
+                obsid_4                                                 Chandra Observation Identifier 4         
+           fit_method_2 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
+                    lii                                                               Galactic Longitude   degree
+                    bii                                                                Galactic Latitude   degree
+    num_sigma_k0_gt_0_3                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
+       exposure_obsid_1                                          Exposure Time for Chandra Observation 1        s
      center_ccd_obsid_5                          CCD Location of Cluster Center in Chandra Observation 5         
      center_ccd_obsid_3                          CCD Location of Cluster Center in Chandra Observation 3         
-      bf_100k_entropy_3                                                      Best-Fit Entropy at 100 kpc keV.cm^2
-    num_sigma_k0_gt_0_4                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
-                alpha_1                                                         Best-Fit Power-Law Index         
-                    lii                                                               Galactic Longitude   degree
-    num_sigma_k0_gt_0_1                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
-                alpha_2                                                         Best-Fit Power-Law Index         
-        num_radial_bins                                                     Number of Radial Bins in Fit         
-                obsid_6                                                 Chandra Observation Identifier 6         
-          alpha_2_error                                          Uncertainty in Best-Fit Power-Law Index         
-     center_ccd_obsid_7                          CCD Location of Cluster Center in Chandra Observation 7         
-bf_core_entropy_4_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
-     center_ccd_obsid_6                          CCD Location of Cluster Center in Chandra Observation 6         
-           &quot;__y_ra_dec&quot;                                                        System unit vector column         
-                obsid_4                                                 Chandra Observation Identifier 4         
-bf_100k_entropy_1_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
-bf_core_entropy_3_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
-      bf_100k_entropy_2                                                      Best-Fit Entropy at 100 kpc keV.cm^2
-          alpha_3_error                                          Uncertainty in Best-Fit Power-Law Index         
-                  notes                                                                 Assigned Note(s)         
-          alpha_1_error                                          Uncertainty in Best-Fit Power-Law Index         
-              p_value_2                               Probability of Worse Fit Given Chi-Squared and DOF         
-bf_100k_entropy_4_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
-           fit_method_1 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
-              p_value_3                               Probability of Worse Fit Given Chi-Squared and DOF         
-                obsid_2                                                 Chandra Observation Identifier 2         
-                obsid_3                                                 Chandra Observation Identifier 3         
-               redshift                                                                         Redshift         
-                  dof_1                                                        Degrees of Freedom in Fit         
-      bf_100k_entropy_1                                                      Best-Fit Entropy at 100 kpc keV.cm^2
-                  dof_2                                                        Degrees of Freedom in Fit         
-      bf_core_entropy_4                                                       Best-Fit Core Entropy, K_0 keV.cm^2
-          chi_squared_2                                                    Chi-Squared of Best-Fit Model         
-                     kt                                                      Average Cluster Temperature      keV
-                    dec                                                                      Declination   degree
-bf_100k_entropy_2_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
-           fit_method_2 Method of T_X Interpolation in Inner Region: flat or extr (Linear Extrapolation)         
-       exposure_obsid_7                                          Exposure Time for Chandra Observation 7        s
-                alpha_3                                                         Best-Fit Power-Law Index         
-       exposure_obsid_1                                          Exposure Time for Chandra Observation 1        s
-      bf_core_entropy_1                                                       Best-Fit Core Entropy, K_0 keV.cm^2
-         max_fit_radius                                                           Maximum Radius for Fit      Mpc
-          chi_squared_3                                                    Chi-Squared of Best-Fit Model         
        exposure_obsid_6                                          Exposure Time for Chandra Observation 6        s
-                  dof_4                                                        Degrees of Freedom in Fit         
-    num_sigma_k0_gt_0_2                          Number of Sigma Best-Fit Core Entropy Is Away from Zero         
-                  dof_3                                                        Degrees of Freedom in Fit         
-          chi_squared_4                                                    Chi-Squared of Best-Fit Model         
-                obsid_5                                                 Chandra Observation Identifier 5         
-              p_value_4                               Probability of Worse Fit Given Chi-Squared and DOF         
-                alpha_4                                                         Best-Fit Power-Law Index         
-bf_core_entropy_2_error                                        Uncertainty in Best-Fit Core Entropy, K_0 keV.cm^2
-                obsid_1                                                 Chandra Observation Identifier 1         
-     center_ccd_obsid_4                          CCD Location of Cluster Center in Chandra Observation 4
+bf_100k_entropy_4_error                                       Uncertainty in Best-Fit Entropy at 100 kpc keV.cm^2
+              p_value_1                               Probability of Worse Fit Given Chi-Squared and DOF         
+       exposure_obsid_2                                          Exposure Time for Chandra Observation 2        s
+     center_ccd_obsid_2                          CCD Location of Cluster Center in Chandra Observation 2         
+           &quot;__x_ra_dec&quot;                                                        System unit vector column         
+           &quot;__y_ra_dec&quot;                                                        System unit vector column         
+           &quot;__z_ra_dec&quot;                                                        System unit vector column         
+                &quot;__row&quot;                                                              System index column
 </pre></div>
 </div>
 </div>
@@ -792,67 +792,45 @@ bf_core_entropy_2_error                                        Uncertainty in Be
 <h2>2. Retrieving the entire contents of a HEASARC catalog<a class="headerlink" href="#retrieving-the-entire-contents-of-a-heasarc-catalog" title="Link to this heading">#</a></h2>
 <p>The simplest use case of a HEASARC catalog is that you want to retrieve the
 entire table.</p>
-<p>We can easily fetch the entire catalog using Astroquery functions, but
-before we do, we should check how many rows there are - we want to know what we’re
+<p>We can easily fetch an entire catalog using Astroquery’s HEASARC submodule, but
+before we do, we should check how many rows there are – we want to know what we’re
 getting into with respect to the size of the table.</p>
-<p>Counting the rows in a HEASARC catalog involves writing a very simple ‘Astronomical
-Data Query Language’ (ADQL) query.</p>
-<p>ADQL is a cousin of the extremely popular ‘Structured Query Language’ (SQL) that has
-been used for database management in industry for many years; the syntax is similar, but
-with additions specific to astronomical searches.</p>
-<p>We use the <code class="docutils literal notranslate"><span class="pre">COUNT(*)</span></code> function to return the number of rows in a table:</p>
+<p>We can very easily use the <code class="docutils literal notranslate"><span class="pre">Heasarc.count_rows(...)</span></code> method to return the number of rows
+in our catalog:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Send query designed to count the rows of a catalog</span>
-<span class="n">accept_nrow_res</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_tap</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM acceptcat&quot;</span><span class="p">)</span>
-
-<span class="c1"># Store the integer number of rows in a variable</span>
-<span class="n">accept_nrows</span> <span class="o">=</span> <span class="n">accept_nrow_res</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c1"># Visualize the returned table</span>
-<span class="n">accept_nrow_res</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accept_nrows</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">count_rows</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">&quot;acceptcat&quot;</span><span class="p">)</span>
+<span class="n">accept_nrows</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;DALResultsTable length=1&gt;
-count
-int64
------
-  240
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(240)
 </pre></div>
 </div>
 </div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Heasarc.count_rows(...)</span></code> method was added to Astroquery in version 0.4.12.</p>
 </div>
 <p>From the output above, we can see that there are ‘only’ 240 rows in the catalog; combine that information with
 the number of columns (which we explored in <a class="reference internal" href="#listing-a-heasarc-catalogs-columns">Section 1</a>), and you
 get a sense of the table’s scale.</p>
 <p>As the ACCEPT catalog is quite small (relatively speaking), we can retrieve the whole table without worrying
 about download time or memory issues.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>A general tutorial on the many uses and features of ADQL is out of the scope of this
-bite-sized demonstration. Various resources for learning ADQL are available online, such
-as <a class="reference external" href="https://docs.g-vo.org/adql/">this short course</a> (<a class="reference external" href="https://dc.g-vo.org/voidoi/q/lp/custom/10.21938/uH0_xl5a6F7tKkXBSPnZxg">Demleitner M. and Heinl H. 2024</a>),
-or the NASA Astronomical Virtual Observatories (NAVO)
-<a class="reference external" href="https://nasa-navo.github.io/navo-workshop/content/reference_notebooks/catalog_queries.html">catalog queries tutorial</a>.</p>
-</div>
 <p>On the other hand, HEASARC hosts much larger catalogs than ACCEPT. The Chandra Source
 Catalog 2 (CSC 2; <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2024ApJS..274...22E/abstract">Evans I. N. et al. 2024</a>),
 for instance:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Same again, but CSC</span>
-<span class="n">Heasarc</span><span class="o">.</span><span class="n">query_tap</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM csc&quot;</span><span class="p">)</span>
+<span class="n">Heasarc</span><span class="o">.</span><span class="n">count_rows</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">&quot;csc&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;DALResultsTable length=1&gt;
-count 
-int64 
-------
-407806
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.int64(407806)
 </pre></div>
 </div>
 </div>
@@ -878,7 +856,7 @@ required:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=240</i>
-<table id="table138123876945696" class="table-striped table-bordered table-condensed">
+<table id="table134704046585088" class="table-striped table-bordered table-condensed">
 <thead><tr><th>__row</th><th>name</th><th>obsid_1</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>exposure_obsid_1</th><th>center_ccd_obsid_1</th><th>redshift</th><th>kt</th><th>notes</th><th>obsid_2</th><th>exposure_obsid_2</th><th>center_ccd_obsid_2</th><th>obsid_3</th><th>exposure_obsid_3</th><th>center_ccd_obsid_3</th><th>obsid_4</th><th>exposure_obsid_4</th><th>center_ccd_obsid_4</th><th>obsid_5</th><th>exposure_obsid_5</th><th>center_ccd_obsid_5</th><th>obsid_6</th><th>exposure_obsid_6</th><th>center_ccd_obsid_6</th><th>obsid_7</th><th>exposure_obsid_7</th><th>center_ccd_obsid_7</th><th>fit_method_1</th><th>num_radial_bins</th><th>max_fit_radius</th><th>bf_core_entropy_1</th><th>bf_core_entropy_1_error</th><th>num_sigma_k0_gt_0_1</th><th>bf_100k_entropy_1</th><th>bf_100k_entropy_1_error</th><th>alpha_1</th><th>alpha_1_error</th><th>dof_1</th><th>chi_squared_1</th><th>p_value_1</th><th>fit_method_2</th><th>bf_core_entropy_2</th><th>bf_core_entropy_2_error</th><th>num_sigma_k0_gt_0_2</th><th>bf_100k_entropy_2</th><th>bf_100k_entropy_2_error</th><th>alpha_2</th><th>alpha_2_error</th><th>dof_2</th><th>chi_squared_2</th><th>p_value_2</th><th>fit_method_3</th><th>bf_core_entropy_3</th><th>bf_core_entropy_3_error</th><th>num_sigma_k0_gt_0_3</th><th>bf_100k_entropy_3</th><th>bf_100k_entropy_3_error</th><th>alpha_3</th><th>alpha_3_error</th><th>dof_3</th><th>chi_squared_3</th><th>p_value_3</th><th>fit_method_4</th><th>bf_core_entropy_4</th><th>bf_core_entropy_4_error</th><th>num_sigma_k0_gt_0_4</th><th>bf_100k_entropy_4</th><th>bf_100k_entropy_4_error</th><th>alpha_4</th><th>alpha_4_error</th><th>dof_4</th><th>chi_squared_4</th><th>p_value_4</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>s</th><th></th><th></th><th>keV</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th></th><th>Mpc</th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>object</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
@@ -927,7 +905,7 @@ value of the <code class="docutils literal notranslate"><span class="pre">redshi
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=20</i>
-<table id="table138123964937232" class="table-striped table-bordered table-condensed">
+<table id="table134704046617904" class="table-striped table-bordered table-condensed">
 <thead><tr><th>__row</th><th>name</th><th>obsid_1</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>exposure_obsid_1</th><th>center_ccd_obsid_1</th><th>redshift</th><th>kt</th><th>notes</th><th>obsid_2</th><th>exposure_obsid_2</th><th>center_ccd_obsid_2</th><th>obsid_3</th><th>exposure_obsid_3</th><th>center_ccd_obsid_3</th><th>obsid_4</th><th>exposure_obsid_4</th><th>center_ccd_obsid_4</th><th>obsid_5</th><th>exposure_obsid_5</th><th>center_ccd_obsid_5</th><th>obsid_6</th><th>exposure_obsid_6</th><th>center_ccd_obsid_6</th><th>obsid_7</th><th>exposure_obsid_7</th><th>center_ccd_obsid_7</th><th>fit_method_1</th><th>num_radial_bins</th><th>max_fit_radius</th><th>bf_core_entropy_1</th><th>bf_core_entropy_1_error</th><th>num_sigma_k0_gt_0_1</th><th>bf_100k_entropy_1</th><th>bf_100k_entropy_1_error</th><th>alpha_1</th><th>alpha_1_error</th><th>dof_1</th><th>chi_squared_1</th><th>p_value_1</th><th>fit_method_2</th><th>bf_core_entropy_2</th><th>bf_core_entropy_2_error</th><th>num_sigma_k0_gt_0_2</th><th>bf_100k_entropy_2</th><th>bf_100k_entropy_2_error</th><th>alpha_2</th><th>alpha_2_error</th><th>dof_2</th><th>chi_squared_2</th><th>p_value_2</th><th>fit_method_3</th><th>bf_core_entropy_3</th><th>bf_core_entropy_3_error</th><th>num_sigma_k0_gt_0_3</th><th>bf_100k_entropy_3</th><th>bf_100k_entropy_3_error</th><th>alpha_3</th><th>alpha_3_error</th><th>dof_3</th><th>chi_squared_3</th><th>p_value_3</th><th>fit_method_4</th><th>bf_core_entropy_4</th><th>bf_core_entropy_4_error</th><th>num_sigma_k0_gt_0_4</th><th>bf_100k_entropy_4</th><th>bf_100k_entropy_4_error</th><th>alpha_4</th><th>alpha_4_error</th><th>dof_4</th><th>chi_squared_4</th><th>p_value_4</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>s</th><th></th><th></th><th>keV</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th></th><th>Mpc</th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>object</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
@@ -970,7 +948,7 @@ higher-redshift, low-central-entropy, galaxy clusters to be returned:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=7</i>
-<table id="table138123876917296" class="table-striped table-bordered table-condensed">
+<table id="table134705678376768" class="table-striped table-bordered table-condensed">
 <thead><tr><th>__row</th><th>name</th><th>obsid_1</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>exposure_obsid_1</th><th>center_ccd_obsid_1</th><th>redshift</th><th>kt</th><th>notes</th><th>obsid_2</th><th>exposure_obsid_2</th><th>center_ccd_obsid_2</th><th>obsid_3</th><th>exposure_obsid_3</th><th>center_ccd_obsid_3</th><th>obsid_4</th><th>exposure_obsid_4</th><th>center_ccd_obsid_4</th><th>obsid_5</th><th>exposure_obsid_5</th><th>center_ccd_obsid_5</th><th>obsid_6</th><th>exposure_obsid_6</th><th>center_ccd_obsid_6</th><th>obsid_7</th><th>exposure_obsid_7</th><th>center_ccd_obsid_7</th><th>fit_method_1</th><th>num_radial_bins</th><th>max_fit_radius</th><th>bf_core_entropy_1</th><th>bf_core_entropy_1_error</th><th>num_sigma_k0_gt_0_1</th><th>bf_100k_entropy_1</th><th>bf_100k_entropy_1_error</th><th>alpha_1</th><th>alpha_1_error</th><th>dof_1</th><th>chi_squared_1</th><th>p_value_1</th><th>fit_method_2</th><th>bf_core_entropy_2</th><th>bf_core_entropy_2_error</th><th>num_sigma_k0_gt_0_2</th><th>bf_100k_entropy_2</th><th>bf_100k_entropy_2_error</th><th>alpha_2</th><th>alpha_2_error</th><th>dof_2</th><th>chi_squared_2</th><th>p_value_2</th><th>fit_method_3</th><th>bf_core_entropy_3</th><th>bf_core_entropy_3_error</th><th>num_sigma_k0_gt_0_3</th><th>bf_100k_entropy_3</th><th>bf_100k_entropy_3_error</th><th>alpha_3</th><th>alpha_3_error</th><th>dof_3</th><th>chi_squared_3</th><th>p_value_3</th><th>fit_method_4</th><th>bf_core_entropy_4</th><th>bf_core_entropy_4_error</th><th>num_sigma_k0_gt_0_4</th><th>bf_100k_entropy_4</th><th>bf_100k_entropy_4_error</th><th>alpha_4</th><th>alpha_4_error</th><th>dof_4</th><th>chi_squared_4</th><th>p_value_4</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>s</th><th></th><th></th><th>keV</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th></th><th>Mpc</th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>object</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
@@ -1031,7 +1009,7 @@ integer; e.g., <code class="docutils literal notranslate"><span class="pre">0</s
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><i>Row index=0</i>
-<table id="table138123876917296">
+<table id="table134705678376768">
 <thead><tr><th>__row</th><th>name</th><th>obsid_1</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>exposure_obsid_1</th><th>center_ccd_obsid_1</th><th>redshift</th><th>kt</th><th>notes</th><th>obsid_2</th><th>exposure_obsid_2</th><th>center_ccd_obsid_2</th><th>obsid_3</th><th>exposure_obsid_3</th><th>center_ccd_obsid_3</th><th>obsid_4</th><th>exposure_obsid_4</th><th>center_ccd_obsid_4</th><th>obsid_5</th><th>exposure_obsid_5</th><th>center_ccd_obsid_5</th><th>obsid_6</th><th>exposure_obsid_6</th><th>center_ccd_obsid_6</th><th>obsid_7</th><th>exposure_obsid_7</th><th>center_ccd_obsid_7</th><th>fit_method_1</th><th>num_radial_bins</th><th>max_fit_radius</th><th>bf_core_entropy_1</th><th>bf_core_entropy_1_error</th><th>num_sigma_k0_gt_0_1</th><th>bf_100k_entropy_1</th><th>bf_100k_entropy_1_error</th><th>alpha_1</th><th>alpha_1_error</th><th>dof_1</th><th>chi_squared_1</th><th>p_value_1</th><th>fit_method_2</th><th>bf_core_entropy_2</th><th>bf_core_entropy_2_error</th><th>num_sigma_k0_gt_0_2</th><th>bf_100k_entropy_2</th><th>bf_100k_entropy_2_error</th><th>alpha_2</th><th>alpha_2_error</th><th>dof_2</th><th>chi_squared_2</th><th>p_value_2</th><th>fit_method_3</th><th>bf_core_entropy_3</th><th>bf_core_entropy_3_error</th><th>num_sigma_k0_gt_0_3</th><th>bf_100k_entropy_3</th><th>bf_100k_entropy_3_error</th><th>alpha_3</th><th>alpha_3_error</th><th>dof_3</th><th>chi_squared_3</th><th>p_value_3</th><th>fit_method_4</th><th>bf_core_entropy_4</th><th>bf_core_entropy_4_error</th><th>num_sigma_k0_gt_0_4</th><th>bf_100k_entropy_4</th><th>bf_100k_entropy_4_error</th><th>alpha_4</th><th>alpha_4_error</th><th>dof_4</th><th>chi_squared_4</th><th>p_value_4</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>s</th><th></th><th></th><th>keV</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th>s</th><th></th><th></th><th></th><th>Mpc</th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th>cm2 keV</th><th>cm2 keV</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>int32</th><th>float64</th><th>object</th><th>object</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>float64</th><th>object</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
@@ -1267,7 +1245,7 @@ one of these data structures:</p>
 <section id="about-this-notebook">
 <h2>About this notebook<a class="headerlink" href="#about-this-notebook" title="Link to this heading">#</a></h2>
 <p>Author: David Turner, HEASARC Staff Scientist</p>
-<p>Updated On: 2026-03-16</p>
+<p>Updated On: 2026-07-17</p>
 <section id="additional-resources">
 <h3>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h3>
 <p>Support: <a class="reference external" href="https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc">HEASARC Helpdesk</a></p>
