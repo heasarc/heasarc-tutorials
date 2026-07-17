@@ -28,7 +28,7 @@ title: How to make a tutorial notebook in the HEASARC-tutorials repository
 # Title: How to make a tutorial notebook in the HEASARC-tutorials repository
 
 One of your first steps in adapting this template should be to fill out the 'front-matter' at the very top of the
-Markdown file - the contents of the front-matter are all metadata, to be used in different ways by different
+Markdown file – the contents of the front-matter are all metadata, to be used in different ways by different
 parts of the HEASARC-tutorials infrastructure.
 
 The following information must be added:
@@ -80,10 +80,14 @@ Point out the parts that are particularly challenging and what solutions we chos
 
 Please report actual numbers and machine details for your notebook if it is expected to run longer or requires specific machines, for example, on Fornax.
 Also, if querying archives, please include a statement like:
-"This runtime is heavily dependent on archive servers which means runtime will vary for users".
+"This runtime is heavily dependent on archive servers, which means that the runtime may vary for users".
+
+**OR**
+
+"This notebook depends on external services, such as the HEASARC archive, and therefore the runtime may vary for users."
 
 Here is a template runtime statement:
-As of {Date}, this notebook takes ~{N}s to run to completion on Fornax using the '{name: size}' server with NGB RAM/ N cores.
+As of {Date}, this notebook takes ~{N}-seconds to run to completion on [Fornax](https://docs.fornax.sciencecloud.nasa.gov/) using the '{name: size}' server with NGB RAM/ N cores.
 
 ## Imports
 
