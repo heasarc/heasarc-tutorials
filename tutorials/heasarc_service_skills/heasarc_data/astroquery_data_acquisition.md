@@ -237,6 +237,12 @@ As well as the contents of one of the observation directories:
 glob.glob(os.path.join(download_dir, "707035020") + "**/*")
 ```
 
+Then a specific instrument directory:
+
+```{code-cell} python
+glob.glob(os.path.join(download_dir, "707035020", "xis") + "**/*")
+```
+
 ## About this notebook
 
 Author: David Turner, HEASARC Staff Scientist
