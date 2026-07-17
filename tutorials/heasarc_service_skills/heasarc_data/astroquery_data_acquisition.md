@@ -139,6 +139,7 @@ custom_search_rad
 Speaking of our source, we will search for Suzaku observations of PDS 456, a nearby radio-quiet quasar:
 
 ```{code-cell} python
+# Blank space can be included in names passed to a name resolver
 source_name = "PDS 456"
 ```
 
