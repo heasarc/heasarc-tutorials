@@ -67,6 +67,7 @@ jupyter:
 ```
 
 ```{code-cell} python
+from astropy.coordinates import SkyCoord
 from astropy.units import Quantity
 from astroquery.heasarc import Heasarc
 ```
@@ -139,6 +140,33 @@ select observations that have our source in the very center of the FoV:
 ```{code-cell} python
 custom_search_rad = Quantity(3, "arcmin")
 custom_search_rad
+```
+
+Speaking of our source, we will search for Suzaku observations of PDS 456, a nearby radio-quiet quasar:
+
+```{code-cell} python
+source_name = "PDS 456"
+```
+
+A string source name variable can be passed directly into the search function we're about to use, which
+will then use a name resolver to fetch the coordinate. Alternatively, we could do that ourselves and
+pass the coordinate in:
+
+```{code-cell} python
+source_coord = SkyCoord.from_name(source_name)
+source_coord
+```
+
+You should always treat the output coordinates of a name resolver with a little caution. They
+are likely to be very reliable for point-like sources, but **for extended sources in particular**
+there is often not a single 'correct' position definition, and you will want to check
+exactly what coordinate has been returned.
+
+In fact, you might want to define your own coordinate directly:
+
+```{code-cell} python
+manual_source_coord = SkyCoord(262.0825, -14.2655, unit="deg")
+manual_source_coord
 ```
 
 ## ??. Downloading observation data files
