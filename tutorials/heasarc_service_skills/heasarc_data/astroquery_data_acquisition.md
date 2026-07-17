@@ -6,22 +6,22 @@ authors:
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
 date: '2026-07-16'
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: false
 file_format: mystnb
 jupytext:
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 1.3
+    format_version: 0.13
     jupytext_version: 1.17.3
 kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-execution:
-  cal-files:
-    xmm-ccf: False
-    chandra: False
-    xspec-models: False
 title: Using Astroquery to find and acquire HEASARC data
 ---
 
@@ -67,11 +67,8 @@ jupyter:
 ```
 
 ```{code-cell} python
+from astropy.units import Quantity
 from astroquery.heasarc import Heasarc
-```
-
-```python
-from astropy.table import Table
 ```
 
 ***
@@ -105,20 +102,53 @@ introduce a keyword search to find a more specific match (see the '{doc}`Find sp
 tutorial for an explanation of keyword searches):
 
 ```{code-cell} python
-suz_obs_cat = Heasarc.list_catalogs(keywords="suzaku", master=True)
-suz_obs_cat
+filt_obs_cat = Heasarc.list_catalogs(keywords="suzaku", master=True)
+filt_obs_cat
 ```
 
 Then extract the name of the catalog:
+
 ```{code-cell} python
-suz_obs_cat_name = suz_obs_cat[0]["name"]
-suz_obs_cat_name
+obs_cat_name = filt_obs_cat[0]["name"]
+obs_cat_name
 ```
 
-## 3.
+## 3. Filtering observations by distance from a source
+
+One of the most common ways to select observations relevant to your science goal is to require
+the nominal central coordinate of the pointing (or 'sky tile', for all-sky surveys) to be
+within some radius of the source of interest.
+
+The specific matching radius you choose will depend on:
+1. The mission whose observations you're searching (every mission will have a different field of view, or FoV).
+2. Which instrument you are most interested in (different instruments on the same mission will oftentimes have different FoVs).
+3. Whether the instrument's FoV is circular, square, or rectangular (Chandra's ACIS-S, for instance, is often used in a rectangular configuration that is much longer than it is wide).
+4. Your source and science goal – a low-redshift galaxy cluster, for instance, might motivate a larger matching radius as the whole source may not fit within the instrument's FoV.
+5. If you only want observations where your source is near the center of the field, where many high-energy telescopes are the most sensitive and have the smallest point spread function (PSF).
+
+Each of HEASARC's observation summary catalogs has a default search radius, which can be found using:
 
 ```{code-cell} python
+default_search_rad = Heasarc.get_default_radius(obs_cat_name)
+default_search_rad
+```
 
+We can also define our own search radius – in this instance let's assume we only want to
+select observations that have our source in the very center of the FoV:
+
+```{code-cell} python
+custom_search_rad = Quantity(3, "arcmin")
+custom_search_rad
+```
+
+## ??. Downloading observation data files
+
+```{code-cell} python
+Heasarc.locate_data()
+```
+
+```{code-cell} python
+Heasarc.download_data()
 ```
 
 ## About this notebook
@@ -135,7 +165,7 @@ Support: [HEASARC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selec
 
 [Latest Astroquery Documentation](https://astroquery.readthedocs.io/en/latest/)
 
-We also provide several bite-sized tutorials on accessing HEASARC catalogs using Python and Astroquery:
+We provide several bite-sized tutorials on accessing HEASARC catalogs using Python and Astroquery:
 - To learn how to use Python and Astroquery to search for a particular HEASARC catalog, please see the '{doc}`Find specific HEASARC catalogs using Python <../heasarc_catalogs/finding_relevant_heasarc_catalog>`' tutorial.
 - To learn how to use Python and Astroquery to retrieve and explore the contents of HEASARC catalogs, please see the '{doc}`Exploring the contents of HEASARC catalogs using Python <../heasarc_catalogs/heasarc_catalog_contents>`' tutorial.
 - To learn how to use Python and Astroquery to cross-match a local catalog (either locally on-disk or loaded into local memory) to a catalog hosted by HEASARC, please see the '{doc}`Cross-matching local and HEASARC catalogs using Python <../heasarc_catalogs/uploading_matching_table_heasarc_catalogs>`' tutorial.
