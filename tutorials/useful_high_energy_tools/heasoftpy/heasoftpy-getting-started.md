@@ -22,6 +22,11 @@ kernelspec:
   name: heasoft
 mystnb:
   execution_allow_errors: false
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: False
 title: Getting started with HEASoftPy
 ---
 
