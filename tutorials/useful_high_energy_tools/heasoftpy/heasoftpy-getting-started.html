@@ -27,20 +27,20 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -48,14 +48,25 @@
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
-    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-R7YGYK7HYQ"></script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+            </script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-R7YGYK7HYQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 gtag('config', 'G-R7YGYK7HYQ');
             </script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/useful_high_energy_tools/heasoftpy/heasoftpy-getting-started';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -64,20 +75,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -106,7 +123,51 @@
 </aside>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -163,8 +224,7 @@
           
           
           
-          <a href="https://github.com/HEASARC/heasarc-tutorials" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/HEASARC/heasarc-tutorials" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         <div class="sidebar-primary-item">
@@ -414,11 +474,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -446,7 +513,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
@@ -519,11 +586,90 @@ sessions, or Jupyter Notebooks.</p>
 </section>
 <section id="runtime">
 <h3>Runtime<a class="headerlink" href="#runtime" title="Link to this heading">#</a></h3>
-<p>As of 3rd November 2025, this notebook takes ~15 m to run to completion on Fornax, using the ‘small’ server with 8GB RAM/ 2 cores.</p>
+<p>As of 28th July 2026, this notebook takes ~20-minutes to run to completion on Fornax, using the ‘small’ server with 8GB RAM/ 2 cores.</p>
 </section>
 </section>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<p>This notebook uses features from an Astroquery pre-release. You will need to install
+the latest version using the command below. We will remove this once Astroquery
+v0.4.12 is officially released.</p>
+<div class="cell tag_hide-output config_scroll_outputs docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install --pre astroquery --upgrade
+</pre></div>
+</div>
+</div>
+<details class="admonition hide below-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell output</p>
+<p class="expanded admonition-title">Hide code cell output</p>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: astroquery in /opt/envs/heasoft/lib/python3.12/site-packages (0.4.12.dev10885)
+Requirement already satisfied: numpy&gt;=1.22 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.6)
+Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (8.0.1)
+Requirement already satisfied: requests&gt;=2.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.34.2)
+Requirement already satisfied: beautifulsoup4&gt;=4.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.15.0)
+Requirement already satisfied: html5lib&gt;=0.999 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.1)
+Requirement already satisfied: keyring&gt;=23.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
+Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.9.1)
+Requirement already satisfied: astropy-iers-data&gt;=0.2026.6.22.1.23.34 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.7.13.0.54.2)
+Requirement already satisfied: packaging&gt;=25.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.2)
+Requirement already satisfied: pyerfa&gt;=2.0.1.3 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
+Requirement already satisfied: PyYAML&gt;=6.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (6.0.3)
+Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (2.8.4)
+Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (4.16.0)
+Requirement already satisfied: six&gt;=1.9 in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (1.17.0)
+Requirement already satisfied: webencodings in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (0.5.1)
+Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.5.0)
+Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (0.9.0)
+Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.4.0)
+Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (4.6.0)
+Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (6.1.2)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.4.9)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.18)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2.7.0)
+Requirement already satisfied: certifi&gt;=2023.5.7 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2026.6.17)
+Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (49.0.0)
+Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (2.1.0)
+Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (3.0)
+Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=23.0-&gt;astroquery) (11.1.0)
+Note: you may need to restart the kernel to use updated packages.
+Requirement already satisfied: numpy&gt;=1.22 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.6)
+Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (8.0.1)
+Requirement already satisfied: requests&gt;=2.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.34.2)
+Requirement already satisfied: beautifulsoup4&gt;=4.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.15.0)
+Requirement already satisfied: html5lib&gt;=0.999 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.1)
+Requirement already satisfied: keyring&gt;=23.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
+Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.9.1)
+Requirement already satisfied: astropy-iers-data&gt;=0.2026.6.22.1.23.34 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.7.13.0.54.2)
+Requirement already satisfied: packaging&gt;=25.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.2)
+Requirement already satisfied: pyerfa&gt;=2.0.1.3 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
+Requirement already satisfied: PyYAML&gt;=6.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (6.0.3)
+Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (2.8.4)
+Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (4.16.0)
+Requirement already satisfied: six&gt;=1.9 in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (1.17.0)
+Requirement already satisfied: webencodings in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (0.5.1)
+Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.5.0)
+Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (0.9.0)
+Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.4.0)
+Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (4.6.0)
+Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (6.1.2)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.4.9)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.18)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2.7.0)
+Requirement already satisfied: certifi&gt;=2023.5.7 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2026.6.17)
+Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (49.0.0)
+Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (2.1.0)
+Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (3.0)
+Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=23.0-&gt;astroquery) (11.1.0)
+Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+</div>
+</details>
+</div>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
@@ -596,6 +742,15 @@ sessions, or Jupyter Notebooks.</p>
     <span class="s2">&quot;1012020112&quot;</span><span class="p">,</span>
     <span class="s2">&quot;1012020114&quot;</span><span class="p">,</span>
 <span class="p">]</span>
+
+<span class="c1"># Sets the data host we want to download observation files from.</span>
+<span class="c1"># The `download_data` method in Astroquery 0.4.12 will attempt to automatically</span>
+<span class="c1">#  determine where to fetch data from - e.g. if you are running on SciServer then the</span>
+<span class="c1">#  mounted HEASARC FTP will be used, if you are running on Fornax then AWS will be</span>
+<span class="c1">#  used - if no specific host is supplied.</span>
+<span class="c1"># We specify AWS, but you may set DATA_HOST = None to let Astroquery</span>
+<span class="c1">#  decide automatically.</span>
+<span class="n">DATA_HOST</span> <span class="o">=</span> <span class="s2">&quot;aws&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -622,12 +777,35 @@ in the main body of the notebooks as we do not wish it to be the main focus.</p>
 <span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 
+
 <span class="c1"># ------------- Setting how many cores we can use --------------</span>
-<span class="n">NUM_CORES</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c1"># We use a service called CircleCI to execute, test, and validate these notebooks</span>
+<span class="c1">#  as we&#39;re writing and maintaining them. Unfortunately we have to treat the</span>
+<span class="c1">#  determination of the number of cores we can use differently, as the</span>
+<span class="c1">#  &#39;os.cpu_count()&#39; call will return the number of cores of the host machine, rather</span>
+<span class="c1">#  than the number that have actually been allocated to us.</span>
+<span class="k">if</span> <span class="s2">&quot;CIRCLECI&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CIRCLECI&quot;</span><span class="p">]):</span>
+    <span class="c1"># Here we read the CPU quota (total CPU time allowed) and the CPU period (how</span>
+    <span class="c1">#  long the scheduling window is) from a cgroup (a linux kernel feature) file.</span>
+    <span class="c1"># Dividing one by t&#39;other provides the number of cores we&#39;ve been allocated.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/sys/fs/cgroup/cpu.max&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cpu_maxo</span><span class="p">:</span>
+        <span class="n">quota</span><span class="p">,</span> <span class="n">period</span> <span class="o">=</span> <span class="n">cpu_maxo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">quota</span><span class="p">)</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
+
+<span class="c1"># If you, the reader, are running this notebook yourself, this is the</span>
+<span class="c1">#  part that is relevant to you - you can override the default number of cores</span>
+<span class="c1">#  used by setting this variable to an integer value.</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Determines the number of CPU cores available</span>
 <span class="n">total_cores</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
 
+<span class="c1"># If NUM_CORES is None, then we use the number of cores returned by &#39;os.cpu_count()&#39;</span>
 <span class="k">if</span> <span class="n">NUM_CORES</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="n">total_cores</span>
+<span class="c1"># Otherwise, NUM_CORES has been overridden (either by the user, or because we&#39;re</span>
+<span class="c1">#  running on CircleCI, and we do a validity check.</span>
 <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
         <span class="s2">&quot;If manually overriding &#39;NUM_CORES&#39;, you must set it to an integer value.&quot;</span>
@@ -657,10 +835,11 @@ in the main body of the notebooks as we do not wish it to be the main focus.</p>
 <span class="c1"># We only download the data if a matching ObsID directory does not exist.</span>
 <span class="c1">#  This is not a perfect way to determine whether the necessary data are fully</span>
 <span class="c1">#  present, but it is good enough for this tutorial.</span>
+<span class="c1"># The `download_data` method in Astroquery 0.4.12 will attempt to automatically</span>
+<span class="c1">#  determine where to fetch data from - e.g. if you are running on SciServer then the</span>
+<span class="c1">#  mounted HEASARC FTP will be used, if you are running on Fornax then AWS will be used.</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">nu_data_dir</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">NU_OBS_ID</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">):</span>
-    <span class="c1"># Heasarc.download_data(nu_data_link, location=nu_data_dir)</span>
-    <span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">nu_data_link</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">nu_data_dir</span><span class="p">)</span>
-    <span class="c1"># Heasarc.download_data(nu_data_link, host=&#39;sciserver&#39;, location=nu_data_dir)</span>
+    <span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">nu_data_link</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">DATA_HOST</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">nu_data_dir</span><span class="p">)</span>
 
 <span class="c1"># Construct a string list of NICER ObsIDs to pass to the HEASARC TAP service.</span>
 <span class="n">ni_oi_str</span> <span class="o">=</span> <span class="s2">&quot;(&#39;&quot;</span> <span class="o">+</span> <span class="s2">&quot;&#39;,&#39;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">NI_OBS_IDS</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39;)&quot;</span>
@@ -673,9 +852,7 @@ in the main body of the notebooks as we do not wish it to be the main focus.</p>
 
 <span class="c1"># Again, we only download the data if a matching ObsID directory does not exist.</span>
 <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ni_data_dir</span><span class="p">,</span> <span class="n">oi</span><span class="p">))</span> <span class="k">for</span> <span class="n">oi</span> <span class="ow">in</span> <span class="n">NI_OBS_IDS</span><span class="p">]):</span>
-    <span class="c1"># Heasarc.download_data(ni_data_links, location=ni_data_dir)</span>
-    <span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">ni_data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ni_data_dir</span><span class="p">)</span>
-    <span class="c1"># Heasarc.download_data(ni_data_links, host=&#39;sciserver&#39;, location=ni_data_dir)</span>
+    <span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">ni_data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">DATA_HOST</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ni_data_dir</span><span class="p">)</span>
 
 <span class="c1"># -------- Get geomagnetic data ---------</span>
 <span class="c1"># This ensures that geomagnetic data required for NICER analyses are downloaded</span>
@@ -1339,7 +1516,7 @@ nupipeline_0.4.12: Info: getting default S/C direction
 nupipeline_0.4.12: Info: Optical Axis   RA : 3.2188650000000E+02(deg)
 nupipeline_0.4.12: Info: Optical Axis  DEC : 5.6889300000000E+01(deg)
 nupipeline_0.4.12: Info: Running &#39;numetrology&#39; 
-nupipeline_0.4.12: Command: numetrology clobber=yes outpsdfilecor=./60001110002_p/nu60001110002_psdcorr.fits chatter=3 history=yes mastaspectfile=./60001110002_p/nu60001110002_mast.fits metgridfile=CALDB metflag=yes alignfile=nuCalign20120101v001.fits metrologyfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz inpsdfilecor= psdcal=yes outpsdfile=./60001110002_p/nu60001110002_psd.fits
+nupipeline_0.4.12: Command: numetrology psdcal=yes mastaspectfile=./60001110002_p/nu60001110002_mast.fits chatter=3 outpsdfilecor=./60001110002_p/nu60001110002_psdcorr.fits metgridfile=CALDB history=yes inpsdfilecor= alignfile=nuCalign20120101v001.fits metrologyfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz outpsdfile=./60001110002_p/nu60001110002_psd.fits clobber=yes metflag=yes
 ---------------------------------------------------------------------
  		Running &#39;numetrology_0.1.9&#39;
 ---------------------------------------------------------------------
@@ -1353,8 +1530,8 @@ Name of the input Alignment File                           :&#39;nuCalign2012010
 Name of the output Mast Aspect Solution File               :&#39;./60001110002_p/nu60001110002_mast.fits&#39;
 ---------------------------------------------------------------------
 numetrology_0.1.9: Warning: /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz file (ext &#39;MET_CMP&#39;) is empty.
-numetrology_0.1.9: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD0.
-numetrology_0.1.9: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD1.
+numetrology_0.1.9: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD0.
+numetrology_0.1.9: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD1.
 numetrology_0.1.9: Warning: /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz file (ext &#39;MET_CMP&#39;) is empty.
 numetrology_0.1.9: Info: Processing nuCalign20120101v001.fits file.
 ---------------------------------------------------------------------
@@ -1362,7 +1539,7 @@ numetrology_0.1.9: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;numetrology&#39; exit with success. &#39;./60001110002_p/nu60001110002_mast.fits&#39; mast aspect solution file created.
 nupipeline_0.4.12: Info: Running &#39;nuattcorr&#39; 
-nupipeline_0.4.12: Command: nuattcorr chatter=3 attfile=/home/jovyan/project/_data/NuSTAR/60001110002/auxil/nu60001110002_att.fits.gz chuoffsetfile=CALDB outattfile=./60001110002_p/nu60001110002_att.fits clobber=yes history=yes
+nupipeline_0.4.12: Command: nuattcorr chuoffsetfile=CALDB clobber=yes outattfile=./60001110002_p/nu60001110002_att.fits chatter=3 attfile=/home/jovyan/project/_data/NuSTAR/60001110002/auxil/nu60001110002_att.fits.gz history=yes
 ---------------------------------------------------------------------
  		Running &#39;nuattcorr_0.1.2&#39;
 ---------------------------------------------------------------------
@@ -1371,9 +1548,9 @@ Name of the input Attitude file                       :&#39;/home/jovyan/project
 Name of the output Corrected Attitude file            :&#39;./60001110002_p/nu60001110002_att.fits&#39;
 Name of the input CHUs Quaternion Offset FITS file    :&#39;CALDB&#39;
 ---------------------------------------------------------------------
-nuattcorr_0.1.2: Info: Creating &#39;3587_tmp_nuattcorr/3587in_nu60001110002_att.fits.gz&#39; symbolic link to input Attitude file.
-nuattcorr_0.1.2: Info: Processing https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuCchuoffset20100101v001.fits file.
-nuattcorr_0.1.2: Info: executing &#39;ftcopy infile=&#39;3587_tmp_nuattcorr/3587in_nu60001110002_att.fits.gz[col @3587_tmp_nuattcorr/3587in.col]&#39; outfile=3587_tmp_nuattcorr/3587out_nu60001110002_att.fits&#39;
+nuattcorr_0.1.2: Info: Creating &#39;4768_tmp_nuattcorr/4768in_nu60001110002_att.fits.gz&#39; symbolic link to input Attitude file.
+nuattcorr_0.1.2: Info: Processing https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuCchuoffset20100101v001.fits file.
+nuattcorr_0.1.2: Info: executing &#39;ftcopy infile=&#39;4768_tmp_nuattcorr/4768in_nu60001110002_att.fits.gz[col @4768_tmp_nuattcorr/4768in.col]&#39; outfile=4768_tmp_nuattcorr/4768out_nu60001110002_att.fits&#39;
 nuattcorr_0.1.2: Info: &#39;./60001110002_p/nu60001110002_att.fits&#39; file successfully written.
 ---------------------------------------------------------------------
 nuattcorr_0.1.2: Exit with success.
@@ -1389,41 +1566,41 @@ nupipeline_0.4.12: Stage  I: Calibrating &#39;./60001110002_p/nu60001110002A_uf.
 ============================================================
 
 nupipeline_0.4.12: Info: Running &#39;nuflagbad&#39; 
-nupipeline_0.4.12: Command: nuflagbad userbpfile=NONE chatter=3 clobber=yes outfile=./60001110002_p/nu60001110002A_uf.1978tmp infile=./60001110002_p/nu60001110002A_uf.evt bpfile=CALDB history=yes dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz outbpfile=./60001110002_p/nu60001110002A_bp.fits
+nupipeline_0.4.12: Command: nuflagbad bpfile=CALDB chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp clobber=yes dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz history=yes infile=./60001110002_p/nu60001110002A_uf.evt outbpfile=./60001110002_p/nu60001110002A_bp.fits userbpfile=NONE
 ---------------------------------------------------------------------
  		Running &#39;nuflagbad_0.1.8&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 Name of the input on-board disabled pixel file        :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39;
 Name of the input on-ground bad pixel file            :&#39;CALDB&#39;
 Name of the input user bad pixel file                 :&#39;NONE&#39;
 Name of the output Bad Pixel file                     :&#39;./60001110002_p/nu60001110002A_bp.fits&#39;
 ---------------------------------------------------------------------
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET0.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET1.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET2.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET3.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET0.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET1.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET2.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET0.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET1.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET2.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
-nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 nuflagbad_0.1.8: Info: Creating output bad pixel file.
 ---------------------------------------------------------------------
 nuflagbad_0.1.8: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagbad&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuhotpix&#39; 
-nupipeline_0.4.12: Command: nuhotpix outhpfile=./60001110002_p/nu60001110002A_hp.fits infile=./60001110002_p/nu60001110002A_uf.evt binsize=600.0 cellsize=5 cleanflick=yes outfile=./60001110002_p/nu60001110002A_uf.1978tmp bthresh=6 logpos=-6.0 history=yes chatter=3 iterate=yes clobber=yes impfac=1.0
+nupipeline_0.4.12: Command: nuhotpix clobber=yes bthresh=6 logpos=-6.0 cellsize=5 history=yes infile=./60001110002_p/nu60001110002A_uf.evt outhpfile=./60001110002_p/nu60001110002A_hp.fits cleanflick=yes chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp iterate=yes binsize=600.0 impfac=1.0
 ---------------------------------------------------------------------
  		Running &#39;nuhotpix_0.1.7&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 Name of the output Hot Pixel file                     :&#39;./60001110002_p/nu60001110002A_hp.fits&#39;
 Bin size (seconds) for count image generation         :&#39;600.000000&#39;
 Search and flag flickering pixels?                      : yes
@@ -1842,8 +2019,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=2 
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89800201.000000 - 89800801.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=2 
-nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89800801.00000
-0 - 89801401.000000]
+nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89800801.000000 - 89801401.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 6 rawy= 0 det_id=3 
@@ -2107,31 +2283,31 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=3
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=12 rawy=19 det_id=2 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=13 rawy= 9 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=15 rawy=30 det_id=3 
-nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 nuhotpix_0.1.7: Info: Creating output hot pixel file.
 ---------------------------------------------------------------------
 nuhotpix_0.1.7: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuhotpix&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpha&#39; 
-nupipeline_0.4.12: Command: nucalcpha clobber=yes cleancols=yes gradefile=CALDB chatter=3 evtthr=55 history=yes phaparfile=CALDB timerise=0.0016 outfile=./60001110002_p/nu60001110002A_uf.1978tmp infile=./60001110002_p/nu60001110002A_uf.evt offsetfile=CALDB
+nupipeline_0.4.12: Command: nucalcpha offsetfile=CALDB clobber=yes phaparfile=CALDB evtthr=55 timerise=0.0016 history=yes infile=./60001110002_p/nu60001110002A_uf.evt cleancols=yes chatter=3 gradefile=CALDB outfile=./60001110002_p/nu60001110002A_uf.3777tmp
 ---------------------------------------------------------------------
  		Running &#39;nucalcpha_0.2.2&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 Name of the input Offset file                         :&#39;CALDB&#39;
 Name of the input Grade file                          :&#39;CALDB&#39;
 Name of the input PHAPAR file                         :&#39;CALDB&#39;
 Delete temporary columns                              : yes
 ---------------------------------------------------------------------
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/cap_offset/nuAoffset20100101v001.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/cap_offset/nuAoffset20100101v001.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
 nucalcpha_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
 ---------------------------------------------------
 nucalcpha_0.2.2: Info: 		 NuSTAR GRADES
@@ -2161,22 +2337,22 @@ nucalcpha_0.2.2: Info: Total events with grade 21                1299    0.1730%
 nucalcpha_0.2.2: Info: Total events with grade 22                1255    0.1672%
 nucalcpha_0.2.2: Info: Total events with grade 23                1287    0.1714%
 nucalcpha_0.2.2: Info: Total events with grade 24                1268    0.1689%
-nucalcpha_0.2.2: Info: Total events with grade 25                3063    0.4080%
-nucalcpha_0.2.2: Info: Total events with grade 26                 328
-0.0437%
+nucalcpha_0.2.2: Info: Total events with grade 25                3063
+   0.4080%
+nucalcpha_0.2.2: Info: Total events with grade 26                 328    0.0437%
 nucalcpha_0.2.2: Info: Total events with grade 27                 131    0.0174%
 nucalcpha_0.2.2: Info: Total events with grade 28                  81    0.0108%
 nucalcpha_0.2.2: Info: Total events with grade 29                  71    0.0095%
 nucalcpha_0.2.2: Info: Total events with grade 30                  82    0.0109%
 nucalcpha_0.2.2: Info: Total events with grade 31                 340    0.0453%
 nucalcpha_0.2.2: Info: Total events with grade 32              528379   70.3832%
-nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpha_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpha&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpi&#39; 
-nupipeline_0.4.12: Command: nucalcpi chatter=3 outfile=./60001110002_p/nu60001110002A_uf.1978tmp clobber=yes hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz clcfile=CALDB infile=./60001110002_p/nu60001110002A_uf.evt gainfile=CALDB clcfilterfile=CALDB temperature=5 history=yes
+nupipeline_0.4.12: Command: nucalcpi clcfilterfile=CALDB gainfile=CALDB history=yes infile=./60001110002_p/nu60001110002A_uf.evt clobber=yes clcfile=CALDB hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp temperature=5
 ---------------------------------------------------------------------
  		Running &#39;nucalcpi_0.2.2&#39;
 ---------------------------------------------------------------------
@@ -2184,87 +2360,87 @@ nupipeline_0.4.12: Command: nucalcpi chatter=3 outfile=./60001110002_p/nu6000111
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
 Name of the input HK Header file                      :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz&#39;
 Name of the input GAIN file                           :&#39;CALDB&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
 nucalcpi_0.2.2: Info: Processing /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz file.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET3.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
-nucalcpi_0.2.2: Info: Processing https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
-nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET3.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
+nucalcpi_0.2.2: Info: Processing https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
+nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpi&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuflagevt&#39; 
-nupipeline_0.4.12: Command: nuflagevt clobber=yes history=yes outfile=./60001110002_p/nu60001110002A_uf.1978tmp infile=./60001110002_p/nu60001110002A_uf.evt evtcutfile=CALDB chatter=3 depthcutfile=CALDB
+nupipeline_0.4.12: Command: nuflagevt evtcutfile=CALDB clobber=yes chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp infile=./60001110002_p/nu60001110002A_uf.evt history=yes depthcutfile=CALDB
 ---------------------------------------------------------------------
  		Running &#39;nuflagevt_0.1.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 ---------------------------------------------------------------------
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
 nuflagevt_0.1.4: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
-nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nuflagevt_0.1.4: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagevt&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucoord&#39; 
-nupipeline_0.4.12: Command: nucoord pntra=3.2188650000000E+02 randomizecoordinator=yes teldef=nuA20100101v002.teldef pixposfile=CALDB clobber=yes timemargin=32.0 chatter=3 history=yes follow_sun=yes seedcoordinator=-1956 pntdec=5.6889300000000E+01 det1yref=350 initseed=no outfile=./60001110002_p/nu60001110002A_uf.1978tmp attinterpol=LINEAR alignfile=nuCalign20120101v001.fits mastaspectfile=./60001110002_p/nu60001110002_mast.fits attfile=./60001110002_p/nu60001110002_att.fits det1reffile=./60001110002_p/nu60001110002A_det1.fits optaxisfile=./60001110002_p/nu60001110002A_oa.fits aberration=no infile=./60001110002_p/nu60001110002A_uf.evt det1xref=350
+nupipeline_0.4.12: Command: nucoord outfile=./60001110002_p/nu60001110002A_uf.3777tmp chatter=3 seedcoordinator=-1956 mastaspectfile=./60001110002_p/nu60001110002_mast.fits pixposfile=CALDB aberration=no det1reffile=./60001110002_p/nu60001110002A_det1.fits det1xref=350 clobber=yes pntra=3.2188650000000E+02 timemargin=32.0 teldef=nuA20100101v002.teldef history=yes infile=./60001110002_p/nu60001110002A_uf.evt attfile=./60001110002_p/nu60001110002_att.fits initseed=no optaxisfile=./60001110002_p/nu60001110002A_oa.fits det1yref=350 pntdec=5.6889300000000E+01 follow_sun=yes randomizecoordinator=yes alignfile=nuCalign20120101v001.fits attinterpol=LINEAR
 --------------------------------------------------------------
              Running &#39; nucoord version 0.1.8 &#39;
 --------------------------------------------------------------
 nucoord_0.1.8: Info: Name of the Input Event File  &#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 --------------------------------------------------------------
-nucoord_0.1.8: Info: Copying input file to &#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Copying input file to &#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39;
 nucoord_0.1.8: Info: Computing DET1 and DET2 coordinates
 nucoord_0.1.8: Info: Running &#39;nucalcpos&#39; 
-nucoord_0.1.8: Command: nucalcpos alignfile=nuCalign20120101v001.fits pixposfile=CALDB chatter=3 saveraw2coord=no initseed=no outfile=3940_tmp_nucoord/nu60001110002A_uf.3940tmp history=yes infile=3940_tmp_nucoord/nu60001110002A_uf.1978tmp mastaspectfile=./60001110002_p/nu60001110002_mast.fits clobber=yes
+nucoord_0.1.8: Command: nucalcpos chatter=3 mastaspectfile=./60001110002_p/nu60001110002_mast.fits outfile=4951_tmp_nucoord/nu60001110002A_uf.4951tmp initseed=no pixposfile=CALDB saveraw2coord=no history=yes infile=4951_tmp_nucoord/nu60001110002A_uf.3777tmp clobber=yes alignfile=nuCalign20120101v001.fits
 ---------------------------------------------------------------------
  		Running &#39;nucalcpos_0.2.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
-Name of the input Event file                          :&#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39;
-Name of the output Event file                         :&#39;3940_tmp_nucoord/nu60001110002A_uf.3940tmp&#39;
+Name of the input Event file                          :&#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39;
+Name of the output Event file                         :&#39;4951_tmp_nucoord/nu60001110002A_uf.4951tmp&#39;
 Name of the input pixel location file                 :&#39;CALDB&#39;
 Name of the input Alignment File                           :&#39;nuCalign20120101v001.fits&#39;
 Name of the input Mast Aspect Solution File               :&#39;./60001110002_p/nu60001110002_mast.fits&#39;
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Info: Processing nuCalign20120101v001.fits file.
-nucalcpos_0.2.4: Info: Processing &#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39; file.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
-nucalcpos_0.2.4: Info: &#39;3940_tmp_nucoord/nu60001110002A_uf.3940tmp&#39; file successfully written.
+nucalcpos_0.2.4: Info: Processing &#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39; file.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
+nucalcpos_0.2.4: Info: &#39;4951_tmp_nucoord/nu60001110002A_uf.4951tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Exit with success.
 ---------------------------------------------------------------------
 nucoord_0.1.8: Info: &#39;nucalcpos&#39; exit with success. DET1 and DET2 coordinates computed.
 nucoord_0.1.8: Info: Computing X and Y coordinates
 nucoord_0.1.8: Info: Running &#39;coordinator&#39; 
-nucoord_0.1.8: Command: coordinator attfile=3940_tmp_nucoord/nu60001110002_att.fits eventfile=3940_tmp_nucoord/nu60001110002A_uf.1978tmp eventext=EVENTS follow_sun=yes interpolation=LINEAR timemargin=32.0 skyxnull=-1 history=yes teldef=3940_tmp_nucoord/nuA20100101v002.teldef seed=-1956 dec=5.6889300000000E+01 ra=3.2188650000000E+02 skyynull=-1 randomize=yes chatter=3 timecol=TIME aberration=no
+nucoord_0.1.8: Command: coordinator timemargin=32.0 eventfile=4951_tmp_nucoord/nu60001110002A_uf.3777tmp seed=-1956 follow_sun=yes skyxnull=-1 dec=5.6889300000000E+01 attfile=4951_tmp_nucoord/nu60001110002_att.fits history=yes teldef=4951_tmp_nucoord/nuA20100101v002.teldef randomize=yes skyynull=-1 eventext=EVENTS chatter=3 interpolation=LINEAR aberration=no timecol=TIME ra=3.2188650000000E+02
 using LINEAR interpolation for aspecting
 0% done
 0% done
@@ -3615,11 +3791,11 @@ one
 99% done
 100% done
 nucoord_0.1.8: Info: &#39;coordinator&#39; exit with success. X and Y coordinates computed.
-nucoord_0.1.8: Info: Moving temporary file &#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39; to output file &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
-nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; successfully written.
+nucoord_0.1.8: Info: Moving temporary file &#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39; to output file &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
+nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; successfully written.
 nucoord_0.1.8: Info: Creating Optical Axis File
 nucoord_0.1.8: Info: Running &#39;nuskypos&#39; 
-nucoord_0.1.8: Command: nuskypos teldef=nuA20100101v002.teldef initseed=no optaxisfile=./60001110002_p/nu60001110002A_oa.fits history=yes clobber=yes pntdec=5.6889300000000E+01 aberration=no chatter=3 det1yref=350 pntra=3.2188650000000E+02 det1reffile=./60001110002_p/nu60001110002A_det1.fits det1xref=350 mastaspectfile=./60001110002_p/nu60001110002_mast.fits instrument=FPMA alignfile=nuCalign20120101v001.fits attfile=./60001110002_p/nu60001110002_att.fits
+nucoord_0.1.8: Command: nuskypos alignfile=nuCalign20120101v001.fits det1yref=350 det1xref=350 aberration=no chatter=3 pntdec=5.6889300000000E+01 instrument=FPMA clobber=yes teldef=nuA20100101v002.teldef history=yes attfile=./60001110002_p/nu60001110002_att.fits pntra=3.2188650000000E+02 det1reffile=./60001110002_p/nu60001110002A_det1.fits initseed=no mastaspectfile=./60001110002_p/nu60001110002_mast.fits optaxisfile=./60001110002_p/nu60001110002A_oa.fits
 ---------------------------------------------------------------------
  		Running &#39;nuskypos_0.1.3&#39;
 ---------------------------------------------------------------------
@@ -3647,41 +3823,41 @@ nupipeline_0.4.12: Stage  I: Calibrating &#39;./60001110002_p/nu60001110002B_uf.
 ============================================================
 
 nupipeline_0.4.12: Info: Running &#39;nuflagbad&#39; 
-nupipeline_0.4.12: Command: nuflagbad infile=./60001110002_p/nu60001110002B_uf.evt bpfile=CALDB outbpfile=./60001110002_p/nu60001110002B_bp.fits dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz history=yes chatter=3 userbpfile=NONE outfile=./60001110002_p/nu60001110002B_uf.1978tmp clobber=yes
+nupipeline_0.4.12: Command: nuflagbad clobber=yes dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz bpfile=CALDB chatter=3 outfile=./60001110002_p/nu60001110002B_uf.3777tmp userbpfile=NONE history=yes infile=./60001110002_p/nu60001110002B_uf.evt outbpfile=./60001110002_p/nu60001110002B_bp.fits
 ---------------------------------------------------------------------
  		Running &#39;nuflagbad_0.1.8&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 Name of the input on-board disabled pixel file        :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39;
 Name of the input on-ground bad pixel file            :&#39;CALDB&#39;
 Name of the input user bad pixel file                 :&#39;NONE&#39;
 Name of the output Bad Pixel file                     :&#39;./60001110002_p/nu60001110002B_bp.fits&#39;
 ---------------------------------------------------------------------
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET0.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET1.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET2.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET3.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET0.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET1.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET2.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET0.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET1.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET2.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
-nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 nuflagbad_0.1.8: Info: Creating output bad pixel file.
 ---------------------------------------------------------------------
 nuflagbad_0.1.8: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagbad&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuhotpix&#39; 
-nupipeline_0.4.12: Command: nuhotpix outhpfile=./60001110002_p/nu60001110002B_hp.fits infile=./60001110002_p/nu60001110002B_uf.evt binsize=600.0 cellsize=5 cleanflick=yes bthresh=6 outfile=./60001110002_p/nu60001110002B_uf.1978tmp logpos=-6.0 history=yes iterate=yes chatter=3 impfac=1.0 clobber=yes
+nupipeline_0.4.12: Command: nuhotpix impfac=1.0 iterate=yes binsize=600.0 cleanflick=yes chatter=3 outfile=./60001110002_p/nu60001110002B_uf.3777tmp cellsize=5 history=yes infile=./60001110002_p/nu60001110002B_uf.evt outhpfile=./60001110002_p/nu60001110002B_hp.fits logpos=-6.0 bthresh=6 clobber=yes
 ---------------------------------------------------------------------
  		Running &#39;nuhotpix_0.1.7&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 Name of the output Hot Pixel file                     :&#39;./60001110002_p/nu60001110002B_hp.fits&#39;
 Bin size (seconds) for count image generation         :&#39;600.000000&#39;
 Search and flag flickering pixels?                      : yes
@@ -3848,7 +4024,8 @@ nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [8975
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=11 rawy=30 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=16 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
-nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in raw
+x=31 rawy=18 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 4 rawy=17 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
@@ -3906,8 +4083,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=15 rawy= 6 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=17 rawy= 4 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=18 rawy=18 det_id=3 
-nuhotpix_0.1.7: Info: Found H
-ot Pixel in rawx=26 rawy=10 det_id=3 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=26 rawy=10 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 9 rawy=12 det_id=1 
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89755801.000000 - 89756401.000000]
@@ -4022,7 +4198,8 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=26 rawy=10 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=17 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
-nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89760601.000000 - 89761201.000000]
+nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89760601.000000 - 8976120
+1.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=10 rawy=10 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
@@ -4081,8 +4258,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
-nuhotpix_0
-.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=17 rawy= 4 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=18 rawy=18 det_id=3 
@@ -4197,7 +4373,8 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=10 rawy=10 det_id=1
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=11 rawy=30 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=25 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
-nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_
+id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
@@ -4255,8 +4432,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=15 rawy=30 det_id=1
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
-nuhotpix_0.1.7: Info: Found Hot Pixel i
-n rawx=31 rawy=20 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=17 rawy= 4 det_id=3 
@@ -4372,7 +4548,8 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=26 rawy=10 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=17 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=13 rawy= 7 det_id=1 
-nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=31 rawy=21 det_id=1 
+nuhotpix_0.1.7: Info: Iter 1 Found Ho
+t Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89775601.000000 - 89776201.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=15 rawy=24 det_id=0 
@@ -4429,8 +4606,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89778001.000000 - 89778601.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 7 rawy= 6 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=12 det_id=1 
-nuhotpix_0.1.7: Info: Found Hot Pixel in rawx
-=11 rawy=30 det_id=1 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=11 rawy=30 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=25 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
@@ -5723,31 +5899,31 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=17 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 6 rawy=10 det_id=3 
-nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 nuhotpix_0.1.7: Info: Creating output hot pixel file.
 ---------------------------------------------------------------------
 nuhotpix_0.1.7: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuhotpix&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpha&#39; 
-nupipeline_0.4.12: Command: nucalcpha chatter=3 gradefile=CALDB cleancols=yes clobber=yes timerise=0.0016 phaparfile=CALDB history=yes evtthr=55 outfile=./60001110002_p/nu60001110002B_uf.1978tmp offsetfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt
+nupipeline_0.4.12: Command: nucalcpha cleancols=yes outfile=./60001110002_p/nu60001110002B_uf.3777tmp gradefile=CALDB chatter=3 clobber=yes offsetfile=CALDB phaparfile=CALDB evtthr=55 timerise=0.0016 infile=./60001110002_p/nu60001110002B_uf.evt history=yes
 ---------------------------------------------------------------------
  		Running &#39;nucalcpha_0.2.2&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 Name of the input Offset file                         :&#39;CALDB&#39;
 Name of the input Grade file                          :&#39;CALDB&#39;
 Name of the input PHAPAR file                         :&#39;CALDB&#39;
 Delete temporary columns                              : yes
 ---------------------------------------------------------------------
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/cap_offset/nuBoffset20100101v001.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/cap_offset/nuBoffset20100101v001.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
 nucalcpha_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
 ---------------------------------------------------
 nucalcpha_0.2.2: Info: 		 NuSTAR GRADES
@@ -5777,22 +5953,22 @@ nucalcpha_0.2.2: Info: Total events with grade 21                1490    0.1842%
 nucalcpha_0.2.2: Info: Total events with grade 22                1482    0.1832%
 nucalcpha_0.2.2: Info: Total events with grade 23                1440    0.1780%
 nucalcpha_0.2.2: Info: Total events with grade 24                1436    0.1775%
-nucalcpha_0.2.2: Info: Total events with grade 25                1271    0.1571%
-nucalcpha_0.2.2: Info: Total events with grade 26                 460
-0.0569%
+nucalcpha_0.2.2: Info: Total events with grade 25                1271
+   0.1571%
+nucalcpha_0.2.2: Info: Total events with grade 26                 460    0.0569%
 nucalcpha_0.2.2: Info: Total events with grade 27                 124    0.0153%
 nucalcpha_0.2.2: Info: Total events with grade 28                 106    0.0131%
 nucalcpha_0.2.2: Info: Total events with grade 29                  73    0.0090%
 nucalcpha_0.2.2: Info: Total events with grade 30                  95    0.0117%
 nucalcpha_0.2.2: Info: Total events with grade 31                 156    0.0193%
 nucalcpha_0.2.2: Info: Total events with grade 32              573552   70.9033%
-nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpha_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpha&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpi&#39; 
-nupipeline_0.4.12: Command: nucalcpi outfile=./60001110002_p/nu60001110002B_uf.1978tmp hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz clobber=yes chatter=3 clcfilterfile=CALDB gainfile=CALDB history=yes temperature=5 clcfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt
+nupipeline_0.4.12: Command: nucalcpi history=yes gainfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt clcfilterfile=CALDB chatter=3 temperature=5 outfile=./60001110002_p/nu60001110002B_uf.3777tmp hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz clcfile=CALDB clobber=yes
 ---------------------------------------------------------------------
  		Running &#39;nucalcpi_0.2.2&#39;
 ---------------------------------------------------------------------
@@ -5800,88 +5976,88 @@ nupipeline_0.4.12: Command: nucalcpi outfile=./60001110002_p/nu60001110002B_uf.1
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
 Name of the input HK Header file                      :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz&#39;
 Name of the input GAIN file                           :&#39;CALDB&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
 nucalcpi_0.2.2: Info: Processing /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz file.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET3.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
-nucalcpi_0.2.2: Info: Processing https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
-nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET3.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
+nucalcpi_0.2.2: Info: Processing https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
+nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpi&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuflagevt&#39; 
-nupipeline_0.4.12: Command: nuflagevt evtcutfile=CALDB chatter=3 depthcutfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt outfile=./60001110002_p/nu60001110002B_uf.1978tmp history=yes clobber=yes
+nupipeline_0.4.12: Command: nuflagevt history=yes infile=./60001110002_p/nu60001110002B_uf.evt depthcutfile=CALDB clobber=yes evtcutfile=CALDB chatter=3 outfile=./60001110002_p/nu60001110002B_uf.3777tmp
 ---------------------------------------------------------------------
  		Running &#39;nuflagevt_0.1.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 ---------------------------------------------------------------------
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
 nuflagevt_0.1.4: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
-nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nuflagevt_0.1.4: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagevt&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucoord&#39; 
-nupipeline_0.4.12: Command: nucoord det1xref=350 infile=./60001110002_p/nu60001110002B_uf.evt aberration=no optaxisfile=./60001110002_p/nu60001110002B_oa.fits attfile=./60001110002_p/nu60001110002_att.fits det1reffile=./60001110002_p/nu60001110002B_det1.fits mastaspectfile=./60001110002_p/nu60001110002_mast.fits initseed=no attinterpol=LINEAR alignfile=nuCalign20120101v001.fits outfile=./60001110002_p/nu60001110002B_uf.1978tmp det1yref=350 seedcoordinator=-1956 pntdec=5.6889300000000E+01 history=yes follow_sun=yes timemargin=32.0 chatter=3 pixposfile=CALDB clobber=yes pntra=3.2188650000000E+02 teldef=nuB20100101v002.teldef randomizecoordinator=yes
+nupipeline_0.4.12: Command: nucoord pntdec=5.6889300000000E+01 follow_sun=yes randomizecoordinator=yes alignfile=nuCalign20120101v001.fits attinterpol=LINEAR attfile=./60001110002_p/nu60001110002_att.fits initseed=no optaxisfile=./60001110002_p/nu60001110002B_oa.fits det1yref=350 aberration=no pixposfile=CALDB det1reffile=./60001110002_p/nu60001110002B_det1.fits det1xref=350 pntra=3.2188650000000E+02 clobber=yes teldef=nuB20100101v002.teldef timemargin=32.0 history=yes infile=./60001110002_p/nu60001110002B_uf.evt outfile=./60001110002_p/nu60001110002B_uf.3777tmp chatter=3 seedcoordinator=-1956 mastaspectfile=./60001110002_p/nu60001110002_mast.fits
 --------------------------------------------------------------
              Running &#39; nucoord version 0.1.8 &#39;
 --------------------------------------------------------------
 nucoord_0.1.8: Info: Name of the Input Event File  &#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 --------------------------------------------------------------
-nucoord_0.1.8: Info: Copying input file to &#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Copying input file to &#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39;
 nucoord_0.1.8: Info: Computing DET1 and DET2 coordinates
 nucoord_0.1.8: Info: Running &#39;nucalcpos&#39; 
-nucoord_0.1.8: Command: nucalcpos saveraw2coord=no outfile=4343_tmp_nucoord/nu60001110002B_uf.4343tmp history=yes chatter=3 initseed=no alignfile=nuCalign20120101v001.fits clobber=yes mastaspectfile=./60001110002_p/nu60001110002_mast.fits pixposfile=CALDB infile=4343_tmp_nucoord/nu60001110002B_uf.1978tmp
+nucoord_0.1.8: Command: nucalcpos pixposfile=CALDB saveraw2coord=no infile=5176_tmp_nucoord/nu60001110002B_uf.3777tmp initseed=no alignfile=nuCalign20120101v001.fits history=yes chatter=3 mastaspectfile=./60001110002_p/nu60001110002_mast.fits clobber=yes outfile=5176_tmp_nucoord/nu60001110002B_uf.5176tmp
 ---------------------------------------------------------------------
  		Running &#39;nucalcpos_0.2.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
-Name of the input Event file                          :&#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39;
-Name of the output Event file                         :&#39;4343_tmp_nucoord/nu60001110002B_uf.4343tmp&#39;
+Name of the input Event file                          :&#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39;
+Name of the output Event file                         :&#39;5176_tmp_nucoord/nu60001110002B_uf.5176tmp&#39;
 Name of the input pixel location file                 :&#39;CALDB&#39;
 Name of the input Alignment File                           :&#39;nuCalign20120101v001.fits&#39;
 Name of the input Mast Aspect Solution File               :&#39;./60001110002_p/nu60001110002_mast.fits&#39;
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Info: Processing nuCalign20120101v001.fits file.
-nucalcpos_0.2.4: Info: Processing &#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39; file.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
+nucalcpos_0.2.4: Info: Processing &#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39; file.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
 nucalcpos_0.2.4: Warning: No mast aspect data for TIME=89745601.005071
-nucalcpos_0.2.4: Info: &#39;4343_tmp_nucoord/nu60001110002B_uf.4343tmp&#39; file successfully written.
+nucalcpos_0.2.4: Info: &#39;5176_tmp_nucoord/nu60001110002B_uf.5176tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Exit with success.
 ---------------------------------------------------------------------
 nucoord_0.1.8: Info: &#39;nucalcpos&#39; exit with success. DET1 and DET2 coordinates computed.
 nucoord_0.1.8: Info: Computing X and Y coordinates
 nucoord_0.1.8: Info: Running &#39;coordinator&#39; 
-nucoord_0.1.8: Command: coordinator eventext=EVENTS seed=-1956 skyxnull=-1 randomize=yes teldef=4343_tmp_nucoord/nuB20100101v002.teldef aberration=no interpolation=LINEAR eventfile=4343_tmp_nucoord/nu60001110002B_uf.1978tmp skyynull=-1 timecol=TIME ra=3.2188650000000E+02 timemargin=32.0 attfile=4343_tmp_nucoord/nu60001110002_att.fits history=yes chatter=3 dec=5.6889300000000E+01 follow_sun=yes
+nucoord_0.1.8: Command: coordinator eventfile=5176_tmp_nucoord/nu60001110002B_uf.3777tmp timecol=TIME aberration=no attfile=5176_tmp_nucoord/nu60001110002_att.fits eventext=EVENTS chatter=3 history=yes follow_sun=yes skyynull=-1 skyxnull=-1 ra=3.2188650000000E+02 interpolation=LINEAR teldef=5176_tmp_nucoord/nuB20100101v002.teldef dec=5.6889300000000E+01 timemargin=32.0 randomize=yes seed=-1956
 using LINEAR interpolation for aspecting
 0% done
 0% done
@@ -7337,11 +7513,11 @@ e
 99% done
 100% done
 nucoord_0.1.8: Info: &#39;coordinator&#39; exit with success. X and Y coordinates computed.
-nucoord_0.1.8: Info: Moving temporary file &#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39; to output file &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
-nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; successfully written.
+nucoord_0.1.8: Info: Moving temporary file &#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39; to output file &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
+nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; successfully written.
 nucoord_0.1.8: Info: Creating Optical Axis File
 nucoord_0.1.8: Info: Running &#39;nuskypos&#39; 
-nucoord_0.1.8: Command: nuskypos pntdec=5.6889300000000E+01 initseed=no clobber=yes attfile=./60001110002_p/nu60001110002_att.fits det1yref=350 det1reffile=./60001110002_p/nu60001110002B_det1.fits history=yes chatter=3 instrument=FPMB det1xref=350 optaxisfile=./60001110002_p/nu60001110002B_oa.fits alignfile=nuCalign20120101v001.fits pntra=3.2188650000000E+02 mastaspectfile=./60001110002_p/nu60001110002_mast.fits aberration=no teldef=nuB20100101v002.teldef
+nucoord_0.1.8: Command: nuskypos aberration=no attfile=./60001110002_p/nu60001110002_att.fits det1yref=350 initseed=no optaxisfile=./60001110002_p/nu60001110002B_oa.fits mastaspectfile=./60001110002_p/nu60001110002_mast.fits det1reffile=./60001110002_p/nu60001110002B_det1.fits teldef=nuB20100101v002.teldef pntdec=5.6889300000000E+01 pntra=3.2188650000000E+02 alignfile=nuCalign20120101v001.fits det1xref=350 chatter=3 history=yes instrument=FPMB clobber=yes
 ---------------------------------------------------------------------
  		Running &#39;nuskypos_0.1.3&#39;
 ---------------------------------------------------------------------
@@ -7372,7 +7548,7 @@ FPMB: .... Stage    I: Calibrating Level 1 Event File: &#39;./60001110002_p/nu60
 FPMB: .... Stage    I: Calibrated Event File: &#39;./60001110002_p/nu60001110002B_uf.evt&#39;
 
 =============================================================================================
-nupipeline_0.4.12: Exit with no errors - Tue Feb  3 11:21:29 EST 2026
+nupipeline_0.4.12: Exit with no errors - Tue Jul 28 16:26:06 EDT 2026
 
 =============================================================================================
 =============================================================================================
@@ -7401,7 +7577,7 @@ nupipeline_0.4.12: Info: getting default S/C direction
 nupipeline_0.4.12: Info: Optical Axis   RA : 3.2188650000000E+02(deg)
 nupipeline_0.4.12: Info: Optical Axis  DEC : 5.6889300000000E+01(deg)
 nupipeline_0.4.12: Info: Running &#39;numetrology&#39; 
-nupipeline_0.4.12: Command: numetrology clobber=yes outpsdfilecor=./60001110002_p/nu60001110002_psdcorr.fits chatter=3 history=yes mastaspectfile=./60001110002_p/nu60001110002_mast.fits metgridfile=CALDB metflag=yes alignfile=nuCalign20120101v001.fits metrologyfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz inpsdfilecor= psdcal=yes outpsdfile=./60001110002_p/nu60001110002_psd.fits
+nupipeline_0.4.12: Command: numetrology psdcal=yes mastaspectfile=./60001110002_p/nu60001110002_mast.fits chatter=3 outpsdfilecor=./60001110002_p/nu60001110002_psdcorr.fits metgridfile=CALDB history=yes inpsdfilecor= alignfile=nuCalign20120101v001.fits metrologyfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz outpsdfile=./60001110002_p/nu60001110002_psd.fits clobber=yes metflag=yes
 ---------------------------------------------------------------------
  		Running &#39;numetrology_0.1.9&#39;
 ---------------------------------------------------------------------
@@ -7415,8 +7591,8 @@ Name of the input Alignment File                           :&#39;nuCalign2012010
 Name of the output Mast Aspect Solution File               :&#39;./60001110002_p/nu60001110002_mast.fits&#39;
 ---------------------------------------------------------------------
 numetrology_0.1.9: Warning: /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz file (ext &#39;MET_CMP&#39;) is empty.
-numetrology_0.1.9: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD0.
-numetrology_0.1.9: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD1.
+numetrology_0.1.9: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD0.
+numetrology_0.1.9: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/metrology/nuCmetgrid20100101v002.fits&#39; file for metgrid data of PSD1.
 numetrology_0.1.9: Warning: /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002_met.fits.gz file (ext &#39;MET_CMP&#39;) is empty.
 numetrology_0.1.9: Info: Processing nuCalign20120101v001.fits file.
 ---------------------------------------------------------------------
@@ -7424,7 +7600,7 @@ numetrology_0.1.9: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;numetrology&#39; exit with success. &#39;./60001110002_p/nu60001110002_mast.fits&#39; mast aspect solution file created.
 nupipeline_0.4.12: Info: Running &#39;nuattcorr&#39; 
-nupipeline_0.4.12: Command: nuattcorr chatter=3 attfile=/home/jovyan/project/_data/NuSTAR/60001110002/auxil/nu60001110002_att.fits.gz chuoffsetfile=CALDB outattfile=./60001110002_p/nu60001110002_att.fits clobber=yes history=yes
+nupipeline_0.4.12: Command: nuattcorr chuoffsetfile=CALDB clobber=yes outattfile=./60001110002_p/nu60001110002_att.fits chatter=3 attfile=/home/jovyan/project/_data/NuSTAR/60001110002/auxil/nu60001110002_att.fits.gz history=yes
 ---------------------------------------------------------------------
  		Running &#39;nuattcorr_0.1.2&#39;
 ---------------------------------------------------------------------
@@ -7433,9 +7609,9 @@ Name of the input Attitude file                       :&#39;/home/jovyan/project
 Name of the output Corrected Attitude file            :&#39;./60001110002_p/nu60001110002_att.fits&#39;
 Name of the input CHUs Quaternion Offset FITS file    :&#39;CALDB&#39;
 ---------------------------------------------------------------------
-nuattcorr_0.1.2: Info: Creating &#39;3587_tmp_nuattcorr/3587in_nu60001110002_att.fits.gz&#39; symbolic link to input Attitude file.
-nuattcorr_0.1.2: Info: Processing https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuCchuoffset20100101v001.fits file.
-nuattcorr_0.1.2: Info: executing &#39;ftcopy infile=&#39;3587_tmp_nuattcorr/3587in_nu60001110002_att.fits.gz[col @3587_tmp_nuattcorr/3587in.col]&#39; outfile=3587_tmp_nuattcorr/3587out_nu60001110002_att.fits&#39;
+nuattcorr_0.1.2: Info: Creating &#39;4768_tmp_nuattcorr/4768in_nu60001110002_att.fits.gz&#39; symbolic link to input Attitude file.
+nuattcorr_0.1.2: Info: Processing https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuCchuoffset20100101v001.fits file.
+nuattcorr_0.1.2: Info: executing &#39;ftcopy infile=&#39;4768_tmp_nuattcorr/4768in_nu60001110002_att.fits.gz[col @4768_tmp_nuattcorr/4768in.col]&#39; outfile=4768_tmp_nuattcorr/4768out_nu60001110002_att.fits&#39;
 nuattcorr_0.1.2: Info: &#39;./60001110002_p/nu60001110002_att.fits&#39; file successfully written.
 ---------------------------------------------------------------------
 nuattcorr_0.1.2: Exit with success.
@@ -7451,41 +7627,41 @@ nupipeline_0.4.12: Stage  I: Calibrating &#39;./60001110002_p/nu60001110002A_uf.
 ============================================================
 
 nupipeline_0.4.12: Info: Running &#39;nuflagbad&#39; 
-nupipeline_0.4.12: Command: nuflagbad userbpfile=NONE chatter=3 clobber=yes outfile=./60001110002_p/nu60001110002A_uf.1978tmp infile=./60001110002_p/nu60001110002A_uf.evt bpfile=CALDB history=yes dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz outbpfile=./60001110002_p/nu60001110002A_bp.fits
+nupipeline_0.4.12: Command: nuflagbad bpfile=CALDB chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp clobber=yes dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz history=yes infile=./60001110002_p/nu60001110002A_uf.evt outbpfile=./60001110002_p/nu60001110002A_bp.fits userbpfile=NONE
 ---------------------------------------------------------------------
  		Running &#39;nuflagbad_0.1.8&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 Name of the input on-board disabled pixel file        :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39;
 Name of the input on-ground bad pixel file            :&#39;CALDB&#39;
 Name of the input user bad pixel file                 :&#39;NONE&#39;
 Name of the output Bad Pixel file                     :&#39;./60001110002_p/nu60001110002A_bp.fits&#39;
 ---------------------------------------------------------------------
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET0.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET1.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET2.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET3.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET0.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET1.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET2.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuAbadpix20100101v003.fits&#39; file for on-ground bad pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET0.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET1.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET2.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
-nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 nuflagbad_0.1.8: Info: Creating output bad pixel file.
 ---------------------------------------------------------------------
 nuflagbad_0.1.8: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagbad&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuhotpix&#39; 
-nupipeline_0.4.12: Command: nuhotpix outhpfile=./60001110002_p/nu60001110002A_hp.fits infile=./60001110002_p/nu60001110002A_uf.evt binsize=600.0 cellsize=5 cleanflick=yes outfile=./60001110002_p/nu60001110002A_uf.1978tmp bthresh=6 logpos=-6.0 history=yes chatter=3 iterate=yes clobber=yes impfac=1.0
+nupipeline_0.4.12: Command: nuhotpix clobber=yes bthresh=6 logpos=-6.0 cellsize=5 history=yes infile=./60001110002_p/nu60001110002A_uf.evt outhpfile=./60001110002_p/nu60001110002A_hp.fits cleanflick=yes chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp iterate=yes binsize=600.0 impfac=1.0
 ---------------------------------------------------------------------
  		Running &#39;nuhotpix_0.1.7&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 Name of the output Hot Pixel file                     :&#39;./60001110002_p/nu60001110002A_hp.fits&#39;
 Bin size (seconds) for count image generation         :&#39;600.000000&#39;
 Search and flag flickering pixels?                      : yes
@@ -7904,8 +8080,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=2 
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89800201.000000 - 89800801.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=2 
-nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89800801.00000
-0 - 89801401.000000]
+nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89800801.000000 - 89801401.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 6 rawy= 0 det_id=3 
@@ -8169,31 +8344,31 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=19 det_id=3
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=12 rawy=19 det_id=2 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=13 rawy= 9 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=15 rawy=30 det_id=3 
-nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 nuhotpix_0.1.7: Info: Creating output hot pixel file.
 ---------------------------------------------------------------------
 nuhotpix_0.1.7: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuhotpix&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpha&#39; 
-nupipeline_0.4.12: Command: nucalcpha clobber=yes cleancols=yes gradefile=CALDB chatter=3 evtthr=55 history=yes phaparfile=CALDB timerise=0.0016 outfile=./60001110002_p/nu60001110002A_uf.1978tmp infile=./60001110002_p/nu60001110002A_uf.evt offsetfile=CALDB
+nupipeline_0.4.12: Command: nucalcpha offsetfile=CALDB clobber=yes phaparfile=CALDB evtthr=55 timerise=0.0016 history=yes infile=./60001110002_p/nu60001110002A_uf.evt cleancols=yes chatter=3 gradefile=CALDB outfile=./60001110002_p/nu60001110002A_uf.3777tmp
 ---------------------------------------------------------------------
  		Running &#39;nucalcpha_0.2.2&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 Name of the input Offset file                         :&#39;CALDB&#39;
 Name of the input Grade file                          :&#39;CALDB&#39;
 Name of the input PHAPAR file                         :&#39;CALDB&#39;
 Delete temporary columns                              : yes
 ---------------------------------------------------------------------
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/cap_offset/nuAoffset20100101v001.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/cap_offset/nuAoffset20100101v001.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
 nucalcpha_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
 ---------------------------------------------------
 nucalcpha_0.2.2: Info: 		 NuSTAR GRADES
@@ -8223,22 +8398,22 @@ nucalcpha_0.2.2: Info: Total events with grade 21                1299    0.1730%
 nucalcpha_0.2.2: Info: Total events with grade 22                1255    0.1672%
 nucalcpha_0.2.2: Info: Total events with grade 23                1287    0.1714%
 nucalcpha_0.2.2: Info: Total events with grade 24                1268    0.1689%
-nucalcpha_0.2.2: Info: Total events with grade 25                3063    0.4080%
-nucalcpha_0.2.2: Info: Total events with grade 26                 328
-0.0437%
+nucalcpha_0.2.2: Info: Total events with grade 25                3063
+   0.4080%
+nucalcpha_0.2.2: Info: Total events with grade 26                 328    0.0437%
 nucalcpha_0.2.2: Info: Total events with grade 27                 131    0.0174%
 nucalcpha_0.2.2: Info: Total events with grade 28                  81    0.0108%
 nucalcpha_0.2.2: Info: Total events with grade 29                  71    0.0095%
 nucalcpha_0.2.2: Info: Total events with grade 30                  82    0.0109%
 nucalcpha_0.2.2: Info: Total events with grade 31                 340    0.0453%
 nucalcpha_0.2.2: Info: Total events with grade 32              528379   70.3832%
-nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpha_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpha&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpi&#39; 
-nupipeline_0.4.12: Command: nucalcpi chatter=3 outfile=./60001110002_p/nu60001110002A_uf.1978tmp clobber=yes hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz clcfile=CALDB infile=./60001110002_p/nu60001110002A_uf.evt gainfile=CALDB clcfilterfile=CALDB temperature=5 history=yes
+nupipeline_0.4.12: Command: nucalcpi clcfilterfile=CALDB gainfile=CALDB history=yes infile=./60001110002_p/nu60001110002A_uf.evt clobber=yes clcfile=CALDB hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp temperature=5
 ---------------------------------------------------------------------
  		Running &#39;nucalcpi_0.2.2&#39;
 ---------------------------------------------------------------------
@@ -8246,87 +8421,87 @@ nupipeline_0.4.12: Command: nucalcpi chatter=3 outfile=./60001110002_p/nu6000111
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
 Name of the input HK Header file                      :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz&#39;
 Name of the input GAIN file                           :&#39;CALDB&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
 nucalcpi_0.2.2: Info: Processing /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002A_fpm.hk.gz file.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET3.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
-nucalcpi_0.2.2: Info: Processing https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
-nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuAgain20100101v011.fits&#39; file for gain data of detector DET3.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuAclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
+nucalcpi_0.2.2: Info: Processing https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
+nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpi&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuflagevt&#39; 
-nupipeline_0.4.12: Command: nuflagevt clobber=yes history=yes outfile=./60001110002_p/nu60001110002A_uf.1978tmp infile=./60001110002_p/nu60001110002A_uf.evt evtcutfile=CALDB chatter=3 depthcutfile=CALDB
+nupipeline_0.4.12: Command: nuflagevt evtcutfile=CALDB clobber=yes chatter=3 outfile=./60001110002_p/nu60001110002A_uf.3777tmp infile=./60001110002_p/nu60001110002A_uf.evt history=yes depthcutfile=CALDB
 ---------------------------------------------------------------------
  		Running &#39;nuflagevt_0.1.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 ---------------------------------------------------------------------
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuAevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
 nuflagevt_0.1.4: Info: Processing &#39;./60001110002_p/nu60001110002A_uf.evt&#39; file.
-nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; file successfully written.
+nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nuflagevt_0.1.4: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagevt&#39; exit with success. &#39;./60001110002_p/nu60001110002A_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucoord&#39; 
-nupipeline_0.4.12: Command: nucoord pntra=3.2188650000000E+02 randomizecoordinator=yes teldef=nuA20100101v002.teldef pixposfile=CALDB clobber=yes timemargin=32.0 chatter=3 history=yes follow_sun=yes seedcoordinator=-1956 pntdec=5.6889300000000E+01 det1yref=350 initseed=no outfile=./60001110002_p/nu60001110002A_uf.1978tmp attinterpol=LINEAR alignfile=nuCalign20120101v001.fits mastaspectfile=./60001110002_p/nu60001110002_mast.fits attfile=./60001110002_p/nu60001110002_att.fits det1reffile=./60001110002_p/nu60001110002A_det1.fits optaxisfile=./60001110002_p/nu60001110002A_oa.fits aberration=no infile=./60001110002_p/nu60001110002A_uf.evt det1xref=350
+nupipeline_0.4.12: Command: nucoord outfile=./60001110002_p/nu60001110002A_uf.3777tmp chatter=3 seedcoordinator=-1956 mastaspectfile=./60001110002_p/nu60001110002_mast.fits pixposfile=CALDB aberration=no det1reffile=./60001110002_p/nu60001110002A_det1.fits det1xref=350 clobber=yes pntra=3.2188650000000E+02 timemargin=32.0 teldef=nuA20100101v002.teldef history=yes infile=./60001110002_p/nu60001110002A_uf.evt attfile=./60001110002_p/nu60001110002_att.fits initseed=no optaxisfile=./60001110002_p/nu60001110002A_oa.fits det1yref=350 pntdec=5.6889300000000E+01 follow_sun=yes randomizecoordinator=yes alignfile=nuCalign20120101v001.fits attinterpol=LINEAR
 --------------------------------------------------------------
              Running &#39; nucoord version 0.1.8 &#39;
 --------------------------------------------------------------
 nucoord_0.1.8: Info: Name of the Input Event File  &#39;./60001110002_p/nu60001110002A_uf.evt&#39;
-nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
 --------------------------------------------------------------
-nucoord_0.1.8: Info: Copying input file to &#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Copying input file to &#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39;
 nucoord_0.1.8: Info: Computing DET1 and DET2 coordinates
 nucoord_0.1.8: Info: Running &#39;nucalcpos&#39; 
-nucoord_0.1.8: Command: nucalcpos alignfile=nuCalign20120101v001.fits pixposfile=CALDB chatter=3 saveraw2coord=no initseed=no outfile=3940_tmp_nucoord/nu60001110002A_uf.3940tmp history=yes infile=3940_tmp_nucoord/nu60001110002A_uf.1978tmp mastaspectfile=./60001110002_p/nu60001110002_mast.fits clobber=yes
+nucoord_0.1.8: Command: nucalcpos chatter=3 mastaspectfile=./60001110002_p/nu60001110002_mast.fits outfile=4951_tmp_nucoord/nu60001110002A_uf.4951tmp initseed=no pixposfile=CALDB saveraw2coord=no history=yes infile=4951_tmp_nucoord/nu60001110002A_uf.3777tmp clobber=yes alignfile=nuCalign20120101v001.fits
 ---------------------------------------------------------------------
  		Running &#39;nucalcpos_0.2.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
-Name of the input Event file                          :&#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39;
-Name of the output Event file                         :&#39;3940_tmp_nucoord/nu60001110002A_uf.3940tmp&#39;
+Name of the input Event file                          :&#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39;
+Name of the output Event file                         :&#39;4951_tmp_nucoord/nu60001110002A_uf.4951tmp&#39;
 Name of the input pixel location file                 :&#39;CALDB&#39;
 Name of the input Alignment File                           :&#39;nuCalign20120101v001.fits&#39;
 Name of the input Mast Aspect Solution File               :&#39;./60001110002_p/nu60001110002_mast.fits&#39;
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Info: Processing nuCalign20120101v001.fits file.
-nucalcpos_0.2.4: Info: Processing &#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39; file.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
-nucalcpos_0.2.4: Info: &#39;3940_tmp_nucoord/nu60001110002A_uf.3940tmp&#39; file successfully written.
+nucalcpos_0.2.4: Info: Processing &#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39; file.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuApixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
+nucalcpos_0.2.4: Info: &#39;4951_tmp_nucoord/nu60001110002A_uf.4951tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Exit with success.
 ---------------------------------------------------------------------
 nucoord_0.1.8: Info: &#39;nucalcpos&#39; exit with success. DET1 and DET2 coordinates computed.
 nucoord_0.1.8: Info: Computing X and Y coordinates
 nucoord_0.1.8: Info: Running &#39;coordinator&#39; 
-nucoord_0.1.8: Command: coordinator attfile=3940_tmp_nucoord/nu60001110002_att.fits eventfile=3940_tmp_nucoord/nu60001110002A_uf.1978tmp eventext=EVENTS follow_sun=yes interpolation=LINEAR timemargin=32.0 skyxnull=-1 history=yes teldef=3940_tmp_nucoord/nuA20100101v002.teldef seed=-1956 dec=5.6889300000000E+01 ra=3.2188650000000E+02 skyynull=-1 randomize=yes chatter=3 timecol=TIME aberration=no
+nucoord_0.1.8: Command: coordinator timemargin=32.0 eventfile=4951_tmp_nucoord/nu60001110002A_uf.3777tmp seed=-1956 follow_sun=yes skyxnull=-1 dec=5.6889300000000E+01 attfile=4951_tmp_nucoord/nu60001110002_att.fits history=yes teldef=4951_tmp_nucoord/nuA20100101v002.teldef randomize=yes skyynull=-1 eventext=EVENTS chatter=3 interpolation=LINEAR aberration=no timecol=TIME ra=3.2188650000000E+02
 using LINEAR interpolation for aspecting
 0% done
 0% done
@@ -9677,11 +9852,11 @@ one
 99% done
 100% done
 nucoord_0.1.8: Info: &#39;coordinator&#39; exit with success. X and Y coordinates computed.
-nucoord_0.1.8: Info: Moving temporary file &#39;3940_tmp_nucoord/nu60001110002A_uf.1978tmp&#39; to output file &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39;
-nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002A_uf.1978tmp&#39; successfully written.
+nucoord_0.1.8: Info: Moving temporary file &#39;4951_tmp_nucoord/nu60001110002A_uf.3777tmp&#39; to output file &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39;
+nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002A_uf.3777tmp&#39; successfully written.
 nucoord_0.1.8: Info: Creating Optical Axis File
 nucoord_0.1.8: Info: Running &#39;nuskypos&#39; 
-nucoord_0.1.8: Command: nuskypos teldef=nuA20100101v002.teldef initseed=no optaxisfile=./60001110002_p/nu60001110002A_oa.fits history=yes clobber=yes pntdec=5.6889300000000E+01 aberration=no chatter=3 det1yref=350 pntra=3.2188650000000E+02 det1reffile=./60001110002_p/nu60001110002A_det1.fits det1xref=350 mastaspectfile=./60001110002_p/nu60001110002_mast.fits instrument=FPMA alignfile=nuCalign20120101v001.fits attfile=./60001110002_p/nu60001110002_att.fits
+nucoord_0.1.8: Command: nuskypos alignfile=nuCalign20120101v001.fits det1yref=350 det1xref=350 aberration=no chatter=3 pntdec=5.6889300000000E+01 instrument=FPMA clobber=yes teldef=nuA20100101v002.teldef history=yes attfile=./60001110002_p/nu60001110002_att.fits pntra=3.2188650000000E+02 det1reffile=./60001110002_p/nu60001110002A_det1.fits initseed=no mastaspectfile=./60001110002_p/nu60001110002_mast.fits optaxisfile=./60001110002_p/nu60001110002A_oa.fits
 ---------------------------------------------------------------------
  		Running &#39;nuskypos_0.1.3&#39;
 ---------------------------------------------------------------------
@@ -9709,41 +9884,41 @@ nupipeline_0.4.12: Stage  I: Calibrating &#39;./60001110002_p/nu60001110002B_uf.
 ============================================================
 
 nupipeline_0.4.12: Info: Running &#39;nuflagbad&#39; 
-nupipeline_0.4.12: Command: nuflagbad infile=./60001110002_p/nu60001110002B_uf.evt bpfile=CALDB outbpfile=./60001110002_p/nu60001110002B_bp.fits dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz history=yes chatter=3 userbpfile=NONE outfile=./60001110002_p/nu60001110002B_uf.1978tmp clobber=yes
+nupipeline_0.4.12: Command: nuflagbad clobber=yes dispixfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz bpfile=CALDB chatter=3 outfile=./60001110002_p/nu60001110002B_uf.3777tmp userbpfile=NONE history=yes infile=./60001110002_p/nu60001110002B_uf.evt outbpfile=./60001110002_p/nu60001110002B_bp.fits
 ---------------------------------------------------------------------
  		Running &#39;nuflagbad_0.1.8&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 Name of the input on-board disabled pixel file        :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39;
 Name of the input on-ground bad pixel file            :&#39;CALDB&#39;
 Name of the input user bad pixel file                 :&#39;NONE&#39;
 Name of the output Bad Pixel file                     :&#39;./60001110002_p/nu60001110002B_bp.fits&#39;
 ---------------------------------------------------------------------
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET0.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET1.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET2.
-nuflagbad_0.1.8: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET3.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET0.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET1.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET2.
+nuflagbad_0.1.8: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/badpix/nuBbadpix20100101v005.fits&#39; file for on-ground bad pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET0.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET1.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET2.
 nuflagbad_0.1.8: Info: Processing &#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_dspx.fits.gz&#39; file for on-board disabled pixel data of detector DET3.
 nuflagbad_0.1.8: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
-nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nuflagbad_0.1.8: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 nuflagbad_0.1.8: Info: Creating output bad pixel file.
 ---------------------------------------------------------------------
 nuflagbad_0.1.8: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagbad&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuhotpix&#39; 
-nupipeline_0.4.12: Command: nuhotpix outhpfile=./60001110002_p/nu60001110002B_hp.fits infile=./60001110002_p/nu60001110002B_uf.evt binsize=600.0 cellsize=5 cleanflick=yes bthresh=6 outfile=./60001110002_p/nu60001110002B_uf.1978tmp logpos=-6.0 history=yes iterate=yes chatter=3 impfac=1.0 clobber=yes
+nupipeline_0.4.12: Command: nuhotpix impfac=1.0 iterate=yes binsize=600.0 cleanflick=yes chatter=3 outfile=./60001110002_p/nu60001110002B_uf.3777tmp cellsize=5 history=yes infile=./60001110002_p/nu60001110002B_uf.evt outhpfile=./60001110002_p/nu60001110002B_hp.fits logpos=-6.0 bthresh=6 clobber=yes
 ---------------------------------------------------------------------
  		Running &#39;nuhotpix_0.1.7&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 Name of the output Hot Pixel file                     :&#39;./60001110002_p/nu60001110002B_hp.fits&#39;
 Bin size (seconds) for count image generation         :&#39;600.000000&#39;
 Search and flag flickering pixels?                      : yes
@@ -9910,7 +10085,8 @@ nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [8975
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=11 rawy=30 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=16 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
-nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in raw
+x=31 rawy=18 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 4 rawy=17 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
@@ -9968,8 +10144,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=15 rawy= 6 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=17 rawy= 4 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=18 rawy=18 det_id=3 
-nuhotpix_0.1.7: Info: Found H
-ot Pixel in rawx=26 rawy=10 det_id=3 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=26 rawy=10 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 9 rawy=12 det_id=1 
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89755801.000000 - 89756401.000000]
@@ -10084,7 +10259,8 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=26 rawy=10 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=17 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
-nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89760601.000000 - 89761201.000000]
+nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89760601.000000 - 8976120
+1.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=10 rawy=10 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
@@ -10143,8 +10319,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
-nuhotpix_0
-.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=17 rawy= 4 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=18 rawy=18 det_id=3 
@@ -10259,7 +10434,8 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=10 rawy=10 det_id=1
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=11 rawy=30 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=25 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
-nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_
+id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
@@ -10317,8 +10493,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=15 rawy=30 det_id=1
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=2 
-nuhotpix_0.1.7: Info: Found Hot Pixel i
-n rawx=31 rawy=20 det_id=2 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=20 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=31 det_id=2 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=17 rawy= 4 det_id=3 
@@ -10434,7 +10609,8 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=26 rawy=10 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=17 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=13 rawy= 7 det_id=1 
-nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx=31 rawy=21 det_id=1 
+nuhotpix_0.1.7: Info: Iter 1 Found Ho
+t Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 9 rawy=23 det_id=3 
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89775601.000000 - 89776201.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=15 rawy=24 det_id=0 
@@ -10491,8 +10667,7 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3
 nuhotpix_0.1.7: Info: Creating count maps for events with TIME included in [89778001.000000 - 89778601.000000]
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 7 rawy= 6 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx= 9 rawy=12 det_id=1 
-nuhotpix_0.1.7: Info: Found Hot Pixel in rawx
-=11 rawy=30 det_id=1 
+nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=11 rawy=30 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=25 det_id=1 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=16 rawy=22 det_id=2 
@@ -11785,31 +11960,31 @@ nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=17 det_id=3
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=18 det_id=3 
 nuhotpix_0.1.7: Info: Found Hot Pixel in rawx=31 rawy=21 det_id=3 
 nuhotpix_0.1.7: Info: Iter 1 Found Hot Pixel in rawx= 6 rawy=10 det_id=3 
-nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nuhotpix_0.1.7: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 nuhotpix_0.1.7: Info: Creating output hot pixel file.
 ---------------------------------------------------------------------
 nuhotpix_0.1.7: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuhotpix&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpha&#39; 
-nupipeline_0.4.12: Command: nucalcpha chatter=3 gradefile=CALDB cleancols=yes clobber=yes timerise=0.0016 phaparfile=CALDB history=yes evtthr=55 outfile=./60001110002_p/nu60001110002B_uf.1978tmp offsetfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt
+nupipeline_0.4.12: Command: nucalcpha cleancols=yes outfile=./60001110002_p/nu60001110002B_uf.3777tmp gradefile=CALDB chatter=3 clobber=yes offsetfile=CALDB phaparfile=CALDB evtthr=55 timerise=0.0016 infile=./60001110002_p/nu60001110002B_uf.evt history=yes
 ---------------------------------------------------------------------
  		Running &#39;nucalcpha_0.2.2&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 Name of the input Offset file                         :&#39;CALDB&#39;
 Name of the input Grade file                          :&#39;CALDB&#39;
 Name of the input PHAPAR file                         :&#39;CALDB&#39;
 Delete temporary columns                              : yes
 ---------------------------------------------------------------------
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/cap_offset/nuBoffset20100101v001.fits&#39; file.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
-nucalcpha_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/grade/nuCgrade20100101v002.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/cap_offset/nuBoffset20100101v001.fits&#39; file.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET0.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET1.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET2.
+nucalcpha_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBphapar20100101v001.fits&#39; file for PHAPAR data of detector DET3.
 nucalcpha_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
 ---------------------------------------------------
 nucalcpha_0.2.2: Info: 		 NuSTAR GRADES
@@ -11839,22 +12014,22 @@ nucalcpha_0.2.2: Info: Total events with grade 21                1490    0.1842%
 nucalcpha_0.2.2: Info: Total events with grade 22                1482    0.1832%
 nucalcpha_0.2.2: Info: Total events with grade 23                1440    0.1780%
 nucalcpha_0.2.2: Info: Total events with grade 24                1436    0.1775%
-nucalcpha_0.2.2: Info: Total events with grade 25                1271    0.1571%
-nucalcpha_0.2.2: Info: Total events with grade 26                 460
-0.0569%
+nucalcpha_0.2.2: Info: Total events with grade 25                1271
+   0.1571%
+nucalcpha_0.2.2: Info: Total events with grade 26                 460    0.0569%
 nucalcpha_0.2.2: Info: Total events with grade 27                 124    0.0153%
 nucalcpha_0.2.2: Info: Total events with grade 28                 106    0.0131%
 nucalcpha_0.2.2: Info: Total events with grade 29                  73    0.0090%
 nucalcpha_0.2.2: Info: Total events with grade 30                  95    0.0117%
 nucalcpha_0.2.2: Info: Total events with grade 31                 156    0.0193%
 nucalcpha_0.2.2: Info: Total events with grade 32              573552   70.9033%
-nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nucalcpha_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpha_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpha&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucalcpi&#39; 
-nupipeline_0.4.12: Command: nucalcpi outfile=./60001110002_p/nu60001110002B_uf.1978tmp hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz clobber=yes chatter=3 clcfilterfile=CALDB gainfile=CALDB history=yes temperature=5 clcfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt
+nupipeline_0.4.12: Command: nucalcpi history=yes gainfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt clcfilterfile=CALDB chatter=3 temperature=5 outfile=./60001110002_p/nu60001110002B_uf.3777tmp hkfile=/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz clcfile=CALDB clobber=yes
 ---------------------------------------------------------------------
  		Running &#39;nucalcpi_0.2.2&#39;
 ---------------------------------------------------------------------
@@ -11862,88 +12037,88 @@ nupipeline_0.4.12: Command: nucalcpi outfile=./60001110002_p/nu60001110002B_uf.1
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
 Name of the input HK Header file                      :&#39;/home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz&#39;
 Name of the input GAIN file                           :&#39;CALDB&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
 nucalcpi_0.2.2: Info: Processing /home/jovyan/project/_data/NuSTAR/60001110002/hk/nu60001110002B_fpm.hk.gz file.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET3.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
-nucalcpi_0.2.2: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
-nucalcpi_0.2.2: Info: Processing https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
-nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/gain/nuBgain20100101v009.fits&#39; file for gain data of detector DET3.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET0.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET1.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET2.
+nucalcpi_0.2.2: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuBclc20100101v004.fits&#39; file for charge loss correction data of detector DET3.
+nucalcpi_0.2.2: Info: Processing https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/clc/nuCclcfilter20100101v001.fits file.
+nucalcpi_0.2.2: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpi_0.2.2: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nucalcpi&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nuflagevt&#39; 
-nupipeline_0.4.12: Command: nuflagevt evtcutfile=CALDB chatter=3 depthcutfile=CALDB infile=./60001110002_p/nu60001110002B_uf.evt outfile=./60001110002_p/nu60001110002B_uf.1978tmp history=yes clobber=yes
+nupipeline_0.4.12: Command: nuflagevt history=yes infile=./60001110002_p/nu60001110002B_uf.evt depthcutfile=CALDB clobber=yes evtcutfile=CALDB chatter=3 outfile=./60001110002_p/nu60001110002B_uf.3777tmp
 ---------------------------------------------------------------------
  		Running &#39;nuflagevt_0.1.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
 Name of the input Event file                          :&#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+Name of the output Event file                         :&#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 ---------------------------------------------------------------------
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
-nuflagevt_0.1.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_SINGLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET0_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET1_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET2_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBdepthcut20100101v004.fits&#39; file for depth cut data of detector DET3_DOUBLE.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET0.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET1.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET2.
+nuflagevt_0.1.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/instrument/nuBevtcut20100101v001.fits&#39; file for event cut data of detector DET3.
 nuflagevt_0.1.4: Info: Processing &#39;./60001110002_p/nu60001110002B_uf.evt&#39; file.
-nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; file successfully written.
+nuflagevt_0.1.4: Info: &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nuflagevt_0.1.4: Exit with success.
 ---------------------------------------------------------------------
 nupipeline_0.4.12: Info: &#39;nuflagevt&#39; exit with success. &#39;./60001110002_p/nu60001110002B_uf.evt&#39; updated
 nupipeline_0.4.12: Info: Running &#39;nucoord&#39; 
-nupipeline_0.4.12: Command: nucoord det1xref=350 infile=./60001110002_p/nu60001110002B_uf.evt aberration=no optaxisfile=./60001110002_p/nu60001110002B_oa.fits attfile=./60001110002_p/nu60001110002_att.fits det1reffile=./60001110002_p/nu60001110002B_det1.fits mastaspectfile=./60001110002_p/nu60001110002_mast.fits initseed=no attinterpol=LINEAR alignfile=nuCalign20120101v001.fits outfile=./60001110002_p/nu60001110002B_uf.1978tmp det1yref=350 seedcoordinator=-1956 pntdec=5.6889300000000E+01 history=yes follow_sun=yes timemargin=32.0 chatter=3 pixposfile=CALDB clobber=yes pntra=3.2188650000000E+02 teldef=nuB20100101v002.teldef randomizecoordinator=yes
+nupipeline_0.4.12: Command: nucoord pntdec=5.6889300000000E+01 follow_sun=yes randomizecoordinator=yes alignfile=nuCalign20120101v001.fits attinterpol=LINEAR attfile=./60001110002_p/nu60001110002_att.fits initseed=no optaxisfile=./60001110002_p/nu60001110002B_oa.fits det1yref=350 aberration=no pixposfile=CALDB det1reffile=./60001110002_p/nu60001110002B_det1.fits det1xref=350 pntra=3.2188650000000E+02 clobber=yes teldef=nuB20100101v002.teldef timemargin=32.0 history=yes infile=./60001110002_p/nu60001110002B_uf.evt outfile=./60001110002_p/nu60001110002B_uf.3777tmp chatter=3 seedcoordinator=-1956 mastaspectfile=./60001110002_p/nu60001110002_mast.fits
 --------------------------------------------------------------
              Running &#39; nucoord version 0.1.8 &#39;
 --------------------------------------------------------------
 nucoord_0.1.8: Info: Name of the Input Event File  &#39;./60001110002_p/nu60001110002B_uf.evt&#39;
-nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Name of the Output Event File &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
 --------------------------------------------------------------
-nucoord_0.1.8: Info: Copying input file to &#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39;
+nucoord_0.1.8: Info: Copying input file to &#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39;
 nucoord_0.1.8: Info: Computing DET1 and DET2 coordinates
 nucoord_0.1.8: Info: Running &#39;nucalcpos&#39; 
-nucoord_0.1.8: Command: nucalcpos saveraw2coord=no outfile=4343_tmp_nucoord/nu60001110002B_uf.4343tmp history=yes chatter=3 initseed=no alignfile=nuCalign20120101v001.fits clobber=yes mastaspectfile=./60001110002_p/nu60001110002_mast.fits pixposfile=CALDB infile=4343_tmp_nucoord/nu60001110002B_uf.1978tmp
+nucoord_0.1.8: Command: nucalcpos pixposfile=CALDB saveraw2coord=no infile=5176_tmp_nucoord/nu60001110002B_uf.3777tmp initseed=no alignfile=nuCalign20120101v001.fits history=yes chatter=3 mastaspectfile=./60001110002_p/nu60001110002_mast.fits clobber=yes outfile=5176_tmp_nucoord/nu60001110002B_uf.5176tmp
 ---------------------------------------------------------------------
  		Running &#39;nucalcpos_0.2.4&#39;
 ---------------------------------------------------------------------
 		 Input Parameters List: 
-Name of the input Event file                          :&#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39;
-Name of the output Event file                         :&#39;4343_tmp_nucoord/nu60001110002B_uf.4343tmp&#39;
+Name of the input Event file                          :&#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39;
+Name of the output Event file                         :&#39;5176_tmp_nucoord/nu60001110002B_uf.5176tmp&#39;
 Name of the input pixel location file                 :&#39;CALDB&#39;
 Name of the input Alignment File                           :&#39;nuCalign20120101v001.fits&#39;
 Name of the input Mast Aspect Solution File               :&#39;./60001110002_p/nu60001110002_mast.fits&#39;
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Info: Processing nuCalign20120101v001.fits file.
-nucalcpos_0.2.4: Info: Processing &#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39; file.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
-nucalcpos_0.2.4: Info: Processing &#39;https://heasarc.gsfc.nasa.gov/FTP/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
+nucalcpos_0.2.4: Info: Processing &#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39; file.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET0.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET1.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET2.
+nucalcpos_0.2.4: Info: Processing &#39;https://nasa-heasarc.s3.us-east-1.amazonaws.com/caldb/data/nustar/fpm/bcf/pixpos/nuBpixpos20100101v007.fits&#39; file for pixpos data of detector DET3.
 nucalcpos_0.2.4: Warning: No mast aspect data for TIME=89745601.005071
-nucalcpos_0.2.4: Info: &#39;4343_tmp_nucoord/nu60001110002B_uf.4343tmp&#39; file successfully written.
+nucalcpos_0.2.4: Info: &#39;5176_tmp_nucoord/nu60001110002B_uf.5176tmp&#39; file successfully written.
 ---------------------------------------------------------------------
 nucalcpos_0.2.4: Exit with success.
 ---------------------------------------------------------------------
 nucoord_0.1.8: Info: &#39;nucalcpos&#39; exit with success. DET1 and DET2 coordinates computed.
 nucoord_0.1.8: Info: Computing X and Y coordinates
 nucoord_0.1.8: Info: Running &#39;coordinator&#39; 
-nucoord_0.1.8: Command: coordinator eventext=EVENTS seed=-1956 skyxnull=-1 randomize=yes teldef=4343_tmp_nucoord/nuB20100101v002.teldef aberration=no interpolation=LINEAR eventfile=4343_tmp_nucoord/nu60001110002B_uf.1978tmp skyynull=-1 timecol=TIME ra=3.2188650000000E+02 timemargin=32.0 attfile=4343_tmp_nucoord/nu60001110002_att.fits history=yes chatter=3 dec=5.6889300000000E+01 follow_sun=yes
+nucoord_0.1.8: Command: coordinator eventfile=5176_tmp_nucoord/nu60001110002B_uf.3777tmp timecol=TIME aberration=no attfile=5176_tmp_nucoord/nu60001110002_att.fits eventext=EVENTS chatter=3 history=yes follow_sun=yes skyynull=-1 skyxnull=-1 ra=3.2188650000000E+02 interpolation=LINEAR teldef=5176_tmp_nucoord/nuB20100101v002.teldef dec=5.6889300000000E+01 timemargin=32.0 randomize=yes seed=-1956
 using LINEAR interpolation for aspecting
 0% done
 0% done
@@ -13399,11 +13574,11 @@ e
 99% done
 100% done
 nucoord_0.1.8: Info: &#39;coordinator&#39; exit with success. X and Y coordinates computed.
-nucoord_0.1.8: Info: Moving temporary file &#39;4343_tmp_nucoord/nu60001110002B_uf.1978tmp&#39; to output file &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39;
-nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002B_uf.1978tmp&#39; successfully written.
+nucoord_0.1.8: Info: Moving temporary file &#39;5176_tmp_nucoord/nu60001110002B_uf.3777tmp&#39; to output file &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39;
+nucoord_0.1.8: Info: Output Event File &#39;./60001110002_p/nu60001110002B_uf.3777tmp&#39; successfully written.
 nucoord_0.1.8: Info: Creating Optical Axis File
 nucoord_0.1.8: Info: Running &#39;nuskypos&#39; 
-nucoord_0.1.8: Command: nuskypos pntdec=5.6889300000000E+01 initseed=no clobber=yes attfile=./60001110002_p/nu60001110002_att.fits det1yref=350 det1reffile=./60001110002_p/nu60001110002B_det1.fits history=yes chatter=3 instrument=FPMB det1xref=350 optaxisfile=./60001110002_p/nu60001110002B_oa.fits alignfile=nuCalign20120101v001.fits pntra=3.2188650000000E+02 mastaspectfile=./60001110002_p/nu60001110002_mast.fits aberration=no teldef=nuB20100101v002.teldef
+nucoord_0.1.8: Command: nuskypos aberration=no attfile=./60001110002_p/nu60001110002_att.fits det1yref=350 initseed=no optaxisfile=./60001110002_p/nu60001110002B_oa.fits mastaspectfile=./60001110002_p/nu60001110002_mast.fits det1reffile=./60001110002_p/nu60001110002B_det1.fits teldef=nuB20100101v002.teldef pntdec=5.6889300000000E+01 pntra=3.2188650000000E+02 alignfile=nuCalign20120101v001.fits det1xref=350 chatter=3 history=yes instrument=FPMB clobber=yes
 ---------------------------------------------------------------------
  		Running &#39;nuskypos_0.1.3&#39;
 ---------------------------------------------------------------------
@@ -13434,7 +13609,7 @@ FPMB: .... Stage    I: Calibrating Level 1 Event File: &#39;./60001110002_p/nu60
 FPMB: .... Stage    I: Calibrated Event File: &#39;./60001110002_p/nu60001110002B_uf.evt&#39;
 
 =============================================================================================
-nupipeline_0.4.12: Exit with no errors - Tue Feb  3 11:21:29 EST 2026
+nupipeline_0.4.12: Exit with no errors - Tue Jul 28 16:26:06 EDT 2026
 
 =============================================================================================
 =============================================================================================
@@ -13541,10 +13716,10 @@ an environment variable, we define a constant global variable that we read in th
  &gt; Output:
  nicerl2 1.41
  --------------------------------------------------------
-          Requested task operations: MKF,SCREEN,CALMERGE
+          Requested task operations: MKF,CALMERGE,SCREEN
         Processed prefilter_columns: NICERV6
     Processed niprefilter2_coltypes: NICERV6,BASE
-           Processed geomag_columns: kp_potsdam.fits(KP),COR_NYM,solarphi_oulu.fits(SOLAR_PHI)
+           Processed geomag_columns: solarphi_oulu.fits(SOLAR_PHI),kp_potsdam.fits(KP),COR_NYM
    Inputs:
    (INDIR) /home/jovyan/project/_data/NICER/1010010121
    (UF)    /home/jovyan/project/_data/NICER/1010010121/xti/event_uf
@@ -13590,8 +13765,8 @@ an environment variable, we define a constant global variable that we read in th
    Event files
    Filter-level calculations
    Filter-level interpolations
-     File: kp_potsdam.fits    Column: KP
      File: solarphi_oulu.fits    Column: SOLAR_PHI
+     File: kp_potsdam.fits    Column: KP
    Adding COR_NYM 
    Adding DELTA_SLOW_LLD 
    Adding XTI_PNT_JITTER 
@@ -13711,8 +13886,8 @@ an environment variable, we define a constant global variable that we read in th
  --------------------------------------------------------
           Requested task operations: MKF,SCREEN,CALMERGE
         Processed prefilter_columns: NICERV6
-    Processed niprefilter2_coltypes: NICERV6,BASE
-           Processed geomag_columns: kp_potsdam.fits(KP),COR_NYM,solarphi_oulu.fits(SOLAR_PHI)
+    Processed niprefilter2_coltypes: BASE,NICERV6
+           Processed geomag_columns: kp_potsdam.fits(KP),solarphi_oulu.fits(SOLAR_PHI),COR_NYM
    Inputs:
    (INDIR) /home/jovyan/project/_data/NICER/1010010122
    (UF)    /home/jovyan/project/_data/NICER/1010010122/xti/event_uf
@@ -13873,10 +14048,10 @@ an environment variable, we define a constant global variable that we read in th
  &gt; Output:
  nicerl2 1.41
  --------------------------------------------------------
-          Requested task operations: CALMERGE,MKF,SCREEN
+          Requested task operations: SCREEN,CALMERGE,MKF
         Processed prefilter_columns: NICERV6
     Processed niprefilter2_coltypes: NICERV6,BASE
-           Processed geomag_columns: kp_potsdam.fits(KP),COR_NYM,solarphi_oulu.fits(SOLAR_PHI)
+           Processed geomag_columns: COR_NYM,solarphi_oulu.fits(SOLAR_PHI),kp_potsdam.fits(KP)
    Inputs:
    (INDIR) /home/jovyan/project/_data/NICER/1012020112
    (UF)    /home/jovyan/project/_data/NICER/1012020112/xti/event_uf
@@ -13922,8 +14097,8 @@ an environment variable, we define a constant global variable that we read in th
    Event files
    Filter-level calculations
    Filter-level interpolations
-     File: kp_potsdam.fits    Column: KP
      File: solarphi_oulu.fits    Column: SOLAR_PHI
+     File: kp_potsdam.fits    Column: KP
    Adding COR_NYM 
    Adding DELTA_SLOW_LLD 
    Adding XTI_PNT_JITTER 
@@ -14035,7 +14210,7 @@ an environment variable, we define a constant global variable that we read in th
  &gt; Output:
  nicerl2 1.41
  --------------------------------------------------------
-          Requested task operations: MKF,CALMERGE,SCREEN
+          Requested task operations: SCREEN,MKF,CALMERGE
         Processed prefilter_columns: NICERV6
     Processed niprefilter2_coltypes: BASE,NICERV6
            Processed geomag_columns: solarphi_oulu.fits(SOLAR_PHI),kp_potsdam.fits(KP),COR_NYM
@@ -14236,7 +14411,7 @@ original downloaded data directories, overwriting any existing files with newer 
 <h2>About this Notebook<a class="headerlink" href="#about-this-notebook" title="Link to this heading">#</a></h2>
 <p>Author: Abdu Zoghbi, HEASARC Staff Scientist</p>
 <p>Author: David Turner, HEASARC Staff Scientist</p>
-<p>Updated On: 2026-02-03</p>
+<p>Updated On: 2026-07-28</p>
 <section id="additional-resources">
 <h3>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h3>
 <p>For more documentation on using HEASoft see :</p>
@@ -14301,7 +14476,7 @@ original downloaded data directories, overwriting any existing files with newer 
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
@@ -14375,8 +14550,8 @@ By HEASARC developers
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

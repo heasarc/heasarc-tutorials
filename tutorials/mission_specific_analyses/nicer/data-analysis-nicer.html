@@ -27,20 +27,20 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -48,16 +48,27 @@
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
-    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-R7YGYK7HYQ"></script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+            </script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-R7YGYK7HYQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 gtag('config', 'G-R7YGYK7HYQ');
             </script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/mission_specific_analyses/nicer/data-analysis-nicer';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -66,20 +77,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -108,7 +125,51 @@
 </aside>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -165,8 +226,7 @@
           
           
           
-          <a href="https://github.com/HEASARC/heasarc-tutorials" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/HEASARC/heasarc-tutorials" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         <div class="sidebar-primary-item">
@@ -416,11 +476,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -448,7 +515,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
@@ -548,11 +615,114 @@
 </section>
 <section id="runtime">
 <h3>Runtime<a class="headerlink" href="#runtime" title="Link to this heading">#</a></h3>
-<p>As of 19th January 2026, this notebook takes ~6 m to run to completion on Fornax using the ‘Default Astrophysics’ image and the ‘small’ server with 8GB RAM/ 2 cores.</p>
+<p>As of 28th July 2026, this notebook takes ~7-minutes to run to completion on Fornax using the ‘small’ server with 8GB RAM/ 2 cores.</p>
 </section>
 </section>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<p>This notebook uses features from an Astroquery pre-release. You will need to install
+the latest version using the command below. We will remove this once Astroquery
+v0.4.12 is officially released.</p>
+<div class="cell tag_hide-output config_scroll_outputs docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install --pre astroquery --upgrade
+</pre></div>
+</div>
+</div>
+<details class="admonition hide below-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell output</p>
+<p class="expanded admonition-title">Hide code cell output</p>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: astroquery in /opt/envs/heasoft/lib/python3.12/site-packages (0.4.11)
+Collecting astroquery
+  Downloading astroquery-0.4.12.dev10885-py3-none-any.whl.metadata (6.5 kB)
+Requirement already satisfied: numpy&gt;=1.22 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.6)
+Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (8.0.1)
+Requirement already satisfied: requests&gt;=2.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.34.2)
+Requirement already satisfied: beautifulsoup4&gt;=4.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.15.0)
+Requirement already satisfied: html5lib&gt;=0.999 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.1)
+Requirement already satisfied: keyring&gt;=23.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
+Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.9.1)
+Requirement already satisfied: astropy-iers-data&gt;=0.2026.6.22.1.23.34 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.7.13.0.54.2)
+Requirement already satisfied: packaging&gt;=25.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.2)
+Requirement already satisfied: pyerfa&gt;=2.0.1.3 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
+Requirement already satisfied: PyYAML&gt;=6.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (6.0.3)
+Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (2.8.4)
+Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (4.16.0)
+Requirement already satisfied: six&gt;=1.9 in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (1.17.0)
+Requirement already satisfied: webencodings in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (0.5.1)
+Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.5.0)
+Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (0.9.0)
+Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.4.0)
+Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (4.6.0)
+Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (6.1.2)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.4.9)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.18)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2.7.0)
+Requirement already satisfied: certifi&gt;=2023.5.7 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2026.6.17)
+Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (49.0.0)
+Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (2.1.0)
+Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (3.0)
+Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=23.0-&gt;astroquery) (11.1.0)
+Downloading astroquery-0.4.12.dev10885-py3-none-any.whl (11.3 MB)
+?25l   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/11.3 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">11.3/11.3 MB</span> <span class=" -Color -Color-Red">90.0 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+?25h
+Installing collected packages: astroquery
+  Attempting uninstall: astroquery
+    Found existing installation: astroquery 0.4.11
+    Uninstalling astroquery-0.4.11:
+      Successfully uninstalled astroquery-0.4.11
+Successfully installed astroquery-0.4.12.dev10885
+Note: you may need to restart the kernel to use updated packages.
+Collecting astroquery
+  Downloading astroquery-0.4.12.dev10885-py3-none-any.whl.metadata (6.5 kB)
+Requirement already satisfied: numpy&gt;=1.22 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.4.6)
+Requirement already satisfied: astropy&gt;=5.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (8.0.1)
+Requirement already satisfied: requests&gt;=2.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (2.34.2)
+Requirement already satisfied: beautifulsoup4&gt;=4.10 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (4.15.0)
+Requirement already satisfied: html5lib&gt;=0.999 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.1)
+Requirement already satisfied: keyring&gt;=23.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (25.7.0)
+Requirement already satisfied: pyvo&gt;=1.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from astroquery) (1.9.1)
+Requirement already satisfied: astropy-iers-data&gt;=0.2026.6.22.1.23.34 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (0.2026.7.13.0.54.2)
+Requirement already satisfied: packaging&gt;=25.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (26.2)
+Requirement already satisfied: pyerfa&gt;=2.0.1.3 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (2.0.1.5)
+Requirement already satisfied: PyYAML&gt;=6.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from astropy&gt;=5.0-&gt;astroquery) (6.0.3)
+Requirement already satisfied: soupsieve&gt;=1.6.1 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (2.8.4)
+Requirement already satisfied: typing-extensions&gt;=4.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from beautifulsoup4&gt;=4.10-&gt;astroquery) (4.16.0)
+Requirement already satisfied: six&gt;=1.9 in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (1.17.0)
+Requirement already satisfied: webencodings in /opt/envs/heasoft/lib/python3.12/site-packages (from html5lib&gt;=0.999-&gt;astroquery) (0.5.1)
+Requirement already satisfied: SecretStorage&gt;=3.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.5.0)
+Requirement already satisfied: jeepney&gt;=0.4.2 in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (0.9.0)
+Requirement already satisfied: jaraco.classes in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (3.4.0)
+Requirement already satisfied: jaraco.functools in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (4.6.0)
+Requirement already satisfied: jaraco.context in /opt/envs/heasoft/lib/python3.12/site-packages (from keyring&gt;=23.0-&gt;astroquery) (6.1.2)
+Requirement already satisfied: charset_normalizer&lt;4,&gt;=2 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.4.9)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (3.18)
+Requirement already satisfied: urllib3&lt;3,&gt;=1.26 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2.7.0)
+Requirement already satisfied: certifi&gt;=2023.5.7 in /opt/envs/heasoft/lib/python3.12/site-packages (from requests&gt;=2.26-&gt;astroquery) (2026.6.17)
+Requirement already satisfied: cryptography&gt;=2.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (49.0.0)
+Requirement already satisfied: cffi&gt;=2.0.0 in /opt/envs/heasoft/lib/python3.12/site-packages (from cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (2.1.0)
+Requirement already satisfied: pycparser in /opt/envs/heasoft/lib/python3.12/site-packages (from cffi&gt;=2.0.0-&gt;cryptography&gt;=2.0-&gt;SecretStorage&gt;=3.2-&gt;keyring&gt;=23.0-&gt;astroquery) (3.0)
+Requirement already satisfied: more-itertools in /opt/envs/heasoft/lib/python3.12/site-packages (from jaraco.classes-&gt;keyring&gt;=23.0-&gt;astroquery) (11.1.0)
+Downloading astroquery-0.4.12.dev10885-py3-none-any.whl (11.3 MB)
+?25l   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/11.3 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">11.3/11.3 MB</span> <span class=" -Color -Color-Red">90.0 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+?25h
+Installing collected packages: astroquery
+  Attempting uninstall: astroquery
+    Found existing installation: astroquery 0.4.11
+    Uninstalling astroquery-0.4.11:
+      Successfully uninstalled astroquery-0.4.11
+Successfully installed astroquery-0.4.12.dev10885
+Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+</div>
+</details>
+</div>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
@@ -756,7 +926,7 @@ name substituted for <code class="docutils literal notranslate"><span class="pre
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=666</i>
-<table id="table140178619309504" class="table-striped table-bordered table-condensed">
+<table id="table139691733681072" class="table-striped table-bordered table-condensed">
 <thead><tr><th>name</th><th>ra</th><th>dec</th><th>time</th><th>obsid</th><th>exposure</th><th>processing_status</th><th>processing_date</th><th>public_date</th><th>obs_type</th><th>__row</th></tr></thead>
 <thead><tr><th></th><th>deg</th><th>deg</th><th>d</th><th></th><th>s</th><th></th><th>d</th><th>d</th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>object</th><th>float64</th><th>int32</th><th>object</th><th>object</th></tr></thead>
@@ -796,7 +966,7 @@ argument and passing an Astropy distance quantity.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=1</i>
-<table id="table140178617672208" class="table-striped table-bordered table-condensed">
+<table id="table139691728046032" class="table-striped table-bordered table-condensed">
 <thead><tr><th>name</th><th>ra</th><th>dec</th><th>time</th><th>obsid</th><th>exposure</th><th>processing_status</th><th>processing_date</th><th>public_date</th><th>obs_type</th><th>__row</th></tr></thead>
 <thead><tr><th></th><th>deg</th><th>deg</th><th>d</th><th></th><th>s</th><th></th><th>d</th><th>d</th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>float64</th><th>object</th><th>float64</th><th>int32</th><th>object</th><th>object</th></tr></thead>
@@ -836,7 +1006,7 @@ retrieves every column of the row whose ObsID matches the one we’re looking fo
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=1</i>
-<table id="table140178617664096" class="table-striped table-bordered table-condensed">
+<table id="table139691727291840" class="table-striped table-bordered table-condensed">
 <thead><tr><th>__row</th><th>name</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>time</th><th>end_time</th><th>obsid</th><th>orig_target_id</th><th>target_id</th><th>target_ra</th><th>target_dec</th><th>exposure</th><th>time_awarded</th><th>mpu0_exposure</th><th>mpu1_exposure</th><th>mpu2_exposure</th><th>mpu3_exposure</th><th>mpu4_exposure</th><th>mpu5_exposure</th><th>mpu6_exposure</th><th>num_fpm</th><th>processing_status</th><th>processing_date</th><th>public_date</th><th>processing_version</th><th>num_processed</th><th>caldb_version</th><th>software_version</th><th>prnb</th><th>abstract</th><th>subject_category</th><th>category_code</th><th>pi_lname</th><th>pi_fname</th><th>cycle</th><th>obs_type</th><th>title</th><th>coordinated</th><th>facility</th><th>galactic_nh</th><th>target_class</th><th>remarks</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
 <thead><tr><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>d</th><th>d</th><th></th><th></th><th></th><th>deg</th><th>deg</th><th>s</th><th>s</th><th>s</th><th>s</th><th>s</th><th>s</th><th>s</th><th>s</th><th>s</th><th></th><th></th><th>d</th><th>d</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>1 / cm2</th><th></th><th></th><th></th><th></th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>int32</th><th>int32</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int16</th><th>object</th><th>float64</th><th>int32</th><th>object</th><th>int16</th><th>object</th><th>object</th><th>object</th><th>object</th><th>object</th><th>int16</th><th>object</th><th>object</th><th>int16</th><th>object</th><th>object</th><th>int16</th><th>object</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
@@ -858,19 +1028,18 @@ as passing the query return to the <code class="docutils literal notranslate"><s
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=1</i>
-<table id="table140178617567568" class="table-striped table-bordered table-condensed">
+<table id="table139691728048864" class="table-striped table-bordered table-condensed">
 <thead><tr><th>ID</th><th>access_url</th><th>sciserver</th><th>aws</th><th>content_length</th><th>error_message</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th></th><th>byte</th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>str39</th><th>str52</th><th>int64</th><th>object</th></tr></thead>
-<tr><td>ivo://nasa.heasarc/nicermastr?14413</td><td>https://heasarc.gsfc.nasa.gov/FTP/nicer/data/obs/2021_09//4020180445/</td><td>/FTP/nicer/data/obs/2021_09/4020180445/</td><td>s3://nasa-heasarc/nicer/data/obs/2021_09/4020180445/</td><td>1090157605</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/nicermastr?14413</td><td>https://heasarc.gsfc.nasa.gov/FTP/nicer/data/obs/2021_09//4020180445/</td><td>/FTP/nicer/data/obs/2021_09/4020180445/</td><td>s3://nasa-heasarc/nicer/data/obs/2021_09/4020180445/</td><td>--</td><td></td></tr>
 </table></div></div></div>
 </div>
 <p>This data link can be passed straight into the <code class="docutils literal notranslate"><span class="pre">download_data</span></code> method of <code class="docutils literal notranslate"><span class="pre">Heasarc</span></code>, and our observation data files
 will be downloaded into the directory specified by <code class="docutils literal notranslate"><span class="pre">ROOT_DATA_DIR</span></code>.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Heasarc.download_data(data_links, host=&quot;sciserver&quot;, location=ROOT_DATA_DIR)</span>
-<span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
 
 <span class="c1"># We remove the existing cleaned event list directory from the data we just downloaded</span>
 <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">OBS_ID</span><span class="p">,</span> <span class="s2">&quot;xti&quot;</span><span class="p">,</span> <span class="s2">&quot;event_cl&quot;</span><span class="p">))</span>
@@ -885,6 +1054,13 @@ INFO: downloading s3://nasa-heasarc/nicer/data/obs/2021_09/4020180445/ [astroque
 </pre></div>
 </div>
 </div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">download_data</span></code> method in Astroquery 0.4.12 will attempt to automatically determine where to fetch
+data from - e.g. if you are running on SciServer then the mounted HEASARC FTP will be used, if you are running
+on Fornax then AWS will be used - if no specific host is supplied.
+Here we specify <code class="docutils literal notranslate"><span class="pre">host='aws'</span></code>, but you may set <code class="docutils literal notranslate"><span class="pre">host=</span> <span class="pre">None</span></code> to let Astroquery decide automatically.</p>
 </div>
 </section>
 </section>
@@ -1179,17 +1355,11 @@ Parameters defined:
 Model wabs&lt;1&gt;*bknpower&lt;2&gt; Source No.: 1   Active/On
 Model Model Component  Parameter  Unit     Value
  par  comp
-   1    1   wabs       nH         10^22    3.83005E-02  +/-  2.10721E-03  
-   2    2   bknpower   PhoIndx1            2.40219      +/-  2.67759E-02  
-   3    2   bknpower   BreakE     keV      1.31037      +/-  1.80388E-02  
-   4    2   bknpower   PhoIndx2            1.61842      +/-  8.99879E-03  
-   5    2   bknpower   norm                1.77091E-02  +/-  1.18084E-04  
-________________________________________________________________________
-   1    1   wabs       nH         10^22    3.83005E-02  +/-  2.10721E-03  
-   2    2   bknpower   PhoIndx1            2.40219      +/-  2.67759E-02  
-   3    2   bknpower   BreakE     keV      1.31037      +/-  1.80388E-02  
-   4    2   bknpower   PhoIndx2            1.61842      +/-  8.99879E-03  
-   5    2   bknpower   norm                1.77091E-02  +/-  1.18084E-04  
+   1    1   wabs       nH         10^22    3.82354E-02  +/-  2.10280E-03  
+   2    2   bknpower   PhoIndx1            2.40110      +/-  2.67182E-02  
+   3    2   bknpower   BreakE     keV      1.31225      +/-  1.80565E-02  
+   4    2   bknpower   PhoIndx2            1.61787      +/-  9.00426E-03  
+   5    2   bknpower   norm                1.77160E-02  +/-  1.17978E-04  
 ________________________________________________________________________
 </pre></div>
 </div>
@@ -1243,7 +1413,7 @@ visualization - this offers a little more flexibility than using PyXspec directl
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/c9b0edbde177959e535a0515b052b5a8ab7abe99b75e65671b477df270bd636a.png" src="../../../_images/c9b0edbde177959e535a0515b052b5a8ab7abe99b75e65671b477df270bd636a.png" />
+<img alt="../../../_images/5ed0bab6b727ae6860ad162d07ea7440def67090b8f3efd02f022f7253091e9c.png" src="../../../_images/5ed0bab6b727ae6860ad162d07ea7440def67090b8f3efd02f022f7253091e9c.png" />
 </div>
 </div>
 </section>
@@ -1298,29 +1468,29 @@ observation to an absolute timescale.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=304</i>
-<table id="table140178847454064" class="table-striped table-bordered table-condensed">
+<table id="table139691675391984" class="table-striped table-bordered table-condensed">
 <thead><tr><th>TIME</th><th>RATE</th><th>ERROR</th><th>FRACEXP</th><th>NUM_FPM_SEL</th></tr></thead>
 <thead><tr><th>float64</th><th>float32</th><th>float32</th><th>float32</th><th>float32</th></tr></thead>
-<tr><td>243475183.0</td><td>57.980362</td><td>1.532714</td><td>0.93</td><td>46.0</td></tr>
-<tr><td>243475213.0</td><td>60.628986</td><td>1.5114796</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243475243.0</td><td>58.028984</td><td>1.4787154</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243475273.0</td><td>56.747826</td><td>1.4623009</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243475303.0</td><td>55.278263</td><td>1.4432425</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243475333.0</td><td>55.692753</td><td>1.4486434</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243475363.0</td><td>54.63768</td><td>1.4348557</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243475393.0</td><td>57.275364</td><td>1.469082</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243475423.0</td><td>57.086956</td><td>1.4666638</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475183.0</td><td>57.939846</td><td>1.5321785</td><td>0.93</td><td>46.0</td></tr>
+<tr><td>243475213.0</td><td>60.553623</td><td>1.5105399</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475243.0</td><td>57.953625</td><td>1.477755</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475273.0</td><td>56.710148</td><td>1.4618154</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475303.0</td><td>55.391304</td><td>1.4447175</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475333.0</td><td>55.65507</td><td>1.4481533</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475363.0</td><td>54.562317</td><td>1.4338659</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475393.0</td><td>57.350723</td><td>1.4700482</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243475423.0</td><td>57.124638</td><td>1.4671477</td><td>1.0</td><td>46.0</td></tr>
 <tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
 <tr><td>243559693.0</td><td>57.802902</td><td>1.4758321</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243559723.0</td><td>57.350723</td><td>1.4700482</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243559753.0</td><td>54.901447</td><td>1.4383152</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243559783.0</td><td>57.199997</td><td>1.4681153</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243559723.0</td><td>57.388405</td><td>1.470531</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243559753.0</td><td>54.863766</td><td>1.4378215</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243559783.0</td><td>57.275364</td><td>1.469082</td><td>1.0</td><td>46.0</td></tr>
 <tr><td>243559813.0</td><td>59.046375</td><td>1.4916219</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243559843.0</td><td>57.87826</td><td>1.4767939</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243559873.0</td><td>57.765217</td><td>1.475351</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243559843.0</td><td>57.84058</td><td>1.476313</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243559873.0</td><td>57.689854</td><td>1.4743881</td><td>1.0</td><td>46.0</td></tr>
 <tr><td>243559903.0</td><td>54.788406</td><td>1.4368336</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243559933.0</td><td>58.330433</td><td>1.4825513</td><td>1.0</td><td>46.0</td></tr>
-<tr><td>243559963.0</td><td>51.304348</td><td>3.8562708</td><td>0.13</td><td>46.0</td></tr>
+<tr><td>243559933.0</td><td>58.29275</td><td>1.4820724</td><td>1.0</td><td>46.0</td></tr>
+<tr><td>243559963.0</td><td>51.594204</td><td>3.8671489</td><td>0.13</td><td>46.0</td></tr>
 </table></div></div></div>
 </div>
 </section>
@@ -1364,7 +1534,7 @@ survey data taken by ROSAT and eROSITA.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/e107b85b2ae6ca59ea142b79560949186d0552741a83c5da829d97f8b6a25906.png" src="../../../_images/e107b85b2ae6ca59ea142b79560949186d0552741a83c5da829d97f8b6a25906.png" />
+<img alt="../../../_images/99340ceeac4a90dd2f24ea716c87c66dd1f35e1235d4f917d8fd39fe3f3261de.png" src="../../../_images/99340ceeac4a90dd2f24ea716c87c66dd1f35e1235d4f917d8fd39fe3f3261de.png" />
 </div>
 </div>
 </section>
@@ -1441,7 +1611,7 @@ the figure we pass <code class="docutils literal notranslate"><span class="pre">
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/5cbef4792ec502cc5d38c1213b12561334b93802e97808c5ca8ea82b2d466b49.png" src="../../../_images/5cbef4792ec502cc5d38c1213b12561334b93802e97808c5ca8ea82b2d466b49.png" />
+<img alt="../../../_images/2705d8858bc1a774867f699aef08ac500ac1ee70199b7c550ee93ccff59d3c26.png" src="../../../_images/2705d8858bc1a774867f699aef08ac500ac1ee70199b7c550ee93ccff59d3c26.png" />
 </div>
 </div>
 </section>
@@ -1452,7 +1622,7 @@ the figure we pass <code class="docutils literal notranslate"><span class="pre">
 <p>Author: Mike Corcoran, Associate Research Professor</p>
 <p>Author: Abdu Zoghbi, HEASARC Staff Scientist</p>
 <p>Author: David Turner, HEASARC Staff Scientist</p>
-<p>Updated On: 2026-01-19</p>
+<p>Updated On: 2026-07-28</p>
 <section id="additional-resources">
 <h3>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h3>
 <p>Support: <a class="reference external" href="https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback">NICER GOF Helpdesk</a></p>
@@ -1517,7 +1687,7 @@ the figure we pass <code class="docutils literal notranslate"><span class="pre">
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
@@ -1620,8 +1790,8 @@ By HEASARC developers
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>
