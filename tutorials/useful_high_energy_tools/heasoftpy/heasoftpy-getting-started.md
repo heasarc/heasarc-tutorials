@@ -8,7 +8,7 @@ authors:
   affiliations: ['University of Maryland, Baltimore County', 'HEASARC, NASA Goddard']
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-02-03'
+date: '2026-07-28'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -18,7 +18,7 @@ jupytext:
     jupytext_version: 1.17.3
 kernelspec:
   display_name: heasoft
-  language: ipython
+  language: python
   name: heasoft
 mystnb:
   execution_allow_errors: false
@@ -55,9 +55,22 @@ This tutorial presents a walk through the main features of `heasoftpy`.
 - Processed NICER data.
 
 ### Runtime
-As of 3rd November 2025, this notebook takes ~15 m to run to completion on Fornax, using the 'small' server with 8GB RAM/ 2 cores.
+As of 3rd November 2025, this notebook takes ~15-minutes to run to completion on Fornax, using the 'small' server with 8GB RAM/ 2 cores.
 
 ## Imports
+
+This notebook uses features from an Astroquery pre-release. You will need to install
+the latest version using the command below. We will remove this once Astroquery
+v0.4.12 is officially released.
+
+```{code-cell} python
+---
+tags: [hide-output]
+jupyter:
+  output_hidden: true
+---
+%pip install --pre astroquery --upgrade
+```
 
 ```{code-cell} python
 import multiprocessing as mp
@@ -79,7 +92,6 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
 def worker(in_dir: str) -> hsp.core.HSPResult:
     """
     A very simple demonstration of how you can wrap a HEASoftPy task call in order to
@@ -122,6 +134,15 @@ NI_OBS_IDS = [
     "1012020112",
     "1012020114",
 ]
+
+# Sets the data host we want to download observation files from.
+# The `download_data` method in Astroquery 0.4.12 will attempt to automatically
+#  determine where to fetch data from - e.g. if you are running on SciServer then the
+#  mounted HEASARC FTP will be used, if you are running on Fornax then AWS will be
+#  used - if no specific host is supplied.
+# We specify AWS, but you may set DATA_HOST = None to let Astroquery
+#  decide automatically.
+DATA_HOST = "aws"
 ```
 
 ### Configuration
@@ -135,7 +156,6 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
 # ------------- Configure global package settings --------------
 # Raise Python exceptions if a heasoftpy task fails
 # TODO Remove once this becomes a default in heasoftpy
@@ -145,12 +165,35 @@ hsp.Config.allow_failure = False
 mp.set_start_method("fork", force=True)
 # --------------------------------------------------------------
 
+
 # ------------- Setting how many cores we can use --------------
-NUM_CORES = None
+# We use a service called CircleCI to execute, test, and validate these notebooks
+#  as we're writing and maintaining them. Unfortunately we have to treat the
+#  determination of the number of cores we can use differently, as the
+#  'os.cpu_count()' call will return the number of cores of the host machine, rather
+#  than the number that have actually been allocated to us.
+if "CIRCLECI" in os.environ and bool(os.environ["CIRCLECI"]):
+    # Here we read the CPU quota (total CPU time allowed) and the CPU period (how
+    #  long the scheduling window is) from a cgroup (a linux kernel feature) file.
+    # Dividing one by t'other provides the number of cores we've been allocated.
+    with open("/sys/fs/cgroup/cpu.max", "r") as cpu_maxo:
+        quota, period = cpu_maxo.read().strip().split()
+        NUM_CORES = int(quota) // int(period)
+
+# If you, the reader, are running this notebook yourself, this is the
+#  part that is relevant to you - you can override the default number of cores
+#  used by setting this variable to an integer value.
+else:
+    NUM_CORES = None
+
+# Determines the number of CPU cores available
 total_cores = os.cpu_count()
 
+# If NUM_CORES is None, then we use the number of cores returned by 'os.cpu_count()'
 if NUM_CORES is None:
     NUM_CORES = total_cores
+# Otherwise, NUM_CORES has been overridden (either by the user, or because we're
+#  running on CircleCI, and we do a validity check.
 elif not isinstance(NUM_CORES, int):
     raise TypeError(
         "If manually overriding 'NUM_CORES', you must set it to an integer value."
@@ -180,10 +223,11 @@ nu_data_link = Heasarc.locate_data(
 # We only download the data if a matching ObsID directory does not exist.
 #  This is not a perfect way to determine whether the necessary data are fully
 #  present, but it is good enough for this tutorial.
+# The `download_data` method in Astroquery 0.4.12 will attempt to automatically
+#  determine where to fetch data from - e.g. if you are running on SciServer then the
+#  mounted HEASARC FTP will be used, if you are running on Fornax then AWS will be used.
 if not os.path.exists(nu_data_dir + f"{NU_OBS_ID}/"):
-    # Heasarc.download_data(nu_data_link, location=nu_data_dir)
-    Heasarc.download_data(nu_data_link, host="aws", location=nu_data_dir)
-    # Heasarc.download_data(nu_data_link, host='sciserver', location=nu_data_dir)
+    Heasarc.download_data(nu_data_link, host=DATA_HOST, location=nu_data_dir)
 
 # Construct a string list of NICER ObsIDs to pass to the HEASARC TAP service.
 ni_oi_str = "('" + "','".join(NI_OBS_IDS) + "')"
@@ -196,9 +240,7 @@ ni_data_links = Heasarc.locate_data(
 
 # Again, we only download the data if a matching ObsID directory does not exist.
 if any([not os.path.exists(os.path.join(ni_data_dir, oi)) for oi in NI_OBS_IDS]):
-    # Heasarc.download_data(ni_data_links, location=ni_data_dir)
-    Heasarc.download_data(ni_data_links, host="aws", location=ni_data_dir)
-    # Heasarc.download_data(ni_data_links, host='sciserver', location=ni_data_dir)
+    Heasarc.download_data(ni_data_links, host=DATA_HOST, location=ni_data_dir)
 
 # -------- Get geomagnetic data ---------
 # This ensures that geomagnetic data required for NICER analyses are downloaded
@@ -222,7 +264,7 @@ hsp.help()
 
 For task-specific help, you can do:
 
-```{code-cell} ipython
+```{code-cell} python
 hsp.ftlist?
 ```
 
@@ -365,6 +407,7 @@ result = ftselect()
 ```
 
 Now we can check the content of the new file with `ftlist`:
+
 ```{code-cell} python
 result = hsp.ftlist(infile="tmp.fits", option="T")
 print(result.stdout)
@@ -459,6 +502,7 @@ NI_OBS_IDS
 ```
 
 Now, we can run the parallelized `nicerl2` tasks:
+
 ```{code-cell} python
 with mp.Pool(NUM_CORES) as p:
     obsids = [os.path.join(ni_data_dir, oi) for oi in NI_OBS_IDS]
@@ -466,12 +510,13 @@ with mp.Pool(NUM_CORES) as p:
 
 # Show the output of the parallel tasks
 result
-````
+```
 
 In this particular case, we've run `nicerl2` in such a way that the outputs are placed in the
 original downloaded data directories, overwriting any existing files with newer versions.
 
 We can quickly examine the cleaned events directory of one of the NICER observations:
+
 ```{code-cell} python
 os.listdir(os.path.join(ni_data_dir, "1012020112", "xti", "event_cl"))
 ```
