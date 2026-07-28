@@ -60,7 +60,7 @@ This tutorial presents a walk through the main features of `heasoftpy`.
 - Processed NICER data.
 
 ### Runtime
-As of 3rd November 2025, this notebook takes ~15-minutes to run to completion on Fornax, using the 'small' server with 8GB RAM/ 2 cores.
+As of 28th July 2026, this notebook takes ~20-minutes to run to completion on Fornax, using the 'small' server with 8GB RAM/ 2 cores.
 
 ## Imports
 
