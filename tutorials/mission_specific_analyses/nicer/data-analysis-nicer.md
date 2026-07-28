@@ -13,7 +13,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-01-19'
+date: '2026-07-28'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -25,6 +25,11 @@ kernelspec:
   name: heasoft
   display_name: heasoft
   language: python
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: False
 title: Getting started with NICER data
 ---
 
@@ -57,9 +62,22 @@ In this tutorial, we will go through the steps of analyzing a NICER observation 
 
 ### Runtime
 
-As of 19th January 2026, this notebook takes ~6 m to run to completion on Fornax using the 'Default Astrophysics' image and the 'small' server with 8GB RAM/ 2 cores.
+As of 28th July 2026, this notebook takes ~7-minutes to run to completion on Fornax using the 'small' server with 8GB RAM/ 2 cores.
 
 ## Imports
+
+This notebook uses features from an Astroquery pre-release. You will need to install
+the latest version using the command below. We will remove this once Astroquery
+v0.4.12 is officially released.
+
+```{code-cell} python
+---
+tags: [hide-output]
+jupyter:
+  output_hidden: true
+---
+%pip install --pre astroquery --upgrade
+```
 
 ```{code-cell} python
 import contextlib
@@ -262,11 +280,17 @@ This data link can be passed straight into the `download_data` method of `Heasar
 will be downloaded into the directory specified by `ROOT_DATA_DIR`.
 
 ```{code-cell} python
-# Heasarc.download_data(data_links, host="sciserver", location=ROOT_DATA_DIR)
 Heasarc.download_data(data_links, host="aws", location=ROOT_DATA_DIR)
 
 # We remove the existing cleaned event list directory from the data we just downloaded
 shutil.rmtree(os.path.join(ROOT_DATA_DIR, OBS_ID, "xti", "event_cl"))
+```
+
+```{important}
+The `download_data` method in Astroquery 0.4.12 will attempt to automatically determine where to fetch
+data from - e.g. if you are running on SciServer then the mounted HEASARC FTP will be used, if you are running
+on Fornax then AWS will be used - if no specific host is supplied.
+Here we specify `host='aws'`, but you may set `host= None` to let Astroquery decide automatically.
 ```
 
 ## 2. Preparing the NICER observation
@@ -715,7 +739,7 @@ Author: Abdu Zoghbi, HEASARC Staff Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-01-19
+Updated On: 2026-07-28
 
 +++
 
