@@ -532,7 +532,7 @@ Author: Abdu Zoghbi, HEASARC Staff Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-02-03
+Updated On: 2026-07-28
 
 +++
 
