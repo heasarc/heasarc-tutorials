@@ -62,7 +62,7 @@ In this tutorial, we will go through the steps of analyzing a NICER observation 
 
 ### Runtime
 
-As of 19th January 2026, this notebook takes ~6-minutes to run to completion on Fornax using the 'Default Astrophysics' image and the 'small' server with 8GB RAM/ 2 cores.
+As of 28th July 2026, this notebook takes ~7-minutes to run to completion on Fornax using the 'small' server with 8GB RAM/ 2 cores.
 
 ## Imports
 
