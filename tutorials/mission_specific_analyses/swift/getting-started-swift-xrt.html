@@ -682,6 +682,16 @@ of the demonstrations in this notebook.</p>
   warn(message, DeprecationWarning)
 /opt/envs/heasoft/lib/python3.12/site-packages/xga/utils.py:619: UserWarning: SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such all functions in xga.sas will not work.
   warn(&quot;SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such &quot;
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you&#39;ve used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
+  from .utils import xga_conf, CENSUS, OUTPUT, NUM_CORES, XGA_EXTRACT, BASE_XSPEC_SCRIPT, CROSS_ARF_XSPEC_SCRIPT, \
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/products/relation.py:12: DeprecationWarning: `scipy.odr` is deprecated as of version 1.17.0 and will be removed in SciPy 1.19.0. Please use `https://pypi.org/project/odrpack/` instead.
+  import scipy.odr as odr
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/utils.py:619: UserWarning: SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such all functions in xga.sas will not work.
+  warn(&quot;SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such &quot;
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you&#39;ve used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
+  from .utils import xga_conf, CENSUS, OUTPUT, NUM_CORES, XGA_EXTRACT, BASE_XSPEC_SCRIPT, CROSS_ARF_XSPEC_SCRIPT, \
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/products/relation.py:12: DeprecationWarning: `scipy.odr` is deprecated as of version 1.17.0 and will be removed in SciPy 1.19.0. Please use `https://pypi.org/project/odrpack/` instead.
+  import scipy.odr as odr
 </pre></div>
 </div>
 </div>
@@ -1045,29 +1055,29 @@ changed over time.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=224</i>
-<table id="table140034917620608" class="table-striped table-bordered table-condensed">
+<table id="table138137529283264" class="table-striped table-bordered table-condensed">
 <thead><tr><th>name</th><th>obsid</th><th>ra</th><th>dec</th><th>start_time</th><th>processing_date</th><th>xrt_exposure</th><th>uvot_exposure</th><th>bat_exposure</th><th>archive_date</th><th>__row</th></tr></thead>
 <thead><tr><th></th><th></th><th>deg</th><th>deg</th><th>d</th><th>d</th><th>s</th><th>s</th><th>s</th><th>d</th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>object</th></tr></thead>
-<tr><td>TPyx</td><td>00031968001</td><td>136.15226</td><td>-32.37080</td><td>55665.587349537</td><td>57643.0</td><td>2597.30600</td><td>0.00000</td><td>2616.00000</td><td>55676</td><td>130422</td></tr>
-<tr><td>TPyx</td><td>00031968002</td><td>136.14748</td><td>-32.36878</td><td>55666.7291666667</td><td>57643.0</td><td>1201.15300</td><td>0.00000</td><td>1218.00000</td><td>55677</td><td>130432</td></tr>
-<tr><td>TPyx</td><td>00031968003</td><td>136.14294</td><td>-32.36096</td><td>55667.7388888889</td><td>57829.0</td><td>1474.82100</td><td>0.00000</td><td>1492.00000</td><td>55678</td><td>130520</td></tr>
-<tr><td>TPyx</td><td>00031968004</td><td>136.09599</td><td>-32.36940</td><td>55668.7347222222</td><td>57643.0</td><td>1060.73900</td><td>0.00000</td><td>1077.00000</td><td>55679</td><td>130428</td></tr>
-<tr><td>TPyx</td><td>00031968005</td><td>136.14678</td><td>-32.36484</td><td>55669.7458333333</td><td>57829.0</td><td>1438.27800</td><td>0.00000</td><td>1456.00000</td><td>55680</td><td>130496</td></tr>
-<tr><td>TPyx</td><td>00031968006</td><td>136.14076</td><td>-32.37281</td><td>55670.6833333333</td><td>57829.0</td><td>2404.49000</td><td>0.00000</td><td>2438.00000</td><td>55681</td><td>130414</td></tr>
-<tr><td>TPyx</td><td>00031968007</td><td>136.09743</td><td>-32.37885</td><td>55671.4797106481</td><td>57644.0</td><td>1011.84600</td><td>0.00000</td><td>1159.00000</td><td>55682</td><td>130333</td></tr>
-<tr><td>TPyx</td><td>00031968008</td><td>136.16624</td><td>-32.38262</td><td>55672.6215162037</td><td>57644.0</td><td>252.47500</td><td>253.30500</td><td>600.00000</td><td>55683</td><td>130266</td></tr>
-<tr><td>TPyx</td><td>00031968009</td><td>136.17396</td><td>-32.38026</td><td>55672.6243055556</td><td>57644.0</td><td>2174.58900</td><td>2133.33400</td><td>1908.00000</td><td>55683</td><td>130276</td></tr>
+<tr><td>TPyx</td><td>00031968001</td><td>136.15226</td><td>-32.37080</td><td>55665.587349537</td><td>57643.0</td><td>2597.30600</td><td>0.00000</td><td>2616.00000</td><td>55676</td><td>145125</td></tr>
+<tr><td>TPyx</td><td>00031968002</td><td>136.14748</td><td>-32.36878</td><td>55666.7291666667</td><td>57643.0</td><td>1201.15300</td><td>0.00000</td><td>1218.00000</td><td>55677</td><td>145135</td></tr>
+<tr><td>TPyx</td><td>00031968003</td><td>136.14294</td><td>-32.36096</td><td>55667.7388888889</td><td>57829.0</td><td>1474.82100</td><td>0.00000</td><td>1492.00000</td><td>55678</td><td>145176</td></tr>
+<tr><td>TPyx</td><td>00031968004</td><td>136.09599</td><td>-32.36940</td><td>55668.7347222222</td><td>57643.0</td><td>1060.73900</td><td>0.00000</td><td>1077.00000</td><td>55679</td><td>145131</td></tr>
+<tr><td>TPyx</td><td>00031968005</td><td>136.14678</td><td>-32.36484</td><td>55669.7458333333</td><td>57829.0</td><td>1438.27800</td><td>0.00000</td><td>1456.00000</td><td>55680</td><td>145152</td></tr>
+<tr><td>TPyx</td><td>00031968006</td><td>136.14076</td><td>-32.37281</td><td>55670.6833333333</td><td>57829.0</td><td>2404.49000</td><td>0.00000</td><td>2438.00000</td><td>55681</td><td>145117</td></tr>
+<tr><td>TPyx</td><td>00031968007</td><td>136.09743</td><td>-32.37885</td><td>55671.4797106481</td><td>57644.0</td><td>1011.84600</td><td>0.00000</td><td>1159.00000</td><td>55682</td><td>145079</td></tr>
+<tr><td>TPyx</td><td>00031968008</td><td>136.16624</td><td>-32.38262</td><td>55672.6215162037</td><td>57644.0</td><td>252.47500</td><td>253.30500</td><td>600.00000</td><td>55683</td><td>145056</td></tr>
+<tr><td>TPyx</td><td>00031968009</td><td>136.17396</td><td>-32.38026</td><td>55672.6243055556</td><td>57644.0</td><td>2174.58900</td><td>2133.33400</td><td>1908.00000</td><td>55683</td><td>145066</td></tr>
 <tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
-<tr><td>TPyx</td><td>00031968156</td><td>136.15184</td><td>-32.35719</td><td>55990.506400463</td><td>57859.0</td><td>1837.08200</td><td>1799.89800</td><td>1850.00000</td><td>56001</td><td>130627</td></tr>
-<tr><td>TPyx</td><td>00031968157</td><td>136.14956</td><td>-32.36261</td><td>55993.0965277778</td><td>57859.0</td><td>2253.56100</td><td>2197.52200</td><td>2277.00000</td><td>56004</td><td>130510</td></tr>
-<tr><td>TPyx</td><td>00031968158</td><td>136.13731</td><td>-32.35809</td><td>55994.1659606481</td><td>57859.0</td><td>3045.52100</td><td>2972.94200</td><td>3074.00000</td><td>56005</td><td>130620</td></tr>
-<tr><td>TPyx</td><td>00031968159</td><td>136.16011</td><td>-32.40473</td><td>56002.6583333333</td><td>57859.0</td><td>77.31700</td><td>77.14200</td><td>84.00000</td><td>56013</td><td>130100</td></tr>
-<tr><td>TPyx</td><td>00031968160</td><td>136.10975</td><td>-32.35739</td><td>56010.2152777778</td><td>57859.0</td><td>3194.91300</td><td>3153.44100</td><td>3209.00000</td><td>56021</td><td>130626</td></tr>
-<tr><td>TPyx</td><td>00031968161</td><td>136.12736</td><td>-32.40198</td><td>56018.9118055556</td><td>57865.0</td><td>2820.94800</td><td>2780.90400</td><td>2836.00000</td><td>56029</td><td>130112</td></tr>
-<tr><td>TPyx</td><td>00031968162</td><td>136.14563</td><td>-32.36482</td><td>56026.1201388889</td><td>57865.0</td><td>3158.35600</td><td>3042.03300</td><td>3195.00000</td><td>56037</td><td>130497</td></tr>
-<tr><td>TPyx</td><td>00031968163</td><td>136.14416</td><td>-32.36998</td><td>56034.3395833333</td><td>57865.0</td><td>2772.56300</td><td>2677.27100</td><td>2809.00000</td><td>56045</td><td>130426</td></tr>
-<tr><td>TPyx</td><td>00031968164</td><td>136.15470</td><td>-32.36690</td><td>56384.2117939815</td><td>58065.0</td><td>5183.62400</td><td>5146.10700</td><td>5204.00000</td><td>56395</td><td>130436</td></tr>
+<tr><td>TPyx</td><td>00031968156</td><td>136.15184</td><td>-32.35719</td><td>55990.506400463</td><td>57859.0</td><td>1837.08200</td><td>1799.89800</td><td>1850.00000</td><td>56001</td><td>145198</td></tr>
+<tr><td>TPyx</td><td>00031968157</td><td>136.14956</td><td>-32.36261</td><td>55993.0965277778</td><td>57859.0</td><td>2253.56100</td><td>2197.52200</td><td>2277.00000</td><td>56004</td><td>145166</td></tr>
+<tr><td>TPyx</td><td>00031968158</td><td>136.13731</td><td>-32.35809</td><td>55994.1659606481</td><td>57859.0</td><td>3045.52100</td><td>2972.94200</td><td>3074.00000</td><td>56005</td><td>145191</td></tr>
+<tr><td>TPyx</td><td>00031968159</td><td>136.16011</td><td>-32.40473</td><td>56002.6583333333</td><td>57859.0</td><td>77.31700</td><td>77.14200</td><td>84.00000</td><td>56013</td><td>144972</td></tr>
+<tr><td>TPyx</td><td>00031968160</td><td>136.10975</td><td>-32.35739</td><td>56010.2152777778</td><td>57859.0</td><td>3194.91300</td><td>3153.44100</td><td>3209.00000</td><td>56021</td><td>145197</td></tr>
+<tr><td>TPyx</td><td>00031968161</td><td>136.12736</td><td>-32.40198</td><td>56018.9118055556</td><td>57865.0</td><td>2820.94800</td><td>2780.90400</td><td>2836.00000</td><td>56029</td><td>144984</td></tr>
+<tr><td>TPyx</td><td>00031968162</td><td>136.14563</td><td>-32.36482</td><td>56026.1201388889</td><td>57865.0</td><td>3158.35600</td><td>3042.03300</td><td>3195.00000</td><td>56037</td><td>145153</td></tr>
+<tr><td>TPyx</td><td>00031968163</td><td>136.14416</td><td>-32.36998</td><td>56034.3395833333</td><td>57865.0</td><td>2772.56300</td><td>2677.27100</td><td>2809.00000</td><td>56045</td><td>145129</td></tr>
+<tr><td>TPyx</td><td>00031968164</td><td>136.15470</td><td>-32.36690</td><td>56384.2117939815</td><td>58065.0</td><td>5183.62400</td><td>5146.10700</td><td>5204.00000</td><td>56395</td><td>145139</td></tr>
 </table></div></div></div>
 </div>
 </section>
@@ -1121,18 +1131,18 @@ out our selected ObsIDs into another variable, for later use:</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=8</i>
-<table id="table140034808492832" class="table-striped table-bordered table-condensed">
+<table id="table138137447288992" class="table-striped table-bordered table-condensed">
 <thead><tr><th>name</th><th>obsid</th><th>ra</th><th>dec</th><th>start_time</th><th>processing_date</th><th>xrt_exposure</th><th>uvot_exposure</th><th>bat_exposure</th><th>archive_date</th><th>__row</th></tr></thead>
 <thead><tr><th></th><th></th><th>deg</th><th>deg</th><th>d</th><th>d</th><th>s</th><th>s</th><th>s</th><th>d</th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>int32</th><th>object</th></tr></thead>
-<tr><td>TPyx</td><td>00031968059</td><td>136.20108</td><td>-32.38330</td><td>55807.7458333333</td><td>57660.0</td><td>1132.55700</td><td>1070.21100</td><td>1500.00000</td><td>55818</td><td>130265</td></tr>
-<tr><td>TPyx</td><td>00032089001</td><td>136.04758</td><td>-32.31409</td><td>55807.7513888889</td><td>57660.0</td><td>3269.49300</td><td>3078.11900</td><td>3019.00000</td><td>55818</td><td>130458</td></tr>
-<tr><td>TPyx</td><td>00031968060</td><td>136.15998</td><td>-32.38590</td><td>55809.6173611111</td><td>57660.0</td><td>1020.44500</td><td>960.60400</td><td>1294.00000</td><td>55820</td><td>130255</td></tr>
-<tr><td>TPyx</td><td>00032089002</td><td>136.04691</td><td>-32.31299</td><td>55809.6229050926</td><td>57660.0</td><td>2017.86600</td><td>1858.87000</td><td>1839.00000</td><td>55820</td><td>130463</td></tr>
-<tr><td>TPyx</td><td>00031968061</td><td>136.22223</td><td>-32.37604</td><td>55811.4979166667</td><td>57660.0</td><td>1294.37800</td><td>1238.56600</td><td>1800.00000</td><td>55822</td><td>130349</td></tr>
-<tr><td>TPyx</td><td>00032089004</td><td>136.04593</td><td>-32.31546</td><td>55811.5048611111</td><td>57660.0</td><td>3414.31100</td><td>3268.16000</td><td>2993.00000</td><td>55822</td><td>130454</td></tr>
-<tr><td>TPyx</td><td>00031968062</td><td>136.16252</td><td>-32.38602</td><td>55813.8319444444</td><td>57660.0</td><td>937.09900</td><td>898.66900</td><td>1200.00000</td><td>55824</td><td>130253</td></tr>
-<tr><td>TPyx</td><td>00032089005</td><td>136.05578</td><td>-32.31443</td><td>55813.8388888889</td><td>57660.0</td><td>2326.41500</td><td>2231.70600</td><td>2150.00000</td><td>55824</td><td>130457</td></tr>
+<tr><td>TPyx</td><td>00031968059</td><td>136.20108</td><td>-32.38330</td><td>55807.7458333333</td><td>57660.0</td><td>1132.55700</td><td>1070.21100</td><td>1500.00000</td><td>55818</td><td>145055</td></tr>
+<tr><td>TPyx</td><td>00032089001</td><td>136.04758</td><td>-32.31409</td><td>55807.7513888889</td><td>57660.0</td><td>3269.49300</td><td>3078.11900</td><td>3019.00000</td><td>55818</td><td>145319</td></tr>
+<tr><td>TPyx</td><td>00031968060</td><td>136.15998</td><td>-32.38590</td><td>55809.6173611111</td><td>57660.0</td><td>1020.44500</td><td>960.60400</td><td>1294.00000</td><td>55820</td><td>145044</td></tr>
+<tr><td>TPyx</td><td>00032089002</td><td>136.04691</td><td>-32.31299</td><td>55809.6229050926</td><td>57660.0</td><td>2017.86600</td><td>1858.87000</td><td>1839.00000</td><td>55820</td><td>145324</td></tr>
+<tr><td>TPyx</td><td>00031968061</td><td>136.22223</td><td>-32.37604</td><td>55811.4979166667</td><td>57660.0</td><td>1294.37800</td><td>1238.56600</td><td>1800.00000</td><td>55822</td><td>145095</td></tr>
+<tr><td>TPyx</td><td>00032089004</td><td>136.04593</td><td>-32.31546</td><td>55811.5048611111</td><td>57660.0</td><td>3414.31100</td><td>3268.16000</td><td>2993.00000</td><td>55822</td><td>145315</td></tr>
+<tr><td>TPyx</td><td>00031968062</td><td>136.16252</td><td>-32.38602</td><td>55813.8319444444</td><td>57660.0</td><td>937.09900</td><td>898.66900</td><td>1200.00000</td><td>55824</td><td>145042</td></tr>
+<tr><td>TPyx</td><td>00032089005</td><td>136.05578</td><td>-32.31443</td><td>55813.8388888889</td><td>57660.0</td><td>2326.41500</td><td>2231.70600</td><td>2150.00000</td><td>55824</td><td>145318</td></tr>
 </table></div></div></div>
 </div>
 <p>To put them into context, we plot the selected time-window-limited subset of relevant
@@ -1184,7 +1194,7 @@ sixth outburst.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/ca8b197224b3c127a8f8842b90bd06b01170f4f5d658344a29df527d29edaf95.png" src="../../../_images/ca8b197224b3c127a8f8842b90bd06b01170f4f5d658344a29df527d29edaf95.png" />
+<img alt="../../../_images/475eba186560044c78a171e8472aae21bf1ebe3869502c96c8e9888176e5d979.png" src="../../../_images/475eba186560044c78a171e8472aae21bf1ebe3869502c96c8e9888176e5d979.png" />
 </div>
 </div>
 </section>
@@ -1206,18 +1216,18 @@ Amazon Web Services (AWS) S3 bucket</a>.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html"><div><i>Table length=8</i>
-<table id="table140034811643328" class="table-striped table-bordered table-condensed">
+<table id="table138137444643808" class="table-striped table-bordered table-condensed">
 <thead><tr><th>ID</th><th>access_url</th><th>sciserver</th><th>aws</th><th>content_length</th><th>error_message</th></tr></thead>
 <thead><tr><th></th><th></th><th></th><th></th><th>byte</th><th></th></tr></thead>
 <thead><tr><th>object</th><th>object</th><th>str40</th><th>str53</th><th>int64</th><th>object</th></tr></thead>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130253</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968062/</td><td>/FTP/swift/data/obs/2011_09/00031968062/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968062/</td><td>9989972</td><td></td></tr>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130255</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968060/</td><td>/FTP/swift/data/obs/2011_09/00031968060/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968060/</td><td>11146423</td><td></td></tr>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130265</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968059/</td><td>/FTP/swift/data/obs/2011_09/00031968059/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968059/</td><td>16683297</td><td></td></tr>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130349</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968061/</td><td>/FTP/swift/data/obs/2011_09/00031968061/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968061/</td><td>33950072</td><td></td></tr>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130454</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089004/</td><td>/FTP/swift/data/obs/2011_09/00032089004/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089004/</td><td>134191346</td><td></td></tr>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130457</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089005/</td><td>/FTP/swift/data/obs/2011_09/00032089005/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089005/</td><td>72037009</td><td></td></tr>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130458</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089001/</td><td>/FTP/swift/data/obs/2011_09/00032089001/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089001/</td><td>134506155</td><td></td></tr>
-<tr><td>ivo://nasa.heasarc/swiftmastr?130463</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089002/</td><td>/FTP/swift/data/obs/2011_09/00032089002/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089002/</td><td>97760516</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145042</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968062/</td><td>/FTP/swift/data/obs/2011_09/00031968062/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968062/</td><td>9989972</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145044</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968060/</td><td>/FTP/swift/data/obs/2011_09/00031968060/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968060/</td><td>11146423</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145055</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968059/</td><td>/FTP/swift/data/obs/2011_09/00031968059/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968059/</td><td>16683297</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145095</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00031968061/</td><td>/FTP/swift/data/obs/2011_09/00031968061/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00031968061/</td><td>33950072</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145315</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089004/</td><td>/FTP/swift/data/obs/2011_09/00032089004/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089004/</td><td>134191346</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145318</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089005/</td><td>/FTP/swift/data/obs/2011_09/00032089005/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089005/</td><td>72037009</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145319</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089001/</td><td>/FTP/swift/data/obs/2011_09/00032089001/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089001/</td><td>134506155</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/swiftmastr?145324</td><td>https://heasarc.gsfc.nasa.gov/FTP/swift/data/obs/2011_09//00032089002/</td><td>/FTP/swift/data/obs/2011_09/00032089002/</td><td>s3://nasa-heasarc/swift/data/obs/2011_09/00032089002/</td><td>97760516</td><td></td></tr>
 </table></div></div></div>
 </div>
 <p>Passing the data links to the <code class="docutils literal notranslate"><span class="pre">Heasarc.download_data</span></code> function, and setting the
@@ -1228,7 +1238,7 @@ observation, which will include BAT and UVOT instrument files that are not relev
 to this tutorial.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1236,6 +1246,13 @@ to this tutorial.</p>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Downloading data AWS S3 ... [astroquery.heasarc.core]
 INFO: Enabling anonymous cloud data access ... [astroquery.heasarc.core]
 INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00031968062/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00031968060/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00031968059/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00031968061/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00032089004/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00032089005/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00032089001/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00032089002/ [astroquery.heasarc.core]
 INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00031968060/ [astroquery.heasarc.core]
 INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00031968059/ [astroquery.heasarc.core]
 INFO: downloading s3://nasa-heasarc/swift/data/obs/2011_09/00031968061/ [astroquery.heasarc.core]
@@ -1263,11 +1280,11 @@ on SciServer, you may pass ‘sciserver’ to use the pre-mounted HEASARC datase
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/auxil&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/log&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/uvot&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/bat&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/home/jovyan/project/_data/Swift/00031968059/auxil&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/bat&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/log&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/uvot&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt&#39;]
 </pre></div>
 </div>
 </div>
@@ -1279,21 +1296,21 @@ on SciServer, you may pass ‘sciserver’ to use the pre-mounted HEASARC datase
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_cl.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_cl.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_uf.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_cl.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_uf.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_ufre.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_uf.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_ufre.evt.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/products/sw00031968059x_skim.gif&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/products/sw00031968059xpc_sk.img.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/products/sw00031968059xpc_ex.img.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/hk/sw00031968059xen.hk.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/hk/sw00031968059xtr.hk.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/hk/sw00031968059xbf_rw.img.gz&#39;,
- &#39;/home/jovyan/projects/heasarc-tutorials/_data/Swift/00031968059/xrt/hk/sw00031968059xhd.hk.gz&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_cl.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_uf.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_cl.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_uf.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_ufre.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_cl.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_uf.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_ufre.evt.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xbf_rw.img.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xen.hk.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xhd.hk.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xtr.hk.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059x_skim.gif&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059xpc_ex.img.gz&#39;,
+ &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059xpc_sk.img.gz&#39;]
 </pre></div>
 </div>
 </div>
@@ -1374,7 +1391,7 @@ it from the list of relevant observations.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=808) is multi-threaded, use of fork() may lead to deadlocks in the child.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/multiprocessing/popen_fork.py:66: DeprecationWarning: This process (pid=885) is multi-threaded, use of fork() may lead to deadlocks in the child.
   self.pid = os.fork()
 </pre></div>
 </div>
@@ -1725,7 +1742,7 @@ functionality to manually zoom in on a 3x3’ region centered on T Pyx:</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/5f0a6bcbc1fc4a5725c50ddc69700eb8c7d1e41bb0872205bb90c593b1c3104f.png" src="../../../_images/5f0a6bcbc1fc4a5725c50ddc69700eb8c7d1e41bb0872205bb90c593b1c3104f.png" />
+<img alt="../../../_images/85714082a898eb774ad56ac0e908e54c3fe3c83081b45ea18a4cc4514470e6d8.png" src="../../../_images/85714082a898eb774ad56ac0e908e54c3fe3c83081b45ea18a4cc4514470e6d8.png" />
 </div>
 </div>
 <p>Also included in the XGA <code class="docutils literal notranslate"><span class="pre">Image</span></code> class is a way of overlaying the contents of a region
@@ -1751,7 +1768,7 @@ applied to the image, by passing an astropy <code class="docutils literal notran
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../../_images/c685447c0d6a0eceef9ee09ca847182057c2fc5e93e33640acf25a858a36983e.png" src="../../../_images/c685447c0d6a0eceef9ee09ca847182057c2fc5e93e33640acf25a858a36983e.png" />
+<img alt="../../../_images/fea32e4c5a2c32d0741e17dc6aa4b216c9bb595835149fa2fdfe891660820435.png" src="../../../_images/fea32e4c5a2c32d0741e17dc6aa4b216c9bb595835149fa2fdfe891660820435.png" />
 </div>
 </div>
 </section>
@@ -1856,7 +1873,7 @@ could have happened in the processing/generation of our X-ray data products.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading Swift-XRT spectra into pyXspec: 100%|██████████| 8/8 [00:02&lt;00:00,  3.90it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -1906,22 +1923,7 @@ them completely independent:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tbvabs Version 2.3
-Cosmic absorption with grains and H2, modified from
-Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
-Questions: Joern Wilms
-joern.wilms@sternwarte.uni-erlangen.de
-joern.wilms@fau.de
-
-http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
-
-PLEASE NOTICE:
-To get the model described by the above paper
-you will also have to set the abundances:
-   abund wilm
-
-Note that this routine ignores the current cross section setting
-as it always HAS to use the Verner cross sections as a baseline.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a $HOME/.xspec directory for you
 tbvabs Version 2.3
 Cosmic absorption with grains and H2, modified from
 Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
@@ -1938,6 +1940,7 @@ you will also have to set the abundances:
 
 Note that this routine ignores the current cross section setting
 as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
 tbvabs Version 2.3
 Cosmic absorption with grains and H2, modified from
 Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
@@ -1954,6 +1957,568 @@ you will also have to set the abundances:
 
 Note that this routine ignores the current cross section setting
 as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
+Cosmic absorption with grains and H2, modified from
+Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
+Questions: Joern Wilms
+joern.wilms@sternwarte.uni-erlangen.de
+joern.wilms@fau.de
+
+http://pulsar.sternwarte.uni-erlangen.de/wilms/research/tbabs/
+
+PLEASE NOTICE:
+To get the model described by the above paper
+you will also have to set the abundances:
+   abund wilm
+
+Note that this routine ignores the current cross section setting
+as it always HAS to use the Verner cross sections as a baseline.
+Creating a $HOME/.xspec directory for you
 tbvabs Version 2.3
 Cosmic absorption with grains and H2, modified from
 Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
@@ -1988,7 +2553,8 @@ parameters for each spectrum have different values:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tbvabs Version 2.3
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating a $HOME/.xspec directory for you
+tbvabs Version 2.3
 Cosmic absorption with grains and H2, modified from
 Wilms, Allen, &amp; McCray, 2000, ApJ 542, 914-924
 Questions: Joern Wilms
@@ -2012,9 +2578,9 @@ Model Model Component  Parameter  Unit     Value
  par  comp
                            Data group: 1
    1    1   TBabs      nH         10^22    0.109146     +/-  3.09077E-02  
-   2    2   bbody      kT         keV      4.98714E-02  +/-  3.88626E-03  
-   3    2   bbody      norm                5.89566E-03  +/-  4.23737E-03  
-   4    3   bremss     kT         keV      1.40213      +/-  0.269462     
+   2    2   bbody      kT         keV      4.98714E-02  +/-  3.88628E-03  
+   3    2   bbody      norm                5.89567E-03  +/-  4.23741E-03  
+   4    3   bremss     kT         keV      1.40212      +/-  0.269461     
    5    3   bremss     norm                2.09659E-03  +/-  4.73090E-04  
                            Data group: 2
    6    1   TBabs      nH         10^22    0.143126     +/-  2.13488E-02  
@@ -2023,11 +2589,59 @@ Model Model Component  Parameter  Unit     Value
    9    3   bremss     kT         keV      1.62225      +/-  0.224638     
   10    3   bremss     norm                2.61929E-03  +/-  3.62162E-04  
                            Data group: 3
-  11    1   TBabs      nH         10^22    8.85726E-02  +/-  2.50749E-02  
-  12    2   bbody      kT         keV      4.98731E-02  +/-  3.52447E-03  
-  13    2   bbody      norm                7.31005E-03  +/-  4.56903E-03  
+  11    1   TBabs      nH         10^22    8.85727E-02  +/-  2.50749E-02  
+  12    2   bbody      kT         keV      4.98731E-02  +/-  3.52445E-03  
+  13    2   bbody      norm                7.31006E-03  +/-  4.56903E-03  
   14    3   bremss     kT         keV      1.58525      +/-  0.397334     
-  15    3   bremss     norm                2.50274E-03  +/-  5.85706E-04  
+  15    3   bremss     norm                2.50274E-03  +/-  5.85702E-04  
+                           Data group: 4
+  16    1   TBabs      nH         10^22    0.142886     +/-  2.43870E-02  
+  17    2   bbody      kT         keV      4.30093E-02  +/-  2.65168E-03  
+  18    2   bbody      norm                2.80382E-02  +/-  1.83100E-02  
+  19    3   bremss     kT         keV      1.26972      +/-  0.183847     
+  20    3   bremss     norm                3.59041E-03  +/-  6.56354E-04  
+                           Data group: 5
+  21    1   TBabs      nH         10^22    0.138989     +/-  3.79592E-02  
+  22    2   bbody      kT         keV      4.61061E-02  +/-  4.58728E-03  
+  23    2   bbody      norm                9.44736E-03  +/-  9.09029E-03  
+  24    3   bremss     kT         keV      0.992651     +/-  0.199343     
+  25    3   bremss     norm                3.67431E-03  +/-  1.11635E-03  
+                           Data group: 6
+  26    1   TBabs      nH         10^22    0.168362     +/-  2.41903E-02  
+  27    2   bbody      kT         keV      4.49303E-02  +/-  2.54694E-03  
+  28    2   bbody      norm                1.55974E-02  +/-  9.17445E-03  
+  29    3   bremss     kT         keV      1.47123      +/-  0.211958     
+  30    3   bremss     norm                2.63791E-03  +/-  4.08549E-04  
+                           Data group: 7
+  31    1   TBabs      nH         10^22    0.129795     +/-  4.66308E-02  
+  32    2   bbody      kT         keV      5.02683E-02  +/-  5.71598E-03  
+  33    2   bbody      norm                6.11996E-03  +/-  6.40132E-03  
+  34    3   bremss     kT         keV      1.91864      +/-  0.969900     
+  35    3   bremss     norm                1.84228E-03  +/-  6.75996E-04  
+                           Data group: 8
+  36    1   TBabs      nH         10^22    0.165242     +/-  2.87802E-02  
+  37    2   bbody      kT         keV      5.02741E-02  +/-  3.20452E-03  
+  38    2   bbody      norm                8.12018E-03  +/-  4.92323E-03  
+  39    3   bremss     kT         keV      1.38293      +/-  0.239943     
+  40    3   bremss     norm                2.90468E-03  +/-  5.75051E-04  
+________________________________________________________________________
+   1    1   TBabs      nH         10^22    0.109146     +/-  3.09077E-02  
+   2    2   bbody      kT         keV      4.98714E-02  +/-  3.88628E-03  
+   3    2   bbody      norm                5.89567E-03  +/-  4.23741E-03  
+   4    3   bremss     kT         keV      1.40212      +/-  0.269461     
+   5    3   bremss     norm                2.09659E-03  +/-  4.73090E-04  
+                           Data group: 2
+   6    1   TBabs      nH         10^22    0.143126     +/-  2.13488E-02  
+   7    2   bbody      kT         keV      4.60205E-02  +/-  2.36086E-03  
+   8    2   bbody      norm                1.20866E-02  +/-  6.22295E-03  
+   9    3   bremss     kT         keV      1.62225      +/-  0.224638     
+  10    3   bremss     norm                2.61929E-03  +/-  3.62162E-04  
+                           Data group: 3
+  11    1   TBabs      nH         10^22    8.85727E-02  +/-  2.50749E-02  
+  12    2   bbody      kT         keV      4.98731E-02  +/-  3.52445E-03  
+  13    2   bbody      norm                7.31006E-03  +/-  4.56903E-03  
+  14    3   bremss     kT         keV      1.58525      +/-  0.397334     
+  15    3   bremss     norm                2.50274E-03  +/-  5.85702E-04  
                            Data group: 4
   16    1   TBabs      nH         10^22    0.142886     +/-  2.43870E-02  
   17    2   bbody      kT         keV      4.30093E-02  +/-  2.65168E-03  
@@ -2173,7 +2787,7 @@ low-energy (&lt;0.5 keV) X-ray emission, compared to the other spectra.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/b67d116fa6635d382f9597e828d88e1b6bfcfee9915e4da6cb785946e6985ba2.png" src="../../../_images/b67d116fa6635d382f9597e828d88e1b6bfcfee9915e4da6cb785946e6985ba2.png" />
+<img alt="../../../_images/3746b7139f87615f851219e4900a62f063cce21b45d5ff74dc47b0c8e0aa2a26.png" src="../../../_images/3746b7139f87615f851219e4900a62f063cce21b45d5ff74dc47b0c8e0aa2a26.png" />
 </div>
 </div>
 </section>
@@ -2341,7 +2955,7 @@ resolve.</p>
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="../../../_images/4587e0ae780ebee4b20d5fcdcd9fed7fd1092405ed50a35bd11f4706b5671f5a.png" src="../../../_images/4587e0ae780ebee4b20d5fcdcd9fed7fd1092405ed50a35bd11f4706b5671f5a.png" />
+<img alt="../../../_images/be6fa609d1de54e624c64278d51ee20a06eaf9a3136f91d41091d1aaac1d45e9.png" src="../../../_images/be6fa609d1de54e624c64278d51ee20a06eaf9a3136f91d41091d1aaac1d45e9.png" />
 </div>
 </div>
 </section>
@@ -2448,6 +3062,54 @@ Model Model Component  Parameter  Unit     Value
   39    3   bremss     kT         keV      1.43407      = p4
   40    3   bremss     norm                2.70474E-03  = p5
 ________________________________________________________________________
+   1    1   TBabs      nH         10^22    0.136428     +/-  9.70306E-03  
+   2    2   bbody      kT         keV      4.69219E-02  +/-  1.13454E-03  
+   3    2   bbody      norm                1.06497E-02  +/-  2.52076E-03  
+   4    3   bremss     kT         keV      1.43407      +/-  9.06427E-02  
+   5    3   bremss     norm                2.70474E-03  +/-  1.87111E-04  
+                           Data group: 2
+   6    1   TBabs      nH         10^22    0.136428     = p1
+   7    2   bbody      kT         keV      4.69219E-02  = p2
+   8    2   bbody      norm                1.06497E-02  = p3
+   9    3   bremss     kT         keV      1.43407      = p4
+  10    3   bremss     norm                2.70474E-03  = p5
+                           Data group: 3
+  11    1   TBabs      nH         10^22    0.136428     = p1
+  12    2   bbody      kT         keV      4.69219E-02  = p2
+  13    2   bbody      norm                1.06497E-02  = p3
+  14    3   bremss     kT         keV      1.43407      = p4
+  15    3   bremss     norm                2.70474E-03  = p5
+                           Data group: 4
+  16    1   TBabs      nH         10^22    0.136428     = p1
+  17    2   bbody      kT         keV      4.69219E-02  = p2
+  18    2   bbody      norm                1.06497E-02  = p3
+  19    3   bremss     kT         keV      1.43407      = p4
+  20    3   bremss     norm                2.70474E-03  = p5
+                           Data group: 5
+  21    1   TBabs      nH         10^22    0.136428     = p1
+  22    2   bbody      kT         keV      4.69219E-02  = p2
+  23    2   bbody      norm                1.06497E-02  = p3
+  24    3   bremss     kT         keV      1.43407      = p4
+  25    3   bremss     norm                2.70474E-03  = p5
+                           Data group: 6
+  26    1   TBabs      nH         10^22    0.136428     = p1
+  27    2   bbody      kT         keV      4.69219E-02  = p2
+  28    2   bbody      norm                1.06497E-02  = p3
+  29    3   bremss     kT         keV      1.43407      = p4
+  30    3   bremss     norm                2.70474E-03  = p5
+                           Data group: 7
+  31    1   TBabs      nH         10^22    0.136428     = p1
+  32    2   bbody      kT         keV      4.69219E-02  = p2
+  33    2   bbody      norm                1.06497E-02  = p3
+  34    3   bremss     kT         keV      1.43407      = p4
+  35    3   bremss     norm                2.70474E-03  = p5
+                           Data group: 8
+  36    1   TBabs      nH         10^22    0.136428     = p1
+  37    2   bbody      kT         keV      4.69219E-02  = p2
+  38    2   bbody      norm                1.06497E-02  = p3
+  39    3   bremss     kT         keV      1.43407      = p4
+  40    3   bremss     norm                2.70474E-03  = p5
+________________________________________________________________________
 </pre></div>
 </div>
 </div>
@@ -2504,7 +3166,7 @@ day 142-149 period results presented by <a class="reference external" href="http
 <h2>About this notebook<a class="headerlink" href="#about-this-notebook" title="Link to this heading">#</a></h2>
 <p>Author: David Turner, HEASARC Staff Scientist</p>
 <p>Author: Peter Craig, Michigan State University Research Associate</p>
-<p>Updated On: 2025-12-23</p>
+<p>Updated On: 2026-07-30</p>
 <section id="additional-resources">
 <h3>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h3>
 </section>
