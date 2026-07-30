@@ -1043,6 +1043,7 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
+# Creating the grid visualization of all our sources
 num_cols = 4
 fig_side_size = 3
 
