@@ -29,6 +29,14 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.tox', '.tmp', '.pytest
 html_js_files = []
 # ----------------------------------------------------------------------------
 
+# --------------------------- Sphinx configuration ---------------------------
+# Suppressing highlight_failure to deal with Sphinx's complaints about using ?
+#  symbols to access help docstrings in Jupyter notebooks.
+suppress_warnings = [
+    "misc.highlighting_failure",
+]
+# ----------------------------------------------------------------------------
+
 # ---------------------------- MyST configuration ----------------------------
 # MyST-NB configuration
 nb_execution_timeout = 1200
