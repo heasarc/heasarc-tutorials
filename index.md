@@ -39,6 +39,7 @@ tutorials/mission_specific_analyses/nicer/nicer_index
 tutorials/mission_specific_analyses/ixpe/ixpe_index
 tutorials/mission_specific_analyses/swift/swift_index
 tutorials/mission_specific_analyses/rosat/rosat_index
+tutorials/mission_specific_analyses/xrism/xrism_index
 ```
 
 ## Demonstrations of useful high-energy tools
