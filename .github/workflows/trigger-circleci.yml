@@ -67,7 +67,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           # Define the exclusion patterns
-          EXCLUDE_PATTERNS=("*notebook_template*" "*pull_request_template*" "*README*" "**/*README*" "*.ipynb_checkpoints*")
+          EXCLUDE_PATTERNS=("*notebook_template*" "*pull_request_template*" "*README*" "**/*README*" "*.ipynb_checkpoints*" "*CONTRIBUTING*" "*CODE_OF_CONDUCT*")
 
           # First, check if there's an override pattern in PR comments
           OVERRIDE_NOTEBOOKS=$(curl -s \
