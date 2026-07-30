@@ -56,7 +56,7 @@ jobs:
         run: |
           # Find all .md files in main-branch/tutorials, excluding templates, READMEs, and index files
           find main-branch/tutorials -name "*.md" -type f | \
-            grep -vE "(notebook_template|pull_request_template|README|index|\.ipynb_checkpoints)" | \
+            grep -vE "(notebook_template|CODE_OF_CONDUCT|CONTRIBUTING|pull_request_template|README|index|\.ipynb_checkpoints)" | \
             sort > /tmp/main_notebooks.txt
 
           # Create list of notebooks that need updating (new files or files with differences)

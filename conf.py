@@ -19,13 +19,22 @@ version = '0.1'
 extensions = ['myst_nb', 'sphinx_copybutton', 'sphinx.ext.mathjax']
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.tox', '.tmp', '.pytest_cache', 'README.md',
-                    '**/*_template*', '**/README.md', '*_template*']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.tox', '.tmp', '.pytest_cache',
+                    'README.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', '**/*_template*',
+                    '**/README.md', '*_template*']
 
 # Registering custom JS files
 #  1. Adds a surface level password-unlocked screen over the website
 # THIS HAS BEEN DISABLED, BUT NOT YET REMOVED - "internal_screen.js"
 html_js_files = []
+# ----------------------------------------------------------------------------
+
+# --------------------------- Sphinx configuration ---------------------------
+# Suppressing highlight_failure to deal with Sphinx's complaints about using ?
+#  symbols to access help docstrings in Jupyter notebooks.
+suppress_warnings = [
+    "misc.highlighting_failure",
+]
 # ----------------------------------------------------------------------------
 
 # ---------------------------- MyST configuration ----------------------------
@@ -61,7 +70,8 @@ def check_poss_nb(file_name):
 
 # These patterns will always be excluded
 BASE_EXCLUDE_PATTERNS = ['*notebook_template*', '*pull_request_template*', '*README*',
-                         '**/*README*', '*.ipynb_checkpoints*']
+                         '**/*README*', '*.ipynb_checkpoints*', '*CONTRIBUTING*',
+                         '*CODE_OF_CONDUCT*']
 
 # We allow a 'HEASARC_NOTEBOOKS_TO_BUILD' environment variable to be set, which should
 #  have the form:

@@ -9,7 +9,7 @@ authors:
   affiliations: ["Michigan State University"]
   orcid: 0000-0002-3673-0668
   website: https://adkpete.github.io/
-date: '2025-12-23'
+date: '2026-07-30'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -21,6 +21,11 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: False
 title: Getting started with Swift-XRT
 ---
 
@@ -554,7 +559,7 @@ observation, which will include BAT and UVOT instrument files that are not relev
 to this tutorial.
 
 ```{code-cell} python
-Heasarc.download_data(data_links, "aws", ROOT_DATA_DIR)
+Heasarc.download_data(data_links, host="aws", location=ROOT_DATA_DIR)
 ```
 
 ```{note}
@@ -1519,7 +1524,7 @@ Author: David Turner, HEASARC Staff Scientist
 
 Author: Peter Craig, Michigan State University Research Associate
 
-Updated On: 2025-12-23
+Updated On: 2026-07-30
 
 +++
 
