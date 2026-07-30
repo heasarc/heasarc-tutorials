@@ -9,7 +9,7 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-03-12'
+date: '2026-07-30'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -25,7 +25,7 @@ execution:
   cal-files:
     xmm-ccf: False
     chandra: False
-    xspec-models: True
+    xspec-models: False
 title: Getting started with ROSAT All Sky Survey data
 ---
 
@@ -950,7 +950,7 @@ tags: [hide-output]
 jupyter:
   output_hidden: true
 ---
-Heasarc.download_data(rass_data_links, "aws", ROOT_DATA_DIR)
+Heasarc.download_data(rass_data_links, host="aws", location=ROOT_DATA_DIR)
 ```
 
 ### What is included in the downloaded data?
@@ -2420,7 +2420,7 @@ Author: David Turner, HEASARC Staff Scientist
 
 Author: Mike Corcoran, Associate Research Professor
 
-Updated On: 2026-03-12
+Updated On: 2026-07-30
 
 +++
 
