@@ -14,4 +14,4 @@ The license for this repository is available [here](./LICENSE.MD)
 
 * [NASA Policiies](https://nodis3.gsfc.nasa.gov/main_lib.cfm)
 
-_This code of conduct has been adapted from the [NASA SMD open science code of conduct](https://github.com/nasa/smd-open-science-guidelines/blob/main/CODE_OF_CONDUCT.md)_
+_This code of conduct has been adapted from the [NASA SMD open science code of conduct](https://github.com/nasa/smd-open-science-guidelines/blob/main/CODE_OF_CONDUCT.md)_.
