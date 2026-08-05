@@ -39,7 +39,7 @@ suppress_warnings = [
 
 # ---------------------------- MyST configuration ----------------------------
 # MyST-NB configuration
-nb_execution_timeout = 1200
+nb_execution_timeout = -1
 nb_merge_streams = True
 nb_execution_mode = "cache"
 nb_scroll_outputs = True
