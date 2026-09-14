@@ -779,15 +779,16 @@ for cur_name in TARGET_LIST:
     search_results[cur_name] = cur_res
 ```
 
-### Downloading the Selected Observations
+### Downloading the selected observations
 
 *Now that we have identified the data links for each observation, we iterate through our dictionary and download the raw data into subdirectories named after the respective target.*
 
 ```{code-cell} python
-# for cur_name, cur_res in search_results.items():
-#     cur_datalinks = Heasarc.locate_data(cur_res)
-
-#     Heasarc.download_data(cur_datalinks, host="aws", location=ROOT_DATA_DIR)
+for cur_name, cur_res in search_results.items():
+    # This fetches data links to the current observation's files
+    cur_datalinks = Heasarc.locate_data(cur_res)
+    # Then they are downloaded
+    Heasarc.download_data(cur_datalinks, host="aws", location=ROOT_DATA_DIR)
 ```
 
 ## 2. Data Preparation
