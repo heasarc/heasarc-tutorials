@@ -1023,7 +1023,6 @@ import xspec as xs  # noqa: E402
 # Stops any XSPEC figure output on the usual plot devices
 xs.Plot.device = "/null"
 
-
 # Other xspec settings
 xs.Plot.xAxis = "keV"
 xs.Plot.background = True
