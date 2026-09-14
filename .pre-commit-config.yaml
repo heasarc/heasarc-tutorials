@@ -19,6 +19,7 @@ repos:
       args:
         - "--max-line-length=88"
         - "--nbqa-dont-skip-bad-cells"
+        - "--extend-ignore=E203"
       exclude: notebook_template.md
     - id: nbqa
       name: nbqa-codespell
