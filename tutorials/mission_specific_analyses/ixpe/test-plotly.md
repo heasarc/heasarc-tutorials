@@ -30,6 +30,7 @@ title: Testing plotly behaviors
 ## Imports
 
 ```{code-cell} python
+%pip install --upgrade nbformat
 %pip install plotly
 ```
 
