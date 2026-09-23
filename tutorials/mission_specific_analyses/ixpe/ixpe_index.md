@@ -10,4 +10,5 @@ caption: IXPE tutorials
 ---
 
 data-analysis-ixpe
+test-plotly
 ```
