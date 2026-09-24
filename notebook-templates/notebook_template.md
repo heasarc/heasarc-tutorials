@@ -342,6 +342,6 @@ Did you use AI for any part of this tutorial, if so please include a statement s
 
 This work made use of:
 
--   STScI style guide: https://github.com/spacetelescope/style-guides/blob/master/guides/jupyter-notebooks.md
--   Fornax tech and science review guidelines: https://github.com/nasa-fornax/fornax-demo-notebooks/blob/main/template/notebook_review_checklists.md
--   The Turing Way Style Guide: https://book.the-turing-way.org/community-handbook/style
+- STScI style guide: https://github.com/spacetelescope/style-guides/blob/master/guides/jupyter-notebooks.md
+- Fornax tech and science review guidelines: https://github.com/nasa-fornax/fornax-demo-notebooks/blob/main/template/notebook_review_checklists.md
+- The Turing Way Style Guide: https://book.the-turing-way.org/community-handbook/style
