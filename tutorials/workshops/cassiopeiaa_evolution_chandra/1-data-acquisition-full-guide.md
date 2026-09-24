@@ -848,10 +848,8 @@ From there, we iterate (in another `for`-loop nested within the first) through t
 The full path to that file, and the path we want to move it to, are set up by joining the file name to the download directory path, and the ObsID directory within that download directory path with `os.path.join(...)`, and we can finally move the file using the `os.path.rename(...)` function:
 
 ```{code-cell} python
-#
 specific_img_file_names = []
 
-#
 for cur_obs in selected_obs:
 
     cur_obs_id = cur_obs["obsid"]
