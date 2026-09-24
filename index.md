@@ -53,6 +53,15 @@ tutorials/useful_high_energy_tools/pysas/pysas_index
 
 ```
 
+## Workshops
+```{toctree}
+---
+maxdepth: 2
+caption: Workshops
+---
+tutorials/workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_index
+```
+
 ***
 
 ## About these notebooks
