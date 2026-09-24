@@ -120,7 +120,7 @@ jupyter:
   source_hidden: true
 ---
 # -------------- Set paths and create directories --------------
-# Set up the path of the directory into which we will download Swift data
+# Set up the path of the directory into which we will download Chandra data
 if os.path.exists("../../../_data"):
     ROOT_DATA_DIR = os.path.join(os.path.abspath("../../../_data"), "CasA-Chandra", "")
 else:
@@ -251,7 +251,8 @@ default_chan_search_rad
 Note that we are looking at a relatively nearby supernova remnant, which is most definitely an "extended" source and is fairly large on the sky. We opt for 1 arcminute matching radius.
 
 ```{code-cell} python
-match_radius = 1.0 * u.arcminute  # The u.arcmin applies arcmin units.
+# The u.arcmin applies arcmin units
+match_radius = 1.0 * u.arcminute
 ```
 
 ```{admonition} Extra Task
@@ -268,6 +269,7 @@ As an ***extension to this notebook***, you could test different values for the 
 Finally, we are ready to run the search! We use the `query_region` function of the `astroquery` package's HEASARC submodule, passing it Cas A's coordinates (`SRC_POSITION`), the name of the catalog to search (`obs_catalog_name`, set to the name of the Chandra master catalog), and the matching radius (`match_radius`). We also pass `columns='*'`, which tells the function to include every column in the table in the return, rather than a standard subset of columns (defined separately for each HEASARC-hosted catalog):
 
 ```{code-cell} python
+# columns="*" returns every catalog column, not the mission-specific default subset
 search_result = Heasarc.query_region(
     SRC_POSITION, catalog=obs_catalog_name, radius=match_radius, columns="*"
 )
@@ -315,7 +317,9 @@ Chandra is an **active mission** – meaning that it is still operating and peop
 To make sure we don't include future and proprietary observations, we can filter the results table using the "status" column, so that only observations that are "archived" are included:
 
 ```{code-cell} python
+# Boolean array indexing: keeps only rows where the condition is True
 all_avail_obs = search_result[search_result["status"] == "archived"]
+
 print(
     f"{len(all_avail_obs)} Chandra observations remain after excluding "
     f"not-yet-taken and proprietary data."
@@ -381,6 +385,8 @@ So, we will trigger the `.filled()` function to produce a normal column, with th
 We also take the opportunity to make sure the resulting column has the 'str' datatype, otherwise we might get an error later on. Once again, for this example, we slice the column so only 10 entries are displayed:
 
 ```{code-cell} python
+# .filled() replaces masked (missing) values with the column's fill value;
+# np.char.find requires a plain string array, not a MaskedColumn
 all_avail_obs["detector"].filled().astype("str")[:10]
 ```
 
@@ -414,6 +420,7 @@ Now, all that's left to do is to turn that array into a boolean masking array th
 Having broken down the different snippets of code required to find observations whose _detector_ entry value contains the 'ACIS' string, we now actually _produce_ the filtered table (making sure to act on the filtered output of the last step):
 
 ```{code-cell} python
+# np.char.find returns the index of the substring match, or -1 if absent
 acis_avail_obs = all_avail_obs[
     (np.char.find(np.array(all_avail_obs["detector"]).astype("str"), "ACIS") != -1)
 ]
@@ -599,6 +606,7 @@ Chandra ObsIDs are often presented in both formats (with and without the prepend
 Python has a built-in function `zfill(...)` that will perform this action on a single string, but again, rather than looping through each column entry individually, we would much rather use a vectorized solution that can be applied to every column entry at once. The `numpy` module provides such a solution in the `char` submodule (which we used earlier when matching the ACIS substring to the detector column entries):
 
 ```{code-cell} python
+# np.char.zfill is the vectorized equivalent of Python's str.zfill
 selected_obs["obsid"] = np.char.zfill(selected_obs["obsid"].astype(str), 5)
 selected_obs[:5]
 ```
@@ -620,6 +628,8 @@ To be able to download the Chandra observation data, we first have to know **whe
 Returning to the HEASARC-specific part of the `astroquery` module, we can find that out quite easily by using the `Heasarc.locate_data(...)` function - passing our table of selected observations, we will get another table in return (with the same number of rows as there are observations in `selected_obs`). The returned table contains several **"datalinks"** per observation, which tell us exactly where to find the files we need:
 
 ```{code-cell} python
+# Returns a table with one row per input observation, containing multiple
+#  datalink columns (ftp, aws, sciserver)
 obs_data_links = Heasarc.locate_data(selected_obs)
 
 # Slicing to 5 entries to avoid the table visualization taking up so much
@@ -653,6 +663,7 @@ os.makedirs(full_obs_download_dir, exist_ok=True)
 Now we use _another_ feature of the HEASARC submodule of `astroquery`, the `.download_data(...)` function. This takes the datalinks table we just created as an input (_though here we slice the table so only the first two rows are given to the function_). It also takes a `host=` input, which just tells it where to download the data from (i.e. which column of the datalinks table to use) - here we telling it to download from AWS. Finally, we use the `location=` argument to ensure that the downloaded Chandra data directories are stored in the output directory we just set up:
 
 ```{code-cell} python
+# host= selects which datalink column to pull the URI from
 Heasarc.download_data(obs_data_links[:2], host="aws", location=full_obs_download_dir)
 ```
 
@@ -660,11 +671,7 @@ Heasarc.download_data(obs_data_links[:2], host="aws", location=full_obs_download
 Chandra observation data directories can be on the order of several gigabytes in size, so if you are downloading large numbers of observations you need to make sure you have the storage space, and be prepared for a little bit of a wait!
 ```
 
-+++
-
 ### Downloading **only images** to save time and storage
-
-+++
 
 Rather than downloading all files for all our observations, we will now _only_ fetch those that are directly
 relevant to what we want to do in this notebook - this method is a little more involved than using Astroquery, but
@@ -676,6 +683,7 @@ platform through Python commands.
 We create an `S3FileSystem` object, which lets us interact with the S3 bucket as if it were a filesystem (the `anon=True` argument tells the module that the S3 bucket we're going to access **does not require an access key or password**):
 
 ```{code-cell} python
+# anon=True skips AWS credential lookup, required for this public bucket
 heasarc_aws_s3 = S3FileSystem(anon=True)
 ```
 
@@ -729,6 +737,8 @@ What you should take from that is that the image file name is going to be differ
 Here we define a file pattern that uses 'wildcards' (i.e. the asterisks) to indicate that a matching file is allowed to contain _anything_ between the parts of the file name that we specify. You will note that we defined the pattern in a list with one entry - that lets us design the next step (actually finding the _full_ file names) in such a way that it would be very easy to later decide that there is an additional file pattern (or patterns) that we want to match to and download - **we would just have to add another entry to `match_file_patterns`**.
 
 ```{code-cell} python
+# Single-element list so additional patterns can be appended later without
+#  changing the code below
 match_file_patterns = ["primary/acis*cntr_img*.fits*"]
 ```
 
@@ -755,6 +765,7 @@ Instead, because we defined our file pattern as a single element list (to make i
 We combine each datalink with each file pattern using the `os.path.join(...)` function, which is intended to help construct file paths by ensuring you don't have to manually add "/" characters, but works equally well for this:
 
 ```{code-cell} python
+# Nested list comprehension: outer loop over observations, inner loop over patterns
 all_file_patt = [
     os.path.join(base_uri, current_file_patt)
     for base_uri in obs_data_links["aws"].value
@@ -767,6 +778,8 @@ all_file_patt[:10]
 We now want to actually run the pattern match to find the URIs of the files we wish to download (again without downloading anything from the S3 bucket beforehand). That is achieved using the `.expand_path(...)` function of the S3FS module. We pass it the list of file patterns, and get a list of full URIs in return (as you can see below):
 
 ```{code-cell} python
+# expand_path resolves the wildcard patterns against the actual bucket contents;
+#  no data is downloaded at this stage
 relevant_img_uris = heasarc_aws_s3.expand_path(all_file_patt)
 relevant_img_uris[:10]
 ```
@@ -862,7 +875,6 @@ for cur_obs in selected_obs:
         os.renames(cur_downloaded_file_path, final_downloaded_file_path)
 
         if "img" in cur_downloaded_file:
-            #
             specific_img_file_names.append(cur_downloaded_file)
 
 selected_obs["img_file_name"] = specific_img_file_names
