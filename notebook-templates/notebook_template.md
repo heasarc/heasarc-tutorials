@@ -5,7 +5,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-06-01'
+date: '2026-09-24'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -137,10 +137,19 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
+# Constant variables, stylized as `CONSTANT_VARIABLE_NAME`, should primarily be set up
+#  in this section. The exception is when it is beneficial to the reader to see them
+#  being set up.
 ```
 
 ### Configuration
+
+_Please remove this explanation when writing a 'real' notebook_ – We include an example of the base content that you
+might wish to include in the 'Configuration' section. This can be modified and added to, **however** we require some
+contents to be included in certain situations:
+- If multiprocessing is used in your tutorial, you ***must*** include the 'setting how many cores we can use' code block, and the `mp.set_start_method(...)` call above it.
+- If your tutorial involves downloading data, you ***must*** include the parts of 'Set paths and create directories' that define `ROOT_DATA_DIR`, and the paths/relative paths must be adjusted to look for the existence of the `_data` directory in the top level of this repositories' directory structure. You should also alter the name of the directory that data are downloaded into, to reflect the mission being used.
+- If your tutorial _creates_ any files during its execution, you ***must*** include the `OUT_PATH` definition code.
 
 ```{code-cell} python
 ---
@@ -149,13 +158,56 @@ jupyter:
   source_hidden: true
 ---
 
+# ------------- Configure global package settings --------------
+# Raise Python exceptions if a heasoftpy task fails
+# TODO Remove once this becomes a default in heasoftpy
+hsp.Config.allow_failure = False
+
+# Set up the method for spawning processes.
+mp.set_start_method("fork", force=True)
+# --------------------------------------------------------------
+
+# ------------- Setting how many cores we can use --------------
+NUM_CORES = None
+total_cores = os.cpu_count()
+
+if NUM_CORES is None:
+    NUM_CORES = total_cores
+elif not isinstance(NUM_CORES, int):
+    raise TypeError(
+        "If manually overriding 'NUM_CORES', you must set it to an integer value."
+    )
+elif isinstance(NUM_CORES, int) and NUM_CORES > total_cores:
+    raise ValueError(
+        f"If manually overriding 'NUM_CORES', the value must be less than or "
+        f"equal to the total available cores ({total_cores})."
+    )
+# --------------------------------------------------------------
+
+# -------------- Set paths and create directories --------------
+# Set up the path of the directory into which we will download Swift data
+if os.path.exists("../../../_data"):
+    ROOT_DATA_DIR = os.path.join(os.path.abspath("../../../_data"), "Swift", "")
+else:
+    ROOT_DATA_DIR = "Swift/"
+
+# Whatever the data directory is, make sure it is absolute.
+ROOT_DATA_DIR = os.path.abspath(ROOT_DATA_DIR)
+
+# Make sure the download directory exists.
+os.makedirs(ROOT_DATA_DIR, exist_ok=True)
+
+# Setup path and directory into which we save output files from this example.
+OUT_PATH = os.path.abspath("Swift_output")
+os.makedirs(OUT_PATH, exist_ok=True)
+# --------------------------------------------------------------
 ```
 
 ***
 
 ## 1. Data Access
 
-The name of this, and all future sections can change.
+The name of this, and all future sections, can change.
 In general, it probably is a good idea to start with something like "Data Access".
 Please note, and stick to, the existing numbering scheme.
 
@@ -177,7 +229,7 @@ This helps people understand both the notebook and the data so that they're more
 :::{tip}
 Please include a narrative for *all* your code cells to help the reader figure out what you are doing and why you chose that path.
 
-Using [MyST admonitions](https://mystmd.org/guide/admonitions) such as this `tip` are encouraged
+Using [MyST admonitions](https://mystmd.org/guide/admonitions) such as this `tip` are strongly encouraged
 :::
 
 ```{code-cell} python
@@ -262,19 +314,26 @@ Any PRs can be opened as drafts, which is in fact preferred, if authors are stil
 
 ## About this notebook
 
--   **Authors:** Specific author and/or team names, plus "and the Fornax team".
--   **Contact:** For help with this notebook, please open a topic in the [Fornax Community Forum](https://discourse.fornax.sciencecloud.nasa.gov/) "Support" category.
--   Please edit and keep the above 2 bullet points, and remove this last line.
+Author: David J Turner, HEASARC Staff Scientist.
+
+Author: _Name Surname, Role_.
+
+Updated On: 2026-09-24
+
+***Please edit the above and remove this last line.***
 
 +++
 
 ### Additional Resources
 
+**HEASARC Help Desk**: [https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc)
+
+***Please add any other resources, including mission-specific helpdesks, and remove this last line.***
 
 ### Acknowledgements
 
 Did anyone help you?
-Probably these teams did, so include them: MAST, HEASARC, & IRSA Fornax teams.
+Potentially these teams did, so include them: MAST, HEASARC, & IRSA Fornax teams.
 
 Did you use AI for any part of this tutorial, if so please include a statement such as:
 "AI: This notebook was created with assistance from OpenAI’s ChatGPT 5 model.", which is a good time to mention that this template notebook was created with assistance from OpenAI’s ChatGPT 5 model.
