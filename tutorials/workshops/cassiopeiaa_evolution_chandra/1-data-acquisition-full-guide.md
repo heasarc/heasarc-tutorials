@@ -809,8 +809,10 @@ We use the `np.char.find(...)` function (that we used in the instrument filterin
 
 We'll take this opportunity to demonstrate another useful `numpy` function - `argwhere`. This basically takes a True/False input array (from `np.char.find(downloaded_files, cur_obs_id) != -1` in this case) and gives us the integer indexes where that array has a value of True. So:
 
-```python
+```
+:::python
 np.argwhere(np.array([True, False, False, True]))
+:::
 ```
 
 would return:
