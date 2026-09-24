@@ -884,8 +884,11 @@ selected_obs.write(
 ## About this notebook
 
 Author: David J Turner, HEASARC Staff Scientist.
+
 Author: Antara Basu-Zych, HEASARC Archive Scientist.
+
 Author: Tess Jaffe, HEASARC Chief Archive Scientist.
+
 Author: Mike Corcoran, Associate Research Professor.
 
 Updated On: 2026-09-24
@@ -898,5 +901,7 @@ Updated On: 2026-09-24
 
 ### Acknowledgements
 
+We thank the Villanova One Sky Center for Astrophysics, particularly Professor Kelly Hambleton and
+Professor Ekta Patel, for their contributions and feedback.
 
 ### References
