@@ -37,7 +37,7 @@ kernelspec:
 title: Identifying and downloading Chandra data
 ---
 
-# X-ray evolution of Cassiopeia A - Identifying and downloading Chandra observations
+# Identifying and downloading Chandra observations
 
 ## Learning Goals
 
