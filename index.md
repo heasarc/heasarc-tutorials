@@ -57,7 +57,7 @@ tutorials/useful_high_energy_tools/pysas/pysas_index
 ```{toctree}
 ---
 maxdepth: 2
-caption: High-energy astrophysics workshops
+caption: Workshops
 ---
 tutorials/workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_index
 ```
