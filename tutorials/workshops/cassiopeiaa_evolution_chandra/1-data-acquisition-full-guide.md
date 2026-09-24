@@ -191,7 +191,7 @@ The terms "object" and "instance" are related to something called _object orient
 
 +++
 
-```{caution}
+````{caution}
 
 You should always treat coordinates retrieved from a database with a little caution. They
 are likely to be very reliable for point-like sources, but **for extended sources in particular**
@@ -200,13 +200,13 @@ exactly what coordinate has been returned.
 
 In fact, you might want to define your own coordinate directly - we set up our `SRC_POSITION` variable (the `SkyCoord` instance) indirectly, by using the `from_name(...)` function, but you can pass coordinates to `SkyCoord` manually as well:
 
-::: python
+```python
 manual_source_coord = SkyCoord(350.8584, 58.8113, unit="deg")
-:::
+```
 
 This declares the same coordinate we got from the name lookup, but demonstrates how to manually define a coordinate object.
 
-```
+````
 
 +++
 
@@ -385,14 +385,14 @@ We also take the opportunity to make sure the resulting column has the 'str' dat
 all_avail_obs["detector"].filled().astype("str")[:10]
 ```
 
-```{tip}
+````{tip}
 We can also find that same information by using Python's built-in `type(...)` function. The "type" of a Python object is the class that the object is an instance of - so the type of `search_result`, and the table (`all_avail_obs`) produced after our first filtering step, will be `astropy.table.table.Table`:
 
-:::python
+```python
 print(type(all_avail_obs['detector']))
 print(type(search_result))
-:::
 ```
+````
 
 +++
 
@@ -455,18 +455,18 @@ print(
 )
 ```
 
-```{important}
+````{important}
 We implemented the filtering of the observation table in a step-by-step manner so that we could talk about why we were making each filtering choice. Setting it up like that is is quite fragile in a Jupyter Notebook environment, however, as cells can be run out of order, and each cell required the one before it to have already been executed. Additionally, if a change was made to a filtering step that _wasn't_ the last in the chain, every subsequent step would need to be re-run.
 
 As such, we would generally recommend imposing all of the filters at the same time, for instance:
 
-:::python
+```python
 selected_obs = search_result[(search_result['status'] == "archived")
                              & (search_result['grating'] == 'NONE')
                              & (np.char.find(np.array(search_result['detector']).astype('str'), 'ACIS') != -1)
                              & (search_result['type'] != "CAL")]
-:::
 ```
+````
 
 +++
 
@@ -809,11 +809,11 @@ We use the `np.char.find(...)` function (that we used in the instrument filterin
 
 We'll take this opportunity to demonstrate another useful `numpy` function - `argwhere`. This basically takes a True/False input array (from `np.char.find(downloaded_files, cur_obs_id) != -1` in this case) and gives us the integer indexes where that array has a value of True. So:
 
-```
-:::python
+````
+```python
 np.argwhere(np.array([True, False, False, True]))
-:::
 ```
+````
 
 would return:
 
