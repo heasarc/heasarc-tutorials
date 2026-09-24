@@ -34,20 +34,23 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: X-ray evolution of Cassiopeia A - Identifying and downloading Chandra observations
+title: Identifying and downloading Chandra data
 ---
 
 # X-ray evolution of Cassiopeia A - Identifying and downloading Chandra observations
 
 ## Learning Goals
 
-By the end of these tutorials, you will be able to:
+By the end of this tutorial, you will be able to:
 
-- Access Cassiopeia A (**Cas A**; an archetypal supernova remnant) Chandra data from the HEASARC using the `astroquery` Python module.
+- Look up the coordinates of a famous astrophysical source, in this case **Cassiopeia A** (or _Cas A_), an archetypal supernova remnant (SNR).
+- Identify Chandra X-ray telescope observations of Cas A using the `astroquery` Python module.
+- Filter the observations to a smaller set of data based on different criteria.
+- Download the selected Chandra data.
 
 ## Introduction
 
-This notebook presents a tutorial of how to access HEASARC data using astroquery.
+This notebook presents a tutorial of how to access HEASARC data using astroquery, specifically Chandra observation data.
 
 We handle the case of a user searching for data on a specific astronomical object
 from a *specific* high-energy mission observation table.
@@ -56,15 +59,17 @@ We will find all publicly available Chandra observations of **Cas A**.
 
 ### Inputs
 
--
+- The name of the target source, in this case **Cas A**.
 
 ### Outputs
 
--
+- Chandra observation directories and data files.
+- A visualization of the distribution of Chandra observations of Cas A over the last ~2-decades.
+- Comma-separated-value table file summarizing the selected Chandra observations of Cas A.
 
 ### Runtime
 
-As of ***DATE***, this notebook takes ~***TIME*** minutes to run to completion on Fornax using the 'small' server with 8GB RAM/ 2 cores.
+As of 24th September 2026, this notebook takes ~2 minutes to run to completion on Fornax using the 'small' server with 8GB RAM/ 2 cores.
 
 
 ## Imports
@@ -135,15 +140,11 @@ os.makedirs(OUT_PATH, exist_ok=True)
 
 ***
 
-## 1. Identifying Chandra observations of Cassiopeia A
-
-+++
+## 1. Identifying Chandra observations of Cas A
 
 Our first task is to determine which of Chandra's very large archive of observations are relevant to our target - this essentially involves searching a summary of all the Chandra observations ever taken for those that were aimed near to or at the target.
 
 To access and download the Chandra data relevant to the Cas A supernova remnant (SNR) we are going to make use of [`astroquery`](https://astroquery.readthedocs.io/en/latest/) - this is a popular (in observational astrophysics circles at least) Python module that provides interfaces to a good fraction of the many astronomical data archives that are publicly accessible.
-
-+++
 
 ### Setting up the name and position of our target
 
@@ -181,7 +182,7 @@ SRC_POSITION = SkyCoord.from_name(SRC_NAME)
 SRC_POSITION
 ```
 
-What happened there is that we declared an "**instance**" of `astropy`'s `SkyCoord` "**class**" - this is a type of Python object (like a string, list, or integer) that stores and allows us to interact with astronomical coordinates. It has many built in methods to make common tasks (such as transforming to a different coordinate system) much easier, as we don't have to implement them ourselves.
+What happened there is that we declared an "**instance**" of `astropy`'s `SkyCoord` "**class**" - this is a type of Python object (like a string, list, or integer) that stores and allows us to interact with astronomical coordinates. It has many built-in methods to make common tasks (such as transforming to a different coordinate system) much easier, as we don't have to implement them ourselves.
 
 Our `SkyCoord` instance represents a single coordinate in this case, but they can be used to interact with as many coordinates as you like.
 
@@ -216,9 +217,9 @@ Now that we have retrieved Cas A's coordinates, we can search for Chandra observ
 
 For this data discovery part, we'll use `astroquery`, the Python module we mentioned in the introduction to this section. As the main data archive for high-energy astrophysics observations, HEASARC maintains an `astroquery` submodule (`astroquery.heasarc`) that provides an easy Python interface to our data and catalog holdings.
 
-Before we get to the data, we need to use a **catalog** - specifically one of HEASARC's 'master' (or observation summary) catalogs. Each master catalog corresponds to a different high-energy mission, and are used to record the basic properties (observation ID, target coordinate, target name, exposure time, etc.) of every observation made by that mission. These observation summary catalogs are a very small subset of our catalog holdings, as we archive many catalogs containing the scientific outputs of different research projects.
+Before we get to the data, we need to use a **catalog** – specifically one of HEASARC's 'master' (or observation summary) catalogs. Each master catalog corresponds to a different high-energy mission, and are used to record the basic properties (observation ID, target coordinate, target name, exposure time, etc.) of every observation made by that mission. These observation summary catalogs are a very small subset of our catalog holdings, as we archive many catalogs containing the scientific outputs of different research projects.
 
-The name of the catalog that summarizes every Chandra observation is ***chanmaster*** - we assign it to a variable below:
+The name of the catalog that summarizes every Chandra observation is ***chanmaster*** – we assign it to a variable below:
 
 ```{code-cell} python
 obs_catalog_name = "chanmaster"
@@ -247,7 +248,7 @@ default_chan_search_rad = Heasarc.get_default_radius(obs_catalog_name)
 default_chan_search_rad
 ```
 
-Note that we are looking at a relatively nearby supernova remnant, which is most definitely an "extended" source, and is fairly large on the sky. We opt for 1 arcminute matching radius.
+Note that we are looking at a relatively nearby supernova remnant, which is most definitely an "extended" source and is fairly large on the sky. We opt for 1 arcminute matching radius.
 
 ```{code-cell} python
 match_radius = 1.0 * u.arcminute  # The u.arcmin applies arcmin units.
@@ -274,7 +275,7 @@ search_result = Heasarc.query_region(
 
 The `search_result` variable, unsurprisingly perhaps, now contains the results of our search through the Chandra data archive! The results are stored in a `Table` object, which is another `astropy` addition (if you've ever used the nearly-ubiquitous-for-data-science `pandas` module - an `astropy Table` is similar to a dataframe).
 
-We can now see a compressed version of the results table (as there are quite a few rows, the default behavior is to skip most of them, with middle row of ellipses representing the hidden entries) by just putting the variable name in a cell and running it (you can find the number of rows in the table by looking at the top left corner):
+We can now see a compressed version of the results table (as there are quite a few rows, the default behavior is to skip most of them, with middle row of ellipses representing the hidden entries) by just putting the variable name in a cell and running it (see the number of rows in the table by looking at the top left corner):
 
 ```{code-cell} python
 search_result
@@ -307,7 +308,7 @@ scripts - there you would have to use the `print(...)` function.
 
 +++
 
-Chandra is an **active mission** - meaning that it is still operating and people are still proposing observation targets. This is relevant for two reasons:
+Chandra is an **active mission** – meaning that it is still operating and people are still proposing observation targets. This is relevant for two reasons:
 1. The observation summary table (master catalog) for Chandra doesn't _just_ contain entries for observations that have already been made. It also contains an entry for each **scheduled** (but not yet completed) observation. So, if Chandra is planning on observing Cas A in the future (which is **true** at the time of writing, 16th August 2026), we have likely included those scheduled observations in our search results.
 2. For many Chandra observations, a 'proprietary period' is enforced. This ensures that the person/team that proposed the observation have exclusive access to the data for some time after it has been taken (typically **six months**, though shorter/no proprietary periods are also possible). So, even though the data have been taken, and we could technically download them, we won't have the information necessary to unencrypt the files, and they would be useless to us.
 
@@ -361,7 +362,7 @@ With that knowledge, we can whittle down our table to those observations with AC
 
 If we only wanted to select observations taken with the '**S**' group of ACIS chips, we could use the same approach as in the previous filtering step - `all_avail_obs[all_avail_obs['detector'] == "ACIS-S"]` - but what if we want to spread the widest net possible and include ACIS-**I** based observations as well? In _that_ case we'd need to find all table entries whose _detector_ column value ***contained*** the string 'ACIS', rather than specifically matched 'ACIS-I' or 'ACIS-S'.
 
-That kind of check is a little easier to perform with `pandas` dataframes, but still possible with our `astropy` Table. First, lets examine the detector column (we've "sliced" - the `[:10]` syntax - the column to the first 10 entries just for display purposes, it hasn't actually effected the contents of the table):
+That kind of check is a little easier to perform with `pandas` dataframes, but still possible with our `astropy` Table. First, let's examine the detector column (we've "sliced" - the `[:10]` syntax - the column to the first 10 entries just for display purposes, it hasn't actually effected the contents of the table):
 
 ```{code-cell} python
 all_avail_obs["detector"][:10]
@@ -375,7 +376,7 @@ The 'masked' part of the class name means that it is a special type of `astropy`
 
 The concept of missing entries is irrelevant to our particular case because the instrument configuration of each observation is a mandatory requirement for an entry in the Chandra master catalog - however, the `numpy` function we want to use will not accept masked arrays (or columns).
 
-So, we will trigger the `.filled()` function to produce a normal column, with the 'fill value' in place of any missing information - that can then be passed to the `numpy` function. Incidentally, if you're wondering why an `astropy` column object works so well with `numpy` functions, its because the column object is built on top of the `numpy` array class.
+So, we will trigger the `.filled()` function to produce a normal column, with the 'fill value' in place of any missing information - that can then be passed to the `numpy` function. Incidentally, if you're wondering why an `astropy` column object works so well with `numpy` functions, it's because the column object is built on top of the `numpy` array class.
 
 We also take the opportunity to make sure the resulting column has the 'str' datatype, otherwise we might get an error later on. Once again, for this example, we slice the column so only 10 entries are displayed:
 
@@ -472,9 +473,9 @@ selected_obs = search_result[(search_result['status'] == "archived")
 
 +++
 
-Our ultimate goal is to see how the supernova remnant changes with time, so we want to select images that span a reasonable time. Note that these times are given in [Modified Julian Dates (MJDs)](https://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html), which are essentially dates that start from November 17, 1858. For our general purposes, units of MJD are equivalent to days, so these data span from MJD = 51410 to 61217, roughly, which is ~27 years. Cas A is a popular and frequently observed source so this spans the entire lifetime of the Chandra mission (from 1999 to 2026).
+Our ultimate goal is to see how the supernova remnant changes with time, so we want to select images that span a reasonable time. Note that these times are given in [Modified Julian Dates (MJDs)](https://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html), which are essentially dates that start from November 17, 1858. For our general purposes, units of MJD are equivalent to days, so these data span from MJD = 51410 to 61217, roughly, which is ~27 years. Cas A is a popular and frequently observed source, so this spans the entire lifetime of the Chandra mission (from 1999 to 2026).
 
-So that we can get an idea of how our observations are distributed through the years of Chandra's operation, we will construct a histogram that bins the observations dates into year-long chunks.
+So that we can get an idea of how our observations are distributed through the years of Chandra's operation, we will construct a histogram that bins the observation dates into year-long chunks.
 
 +++
 
@@ -526,6 +527,12 @@ Finally, we are ready to visualize our distribution!
 Though really we're showing **two** distributions, as we want to see the contrast between the distribution of observations at the beginning of our filtering process (after having excluded all proprietary and future observations), and the final set of observations we've selected:
 
 ```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+
 plt.figure(figsize=(6, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=False)
@@ -579,7 +586,7 @@ As an ***extension to this notebook***, you could add the distributions of the o
 
 +++
 
-### Reformatting the ObsID column so its easier to work with
+### Reformatting the ObsID column to be easier to work with
 
 +++
 
@@ -587,7 +594,7 @@ Finally, before we move on to downloading the observation data, we make a small 
 
 So an ObsID of `104` becomes `00104`, for instance.
 
-Chandra ObsIDs are often presented in both formats  (with and without the prepended zeros), but it is often quite convenient to _know_ that the ObsID is going to be exactly five characters.
+Chandra ObsIDs are often presented in both formats (with and without the prepended zeros), but it is often quite convenient to _know_ that the ObsID is going to be exactly five characters.
 
 Python has a built-in function `zfill(...)` that will perform this action on a single string, but again, rather than looping through each column entry individually, we would much rather use a vectorized solution that can be applied to every column entry at once. The `numpy` module provides such a solution in the `char` submodule (which we used earlier when matching the ACIS substring to the detector column entries):
 
@@ -636,14 +643,14 @@ That is easily achieved using Astroquery, with the `download_data` method of `He
 the datalinks we found in the previous step.
 
 We demonstrate this approach using the first two observations represented in the datalinks table, though in the following sections we will
-demonstrate a more complicated, but targeted, approach that will let us download only the image files. Before we download though, we're going to set up a directory to store the downloaded data in:
+demonstrate a more complicated, but targeted, approach that will let us download only the image files. Before we download, though, we're going to set up a directory to store the downloaded data in:
 
 ```{code-cell} python
 full_obs_download_dir = os.path.join(ROOT_DATA_DIR, "full_obs_data_dirs")
 os.makedirs(full_obs_download_dir, exist_ok=True)
 ```
 
-Now we use _another_ feature of the HEASARC submodule of `astroquery`, the `.download_data(...)` function. This takes the datalinks table we just created as an input (_though here we are slicing that table so only the first two rows are given the the function_). It also takes a `host=` input, which just tells it where to download the data from (i.e. which column of the datalinks table to use) - here we telling it to download from AWS. Finally, we use the `location=` argument to ensure that the downloaded Chandra data directories are stored in the output directory we just set up:
+Now we use _another_ feature of the HEASARC submodule of `astroquery`, the `.download_data(...)` function. This takes the datalinks table we just created as an input (_though here we slice the table so only the first two rows are given to the function_). It also takes a `host=` input, which just tells it where to download the data from (i.e. which column of the datalinks table to use) - here we telling it to download from AWS. Finally, we use the `location=` argument to ensure that the downloaded Chandra data directories are stored in the output directory we just set up:
 
 ```{code-cell} python
 Heasarc.download_data(obs_data_links[:2], host="aws", location=full_obs_download_dir)
@@ -745,7 +752,7 @@ We do this using a list comprehension, which is a very useful way of containing 
 
 Instead, because we defined our file pattern as a single element list (to make it easy to add additional patterns to match), we want to iterate across both the observation datalinks **and** for each datalink iterate across the file patterns. So the final length of the list of the `all_file_patt` output will be the number of observations we selected multiplied by the number of file pattern entries we added to `match_file_patterns`.
 
-We combine each datalink with each file pattern using the `os.path.join(...)` function, which is intended to help construct file paths by ensuring you don't have to manually add "/" characters, but works equally well for this):
+We combine each datalink with each file pattern using the `os.path.join(...)` function, which is intended to help construct file paths by ensuring you don't have to manually add "/" characters, but works equally well for this:
 
 ```{code-cell} python
 all_file_patt = [
@@ -784,7 +791,7 @@ os.makedirs(only_ims_download_dir, exist_ok=True)
 
 Now we use the `.get(...)` function of the S3Fs module, passing the pattern-matched URIs we retrieved in the last step, as well as the path to the download directory we just created.
 
-It's worth noting that the S3FS module won't download different files to different local directories - it'll write the whole lot of Chandra images into that one download directory. As it is **very important** to keep data files organized while doing research, we'll will, in the next step, re-organize those downloaded images so they live in their own ObsID directories.
+It's worth noting that the S3FS module won't download different files to different local directories - it'll write the whole lot of Chandra images into that one download directory. As it is **very important** to keep data files organized while doing research, we will, in the next step, re-organize those downloaded images so they live in their own ObsID directories.
 
 We prepare for that by constructing a `downloaded_files` variable, which is a list of the files contained in the download directory - we use `scandir` to fetch the names and properties of every file and folder stored in the download directory - iterating through the results of the `scandir` call in a list comprehension, we keep only those entries that are marked as being a _file_, as opposed to a _folder_:
 
@@ -803,7 +810,7 @@ Finally, we'll reorganize the files we just downloaded (as we already said we wo
 
 We iterate through the rows of our `selected_obs` table, extracting the ObsID into a variable name for convenience - that will be used to figure out which of the file names stored in the `download_files` list are from that observation.
 
-We use the `np.char.find(...)` function (that we used in the instrument filtering step in a previous section) to check each entry in `downloaded_files` to see if the it contains the current ObsID - recall that it returns an array of integer values the same length as the input array (or list in this case) - a value of _-1_ means that the file name **doesn't** contain the current ObsID.
+We use the `np.char.find(...)` function (that we used in the instrument filtering step in a previous section) to check each entry in `downloaded_files` to see if it contains the current ObsID - recall that it returns an array of integer values the same length as the input array (or list in this case) - a value of _-1_ means that the file name **doesn't** contain the current ObsID.
 
 We'll take this opportunity to demonstrate another useful `numpy` function - `argwhere`. This basically takes a True/False input array (from `np.char.find(downloaded_files, cur_obs_id) != -1` in this case) and gives us the integer indexes where that array has a value of True. So:
 
@@ -820,7 +827,7 @@ array([[0],
        [3]])
 ```
 
-That return is in the form of a 2-by-1 array, as `argwhere` treats every input array as though it were multi-dimensional - even 'flat' 1D arrays like our four element True/False example array. We squash the return from `argwhere` back into a 1D array using the `.flatten()` function.
+That return is in the form of a 2-by-1 array, as `argwhere` treats every input array as though it were multidimensional - even 'flat' 1D arrays like our four-element True/False example array. We squash the return from `argwhere` back into a 1D array using the `.flatten()` function.
 
 
 From there, we iterate (in another `for`-loop nested within the first) through the matching indexes (if the `match_file_patterns` list contains only one entry, there should be only one index per ObsID) and read out the relevant file name to the `cur_downloaded_file` variable, for convenience.
@@ -867,7 +874,7 @@ selected_obs["img_file_name"] = specific_img_file_names
 
 The selected observations table contains useful information that we will want to use in later notebooks. So let's store it!
 
-`Table` instances have a `.write(...)` function, which is exactly what it sounds like - we tell it _where_ to write the output file, and what format we want it to be written in (comma separated values, in this case):
+`Table` instances have a `.write(...)` function, which is exactly what it sounds like - we tell it _where_ to write the output file, and what format we want it to be written in (comma-separated values, in this case):
 
 ```{code-cell} python
 selected_obs.write(
