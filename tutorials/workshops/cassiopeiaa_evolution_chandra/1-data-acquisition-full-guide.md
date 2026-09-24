@@ -170,8 +170,6 @@ Luckily, as we've already mentioned, Cas A is a very famous and recognizable obj
 We can use a **name resolver** service ([Sesame](https://cds.unistra.fr/cgi-bin/Sesame), in this case) to take our target's name and run queries through all of the above databases to retrieve its position. The `astropy` module (which is essentially the core astrophysics library for Python) provides a simple interface where we can just pass the `SRC_NAME` variable we defined earlier and get a coordinate back:
 
 ```{code-cell} python
-:tags: [hide-input]
-
 # Find the coordinates of the source
 SRC_POSITION = SkyCoord.from_name(SRC_NAME)
 
@@ -809,11 +807,11 @@ We use the `np.char.find(...)` function (that we used in the instrument filterin
 
 We'll take this opportunity to demonstrate another useful `numpy` function - `argwhere`. This basically takes a True/False input array (from `np.char.find(downloaded_files, cur_obs_id) != -1` in this case) and gives us the integer indexes where that array has a value of True. So:
 
-````
+
 ```python
 np.argwhere(np.array([True, False, False, True]))
 ```
-````
+
 
 would return:
 
