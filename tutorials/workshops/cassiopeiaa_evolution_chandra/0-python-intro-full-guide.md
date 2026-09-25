@@ -434,10 +434,17 @@ print("\nCenter pixel region:")
 print(img_data[1:3, 1:3])
 ```
 
- ---
+## **You're ready!**
+
+You've now seen — and run — every major Python pattern used in the Cas A science notebooks.
+
+Open the first worksheet to begin!
+
+***
+
 ## **Advanced materials**
 
-All materials below are hidden, though you can see them in the table of contents (the icon on the far left side bar with three dot-dashes).  They are provided as a reference.
+These more advanced materials are provided as a reference.
 
 ## 6+. NumPy Arrays: The Core Data Structure
 
@@ -1248,12 +1255,6 @@ print(time_obj.decimalyear)
 time_since_first = Quantity((time_obj - time_obj[0]).to_value("day"), "day")
 print(time_since_first.to("year"))
 ```
-
-## **You're ready!**
-
-You've now seen — and run — every major Python pattern used in the Cas A science notebooks.
-
-Open the first worksheet to begin!
 
 ## About this notebook
 
