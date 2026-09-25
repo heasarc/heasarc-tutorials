@@ -39,10 +39,6 @@ title: "Full Guide 0 – Python for this workshop"
 
 # Full Guide 0 – Python for this workshop
 
-```{eval-rst}
-:tocdepth: 1
-```
-
 ## Learning Goals
 
 By the end of this tutorial, you will be able to:
@@ -255,6 +251,7 @@ The `f` before the opening quote marks this as an **f-string** (formatted string
 +++
 
 ## 5. For Loops Over Real Data
+:class: subsection-divider
 
 The science notebooks use `for` loops in several patterns that go beyond the basic `for i in range(10)`. Here are the ones you'll encounter.
 
@@ -274,7 +271,7 @@ for i, obs_id in enumerate(obs_ids):
 ```
 
 ```{code-cell} python
-# Pattern 3: Loop over table rows — each 'row' is like a mini-dictionary
+# Pattern 3: Loop over table rows — each 'row' is similar to a dictionary
 obs_table = Table(
     {
         "obsid": ["00114", "01952", "04634", "09117"],
