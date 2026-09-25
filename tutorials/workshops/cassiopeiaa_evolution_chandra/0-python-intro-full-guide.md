@@ -251,7 +251,7 @@ The `f` before the opening quote marks this as an **f-string** (formatted string
 +++
 
 ## 5. For Loops Over Real Data
-:class: subsection-divider
+{.subsection-divider}
 
 The science notebooks use `for` loops in several patterns that go beyond the basic `for i in range(10)`. Here are the ones you'll encounter.
 
@@ -304,7 +304,7 @@ source_name = "Cas A"
 num_obs = 26
 exposure_ks = 49.4
 
-# Old way — hard to read, easy to get wrong:
+# Old way — difficult to read, easy to get wrong:
 print("Source: " + source_name + ", observations: " + str(num_obs))
 
 # Modern f-string — the expression inside {} is evaluated inline:
