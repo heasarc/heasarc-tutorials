@@ -17,7 +17,7 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-09-24'
+date: '2026-09-25'
 execution:
   cal-files:
     xmm-ccf: false
@@ -84,21 +84,21 @@ Work through the sections in order. Each one builds on the last, and there are f
 
 This notebook describes in detail each of the aspects of Python and its most important libraries that will be used in our example notebooks.  Here's a quick reference, which really only make sense if you read the appropriate section below.  We summarize them here as a quick reference to remind you.
 
-| Topic | Key syntax |
-|---|---|
-| Imports | `import numpy as np` or `from astropy.io import fits` |
-| f-strings | `f"Value is {variable:.2f}"` |
-| File paths | `os.path.join(dir, subdir, file)` |
-| For loops | `for row in table:` or `for i, val in enumerate(list):` |
-| NumPy arrays | `arr[arr > threshold]` or `arr[:, 0]`, `np.argmax(arr)` |
-| Dictionaries | `d = {}` and `d['key'] = value` and `for k, v in d.items()` |
-| `with` statement | `with fits.open(path) as hdul: data = hdul[0].data` |
-| Objects | `object.attribute` or `object.method(args)` |
-| List comprehensions | `[expr for item in iterable if condition]` |
-| Table filtering | `table[(table['col'] == val) & (table['col2'] > 0)]` |
-| imshow | `ax.imshow(array, origin='lower', cmap='gray', norm=norm)` |
-| curve_fit | `popt, pcov = curve_fit(model_func, x, y)` |
-| Astropy units | `Quantity(3.4, 'kpc')` and `.to('km/s')` |
+| Topic               | Key syntax                                                  |
+|---------------------|-------------------------------------------------------------|
+| Imports             | `import numpy as np` or `from astropy.io import fits`       |
+| f-strings           | `f"Value is {variable:.2f}"`                                |
+| File paths          | `os.path.join(dir, subdir, file)`                           |
+| For loops           | `for row in table:` or `for i, val in enumerate(list):`     |
+| NumPy arrays        | `arr[arr > threshold]` or `arr[:, 0]`, `np.argmax(arr)`     |
+| Dictionaries        | `d = {}` and `d['key'] = value` and `for k, v in d.items()` |
+| `with` statement    | `with fits.open(path) as hdul: data = hdul[0].data`         |
+| Objects             | `object.attribute` or `object.method(args)`                 |
+| List comprehensions | `[expr for item in iterable if condition]`                  |
+| Table filtering     | `table[(table['col'] == val) & (table['col2'] > 0)]`        |
+| imshow              | `ax.imshow(array, origin='lower', cmap='gray', norm=norm)`  |
+| curve_fit           | `popt, pcov = curve_fit(model_func, x, y)`                  |
+| Astropy units       | `Quantity(3.4, 'kpc')` and `.to('km/s')`                    |
 
 ### Inputs
 
@@ -112,7 +112,7 @@ This notebook describes in detail each of the aspects of Python and its most imp
 
 ### Runtime
 
-_[Author to complete: report actual runtime and machine details, e.g. "As of {Date}, this notebook takes ~{N} seconds to run to completion on Fornax using the '{name: size}' server with N GB RAM / N cores."]_
+As of 25th September 2026, this notebook takes ~10 seconds to run to completion on Fornax using the 'small' server with 8GB RAM/ 2 cores.
 
 +++
 
@@ -754,7 +754,8 @@ print(f"Data type:   {img_array.dtype}")
 print(f"Object:    {img_header['OBJECT']}")
 print(f"Telescope: {img_header['TELESCOP']}")
 
-# You can look at the first N header cards like a slice:
+# You can look at the first N header cards like a slice.
+#  The pprint module can make supporting object types print in a 'prettier' way
 from pprint import pprint
 
 pprint(list(img_header.items())[:8])  # first 8 header key-value pairs
@@ -1248,19 +1249,11 @@ time_since_first = Quantity((time_obj - time_obj[0]).to_value("day"), "day")
 print(time_since_first.to("year"))
 ```
 
-```{code-cell} python
-
-```
-
 # You're Ready
 
 You've now seen — and run — every major Python pattern used in the Cas A science notebooks.
 
-Open `1-Worksheet-GetStarted.ipynb` to begin.
-
-```{code-cell} python
-
-```
+Open the first worksheet to begin!
 
 ## About this notebook
 
@@ -1272,7 +1265,7 @@ Author: Antara Basu-Zych, HEASARC Archive Scientist.
 
 Author: Mike Corcoran, Associate Research Professor.
 
-Updated On: 2026-09-24
+Updated On: 2026-09-25
 
 +++
 
@@ -1280,12 +1273,10 @@ Updated On: 2026-09-24
 
 **HEASARC Help Desk**: [https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc)
 
-_[Author to add any other resources, including mission-specific helpdesks.]_
 
 ### Acknowledgements
 
-_[Author to complete.]_
+We thank the Villanova One Sky Center for Astrophysics, particularly Professor Kelly Hambleton and
+Professor Ekta Patel, for their contributions and feedback.
 
 ### References
-
-_[Author to complete.]_
