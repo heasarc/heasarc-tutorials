@@ -110,10 +110,3 @@
     padding: 5px 0; /* Add vertical padding here if needed */
     display: block;
 }
-
-/* Allow a divider in a notebook ToC, apply to a ##section */
-h2.subsection-divider {
-    color: var(--pst-color-text-muted, #6c757d);
-    margin-top: 2.5em;
-    font-weight: 500;
-}

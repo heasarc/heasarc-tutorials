@@ -251,7 +251,6 @@ The `f` before the opening quote marks this as an **f-string** (formatted string
 +++
 
 ## 5. For Loops Over Real Data
-{.subsection-divider}
 
 The science notebooks use `for` loops in several patterns that go beyond the basic `for i in range(10)`. Here are the ones you'll encounter.
 
@@ -436,7 +435,7 @@ print(img_data[1:3, 1:3])
 ```
 
  ---
-# Advanced materials
+## **Advanced materials**
 
 All materials below are hidden, though you can see them in the table of contents (the icon on the far left side bar with three dot-dashes).  They are provided as a reference.
 
@@ -1250,7 +1249,7 @@ time_since_first = Quantity((time_obj - time_obj[0]).to_value("day"), "day")
 print(time_since_first.to("year"))
 ```
 
-# You're Ready
+## **You're ready!**
 
 You've now seen — and run — every major Python pattern used in the Cas A science notebooks.
 
