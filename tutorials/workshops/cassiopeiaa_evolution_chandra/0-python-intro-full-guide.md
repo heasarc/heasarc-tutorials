@@ -34,10 +34,10 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: "Full Guide 0 – Python for These Notebooks"
+title: "Full Guide 0 – Python for this workshop"
 ---
 
-# Full Guide 0 – Python for These Notebooks
+# Full Guide 0 – Python for this workshop
 
 ## Learning Goals
 
@@ -60,7 +60,7 @@ Work through the sections in order. Each one builds on the last, and there are f
 2. [Imports and Library Namespaces](#2-imports-and-library-namespaces)
 3. [Variables, Types, and the ALL_CAPS Convention](#3-variables-types-and-the-all_caps-convention)
 4. [f-strings: The Modern Way to Build Messages](#4-f-strings-the-modern-way-to-build-messages)
-5. [For Loops Over Real Data](#10-objects-attributes-and-methods)
+5. [For Loops Over Real Data](#5-for-loops-over-real-data)
 6. [NumPy Arrays: The Core Data Structure](#6-numpy-arrays-the-core-data-structure)
 
 +++
@@ -70,14 +70,14 @@ Work through the sections in order. Each one builds on the last, and there are f
 +++
 
 7. [Dictionaries](#7-dictionaries)
-8. [The `with` Statement and File Handles](#8-the-with-statement-and-file-handles)
-9. [File Paths with `os.path`](#5-for-loops-over-real-data)
-10. [Objects, Attributes, and Methods](#9-file-paths-with-ospath)
+8. [File Paths with `os.path`](#8-file-paths-with-ospath)
+9. [The `with` Statement and File Handles](#9-the-with-statement-and-file-handles)
+10. [Objects, Attributes, and Methods](#10-objects-attributes-and-methods)
 11. [List Comprehensions](#11-list-comprehensions)
 12. [Boolean Logic and Filtering Tables](#12-boolean-logic-and-filtering-tables)
 13. [Matplotlib: Plotting Images and Data](#13-matplotlib-plotting-images-and-data)
 14. [Functions as Arguments: `curve_fit`](#14-fitting-models-to-data-curve_fit)
-15.  [Astropy Units and Physical Quantities](#15-astropy-units-and-physical-quantities)
+15. [Astropy Units and Physical Quantities](#15-astropy-units-and-physical-quantities)
 
 
 ### Quick Reference
@@ -578,71 +578,7 @@ for obs_id, info in all_loaded_imgs.items():
     print(f"  ObsID {obs_id}: exposure = {info['exp']} s")
 ```
 
-## 8. The `with` Statement and File Handles
-
-In the science notebooks, every FITS file is opened using a `with` block:
-
-```python
-with fits.open(demo_img_path) as imgo:
-    demo_img_arr = imgo['PRIMARY'].data
-    demo_img_hdr = imgo['PRIMARY'].header
-```
-
-You saw a simpler version of this in the original intro notebook with `open('file.txt')`. The `with` statement is a **context manager** — it guarantees that no matter what happens (even if your code crashes), the file will be properly closed when the indented block exits.
-
-The critical rule: **any data you need from the file must be extracted inside the `with` block and stored in a variable.** Once you leave the block, the file is closed and the handle `imgo` is no longer usable.
-
-```{code-cell} python
-# Demonstration with a plain text file — same pattern as FITS
-import os
-
-# First, write a small file to read back
-with open("Data/demo_output/demo_data.txt", "w") as outfile:
-    outfile.write("ObsID  Exposure  Detector\n")
-    outfile.write("00114  49400     ACIS-S\n")
-    outfile.write("01952  33000     ACIS-S\n")
-
-# Now read it back — the file is automatically closed when the 'with' block ends
-with open("Data/demo_output/demo_data.txt", "r") as infile:
-    file_contents = infile.read()  # <-- stored in a variable INSIDE the block
-
-# We can use file_contents here because we saved it to a variable
-print(file_contents)
-```
-
-```{code-cell} python
-# The pattern extends naturally to FITS files.
-# Here is the actual pattern you will see in the notebooks:
-
-# Download a real FITS image of the Horsehead Nebula (cached after first download)
-horsehead_path = download_file(
-    "http://data.astropy.org/tutorials/FITS-images/HorseHead.fits", cache=True
-)
-
-with fits.open(horsehead_path) as hdul:
-    print(hdul.info())  # shows the structure of the FITS file
-    img_array = hdul[0].data  # 2D numpy array — extracted inside the block
-    img_header = hdul[0].header  # header — also extracted inside the block
-
-# Outside the 'with' block: the file is closed, but our variables are still available
-print(f"\nImage shape: {img_array.shape}")
-print(f"Data type:   {img_array.dtype}")
-```
-
-```{code-cell} python
-# Headers behave like dictionaries — access values by keyword name
-print(f"Object:    {img_header['OBJECT']}")
-print(f"Telescope: {img_header['TELESCOP']}")
-
-# You can look at the first N header cards like a slice:
-from pprint import pprint
-
-pprint(list(img_header.items())[:8])  # first 8 header key-value pairs
-```
-
- ---
-
-## 9. File Paths with `os.path`
+## 8. File Paths with `os.path`
 
 The science notebooks organize downloaded data into a directory structure, and they build file paths in code rather than typing them out by hand. This is done using Python's built-in `os` module. The key reason: paths look different on Windows (`C:\Users\...`) vs. Mac/Linux (`/home/...`). Using `os.path.join()` makes your code work on any system.
 
@@ -758,6 +694,70 @@ print()
 
 # Accessing a specific cell:
 print(obs_table["exposure"][2])
+```
+
+ ---
+
+## 9. The `with` Statement and File Handles
+
+In the science notebooks, every FITS file is opened using a `with` block:
+
+```python
+with fits.open(demo_img_path) as imgo:
+    demo_img_arr = imgo['PRIMARY'].data
+    demo_img_hdr = imgo['PRIMARY'].header
+```
+
+You saw a simpler version of this in the original intro notebook with `open('file.txt')`. The `with` statement is a **context manager** — it guarantees that no matter what happens (even if your code crashes), the file will be properly closed when the indented block exits.
+
+The critical rule: **any data you need from the file must be extracted inside the `with` block and stored in a variable.** Once you leave the block, the file is closed and the handle `imgo` is no longer usable.
+
+```{code-cell} python
+# Demonstration with a plain text file — same pattern as FITS
+import os
+
+# First, write a small file to read back
+with open("Data/demo_output/demo_data.txt", "w") as outfile:
+    outfile.write("ObsID  Exposure  Detector\n")
+    outfile.write("00114  49400     ACIS-S\n")
+    outfile.write("01952  33000     ACIS-S\n")
+
+# Now read it back — the file is automatically closed when the 'with' block ends
+with open("Data/demo_output/demo_data.txt", "r") as infile:
+    file_contents = infile.read()  # <-- stored in a variable INSIDE the block
+
+# We can use file_contents here because we saved it to a variable
+print(file_contents)
+```
+
+```{code-cell} python
+# The pattern extends naturally to FITS files.
+# Here is the actual pattern you will see in the notebooks:
+
+# Download a real FITS image of the Horsehead Nebula (cached after first download)
+horsehead_path = download_file(
+    "http://data.astropy.org/tutorials/FITS-images/HorseHead.fits", cache=True
+)
+
+with fits.open(horsehead_path) as hdul:
+    print(hdul.info())  # shows the structure of the FITS file
+    img_array = hdul[0].data  # 2D numpy array — extracted inside the block
+    img_header = hdul[0].header  # header — also extracted inside the block
+
+# Outside the 'with' block: the file is closed, but our variables are still available
+print(f"\nImage shape: {img_array.shape}")
+print(f"Data type:   {img_array.dtype}")
+```
+
+```{code-cell} python
+# Headers behave like dictionaries — access values by keyword name
+print(f"Object:    {img_header['OBJECT']}")
+print(f"Telescope: {img_header['TELESCOP']}")
+
+# You can look at the first N header cards like a slice:
+from pprint import pprint
+
+pprint(list(img_header.items())[:8])  # first 8 header key-value pairs
 ```
 
  ---
