@@ -5,5 +5,7 @@
 maxdepth: 2
 caption: Cassiopeia A Chandra Workshop
 ---
+0-python-intro-full-guide
+
 1-data-acquisition-full-guide
 ```
