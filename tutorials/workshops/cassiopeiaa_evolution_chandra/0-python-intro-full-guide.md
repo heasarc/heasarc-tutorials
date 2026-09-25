@@ -53,49 +53,34 @@ By the end of this tutorial, you will be able to:
 
 This notebook is your practical introduction to Python — not Python in the abstract, but specifically the Python you will encounter in the Cassiopeia A data analysis notebooks. Every topic here is something you will use. Every code example is the kind of thing you will need to read, modify, or write yourself for our research project.
 
-Work through the sections in order. Each one builds on the last.  (There are further advanced materials below that are provided for reference.)
+Work through the sections in order. Each one builds on the last, and there are further advanced materials below that are provided for reference.
 
-### Inputs
-
-- No external data files are required to run this notebook.
-- One demonstration FITS image (the Horsehead Nebula) is downloaded automatically, on demand, via `astropy.utils.data.download_file` in Section 8; all other example data (tables, arrays) are generated in-place within the notebook's own code cells.
-
-### Outputs
-
-- A small demonstration text file (`Data/demo_output/demo_data.txt`), used to illustrate the `with` statement.
-- One annotated PNG figure (`Data/demo_output/horsehead_annotated.png`), used to illustrate Matplotlib image annotation and figure saving.
-
-### Runtime
-
-_[Author to complete: report actual runtime and machine details, e.g. "As of {Date}, this notebook takes ~{N} seconds to run to completion on Fornax using the '{name: size}' server with N GB RAM / N cores."]_
-
-## Contents
-1. [Running Code in Jupyter](#1.-Running-Code-in-Jupyter)
-2. [Imports and Library Namespaces](#2.-Imports-and-Library-Namespaces)
-3. [Variables, Types, and the ALL_CAPS Convention](#3.-Variables,-Types,-and-the-ALL_CAPS-Convention)
-4. [f-strings: The Modern Way to Build Messages](#4.-f-strings:-The-Modern-Way-to-Build-Messages)
-5. [For Loops Over Real Data](#10.-For-Loops-Over-Real-Data)
-6. [NumPy Arrays: The Core Data Structure](#6.-NumPy-Arrays:-The-Core-Data-Structure)
+### Contents
+1. [Running Code in Jupyter](#1-running-code-in-jupyter)
+2. [Imports and Library Namespaces](#2-imports-and-library-namespaces)
+3. [Variables, Types, and the ALL_CAPS Convention](#3-variables-types-and-the-all_caps-convention)
+4. [f-strings: The Modern Way to Build Messages](#4-f-strings-the-modern-way-to-build-messages)
+5. [For Loops Over Real Data](#10-objects-attributes-and-methods)
+6. [NumPy Arrays: The Core Data Structure](#6-numpy-arrays-the-core-data-structure)
 
 +++
 
-### Advanced materials:
+### Contents: Advanced materials:
 
 +++
 
-7. [Dictionaries](#7.-Dictionaries)
-8. [The `with` Statement and File Handles](#8.-The-with-Statement-and-File-Handles)
-9. [File Paths with `os.path`](#5.-File-Paths-with-os.path)
-10. [Objects, Attributes, and Methods](#9.-Objects,-Attributes,-and-Methods)
-11. [List Comprehensions](#11.-List-Comprehensions)
-12. [Boolean Logic and Filtering Tables](#12.-Boolean-Logic-and-Filtering-Tables)
-13. [Matplotlib: Plotting Images and Data](#13.-Matplotlib:-Plotting-Images-and-Data)
-14. [Functions as Arguments: `curve_fit`](#14.-Functions-as-Arguments:-curve_fit)
-15.  [Astropy Units and Physical Quantities](#15.-Astropy-Units-and-Physical-Quantities)
+7. [Dictionaries](#7-dictionaries)
+8. [The `with` Statement and File Handles](#8-the-with-statement-and-file-handles)
+9. [File Paths with `os.path`](#5-for-loops-over-real-data)
+10. [Objects, Attributes, and Methods](#9-file-paths-with-ospath)
+11. [List Comprehensions](#11-list-comprehensions)
+12. [Boolean Logic and Filtering Tables](#12-boolean-logic-and-filtering-tables)
+13. [Matplotlib: Plotting Images and Data](#13-matplotlib-plotting-images-and-data)
+14. [Functions as Arguments: `curve_fit`](#14-fitting-models-to-data-curve_fit)
+15.  [Astropy Units and Physical Quantities](#15-astropy-units-and-physical-quantities)
 
-+++ {"jp-MarkdownHeadingCollapsed": true}
 
-## Quick Reference
+### Quick Reference
 
 This notebook describes in detail each of the aspects of Python and its most important libraries that will be used in our example notebooks.  Here's a quick reference, which really only make sense if you read the appropriate section below.  We summarize them here as a quick reference to remind you.
 
@@ -114,6 +99,20 @@ This notebook describes in detail each of the aspects of Python and its most imp
 | imshow | `ax.imshow(array, origin='lower', cmap='gray', norm=norm)` |
 | curve_fit | `popt, pcov = curve_fit(model_func, x, y)` |
 | Astropy units | `Quantity(3.4, 'kpc')` and `.to('km/s')` |
+
+### Inputs
+
+- No external data files are required to run this notebook.
+- One demonstration FITS image (the Horsehead Nebula) is downloaded automatically, on demand, via `astropy.utils.data.download_file` in Section 8; all other example data (tables, arrays) are generated in-place within the notebook's own code cells.
+
+### Outputs
+
+- A small demonstration text file (`Data/demo_output/demo_data.txt`), used to illustrate the `with` statement.
+- One annotated PNG figure (`Data/demo_output/horsehead_annotated.png`), used to illustrate Matplotlib image annotation and figure saving.
+
+### Runtime
+
+_[Author to complete: report actual runtime and machine details, e.g. "As of {Date}, this notebook takes ~{N} seconds to run to completion on Fornax using the '{name: size}' server with N GB RAM / N cores."]_
 
 +++
 
@@ -440,7 +439,7 @@ print(img_data[1:3, 1:3])
 
 All materials below are hidden, though you can see them in the table of contents (the icon on the far left side bar with three dot-dashes).  They are provided as a reference.
 
-+++
+## 6+. NumPy Arrays: The Core Data Structure
 
 ### 6d+. Advanced:  Array attributes and common functions
 
@@ -454,7 +453,7 @@ print("Mean:           ", img_data.mean())
 print("95th percentile:", np.percentile(img_data, 95))
 ```
 
-###### 6e+. Advanced:  Boolean masking: filtering data without a for loop
+### 6e+. Advanced:  Boolean masking: filtering data without a for loop
 
 This is one of the most important NumPy skills. Instead of looping through an array and checking each element, you compare the whole array to a condition, which produces a **boolean array** (True/False for each element). You then use that boolean array to index into the original array, keeping only the matching elements.
 
