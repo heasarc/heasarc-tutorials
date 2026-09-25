@@ -39,6 +39,10 @@ title: "Full Guide 0 – Python for this workshop"
 
 # Full Guide 0 – Python for this workshop
 
+```{eval-rst}
+:tocdepth: 1
+```
+
 ## Learning Goals
 
 By the end of this tutorial, you will be able to:
