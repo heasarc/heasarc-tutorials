@@ -51,7 +51,7 @@ nb_scroll_outputs = True
 #  or a centralized file - will be good for defining a value we might want to change everywhere easily
 # The colon_fence extension lets us use ::: in place of ``` to delimit directives (I am more used to ::: from using
 #  MySTMD)
-myst_enable_extensions = ['amsmath', 'dollarmath', 'smartquotes', 'substitution', 'colon_fence']
+myst_enable_extensions = ['amsmath', 'dollarmath', 'smartquotes', 'substitution', 'colon_fence', 'attrs_block']
 
 myst_heading_anchors = 4
 # ----------------------------------------------------------------------------
