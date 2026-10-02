@@ -692,7 +692,7 @@ print(file_contents)
 
 In the science notebooks, every FITS file is opened using a `with` block:
 
-```{code-cell} python
+```python
 with fits.open(demo_img_path) as imgo:
     demo_img_arr = imgo["PRIMARY"].data
     demo_img_hdr = imgo["PRIMARY"].header
