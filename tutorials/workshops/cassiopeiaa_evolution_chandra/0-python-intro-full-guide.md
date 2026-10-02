@@ -249,7 +249,7 @@ Another thing to note is that there are some built-in math operators, but the `n
 
 Throughout the notebooks you will see lines like:
 
-```{code-cell} python
+```python
 print(
     f"{len(search_result)} observations selected, with {len(search_result.columns)} columns."
 )
