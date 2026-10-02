@@ -34,7 +34,7 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: "Full Guide 0 – Python for this workshop"
+title: "Full Guide 0 \u2013 Python for this workshop"
 ---
 
 # Full Guide 0 – Python for this workshop
@@ -67,8 +67,22 @@ Work through the sections in order. Each one builds on the last, and there are f
 
 ### Contents: Advanced materials:
 
-+++
-
+<style>
+/* Reset to all-white backgrounds */
+.rendered_html table tr:nth-child(even),
+.rendered_html table tr:nth-child(odd) {
+    background: #ffffff !important;
+}
+/* Add light padding and thin row separation */
+.rendered_html table td {
+    padding: 8px !important;
+    border-bottom: 1px solid #eaeaea !important;
+}
+/* Put a soft blue vertical bar on the left edge of each row */
+.rendered_html table td:first-child {
+    border-left: 4px solid #4a90e2 !important;
+}
+</style>
 7. [Dictionaries](#7-dictionaries)
 8. [File Paths with `os.path`](#8-file-paths-with-ospath)
 9. [The `with` Statement and File Handles](#9-the-with-statement-and-file-handles)
@@ -129,9 +143,9 @@ The import statements themselves, and what each library is for, are walked throu
 
 A Jupyter notebook is made of **cells**. Text cells (like this one) contain explanations. Code cells contain Python. Results of running a cell can appear inline, i.e., just below the code you can see the plot it made.  This makes them like runnable lab notebooks.
 
-To run a code cell, click on it and press **Shift+Enter**. The output appears directly below.
+To run a code cell, click on it and press **Shift+Enter**. The output appears directly below.  Note that every time you run a cell, it and only it is sent to the Python kernel.  So if you skip cells or do them in the wrong order, you may get errors or incorrect results if the run cell depends on something in a previous cell.
 
-A number in brackets like `[3]` to the left of a cell tells you it has been run, and in what order. An asterisk `[*]` means it is still running. If you ever need to start fresh, use the menu: **Kernel → Restart & Run All**.
+A number in brackets like `[3]` to the left of a cell tells you it has been run and in what order. (E.g., as the third block of Python run in the Python session.)  An asterisk `[*]` means it is still running. A `[ ]` means it has never been run in this notebook session. If you ever need to start over with a fresh Python session, use the menu: **Kernel → Restart**.  But that will not update the `[3]` for instance, or the current outputs shown from a previous run, which means things can look confusing. To start with nothing shown from a previous run, use **Kernel → Restart and Clear Outputs of All Cells**.
 
 Try running the cell below:
 
@@ -153,16 +167,13 @@ This works in Jupyter and iPython only — in a standalone Python script you wou
 
 ## 2. Imports and Library Namespaces
 
-Python on its own is a general-purpose language. The power for science comes from **libraries** — collections of pre-written code maintained by the community. Before you can use a library, you have to **import** it.
+Python on its own is a general-purpose language. The power for science comes from **libraries** — collections of pre-written code maintained by the community. Before you can use a library, you have to **import** it, which means to find it on your system and enable it to be called.
 
 The import lines at the top of every science notebook look intimidating at first. Let's break them down.  They are large libraries so this import line takes a noticeable amount of time, so give it a minute.
 
 ```{code-cell} python
 import astropy.units as u
 import matplotlib.pyplot as plt
-
-# The two most important libraries for scientific Python.
-# 'as np' and 'as plt' create short aliases — this is universal convention.
 import numpy as np
 
 # You can also import a specific part of a library:
@@ -176,11 +187,11 @@ from scipy.optimize import curve_fit
 print("All imports succeeded.")
 ```
 
-In this context, the dot indicates subpackages within the main package.  The part after the "as" is the alias, which also creates a **namespace** — a prefix that tells Python which library a function belongs to. If you don't, the namespace will be the package imported, e.g., "data" for the astropy data handling package.  Clearly that's a bad idea because different libraries sometimes use the same function name:
+In this context, the dot indicates subpackages within the main package.  The part after the "as" is the alias, which also creates a **namespace** — a prefix that tells Python which library a function belongs to. If you don't, the namespace will be the package imported, e.g., "fits" for the astropy FITS handling package.  Clearly that can be a bad idea when different libraries sometimes use the same function name, such as:
 
-```python
-np.sqrt(16)      # NumPy's square root — works on entire arrays
-math.sqrt(16)    # Python's built-in math — works on single numbers only
+```{code-cell} python
+np.sqrt(16)  # NumPy's square root — works on entire arrays
+math.sqrt(16)  # Python's built-in math — works on single numbers only
 ```
 
 When you see `np.something(...)` in a notebook, you now know it comes from NumPy. When you see `plt.something(...)`, it comes from Matplotlib. You will see this pattern hundreds of times.
@@ -194,7 +205,7 @@ print(np.log10(1000))  # 3.0
 
 ## 3. Variables, Types, and the ALL_CAPS Convention
 
-You already know what a variable is. One thing the science notebooks do that `might look odd: they use ALL_CAPS names for values that should never change during the analysis — things like the source name, or the path to the data directory. This is just a convention (Python doesn't enforce it), but it's a widely used signal meaning "treat this like a constant".
+You already know what a variable is. One thing the science notebooks do that might look odd: they use ALL_CAPS names for values that should never change during the analysis — things like the source name, or the path to the data directory. This is just a convention (Python doesn't enforce it), but it's a widely used signal meaning "treat this like a constant".
 
 ```{code-cell} python
 # ALL_CAPS: a signal to the reader that this value won't change
@@ -232,71 +243,19 @@ print(
 print(10 % 3)  # 1          (modulo — the remainder)
 ```
 
-Another thing to note is that there are options for math functions, but the `numpy` library is more flexible, operates on arrays, and has a lot of useful math functions.
-
-```{raw-cell}
-
-```
+Another thing to note is that there are some built-in math operators, but the `numpy` library is more flexible, operates on arrays, and has a lot of useful math functions.
 
 ## 4. f-strings: The Modern Way to Build Messages
 
 Throughout the notebooks you will see lines like:
 
-```python
-print(f"{len(search_result)} observations selected, with {len(search_result.columns)} columns.")
-```
-
-The `f` before the opening quote marks this as an **f-string** (formatted string). Anything inside `{}` is executed as Python and its result is inserted into the string. This is the standard modern way to build informative output.  Note that again Python will implicitly determine the type based on what it gets and apply default formatting rules for that type.  But the third example shows you how to control the formatting yourself when you need to.  This is discussed more in the next cell.
-
-+++
-
-## 5. For Loops Over Real Data
-
-The science notebooks use `for` loops in several patterns that go beyond the basic `for i in range(10)`. Here are the ones you'll encounter.
-
 ```{code-cell} python
-# Pattern 1: Loop over a list of items directly
-obs_ids = ["00114", "01952", "04634"]
-
-for obs_id in obs_ids:
-    print(f"Processing observation {obs_id}")
-```
-
-```{code-cell} python
-# Pattern 2: enumerate() — gives you both the index AND the value
-# Used when you need to know the position as well as the item
-for i, obs_id in enumerate(obs_ids):
-    print(f"  [{i}] ObsID: {obs_id}")
-```
-
-```{code-cell} python
-# Pattern 3: Loop over table rows — each 'row' is similar to a dictionary
-obs_table = Table(
-    {
-        "obsid": ["00114", "01952", "04634", "09117"],
-        "time": [51413.2, 52010.5, 53186.7, 55008.1],  # MJD
-        "exposure": [49400, 33000, 98000, 46000],  # seconds
-        "detector": ["ACIS-S", "ACIS-S", "ACIS-S", "ACIS-I"],
-    }
-)
-for row in obs_table:
-    print(f"  ObsID {row['obsid']}: {row['exposure']/1000:.0f} ks on {row['detector']}")
-```
-
-```{code-cell} python
-# Pattern 4: Building up a result inside a loop
-# This is how the notebooks accumulate results across many observations
-total_exposure = 0
-processed_ids = []
-
-for row in obs_table:
-    total_exposure += row["exposure"]
-    processed_ids.append(row["obsid"])
-
 print(
-    f"Total exposure across {len(processed_ids)} observations: {total_exposure/1000:.0f} ks"
+    f"{len(search_result)} observations selected, with {len(search_result.columns)} columns."
 )
 ```
+
+The `f` before the opening quote marks this as an **f-string** (formatted string). Anything inside the string enclosed in curly brackets, `{}`, is executed as Python and its result is inserted into the string. This is the standard modern way to build informative output.  Note that again Python will implicitly determine the type based on what it gets and apply default formatting rules for that type.
 
 ```{code-cell} python
 source_name = "Cas A"
@@ -324,43 +283,55 @@ print(f"Scientific:   {pi:.3e}")
 print(f"As integer:   {pi:.0f}")
 ```
 
-A much more complicated type is objects used in "object-oriented" programming.  Many of the packages we use have this, though we are not using them this way.  So this note is just informational.  Such a variable is an "object" that can contain its own internal variables and functions.  To access these internal components is the other major context in which the dot is used.
+## 5. For Loops Over Real Data
+
+The science notebooks use `for` loops in several patterns that go beyond the basic `for i in range(10)`. Here are the ones you'll encounter.
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
-# A simple class definition that takes two inputs, the second of which is optional.
-# When an object of this type is initialized, it computes a value that it stores
-# internally. It also defines a function that can be called based on that object.
-# This can get very complicated, but seeing these examples will let you recognize
-# them in future.
+# Pattern 1: Loop over a list of items directly
+obs_ids = ["00114", "01952", "04634"]
 
-
-#  A class:
-class my_object:
-    #  Its constructor
-    def __init__(self, input1, input2=1):
-        # actions to save the inputs and compute a new variable
-        self.input1 = input1
-        self.input2 = input2
-        self.simple_variable = input1 * input2
-        print(
-            f"The input {self.input1} and {self.input2} multiply into {self.simple_variable}"
-        )
-
-    #  A method of the class
-    def simple_function(self):
-        print(
-            f"The sqrt of the input {self.input1}*{self.input2}={self.simple_variable} is {np.sqrt(self.simple_variable):.4f}"
-        )
-
-
-anObject = my_object(3, 4)
-print(anObject.input2)
-anObject.simple_function()
+for obs_id in obs_ids:
+    print(f"Processing observation {obs_id}")
 ```
+
+```{code-cell} python
+# Pattern 2: enumerate() — gives you both the index AND the value
+# Used when you need to know the position as well as the item
+for i, obs_id in enumerate(obs_ids):
+    print(f"  [{i}] ObsID: {obs_id}")
+```
+
+```{code-cell} python
+# Pattern 3: Loop over astropy Table rows — each 'row' is similar to a dictionary
+obs_table = Table(
+    {
+        "obsid": ["00114", "01952", "04634", "09117"],
+        "time": [51413.2, 52010.5, 53186.7, 55008.1],  # MJD
+        "exposure": [49400, 33000, 98000, 46000],  # seconds
+        "detector": ["ACIS-S", "ACIS-S", "ACIS-S", "ACIS-I"],
+    }
+)
+for row in obs_table:
+    print(f"  ObsID {row['obsid']}: {row['exposure']/1000:.0f} ks on {row['detector']}")
+```
+
+```{code-cell} python
+# Pattern 4: Building up a result inside a loop
+# This is how the notebooks accumulate results across many observations
+total_exposure = 0
+processed_ids = []
+
+for row in obs_table:
+    total_exposure += row["exposure"]
+    processed_ids.append(row["obsid"])
+
+print(
+    f"Total exposure across {len(processed_ids)} observations: {total_exposure/1000:.0f} ks"
+)
+```
+
+A much more complicated type is objects used in "object-oriented" programming.  Many of the packages we use have this, though we are not using them this way.  So this note is just informational.  Such a variable is an "object" that can contain its own internal variables and functions.  To access these internal components is the other major context in which the dot is used.
 
 ## 6. NumPy Arrays: The Core Data Structure
 
@@ -436,9 +407,11 @@ print(img_data[1:3, 1:3])
 
 ## **You're ready!**
 
-You've now seen — and run — every major Python pattern used in the Cas A science notebooks.
+You've now seen — and run — the major Python patterns used in the Cas A science notebooks.
 
 Open the first worksheet to begin!
+
+Below we show some more advanced usages.  Click the downward arrow to the left of "Advanced materials" to expand this section.
 
 ***
 
@@ -673,10 +646,6 @@ obs_table
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Attributes and methods of the Table object:
 print("Column names:", obs_table.colnames)
 print("Number of rows:", len(obs_table))
@@ -687,10 +656,6 @@ obs_table
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Accessing columns — like a dictionary, using the column name as key:
 print(obs_table["obsid"])
 print()
@@ -702,22 +667,6 @@ print()
 # Accessing a specific cell:
 print(obs_table["exposure"][2])
 ```
-
- ---
-
-## 9. The `with` Statement and File Handles
-
-In the science notebooks, every FITS file is opened using a `with` block:
-
-```python
-with fits.open(demo_img_path) as imgo:
-    demo_img_arr = imgo['PRIMARY'].data
-    demo_img_hdr = imgo['PRIMARY'].header
-```
-
-You saw a simpler version of this in the original intro notebook with `open('file.txt')`. The `with` statement is a **context manager** — it guarantees that no matter what happens (even if your code crashes), the file will be properly closed when the indented block exits.
-
-The critical rule: **any data you need from the file must be extracted inside the `with` block and stored in a variable.** Once you leave the block, the file is closed and the handle `imgo` is no longer usable.
 
 ```{code-cell} python
 # Demonstration with a plain text file — same pattern as FITS
@@ -736,6 +685,22 @@ with open("Data/demo_output/demo_data.txt", "r") as infile:
 # We can use file_contents here because we saved it to a variable
 print(file_contents)
 ```
+
+ ---
+
+## 9. The `with` Statement and File Handles
+
+In the science notebooks, every FITS file is opened using a `with` block:
+
+```{code-cell} python
+with fits.open(demo_img_path) as imgo:
+    demo_img_arr = imgo["PRIMARY"].data
+    demo_img_hdr = imgo["PRIMARY"].header
+```
+
+You saw a simpler version of this in the original intro notebook with `open('file.txt')`. The `with` statement is a **context manager** — it guarantees that no matter what happens (even if your code crashes), the file will be properly closed when the indented block exits.
+
+The critical rule: **any data you need from the file must be extracted inside the `with` block and stored in a variable.** Once you leave the block, the file is closed and the handle `imgo` is no longer usable.
 
 ```{code-cell} python
 # The pattern extends naturally to FITS files.
@@ -778,19 +743,54 @@ The two key ideas:
 - An **attribute** is data stored inside an object. You access it with a dot: `array.shape`, `result.data`.
 - A **method** is a function stored inside an object. You call it with a dot and parentheses: `table.sort('time')`, `header.keys()`.
 
-You do **not** need to write your own objects for these notebooks. But you need to be comfortable **using** them.
+You do **not** need to write your own objects for these notebooks. But you need to be comfortable **using** them.  And here's a very simple example to show you the kinds of things they can do.
 
-+++
+```{code-cell} python
+# A simple class definition that takes two inputs, the second of which is optional.
+# When an object of this type is initialized, it computes a value that it stores
+# internally. It also defines a function that can be called based on that object.
+# This can get very complicated, but seeing these examples will let you recognize
+# them in future.
+
+
+#  A class:
+class my_object:
+    #  Its constructor
+    def __init__(self, input1, input2=1):
+        # actions to save the inputs and compute a new variable
+        self.input1 = input1
+        self.input2 = input2
+        self.simple_variable = input1 * input2
+        print(
+            f"Init:  The input {self.input1} and {self.input2} multiply into {self.simple_variable}"
+        )
+
+    #  A method of the class
+    def simple_function(self, another_input=None):
+        if another_input:
+            print(
+                #  Note also you can split a string into lines for readability:
+                f"Divide argument:  {self.simple_variable} divided by "
+                f"{another_input} is {self.simple_variable/another_input:.4f}"
+            )
+        else:
+            print(
+                f"Sqrt function:  The sqrt of the input {self.input1}*{self.input2}="
+                f"{self.simple_variable} is {np.sqrt(self.simple_variable):.4f}"
+            )
+
+
+anObject = my_object(3, 4)
+print(anObject.input2)
+anObject.simple_function()
+anObject.simple_function(7.1)
+```
 
 ## 11. List Comprehensions
 
 A list comprehension is a compact way to write a `for` loop that builds a list. You will see them constantly in the notebooks. They are more readable (once you're used to them) and slightly faster than an equivalent loop.
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # The loop version and the comprehension version do the same thing:
 
 # Long way — a for loop that builds a list
@@ -808,7 +808,7 @@ print(ks_values_comp)
 ```{code-cell} python
 # With an 'if' filter — only include items that pass a condition
 # This is used in the notebooks to list only files (not directories):
-
+os.makedirs("Data/demo_output/foobar", exist_ok=True)
 # All entries in the demo_output directory:
 all_entries = [entry.name for entry in os.scandir("Data/demo_output")]
 
@@ -820,10 +820,6 @@ print("Files only: ", only_files)
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # A real example from notebook 2:
 # Get the maximum count rate from each image stored in all_loaded_imgs
 max_rate_vals = [info["data"].max() for info in all_loaded_imgs.values()]
@@ -836,12 +832,15 @@ print(f"95th percentile upper limit: {upper_limit}")
 
 ## 12. Boolean Logic and Filtering Tables
 
-The first notebook is essentially a sequence of table filtering steps. Each one applies a condition to select a subset of rows. This section shows you the full toolkit.
+The first notebook is essentially a sequence of table filtering steps. Each one applies a condition to select a subset of rows. This section shows you the full toolkit.  What's happening is that the `foo == value` is creating a mask of `foo` where the value matches.  You can then reference that mask to get the values.
 
-The core pattern is always:
-```python
-filtered_table = original_table[original_table['column'] == 'value']
+The core pattern is always `foo[foo == value]`:
+
+```{code-cell} python
+filtered_table = original_table[original_table["column"] == "value"]
 ```
+
+Start with this:
 
 ```{code-cell} python
 # Rebuild the table with more rows for this demonstration
@@ -868,10 +867,6 @@ obs_table
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Filter 1: keep only archived observations
 archived = obs_table[obs_table["status"] == "archived"]
 print(f"After status filter: {len(archived)} observations")
@@ -882,10 +877,6 @@ print(f"After grating filter: {len(no_grating)} observations")
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Apply multiple filters at once using & (and)
 # This is the preferred pattern shown in the notebook
 selected = obs_table[
@@ -896,11 +887,7 @@ selected
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
-# Excluding specific observations by ID using np.isin and ~
+# Excluding specific observations by ID using np.isin(array, value) and ~
 # ~ is the 'not' operator for boolean arrays
 to_exclude = ["06690", "13783"]
 
@@ -911,17 +898,13 @@ cleaned
 
 ## 13. Matplotlib: Plotting Images and Data
 
-The science notebooks use Matplotlib extensively in two ways: plotting data (histograms, scatter plots, line plots) and displaying 2D images. Both use the **object-oriented** `fig, ax` style, which gives you finer control than the simpler `plt.plot()` style.
+The science notebooks use Matplotlib extensively in two ways: plotting data (histograms, scatter plots, line plots) and displaying 2D images. Both use the **object-oriented** `fig, ax` style, which gives you finer control than the simpler `plt.plot()` style.  These in turn are a part of `plt.subplots()` object, even if we only want one plot.
 
 We'll use the real Horsehead Nebula FITS image we already downloaded.
 
 ### 13a. The `fig, ax` pattern
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 import matplotlib.pyplot as plt
 
 # Simulated data: observation times (years) and a measured radius (arcsec)
@@ -954,10 +937,6 @@ plt.show()
 The side-by-side Chandra image comparison in notebook 2 uses `plt.subplots(nrows, ncols)` to create a grid of plot panels.
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Create a 1-row, 2-column figure
 fig, ax_arr = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
 
@@ -981,10 +960,6 @@ plt.show()
 This is the core visualization for X-ray astronomy. `plt.imshow()` treats a 2D NumPy array as an image, mapping each value to a color.
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Display the Horsehead Nebula FITS image we loaded earlier
 fig, ax = plt.subplots(figsize=(6, 6))
 
@@ -1011,10 +986,6 @@ plt.show()
 X-ray images have a huge dynamic range — the brightest features can be thousands of times brighter than the faintest ones. Displaying with a linear color scale washes out the faint structure. A **logarithmic stretch** is standard practice.
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 from astropy.visualization import ImageNormalize, LogStretch, ManualInterval
 
 # ImageNormalize combines an 'interval' (which values map to 0-1)
@@ -1025,14 +996,18 @@ norm = ImageNormalize(
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
+#  We're going to compare two color maps.  To get a list of all, do
+# from matplotlib import colormaps
+# print(list(colormaps))
+
 # Left: linear scale
-im0 = axes[0].imshow(img_array, origin="lower", cmap="gray", vmin=3000, vmax=15000)
+im0 = axes[0].imshow(img_array, origin="lower", cmap="plasma", vmin=3000, vmax=15000)
 axes[0].set_title("Linear stretch", fontsize=13)
 axes[0].axis("off")
 fig.colorbar(im0, ax=axes[0])
 
 # Right: logarithmic stretch via astropy ImageNormalize
-im1 = axes[1].imshow(img_array, origin="lower", cmap="gray", norm=norm)
+im1 = axes[1].imshow(img_array, origin="lower", cmap="viridis", norm=norm)
 axes[1].set_title("Log stretch (reveals faint structure)", fontsize=13)
 axes[1].axis("off")
 fig.colorbar(im1, ax=axes[1])
@@ -1048,7 +1023,7 @@ from matplotlib.patches import Circle
 
 fig, ax = plt.subplots(figsize=(6, 6))
 
-ax.imshow(img_array, origin="lower", cmap="gray", norm=norm)
+ax.imshow(img_array, origin="lower", cmap="plasma", vmin=3000, vmax=15000)
 ax.axis("off")
 
 # ax.text() places text on the image.
@@ -1089,12 +1064,8 @@ In notebook 3, you will fit a model to data to measure how fast Cas A is expandi
 First, let's understand what that means, and then we'll see `curve_fit` in action.
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
-# Functions are objects in Python — you can assign them to variables
-# and pass them as arguments to other functions.
+# Functions are objects in Python — you can assign the results to variables
+# and/or you can pass them as arguments to other functions.
 
 
 def square(x):
@@ -1112,10 +1083,6 @@ print(result)
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 from scipy.optimize import curve_fit
 
 # Step 1: Define your model function.
@@ -1153,10 +1120,6 @@ print(f"Fitted intercept: {fitted_c:.1f} arcsec")
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Uncertainties on the fitted parameters come from the covariance matrix.
 # The diagonal of pcov contains the variance (sigma^2) for each parameter.
 param_errors = np.sqrt(np.diag(pcov))
@@ -1165,10 +1128,6 @@ print(f"Uncertainty on intercept: {param_errors[1]:.2f} arcsec")
 ```
 
 ```{code-cell} python
----
-jupyter:
-  source_hidden: true
----
 # Visualize the fit
 x_smooth = np.linspace(x_data_norm.min(), x_data_norm.max(), 100)
 y_fit_line = straight_line(x_smooth, fitted_m, fitted_c)
