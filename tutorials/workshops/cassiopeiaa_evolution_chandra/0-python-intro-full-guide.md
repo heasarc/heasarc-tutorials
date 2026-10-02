@@ -34,7 +34,7 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: "Full Guide 0 \u2013 Python for this workshop"
+title: "Full Guide 0 – Python for this workshop"
 ---
 
 # Full Guide 0 – Python for this workshop
@@ -189,7 +189,7 @@ print("All imports succeeded.")
 
 In this context, the dot indicates subpackages within the main package.  The part after the "as" is the alias, which also creates a **namespace** — a prefix that tells Python which library a function belongs to. If you don't, the namespace will be the package imported, e.g., "fits" for the astropy FITS handling package.  Clearly that can be a bad idea when different libraries sometimes use the same function name, such as:
 
-```{code-cell} python
+```python
 np.sqrt(16)  # NumPy's square root — works on entire arrays
 math.sqrt(16)  # Python's built-in math — works on single numbers only
 ```
