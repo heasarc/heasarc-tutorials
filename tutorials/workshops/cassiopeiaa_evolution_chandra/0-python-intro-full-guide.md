@@ -836,7 +836,7 @@ The first notebook is essentially a sequence of table filtering steps. Each one 
 
 The core pattern is always `foo[foo == value]`:
 
-```{code-cell} python
+```python
 filtered_table = original_table[original_table["column"] == "value"]
 ```
 
