@@ -6,7 +6,7 @@ authors:
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
 - name: NICER Team
-date: '2026-06-26'
+date: '2026-10-07'
 execution:
   cal-files:
     xmm-ccf: false
@@ -1105,7 +1105,9 @@ cur_plot_data["energy_step"] = np.append(
 ```
 
 ```{code-cell} python
-plot_fit_residual_spec(cur_plot_data, inst_name="EXOSAT-ME", mod_expr="tbabsxbbody")
+plot_fit_residual_spec(
+    cur_plot_data, inst_name="NICER-combined", mod_expr="tbabsxbbody"
+)
 ```
 
 ## About this notebook
@@ -1114,7 +1116,7 @@ Author: David Turner, HEASARC Staff Scientist
 
 Author: NICER Team
 
-Updated On: 2026-06-26
+Updated On: 2026-10-07
 
 +++
 
