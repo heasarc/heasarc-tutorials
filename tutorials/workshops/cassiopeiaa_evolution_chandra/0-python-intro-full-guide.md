@@ -17,7 +17,7 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-09-25'
+date: '2026-10-15'
 execution:
   cal-files:
     xmm-ccf: false
@@ -90,7 +90,7 @@ Work through the sections in order. Each one builds on the last, and there are f
 11. [List Comprehensions](#11-list-comprehensions)
 12. [Boolean Logic and Filtering Tables](#12-boolean-logic-and-filtering-tables)
 13. [Matplotlib: Plotting Images and Data](#13-matplotlib-plotting-images-and-data)
-14. [Functions as Arguments: `curve_fit`](#14-fitting-models-to-data-curve_fit)
+14. [Fitting models to data: `curve_fit`](#14-fitting-models-to-data-curve_fit)
 15. [Astropy Units and Physical Quantities](#15-astropy-units-and-physical-quantities)
 
 
@@ -1225,7 +1225,9 @@ Author: Antara Basu-Zych, HEASARC Archive Scientist.
 
 Author: Mike Corcoran, Associate Research Professor.
 
-Updated On: 2026-09-25
+_This notebook was created with assistance from generative AI tools._
+
+Updated On: 2026-10-15
 
 +++
 
