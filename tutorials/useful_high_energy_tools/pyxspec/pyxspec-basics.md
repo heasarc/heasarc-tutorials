@@ -1803,9 +1803,14 @@ don't warrant it (the original investigators published only the power law fit).
 
 ## 7. Deriving upper limits on model parameters
 
-There is one final useful thing to do with the data – derive an upper limit
-to the presence of a fluorescent iron emission line. We return to our original model
-and add a gaussian emission line of fixed energy and width then fit to get:
+There is one final useful thing to do with the data – derive an upper limit to the
+presence of an emission line; specifically the fluorescent iron line, or Fe K$\alpha$,
+which occurs when neutral iron is either collisionally or photo-ionized with an
+energy of more than 7.1 keV. This fluorescent line is emitted at a characteristic energy
+of ~6.4 keV, in the rest frame of the object.
+
+We return to our original model and add a gaussian emission line of fixed energy and
+width then fit to get:
 
 ```{code-cell} python
 abs_pl_gauss_em_mod = xs.Model(
