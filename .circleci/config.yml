@@ -23,6 +23,9 @@ parameters:
   require_xspec_models:
     type: boolean
     default: False
+  force_reexecute:
+    type: string
+    default: ""
   cache_specs:
     type: string
     default: "{}"
@@ -45,6 +48,7 @@ workflows:
           require_xmm_ccf: << pipeline.parameters.require_xmm_ccf >>
           require_chandra: << pipeline.parameters.require_chandra >>
           require_xspec_models: << pipeline.parameters.require_xspec_models >>
+          force_reexecute: << pipeline.parameters.force_reexecute >>
           cache_specs: << pipeline.parameters.cache_specs >>
 
 
@@ -72,6 +76,9 @@ jobs:
       require_xspec_models:
         type: boolean
         default: False
+      force_reexecute:
+        type: string
+        default: ""
       cache_specs:
         type: string
         default: "{}"
@@ -233,6 +240,18 @@ jobs:
           name: Add Fornax-hea kernels to build environment
           command: |
             find /opt/jupyter/share/jupyter/kernels -maxdepth 1 -type d ! -name 'python3' -exec ln -s {} /opt/envs/build_docs/share/jupyter/kernels/ \;
+
+      - run:
+          name: Force re-execution for dependents
+          command: |
+            # Remove notebooks from the MyST-NB cache if they need to be re-executed
+            # because their dependencies changed.
+            export FORCE_REEXECUTE='<< parameters.force_reexecute >>'
+            IFS=',' read -ra force_arr \<<< "$FORCE_REEXECUTE"
+            for nb in "${force_arr[@]}"; do
+              echo "Forcing re-execution of tutorials/${nb} by removing from MyST-NB cache..."
+              micromamba run -n build_docs jupyter-cache remove "tutorials/${nb}" || true
+            done
 
       # Now we're going to start building the documentation
       - run:

@@ -197,6 +197,11 @@ def main():
         # Sort
         ordered_list = topological_sort(graph, full_set)
 
+        # 2.5 Identify which notebooks need forced re-execution
+        # Any notebook that is in the full_set but NOT in the original 'changed' list
+        # (or any notebook that has a changed ancestor)
+        force_reexecute = [nb for nb in ordered_list if nb not in changed or any(anc in changed for anc in get_full_execution_set(graph, {}, [nb]) if anc != nb)]
+
         # 3. Determine calibration needs
         cal_needs, bad_cal = get_calibration_needs(args.tutorials_dir, ordered_list, allowed_cal)
 
@@ -205,6 +210,7 @@ def main():
 
         # 5. Output results in a format GitHub Actions can parse
         print(f"NOTEBOOKS_TO_BUILD={','.join(ordered_list)}")
+        print(f"FORCE_REEXECUTE={','.join(force_reexecute)}")
 
         if bad_cal:
             print("ANY_BAD_CAL_SPEC=true")

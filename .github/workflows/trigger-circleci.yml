@@ -108,6 +108,7 @@ jobs:
           PROJECT_SLUG: 'circleci/LdzbTUR6aexSM6vJCVrZk5/GRoaAeYuJNgCdifZviG612'
           CHECKOUT_REPO: 'HEASARC/heasarc-tutorials'
           NOTEBOOKS_TO_BUILD: ${{ steps.resolve_build.outputs.notebooks_to_build }}
+          FORCE_REEXECUTE: ${{ steps.resolve_build.outputs.force_reexecute }}
           REQUIRE_XMM_CCF: ${{ steps.resolve_build.outputs.require_xmm_ccf }}
           REQUIRE_CHANDRA: ${{ steps.resolve_build.outputs.require_chandra }}
           REQUIRE_XSPEC_MODELS: ${{ steps.resolve_build.outputs.require_xspec_models }}
@@ -130,6 +131,7 @@ jobs:
               "checkout": {"branch": "'"${TARGET_BRANCH}"'"},
               "parameters": {
                 "notebooks_to_build": "'"${NOTEBOOKS_TO_BUILD}"'",
+                "force_reexecute": "'"${FORCE_REEXECUTE}"'",
                 "require_xmm_ccf": '${REQUIRE_XMM_CCF}',
                 "require_chandra": '${REQUIRE_CHANDRA}',
                 "require_xspec_models": '${REQUIRE_XSPEC_MODELS}',
