@@ -120,17 +120,17 @@ jobs:
       # 1. Load the most recent cache that matches the stub of the MyST notebook cache key
       # 2. Restore the XMM calibration file cache, saves us downloading it every time!
       - restore_cache:
-          name: Restoring Workshop State Cache
+          name: Restoring data cache
           keys:
-            - workshop-state-{{ .Branch }}-
-            - workshop-state-
+            - data-cache-{{ .Branch }}-
+            - data-cache-
 
       - run:
-          name: Distribute Workshop State from Cache
+          name: Distributing data from cache
           command: |
-            if [ -d state_cache ]; then
+            if [ -d state_cache ] && [ "$(ls -A state_cache)" ]; then
               echo "Restoring state files from cache..."
-              cp -r state_cache/* .
+              cp -a state_cache/* .
             fi
 
       # 3. And the same thing with the Chandra CalDB cache
@@ -258,11 +258,11 @@ jobs:
             bash -c 'rm _build/html/index.html.bak'
 
       - run:
-          name: Collect Workshop State for Caching
+          name: Collecting data for cache
           when: always
           command: |
             # This script uses the cache_specs parameter to identify which directories
-            #  need to be preserved for downstream notebooks.
+            #  need to be preserved for dependent notebooks.
             export CACHE_SPECS='<< parameters.cache_specs >>'
             mkdir -p state_cache
 
@@ -277,7 +277,9 @@ jobs:
                     for match in glob.glob(full_path):
                         dest = os.path.join('state_cache', match)
                         os.makedirs(os.path.dirname(dest), exist_ok=True)
-                        if os.path.isdir(match): shutil.copytree(match, dest, dirs_exist_ok=True)
+                        if os.path.isdir(match):
+                            if os.path.exists(dest): shutil.rmtree(dest)
+                            shutil.copytree(match, dest)
                         else: shutil.copy2(match, dest)
             "
 
@@ -346,7 +348,7 @@ jobs:
       # The MySTNB build cache, so we can hopefully avoid re-executing notebooks unnecessarily
       - save_cache:
           when: always
-          key: workshop-state-{{ .Branch }}-{{ epoch }}
+          key: data-cache-{{ .Branch }}-{{ epoch }}
           paths:
             - state_cache
             - _build/.jupyter_cache
