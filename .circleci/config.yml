@@ -127,43 +127,13 @@ jobs:
       - run:
           name: Restoring data cache
           command: |
-            # We only restore data from the cache for notebooks that are NOT being
-            #  re-executed in this run. This ensures that 'clean' dependencies have
-            #  their data, while 'dirty' notebooks generate fresh data.
+            # Use the data_cache_manager.py script to surgically restore data for
+            #  clean dependencies while ensuring dirty notebooks run fresh.
             export CACHE_SPECS='<< parameters.cache_specs >>'
             export NOTEBOOKS_TO_BUILD='<< parameters.notebooks_to_build >>'
+            python3 .github/workflows/data_cache_manager.py --mode restore
 
-            if [ -d state_cache ] && [ "$(ls -A state_cache)" ]; then
-              python3 -c "
-              import json, os, shutil, glob
-              specs = json.loads(os.environ.get('CACHE_SPECS', '{}'))
-              to_build = os.environ.get('NOTEBOOKS_TO_BUILD', '').split(',')
-
-              for nb, paths in specs.items():
-                  # If the notebook is NOT being built, it's a clean dependency
-                  # We should restore its data from the cache to the workspace
-                  if nb not in to_build:
-                      nb_dir = os.path.dirname(os.path.join('tutorials', nb))
-                      for path in paths:
-                          # The cache stores files at their original relative paths inside 'state_cache'
-                          cached_path = os.path.join('state_cache', nb_dir, path)
-                          for match in glob.glob(cached_path):
-                              # Calculate the destination relative to the repo root
-                              dest = os.path.relpath(match, 'state_cache')
-                              os.makedirs(os.path.dirname(dest), exist_ok=True)
-                              print(f'Restoring {dest} from cache...')
-                              if os.path.isdir(match):
-                                  if os.path.exists(dest): shutil.rmtree(dest)
-                                  shutil.copytree(match, dest)
-                              else:
-                                  shutil.copy2(match, dest)
-                  else:
-                      print(f'Skipping workspace restoration for {nb} (marked for building).')
-              "
-            fi
-
-      # 3. And the same thing with the Chandra CalDB cache
-      # 4. Load the XSPEC models cache (not included in the Fornax-Hea image as it is large!)
+      # Load the most recent MyST notebook cache
       - restore_cache:
           name: Restoring MyST notebook cache
           # If there isn't a cache for this branch, we'll try and find the most recent cache.
@@ -290,39 +260,11 @@ jobs:
           name: Collecting data for cache
           when: always
           command: |
-            # This script synthesizes a new state_cache directory for the immutable CircleCI cache.
-            # It preserves existing cached files for clean notebooks and overwrites with fresh
-            # data for notebooks that were just re-executed.
+            # Use the data_cache_manager.py script to synthesize a new state_cache directory.
+            # It preserves existing cached files and updates with fresh data from this run.
             export CACHE_SPECS='<< parameters.cache_specs >>'
             export NOTEBOOKS_TO_BUILD='<< parameters.notebooks_to_build >>'
-            mkdir -p state_cache
-
-            python3 -c "
-            import json, os, shutil, glob
-            specs = json.loads(os.environ.get('CACHE_SPECS', '{}'))
-            to_build = os.environ.get('NOTEBOOKS_TO_BUILD', '').split(',')
-
-            for nb, paths in specs.items():
-                nb_dir = os.path.dirname(os.path.join('tutorials', nb))
-                if nb in to_build:
-                    # Notebook was re-executed. We MUST overwrite the cached version with fresh results.
-                    for path in paths:
-                        src = os.path.join(nb_dir, path)
-                        dest = os.path.join('state_cache', src)
-                        for match in glob.glob(src):
-                            actual_dest = os.path.join('state_cache', match)
-                            os.makedirs(os.path.dirname(actual_dest), exist_ok=True)
-                            print(f'Caching fresh state for {match}...')
-                            if os.path.isdir(match):
-                                if os.path.exists(actual_dest): shutil.rmtree(actual_dest)
-                                shutil.copytree(match, actual_dest)
-                            else:
-                                shutil.copy2(match, actual_dest)
-                else:
-                    # Notebook was NOT re-executed. Its state in 'state_cache' is already
-                    # correct (restored from the previous cache at the start).
-                    print(f'Preserving existing cached state for {nb}.')
-            "
+            python3 .github/workflows/data_cache_manager.py --mode collect
 
       - run:
           name: Rearrange built HTML and executed notebooks for artifact storage
