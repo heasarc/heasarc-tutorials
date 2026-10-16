@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-06-01'
+date: '2026-10-16'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -453,9 +453,16 @@ directory, or the wholesale failure of all plotting in your notebook.
 The **data** plot option produces the most important of all XSPEC visualizations – a
 spectrum!
 
-By default, spectra will be plotted as a function of **instrument channel**, which
-is the most fundamental indication of an X-ray event's energy (said event hopefully
-corresponding to a _photon_, as opposed to a particle, hitting the detector).
+By default, spectra will be plotted as a function of **instrument channel** – typically
+'Pulse Invariant' (PI) values, which are the gain-corrected outputs of the detector (as
+opposed to 'Pulse Height Amplitude', or PHA, values, which are the raw signal output of
+the detector). PI channels each correspond to a particular energy, and that mapping is
+defined by something called the 'Redistribution Matrix File' (RMF).
+
+Every event recorded by an X-ray detector (or most X-ray detectors at least) will
+have a PI or PHA value assigned (said event hopefully corresponding to a _photon_, as
+opposed to a particle, hitting the detector), and a spectrum is constructed by binning
+those events by instrument channel, or energy.
 
 On the other hand, if an instrument _response_ has been loaded along with the spectral data (we
 made sure of that [Section 1](#1-loading-a-spectrum-into-pyxspec)), then we can plot
@@ -1842,7 +1849,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-06-01
+Updated On: 2026-10-16
 
 +++
 
