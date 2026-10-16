@@ -60,6 +60,7 @@ maxdepth: 2
 caption: Workshops
 ---
 tutorials/workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_index
+tutorials/workshops/test_framework/test-framework-index
 ```
 
 ***

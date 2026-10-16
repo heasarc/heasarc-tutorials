@@ -56,19 +56,24 @@ jobs:
               exit 3
             fi
 
-      - name: Define notebook build list
-        # The CircleCI pipeline can take an argument that defines exactly which notebooks
-        #  should be built. This step sets up the variable that will be passed to the
-        #  pipeline. Either by identifying which notebooks have been altered in the
-        #  triggering PR, or by looking for an override in the PR comments.
-        id: which_notebooks_to_build
+      - name: Setup Python
+        id: setup_python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        id: install_deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install jupytext pyyaml
+
+      - name: Resolve notebook build list and dependencies
+        id: resolve_build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          # Define the exclusion patterns
-          EXCLUDE_PATTERNS=("*notebook_template*" "*pull_request_template*" "*README*" "**/*README*" "*.ipynb_checkpoints*" "*CONTRIBUTING*" "*CODE_OF_CONDUCT*")
-
           # First, check if there's an override pattern in PR comments
           OVERRIDE_NOTEBOOKS=$(curl -s \
             -H "Authorization: token ${GITHUB_TOKEN}" \
@@ -76,75 +81,17 @@ jobs:
             jq -r '.[] | select(.body | contains("@heasarc-notebooks:")) | .body | match("@heasarc-notebooks:\\s*(.+)"; "g") | .captures[0].string' | tail -1)
 
           if [ -n "$OVERRIDE_NOTEBOOKS" ]; then
-            # Use the override from the comments
-            NOTEBOOKS_TO_BUILD="$OVERRIDE_NOTEBOOKS"
-            echo "Using notebooks specified in PR comment: $NOTEBOOKS_TO_BUILD"
+            CHANGED_FILES="$OVERRIDE_NOTEBOOKS"
           else
-            # Get the list of changed files in the PR
-            CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
-
-            # Filter and process the files
-            NOTEBOOKS_TO_BUILD=""
-            while IFS= read -r file; do
-              # Check if file is in tutorials directory and ends with .md
-              if [[ "$file" =~ ^tutorials/.*\.md$ ]]; then
-                # Get relative path from tutorials directory
-                REL_PATH="${file#tutorials/}"
-
-                # Check if file should be excluded
-                SHOULD_EXCLUDE=false
-                for pattern in "${EXCLUDE_PATTERNS[@]}"; do
-                  # Convert glob patterns to match logic
-                  if [[ "$REL_PATH" == *"index"* ]] || [[ "$REL_PATH" =~ $(echo "$pattern" | sed 's/\*/.*/'g) ]]; then
-                    SHOULD_EXCLUDE=true
-                    break
-                  fi
-                done
-
-                if [ "$SHOULD_EXCLUDE" = false ]; then
-                  if [ -z "$NOTEBOOKS_TO_BUILD" ]; then
-                    NOTEBOOKS_TO_BUILD="$REL_PATH"
-                  else
-                    NOTEBOOKS_TO_BUILD="${NOTEBOOKS_TO_BUILD},$REL_PATH"
-                  fi
-                fi
-              fi
-            done <<< "$CHANGED_FILES"
-
-            echo "Notebooks to build based on changed files: $NOTEBOOKS_TO_BUILD"
+            CHANGED_FILES=$(git diff --name-only origin/main...HEAD | tr '\n' ',')
           fi
 
-          # Export the variable for the next step
-          echo "notebooks_to_build=$NOTEBOOKS_TO_BUILD" >> $GITHUB_OUTPUT
-
-      - name: Setup Python
-        id: setup_python
-        if: success() && steps.which_notebooks_to_build.outputs.notebooks_to_build != ''
-        uses: actions/setup-python@v6.2.0
-        with:
-          python-version: '3.12'
-
-      - name: Install Jupytext
-        id: install_jupytext
-        if: success() && steps.which_notebooks_to_build.outputs.notebooks_to_build != ''
-        run: |
-          python -m pip install --upgrade pip
-          pip install jupytext
-
-      - name: Determine which calibration datasets are required
-        id: which_cal_data
-        if: success() && steps.which_notebooks_to_build.outputs.notebooks_to_build != ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          NOTEBOOKS_TO_BUILD: ${{ steps.which_notebooks_to_build.outputs.notebooks_to_build }}
-        run: |
-          python .github/workflows/collate-cal-files.py
+          python .github/workflows/resolve_nb_deps.py --changed-files "$CHANGED_FILES" >> $GITHUB_OUTPUT
 
       - name: Fail if any calibration metadata is invalid
-        if: steps.which_cal_data.outputs.any_bad_cal_spec == 'true'
+        if: steps.resolve_build.outputs.any_bad_cal_spec == 'true'
         env:
-          BAD_CAL_SPEC: ${{ steps.which_cal_data.outputs.bad_cal_spec }}
+          BAD_CAL_SPEC: ${{ steps.resolve_build.outputs.bad_cal_spec }}
         run: |
           echo "::error title=Invalid calibration metadata::$BAD_CAL_SPEC"
           exit 1
@@ -152,7 +99,7 @@ jobs:
       - name: Trigger CircleCI Pipeline via API
         # Only proceed if the wait step succeeded, and the 'skip-doc-build' label wasn't added to the PR (could be
         #  that the contributor added the label after the PR was opened).
-        if: success() && contains( github.event.pull_request.labels.*.name, 'skip-doc-build') == false && steps.which_notebooks_to_build.outputs.notebooks_to_build != ''
+        if: success() && contains( github.event.pull_request.labels.*.name, 'skip-doc-build') == false && steps.resolve_build.outputs.notebooks_to_build != ''
         env:
           # At the time of writing, this call will only work using personal API access tokens, rather than
           #  organization-level tokens.
@@ -160,10 +107,12 @@ jobs:
           TARGET_BRANCH: ${{ github.head_ref }}
           PROJECT_SLUG: 'circleci/LdzbTUR6aexSM6vJCVrZk5/GRoaAeYuJNgCdifZviG612'
           CHECKOUT_REPO: 'HEASARC/heasarc-tutorials'
-          NOTEBOOKS_TO_BUILD: ${{ steps.which_notebooks_to_build.outputs.notebooks_to_build }}
-          REQUIRE_XMM_CCF: ${{ steps.which_cal_data.outputs.require_xmm-ccf }}
-          REQUIRE_CHANDRA: ${{ steps.which_cal_data.outputs.require_chandra }}
-          REQUIRE_XSPEC_MODELS: ${{ steps.which_cal_data.outputs.require_xspec-models }}
+          NOTEBOOKS_TO_BUILD: ${{ steps.resolve_build.outputs.notebooks_to_build }}
+          FORCE_REEXECUTE: ${{ steps.resolve_build.outputs.force_reexecute }}
+          REQUIRE_XMM_CCF: ${{ steps.resolve_build.outputs.require_xmm_ccf }}
+          REQUIRE_CHANDRA: ${{ steps.resolve_build.outputs.require_chandra }}
+          REQUIRE_XSPEC_MODELS: ${{ steps.resolve_build.outputs.require_xspec_models }}
+          CACHE_SPECS: ${{ steps.resolve_build.outputs.cache_specs }}
 
         run: |
           echo "pre-commit.ci checks passed on branch ${TARGET_BRANCH}. Triggering CircleCI."
@@ -182,8 +131,10 @@ jobs:
               "checkout": {"branch": "'"${TARGET_BRANCH}"'"},
               "parameters": {
                 "notebooks_to_build": "'"${NOTEBOOKS_TO_BUILD}"'",
+                "force_reexecute": "'"${FORCE_REEXECUTE}"'",
                 "require_xmm_ccf": '${REQUIRE_XMM_CCF}',
                 "require_chandra": '${REQUIRE_CHANDRA}',
-                "require_xspec_models": '${REQUIRE_XSPEC_MODELS}'
+                "require_xspec_models": '${REQUIRE_XSPEC_MODELS}',
+                "cache_specs": "'"${CACHE_SPECS//"\""/"\\\""}"'"
               }
              }'
