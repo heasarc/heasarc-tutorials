@@ -57,8 +57,8 @@ def build_dependency_graph(root_dir: str) -> Dict[str, List[str]]:
                     continue
 
                 metadata = parse_metadata(os.path.join(root, file))
-                heasarc = metadata.get('heasarc', {})
-                deps = heasarc.get('dependencies', [])
+                exec_meta = metadata.get('execution', {})
+                deps = exec_meta.get('dependencies', [])
 
                 # Normalize paths (they are relative to the tutorials directory)
                 graph[rel_path] = deps
@@ -153,8 +153,8 @@ def get_cache_specs(root_dir: str, notebooks: List[str]) -> Dict[str, List[str]]
     specs = {}
     for nb in notebooks:
         metadata = parse_metadata(os.path.join(root_dir, nb))
-        heasarc = metadata.get('heasarc', {})
-        cache_outputs = heasarc.get('cache_outputs', [])
+        exec_meta = metadata.get('execution', {})
+        cache_outputs = exec_meta.get('cache_outputs', [])
         if cache_outputs:
             specs[nb] = cache_outputs
     return specs

@@ -1,5 +1,9 @@
 ---
-heasarc:
+execution:
+  cal-files:
+    xmm-ccf: False
+    chandra: False
+    xspec-models: False
   dependencies:
     - workshops/test_framework/0-provider.md
 ---
