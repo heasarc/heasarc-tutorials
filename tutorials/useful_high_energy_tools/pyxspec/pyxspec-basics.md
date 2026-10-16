@@ -574,7 +574,7 @@ expression of a combination of component models.
 
 There are two basic kinds of model components – **additive** and **multiplicative**:
 - **Additive components** – Represent X-Ray sources of different kinds (e.g., a bremsstrahlung continuum) and, after being convolved with the instrument response, prescribe the number of counts per energy bin.
-- **Multiplicative components** – Represent phenomena that modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an energy-dependent multiplicative factor to the source radiation before the result is convolved with the instrumental response.
+- **Multiplicative components** – Represent phenomena that modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an energy-dependent multiplicative factor to the models they are combined with before the result is convolved with the instrumental response. The `tbabs` model, for instance, helps account for the absorption of X-ray emission by matter in our galaxy (typically at the lower energies, up to around 2 keV) by calculating the absorption effect on the spectrum using an input 'neutral hydrogen column density' (nH), which can be calculated from 21cm observations ([using this HEASARC tool](https://heasarc.gsfc.nasa.gov/cgi-bin/Tools/w3nh/w3nh.pl)).
 
 More generally, XSPEC allows three types of **modifying** components:
 - The **multiplicative** type mentioned above.
