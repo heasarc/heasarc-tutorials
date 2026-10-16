@@ -33,6 +33,6 @@ import os
 
 os.makedirs("data", exist_ok=True)
 with open("data/test_output.txt", "w") as f:
-    f.write("Saaaaaaaaaaaaaaaaaaaaaad")
+    f.write("Merkimer!")
 print("Generated data/test_output.txt")
 ```
