@@ -126,15 +126,15 @@ def get_calibration_needs(root_dir: str, notebooks: List[str], allowed_names: Li
         nb_path = os.path.join(root_dir, nb)
         metadata = parse_metadata(nb_path)
 
-        # Match logic from collate-cal-files.py
         exec_meta = metadata.get('execution', {})
-        cal_files = exec_meta.get('cal-files', {})
 
-        if not exec_meta or not cal_files:
+        if not exec_meta or 'cal-files' not in exec_meta:
             # Default to ALL calibration if none specified
             for name in allowed_names:
                 needs[name] = True
             continue
+
+        cal_files = exec_meta.get('cal-files', {})
 
         # Check for invalid names
         invalid = [n for n in cal_files.keys() if n not in allowed_names]

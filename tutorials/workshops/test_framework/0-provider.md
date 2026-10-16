@@ -4,8 +4,8 @@ execution:
     xmm-ccf: False
     chandra: False
     xspec-models: False
-    cache_outputs:
-      - data/test_output.txt
+  cache_outputs:
+    - data/test_output.txt
 ---
 
 # Provider Notebook
