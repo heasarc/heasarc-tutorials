@@ -252,12 +252,12 @@ jobs:
               for nb in "${force_arr[@]}"; do
                 NB_PATH="tutorials/${nb}"
                 echo "Removing ${NB_PATH} from MyST-NB cache to force re-execution..."
-                # jcache is the CLI tool for the jupyter-cache package
-                micromamba run -n build_docs jcache notebook remove -p "$CACHE_PATH" "$NB_PATH" || true
+                # Correct syntax: jcache notebook -p <path> <action> <args>
+                micromamba run -n build_docs jcache notebook -p "$CACHE_PATH" remove "$NB_PATH" || true
               done
 
               echo "Updated MyST-NB cache contents:"
-              micromamba run -n build_docs jcache notebook list -p "$CACHE_PATH" || true
+              micromamba run -n build_docs jcache notebook -p "$CACHE_PATH" list || true
             fi
 
       # Now we're going to start building the documentation
