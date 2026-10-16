@@ -40,3 +40,7 @@ if os.path.exists(file_path):
 else:
     raise FileNotFoundError(f"Missing dependency data: {file_path}")
 ```
+
+```{code-cell} python
+print("well well well - what a to do")
+```
