@@ -574,7 +574,7 @@ expression of a combination of component models.
 
 There are two basic kinds of model components – **additive** and **multiplicative**:
 - **Additive components** – Represent X-Ray sources of different kinds (e.g., a bremsstrahlung continuum) and, after being convolved with the instrument response, prescribe the number of counts per energy bin.
-- **Multiplicative components** – Represent phenomena that modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an energy-dependent multiplicative factor to the models they are combined with before the result is convolved with the instrumental response. The `tbabs` model, for instance, helps account for the absorption of X-ray emission by matter in our galaxy (typically at the lower energies, up to around 2 keV) by calculating the absorption effect on the spectrum using an input 'neutral hydrogen column density' (nH), which can be calculated from 21cm observations ([using this HEASARC tool](https://heasarc.gsfc.nasa.gov/cgi-bin/Tools/w3nh/w3nh.pl)).
+- **Multiplicative components** – Represent phenomena that modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an energy-dependent multiplicative factor to the models they are combined with before the result is convolved with the instrumental response. The `tbabs` model, for instance, helps account for the absorption of X-ray emission by matter in our galaxy (typically at the lower energies, up to around 2 keV) by calculating the absorption effect on the spectrum using an input 'neutral hydrogen column density' (nH), which can be derived from 21 cm observations ([using this HEASARC tool](https://heasarc.gsfc.nasa.gov/cgi-bin/Tools/w3nh/w3nh.pl)).
 
 More generally, XSPEC allows three types of **modifying** components:
 - The **multiplicative** type mentioned above.
@@ -1267,6 +1267,9 @@ plt.figure(figsize=(5.5, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=True)
 
+# Matplotlib has a very handy contour plotting method built-in - note that we pass the
+#  contour heights and levels pre-calculated by XSPEC, rather than calculating them
+#  ourselves
 cont_obj = plt.contour(
     steppar_plot_data["nh"],
     steppar_plot_data["powerlaw_ind"],
@@ -1274,11 +1277,15 @@ cont_obj = plt.contour(
     steppar_plot_data["contour_level"],
     cmap="rainbow",
 )
+
+# This is a convenience function to label the contour lines with their levels
 plt.clabel(cont_obj)
 
 plt.xlabel(steppar_plot_data["x_label"], fontsize=15)
 plt.ylabel(steppar_plot_data["y_label"], fontsize=15)
 
+# We create a point for the fit parameter values so we can easily include it in the
+#  legend
 fit_point_obj = plt.plot(
     abs_pl_mod.TBabs.nH.values[0],
     abs_pl_mod.powerlaw.PhoIndex.values[0],
@@ -1288,6 +1295,7 @@ fit_point_obj = plt.plot(
     markeredgewidth=0.8,
 )
 
+# Now we overlay that point with axis-spanning horizontal and vertical lines
 plt.axvline(
     abs_pl_mod.TBabs.nH.values[0], color="black", linestyle="solid", linewidth=1.2
 )
@@ -1298,8 +1306,10 @@ plt.axhline(
     linewidth=1.2,
 )
 
+# We fetch the contour line 'handles', which we will label for the legend
 cont_handles = cont_obj.legend_elements()[0]
 
+# The labels we assign each contour line handle are their 'sigma' values (1, 2, 3).
 leg_labels = ["Fit result"] + list(cont_conf_perc.keys())
 leg_handles = fit_point_obj + cont_handles
 
