@@ -23,6 +23,9 @@ parameters:
   require_xspec_models:
     type: boolean
     default: False
+  cache_specs:
+    type: string
+    default: "{}"
 
 # Defines the different workflows that we could run on CircleCI - a workflow is a combination of
 #  jobs that can be run sequentially or in parallel.
@@ -42,6 +45,7 @@ workflows:
           require_xmm_ccf: << pipeline.parameters.require_xmm_ccf >>
           require_chandra: << pipeline.parameters.require_chandra >>
           require_xspec_models: << pipeline.parameters.require_xspec_models >>
+          cache_specs: << pipeline.parameters.cache_specs >>
 
 
 # Here we define the different jobs that can be run in different CircleCI workflows.
@@ -68,6 +72,9 @@ jobs:
       require_xspec_models:
         type: boolean
         default: False
+      cache_specs:
+        type: string
+        default: "{}"
     # We're using a docker container as a run environment - particularly the NASA Fornax
     #  high-energy image that we maintain as part of the Fornax initiative
     docker:
@@ -112,6 +119,20 @@ jobs:
 
       # 1. Load the most recent cache that matches the stub of the MyST notebook cache key
       # 2. Restore the XMM calibration file cache, saves us downloading it every time!
+      - restore_cache:
+          name: Restoring Workshop State Cache
+          keys:
+            - workshop-state-{{ .Branch }}-
+            - workshop-state-
+
+      - run:
+          name: Distribute Workshop State from Cache
+          command: |
+            if [ -d state_cache ]; then
+              echo "Restoring state files from cache..."
+              cp -r state_cache/* .
+            fi
+
       # 3. And the same thing with the Chandra CalDB cache
       # 4. Load the XSPEC models cache (not included in the Fornax-Hea image as it is large!)
       - restore_cache:
@@ -237,6 +258,30 @@ jobs:
             bash -c 'rm _build/html/index.html.bak'
 
       - run:
+          name: Collect Workshop State for Caching
+          when: always
+          command: |
+            # This script uses the cache_specs parameter to identify which directories
+            #  need to be preserved for downstream notebooks.
+            export CACHE_SPECS='<< parameters.cache_specs >>'
+            mkdir -p state_cache
+
+            # Use python to parse the JSON and copy files
+            python3 -c "
+            import json, os, shutil, glob
+            specs = json.loads(os.environ.get('CACHE_SPECS', '{}'))
+            for nb, paths in specs.items():
+                nb_dir = os.path.dirname(os.path.join('tutorials', nb))
+                for path in paths:
+                    full_path = os.path.join(nb_dir, path)
+                    for match in glob.glob(full_path):
+                        dest = os.path.join('state_cache', match)
+                        os.makedirs(os.path.dirname(dest), exist_ok=True)
+                        if os.path.isdir(match): shutil.copytree(match, dest, dirs_exist_ok=True)
+                        else: shutil.copy2(match, dest)
+            "
+
+      - run:
           name: Rearrange built HTML and executed notebooks for artifact storage
           when: always
           command: |
@@ -299,6 +344,13 @@ jobs:
             echo "</ul></body></html>" >> artifacts/executed_notebooks/nb_index.html
 
       # The MySTNB build cache, so we can hopefully avoid re-executing notebooks unnecessarily
+      - save_cache:
+          when: always
+          key: workshop-state-{{ .Branch }}-{{ epoch }}
+          paths:
+            - state_cache
+            - _build/.jupyter_cache
+
       - save_cache:
           key: jupyter_ch-{{ .Branch }}-{{epoch}}
           paths:
