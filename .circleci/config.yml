@@ -248,7 +248,7 @@ jobs:
             export CACHE_PATH='_build/.jupyter_cache'
 
             if [ -n "$FORCE_REEXECUTE" ] && [ -d "$CACHE_PATH" ]; then
-              IFS=',' read -ra force_arr <<< "$FORCE_REEXECUTE"
+              IFS=',' read -ra force_arr \<<< "$FORCE_REEXECUTE"
               for nb in "${force_arr[@]}"; do
                 NB_PATH="tutorials/${nb}"
                 echo "Removing ${NB_PATH} from MyST-NB cache to force re-execution..."
