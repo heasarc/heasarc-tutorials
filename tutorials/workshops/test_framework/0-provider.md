@@ -33,6 +33,6 @@ import os
 
 os.makedirs("data", exist_ok=True)
 with open("data/test_output.txt", "w") as f:
-    f.write("Merkimer!")
+    f.write("I 3D printed a glowing pumpkin-duck!")
 print("Generated data/test_output.txt")
 ```
