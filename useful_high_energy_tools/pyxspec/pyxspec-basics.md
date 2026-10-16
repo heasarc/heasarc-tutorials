@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-06-01'
+date: '2026-10-16'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -453,9 +453,16 @@ directory, or the wholesale failure of all plotting in your notebook.
 The **data** plot option produces the most important of all XSPEC visualizations – a
 spectrum!
 
-By default, spectra will be plotted as a function of **instrument channel**, which
-is the most fundamental indication of an X-ray event's energy (said event hopefully
-corresponding to a _photon_, as opposed to a particle, hitting the detector).
+By default, spectra will be plotted as a function of **instrument channel** – typically
+'Pulse Invariant' (PI) values, which are the gain-corrected outputs of the detector (as
+opposed to 'Pulse Height Amplitude', or PHA, values, which are the raw signal output of
+the detector). PI channels each correspond to a particular energy, and that mapping is
+defined by something called the 'Redistribution Matrix File' (RMF).
+
+Every event recorded by an X-ray detector (or most X-ray detectors at least) will
+have a PI or PHA value assigned (said event hopefully corresponding to a _photon_, as
+opposed to a particle, hitting the detector), and a spectrum is constructed by binning
+those events by instrument channel, or energy.
 
 On the other hand, if an instrument _response_ has been loaded along with the spectral data (we
 made sure of that [Section 1](#1-loading-a-spectrum-into-pyxspec)), then we can plot
@@ -567,7 +574,7 @@ expression of a combination of component models.
 
 There are two basic kinds of model components – **additive** and **multiplicative**:
 - **Additive components** – Represent X-Ray sources of different kinds (e.g., a bremsstrahlung continuum) and, after being convolved with the instrument response, prescribe the number of counts per energy bin.
-- **Multiplicative components** – Represent phenomena that modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an energy-dependent multiplicative factor to the source radiation before the result is convolved with the instrumental response.
+- **Multiplicative components** – Represent phenomena that modify the observed X-Radiation (e.g. reddening or an absorption edge). They apply an energy-dependent multiplicative factor to the models they are combined with before the result is convolved with the instrumental response. The `tbabs` model, for instance, helps account for the absorption of X-ray emission by matter in our galaxy (typically at the lower energies, up to around 2 keV) by calculating the absorption effect on the spectrum using an input 'neutral hydrogen column density' (nH), which can be derived from 21 cm observations ([using this HEASARC tool](https://heasarc.gsfc.nasa.gov/cgi-bin/Tools/w3nh/w3nh.pl)).
 
 More generally, XSPEC allows three types of **modifying** components:
 - The **multiplicative** type mentioned above.
@@ -1260,6 +1267,9 @@ plt.figure(figsize=(5.5, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=True)
 
+# Matplotlib has a very handy contour plotting method built-in - note that we pass the
+#  contour heights and levels pre-calculated by XSPEC, rather than calculating them
+#  ourselves
 cont_obj = plt.contour(
     steppar_plot_data["nh"],
     steppar_plot_data["powerlaw_ind"],
@@ -1267,11 +1277,15 @@ cont_obj = plt.contour(
     steppar_plot_data["contour_level"],
     cmap="rainbow",
 )
+
+# This is a convenience function to label the contour lines with their levels
 plt.clabel(cont_obj)
 
 plt.xlabel(steppar_plot_data["x_label"], fontsize=15)
 plt.ylabel(steppar_plot_data["y_label"], fontsize=15)
 
+# We create a point for the fit parameter values so we can easily include it in the
+#  legend
 fit_point_obj = plt.plot(
     abs_pl_mod.TBabs.nH.values[0],
     abs_pl_mod.powerlaw.PhoIndex.values[0],
@@ -1281,6 +1295,7 @@ fit_point_obj = plt.plot(
     markeredgewidth=0.8,
 )
 
+# Now we overlay that point with axis-spanning horizontal and vertical lines
 plt.axvline(
     abs_pl_mod.TBabs.nH.values[0], color="black", linestyle="solid", linewidth=1.2
 )
@@ -1291,8 +1306,10 @@ plt.axhline(
     linewidth=1.2,
 )
 
+# We fetch the contour line 'handles', which we will label for the legend
 cont_handles = cont_obj.legend_elements()[0]
 
+# The labels we assign each contour line handle are their 'sigma' values (1, 2, 3).
 leg_labels = ["Fit result"] + list(cont_conf_perc.keys())
 leg_handles = fit_point_obj + cont_handles
 
@@ -1796,9 +1813,14 @@ don't warrant it (the original investigators published only the power law fit).
 
 ## 7. Deriving upper limits on model parameters
 
-There is one final useful thing to do with the data – derive an upper limit
-to the presence of a fluorescent iron emission line. We return to our original model
-and add a gaussian emission line of fixed energy and width then fit to get:
+There is one final useful thing to do with the data – derive an upper limit to the
+presence of an emission line; specifically the fluorescent iron line, or Fe K$\alpha$,
+which occurs when neutral iron is either collisionally or photo-ionized with an
+energy of more than 7.1 keV. This fluorescent line is emitted at a characteristic energy
+of ~6.4 keV, in the rest frame of the object.
+
+We return to our original model and add a gaussian emission line of fixed energy and
+width then fit to get:
 
 ```{code-cell} python
 abs_pl_gauss_em_mod = xs.Model(
@@ -1842,7 +1864,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-06-01
+Updated On: 2026-10-16
 
 +++
 
