@@ -255,7 +255,10 @@ jobs:
             from jupyter_cache import get_cache
 
             cache = get_cache("_build/.jupyter_cache")
+            print(cache)
+
             targets = [t.strip() for t in os.environ["FORCE_REEXECUTE"].split(",") if t.strip()]
+            print(targets)
 
             # URIs are stored as they were at cache time (usually absolute, e.g.
             #  /home/jovyan/project/tutorials/...), so match on resolved path or suffix.
@@ -263,6 +266,7 @@ jobs:
             removed = set()
             for rec in cache.list_cache_records():
                 uri = str(Path(rec.uri))
+                print(uri)
                 if uri in wanted or any(uri.endswith(t.lstrip("./")) for t in targets):
                     print(f"Removing cache record PK={rec.pk} uri={rec.uri}")
                     cache.remove_cache(rec.pk)

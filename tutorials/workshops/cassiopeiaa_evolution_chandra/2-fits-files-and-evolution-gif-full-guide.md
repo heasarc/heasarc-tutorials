@@ -44,8 +44,8 @@ title: "Full Guide 2 \u2013 Watching a supernova remnant evolve!"
 
 By the end of this tutorial, you will be able to:
 
-- Make image cutouts of the different data over the 20+ years of the available Chandra data
-- Put the images together to create a movie
+- Make image cutouts of the different data over the 20+ years of the available Chandra data.
+- Put the images together to create a movie.
 
 ## Introduction
 
@@ -76,8 +76,6 @@ from astropy.visualization import (
 )
 from astropy.wcs import WCS, FITSFixedWarning
 from IPython.display import Image
-
-# Needed for the movie.
 from matplotlib import animation
 from matplotlib.cm import ScalarMappable
 from matplotlib.patches import Circle
