@@ -434,6 +434,7 @@ all_loaded_img_info = {}
 
 with tqdm(desc="Loading Chandra images into memory", total=len(obs_table)) as onwards:
 
+    # Iterating through every row in the table of observations
     for cur_obs_row in obs_table:
         cur_obs_id = cur_obs_row["obsid"]
 
