@@ -23,7 +23,7 @@ execution:
     xmm-ccf: false
     chandra: false
     xspec-models: false
-  cache_outputs: [../../../_data/CasA-Chandra]
+  cache_outputs: [../../../_data/CasA-Chandra, casa_output]
 file_format: mystnb
 jupytext:
   text_representation:

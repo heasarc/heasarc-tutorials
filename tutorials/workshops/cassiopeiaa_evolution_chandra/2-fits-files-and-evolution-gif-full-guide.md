@@ -35,7 +35,7 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: "Full Guide 2 \u2013 Watching a supernova remnant evolve!"
+title: "Full Guide 2 - Watching a supernova remnant evolve!"
 ---
 
 # Full Guide 2 – Watching a supernova remnant evolve!
@@ -116,7 +116,7 @@ if not os.path.exists(IMS_ROOT_DATA_DIR):
 
 # Finally set and create the output directory, into which we will
 #  save any files we create
-ROOT_OUT_PATH = os.path.abspath("demo_output")
+ROOT_OUT_PATH = os.path.abspath("casa_output")
 # Make sure the download directory exists.
 if not os.path.exists(ROOT_OUT_PATH):
     raise FileNotFoundError(
