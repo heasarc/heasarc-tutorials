@@ -241,21 +241,53 @@ jobs:
           command: |
             find /opt/jupyter/share/jupyter/kernels -maxdepth 1 -type d ! -name 'python3' -exec ln -s {} /opt/envs/build_docs/share/jupyter/kernels/ \;
 
+#      - run:
+#          name: Force re-execution for dependents
+#          command: |
+#            export FORCE_REEXECUTE='<< parameters.force_reexecute >>'
+#            export CACHE_PATH='_build/.jupyter_cache'
+#
+#            if [ -n "$FORCE_REEXECUTE" ] && [ -d "$CACHE_PATH" ]; then
+#              IFS=',' read -ra force_arr \<<< "$FORCE_REEXECUTE"
+#              for nb in "${force_arr[@]}"; do
+#                NB_PATH="tutorials/${nb}"
+#                echo "Removing ${NB_PATH} from MyST-NB cache to force re-execution..."
+#                # Correct syntax: jcache notebook -p <path> <action> <args>
+#                micromamba run -n build_docs jcache notebook -p "$CACHE_PATH" remove "$NB_PATH" || true
+#              done
+#            fi
+
       - run:
-          name: Force re-execution for dependents
+          name: Force re-execution of dependent notebooks
           command: |
             export FORCE_REEXECUTE='<< parameters.force_reexecute >>'
-            export CACHE_PATH='_build/.jupyter_cache'
-
-            if [ -n "$FORCE_REEXECUTE" ] && [ -d "$CACHE_PATH" ]; then
-              IFS=',' read -ra force_arr \<<< "$FORCE_REEXECUTE"
-              for nb in "${force_arr[@]}"; do
-                NB_PATH="tutorials/${nb}"
-                echo "Removing ${NB_PATH} from MyST-NB cache to force re-execution..."
-                # Correct syntax: jcache notebook -p <path> <action> <args>
-                micromamba run -n build_docs jcache notebook -p "$CACHE_PATH" remove "$NB_PATH" || true
-              done
+            if [ -z "$FORCE_REEXECUTE" ]; then
+              echo "No notebooks flagged for forced re-execution"
+              exit 0
             fi
+            micromamba run -n build_docs python - <<'PY'
+            import os
+            from pathlib import Path
+            from jupyter_cache import get_cache
+
+            cache = get_cache("_build/.jupyter_cache")
+            targets = [t.strip() for t in os.environ["FORCE_REEXECUTE"].split(",") if t.strip()]
+
+            # URIs are stored as they were at cache time (usually absolute, e.g.
+            #  /home/jovyan/project/tutorials/...), so match on resolved path or suffix.
+            wanted = {str(Path(t).resolve()) for t in targets}
+            removed = set()
+            for rec in cache.list_cache_records():
+                uri = str(Path(rec.uri))
+                if uri in wanted or any(uri.endswith(t.lstrip("./")) for t in targets):
+                    print(f"Removing cache record PK={rec.pk} uri={rec.uri}")
+                    cache.remove_cache(rec.pk)
+                    removed.add(uri)
+
+            missing = [t for t in targets if not any(str(Path(t).resolve()) == r or r.endswith(t.lstrip('./')) for r in removed)]
+            if missing:
+                raise SystemExit(f"ERROR: no cache record found/removed for: {missing}")
+            PY
 
       # Now we're going to start building the documentation
       - run:
