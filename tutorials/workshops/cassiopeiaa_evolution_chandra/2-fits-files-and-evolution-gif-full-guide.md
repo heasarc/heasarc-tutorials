@@ -446,9 +446,7 @@ with tqdm(desc="Loading Chandra images into memory", total=len(obs_table)) as on
         with fits.open(cur_img_full_path) as cur_imgo:
 
             cur_wcs = WCS(cur_imgo[0].header)
-
             cur_exposure = cur_imgo[0].header["EXPOSURE"]
-
             cur_obs_date = cur_imgo[0].header["DATE-OBS"]
 
             all_loaded_img_info[cur_obs_id] = {

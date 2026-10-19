@@ -4,7 +4,7 @@ import shutil
 import glob
 import argparse
 
-def restore(specs, to_build, state_cache_dir, workspace_root):
+def restore(specs, to_build, force_reexecute, state_cache_dir, workspace_root):
     """Surgically restores clean dependency data from state_cache to workspace."""
     missing_data_notebooks = set()
     if not os.path.exists(state_cache_dir):
@@ -32,7 +32,8 @@ def restore(specs, to_build, state_cache_dir, workspace_root):
 
             nb_data_found = True
             # Only restore data if the notebook is NOT being re-executed in this run
-            if nb not in to_build:
+            # We use force_reexecute list instead of to_build here.
+            if nb not in force_reexecute:
                 for src in matches:
                     # Calculate the destination relative to the repo root
                     dest = os.path.relpath(src, state_cache_dir)
@@ -49,8 +50,8 @@ def restore(specs, to_build, state_cache_dir, workspace_root):
         if not nb_data_found and paths:
             print(f"No cached data found for {nb} - adding to missing list.")
             missing_data_notebooks.add(nb)
-        elif nb in to_build:
-            print(f"Skipping workspace restoration for {nb} (marked for building), but data was found in cache.")
+        elif nb in force_reexecute:
+            print(f"Skipping workspace restoration for {nb} (marked for re-execution), but data was found in cache.")
 
     return missing_data_notebooks
 
@@ -100,6 +101,9 @@ def main():
         to_build = os.environ.get('NOTEBOOKS_TO_BUILD', '').split(',')
         # Clean up empty entries from split
         to_build = [b for b in to_build if b]
+
+        force_reexecute = os.environ.get('FORCE_REEXECUTE', '').split(',')
+        force_reexecute = [b for b in force_reexecute if b]
     except Exception as e:
         print(f"Error parsing environment variables: {e}")
         return
@@ -107,7 +111,7 @@ def main():
     workspace_root = os.getcwd()
 
     if args.mode == "restore":
-        missing = restore(specs, to_build, args.cache_dir, workspace_root)
+        missing = restore(specs, to_build, force_reexecute, args.cache_dir, workspace_root)
         if missing:
             # Output the list of notebooks with missing data to a file that CircleCI can read
             with open("missing_data_notebooks.txt", "w") as f:

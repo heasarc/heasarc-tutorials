@@ -138,6 +138,7 @@ jobs:
             #  clean dependencies while ensuring dirty notebooks run fresh.
             export CACHE_SPECS='<< parameters.cache_specs >>'
             export NOTEBOOKS_TO_BUILD='<< parameters.notebooks_to_build >>'
+            export FORCE_REEXECUTE='<< parameters.force_reexecute >>'
             python3 .github/workflows/data_cache_manager.py --mode restore
 
             # If the restore script identified notebooks with missing cached data, we need to
