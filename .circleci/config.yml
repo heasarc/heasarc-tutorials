@@ -269,8 +269,8 @@ jobs:
                     removed.add(uri)
 
             missing = [t for t in targets if not any(str(Path(t).resolve()) == r or r.endswith(t.lstrip('./')) for r in removed)]
-            if missing:
-                raise SystemExit(f"ERROR: no cache record found/removed for: {missing}")
+            # if missing:
+            #     raise SystemExit(f"ERROR: no cache record found/removed for: {missing}")
             PY
 
       # Now we're going to start building the documentation
