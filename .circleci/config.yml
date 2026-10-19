@@ -140,6 +140,35 @@ jobs:
             export NOTEBOOKS_TO_BUILD='<< parameters.notebooks_to_build >>'
             python3 .github/workflows/data_cache_manager.py --mode restore
 
+            # If the restore script identified notebooks with missing cached data, we need to
+            #  add them to the list of notebooks to build and force re-execute.
+            if [ -f missing_data_notebooks.txt ]; then
+              MISSING_NBS=$(cat missing_data_notebooks.txt)
+              echo "The following notebooks have missing cached data and will be re-executed: $MISSING_NBS"
+
+              # Append to NOTEBOOKS_TO_BUILD if not empty, otherwise just use MISSING_NBS
+              if [ -n "$NOTEBOOKS_TO_BUILD" ]; then
+                NEW_NOTEBOOKS_TO_BUILD="$NOTEBOOKS_TO_BUILD,$MISSING_NBS"
+              else
+                NEW_NOTEBOOKS_TO_BUILD="$MISSING_NBS"
+              fi
+
+              # Do the same for FORCE_REEXECUTE
+              FORCE_REEXECUTE='<< parameters.force_reexecute >>'
+              if [ -n "$FORCE_REEXECUTE" ]; then
+                NEW_FORCE_REEXECUTE="$FORCE_REEXECUTE,$MISSING_NBS"
+              else
+                NEW_FORCE_REEXECUTE="$MISSING_NBS"
+              fi
+
+              # Export to BASH_ENV so subsequent steps see the updated variables
+              echo "export HEASARC_NOTEBOOKS_TO_BUILD=$NEW_NOTEBOOKS_TO_BUILD" >> $BASH_ENV
+              echo "export FORCE_REEXECUTE=$NEW_FORCE_REEXECUTE" >> $BASH_ENV
+            else
+              echo "export HEASARC_NOTEBOOKS_TO_BUILD=$NOTEBOOKS_TO_BUILD" >> $BASH_ENV
+              echo "export FORCE_REEXECUTE='<< parameters.force_reexecute >>'" >> $BASH_ENV
+            fi
+
       # Load the most recent MyST notebook cache
       - restore_cache:
           name: Restoring MyST notebook cache
@@ -244,7 +273,6 @@ jobs:
       - run:
           name: Force re-execution of dependent notebooks
           command: |
-            export FORCE_REEXECUTE='<< parameters.force_reexecute >>'
             if [ -z "$FORCE_REEXECUTE" ]; then
               echo "No notebooks flagged for forced re-execution"
               exit 0
@@ -282,10 +310,7 @@ jobs:
           name: Build HTML rendering of notebooks
           no_output_timeout: 75m
           command: |
-            # The first command sets the HEASARC_NOTEBOOKS_TO_BUILD environment variable, which tells the build
-            #  process which notebooks to build. It allows granular control over which notebooks are built
-            #  for a given test build - the default value of "" will build all the notebooks.
-            export HEASARC_NOTEBOOKS_TO_BUILD="<< parameters.notebooks_to_build >>"
+            # HEASARC_NOTEBOOKS_TO_BUILD should already be set in BASH_ENV from the cache restore step
 
             # This is what actually runs the build process, executing the specified notebooks, but building the
             #  entire website (notebooks not specified for execution are included as just code cells/commentary, no outputs).
@@ -306,7 +331,8 @@ jobs:
             # Use the data_cache_manager.py script to synthesize a new state_cache directory.
             # It preserves existing cached files and updates with fresh data from this run.
             export CACHE_SPECS='<< parameters.cache_specs >>'
-            export NOTEBOOKS_TO_BUILD='<< parameters.notebooks_to_build >>'
+            # NOTEBOOKS_TO_BUILD should be set in BASH_ENV and inherited here
+            export NOTEBOOKS_TO_BUILD=$HEASARC_NOTEBOOKS_TO_BUILD
             python3 .github/workflows/data_cache_manager.py --mode collect
 
       - run:
@@ -316,8 +342,7 @@ jobs:
             # The artifacts directory was created in one of the first steps of this
             #  job, so we don't have to worry about making it again.
 
-            # We have to set the HEASARC_NOTEBOOKS_TO_BUILD environment variable again
-            export HEASARC_NOTEBOOKS_TO_BUILD="<< parameters.notebooks_to_build >>"
+            # HEASARC_NOTEBOOKS_TO_BUILD should be set in BASH_ENV and inherited here
 
             # Move the built HTML into the artifacts directory
             mv _build/html artifacts/

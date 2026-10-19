@@ -258,6 +258,7 @@ with fits.open(demo_evt_path) as evto:
     # Add a newline to separate the two prints
     print(evto, "\n")
 
+    # Iterate through the HDUs
     for cur_hdu in evto:
         print(cur_hdu.name)
 ```
