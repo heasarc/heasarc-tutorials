@@ -503,6 +503,7 @@ plt.figure(figsize=(6, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=False)
 
+# Pulling out the main current axis
 main_ax = plt.gca()
 
 plt.hist(
