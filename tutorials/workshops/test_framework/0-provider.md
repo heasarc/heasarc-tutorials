@@ -33,6 +33,6 @@ import os
 
 os.makedirs("data", exist_ok=True)
 with open("data/test_output.txt", "w") as f:
-    f.write("So many of these commits are pointless")
+    f.write("FUCKING PLEASE")
 print("Generated data/test_output.txt")
 ```

@@ -255,9 +255,6 @@ jobs:
                 # Correct syntax: jcache notebook -p <path> <action> <args>
                 micromamba run -n build_docs jcache notebook -p "$CACHE_PATH" remove "$NB_PATH" || true
               done
-
-              echo "Updated MyST-NB cache contents:"
-              micromamba run -n build_docs jcache notebook -p "$CACHE_PATH" list || true
             fi
 
       # Now we're going to start building the documentation
