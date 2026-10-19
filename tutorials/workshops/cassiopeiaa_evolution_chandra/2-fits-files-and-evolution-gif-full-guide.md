@@ -271,8 +271,10 @@ At the bottom of the cell, we also demonstrate that the header keys (e.g. XTENSI
 
 ```{code-cell} python
 with fits.open(demo_evt_path) as evto:
+    # Using pprint (pretty print) because it makes the headers easier to read
     pprint(evto["EVENTS"].header[:30])
 
+    # Adding a blank space, for clarity.
     print("\n")
 
     print("The assigned to the TTYPE5 header key is:", evto["EVENTS"].header["TTYPE5"])

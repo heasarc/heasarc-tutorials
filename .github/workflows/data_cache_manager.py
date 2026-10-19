@@ -10,28 +10,29 @@ def restore(specs, to_build, state_cache_dir, workspace_root):
     if not os.path.exists(state_cache_dir):
         print(f"No state cache directory found at {state_cache_dir}")
         # If the cache directory is missing entirely, all notebooks that have cache specs
-        #  and are NOT already being built should be flagged as missing data.
+        #  should be flagged as potentially needing re-execution if they're not fully restored.
         for nb in specs:
-            if nb not in to_build:
-                missing_data_notebooks.add(nb)
+            missing_data_notebooks.add(nb)
         return missing_data_notebooks
 
     for nb, paths in specs.items():
-        # Only restore data if the notebook is NOT being re-executed in this run
-        if nb not in to_build:
-            # All paths are relative to the 'tutorials/' directory
-            nb_dir = os.path.dirname(os.path.join('tutorials', nb))
-            nb_data_found = False
-            for path in paths:
-                # The cache stores files at their original relative paths inside 'state_cache'
-                pattern = os.path.join(state_cache_dir, nb_dir, path)
-                matches = glob.glob(pattern)
+        # All paths are relative to the 'tutorials/' directory
+        nb_dir = os.path.dirname(os.path.join('tutorials', nb))
+        nb_data_found = False
 
-                if not matches:
-                    print(f"No cached files found matching {pattern} for clean dependency {nb}")
-                    continue
+        # We check for cached data regardless of whether it's being built or not
+        #  so we can detect if the cache is actually empty/missing for this notebook.
+        for path in paths:
+            # The cache stores files at their original relative paths inside 'state_cache'
+            pattern = os.path.join(state_cache_dir, nb_dir, path)
+            matches = glob.glob(pattern)
 
-                nb_data_found = True
+            if not matches:
+                continue
+
+            nb_data_found = True
+            # Only restore data if the notebook is NOT being re-executed in this run
+            if nb not in to_build:
                 for src in matches:
                     # Calculate the destination relative to the repo root
                     dest = os.path.relpath(src, state_cache_dir)
@@ -45,10 +46,11 @@ def restore(specs, to_build, state_cache_dir, workspace_root):
                     else:
                         shutil.copy2(src, dest)
 
-            if not nb_data_found and paths:
-                missing_data_notebooks.add(nb)
-        else:
-            print(f"Skipping workspace restoration for {nb} (marked for building).")
+        if not nb_data_found and paths:
+            print(f"No cached data found for {nb} - adding to missing list.")
+            missing_data_notebooks.add(nb)
+        elif nb in to_build:
+            print(f"Skipping workspace restoration for {nb} (marked for building), but data was found in cache.")
 
     return missing_data_notebooks
 
