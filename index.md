@@ -66,11 +66,11 @@ tutorials/workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_
 
 ## About these notebooks
 
-**Authors** - HEASARC scientists and developers.
+**Authors** – HEASARC scientists and developers.
 
-**Contact** - [HEASARC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback) with questions, problems, and suggestions.
+**Contact** – [HEASARC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback) with questions, problems, and suggestions.
 
-**Issues** - We encourage users to open issues in this repository ([https://github.com/HEASARC/heasarc-tutorials](https://github.com/HEASARC/heasarc-tutorials)), both with problems and ideas for improvements.
+**Issues** – We encourage users to open issues in this repository ([https://github.com/HEASARC/heasarc-tutorials](https://github.com/HEASARC/heasarc-tutorials)), both with problems and ideas for improvements.
 
 
 ## Other related tutorial sets

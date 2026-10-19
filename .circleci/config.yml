@@ -23,6 +23,12 @@ parameters:
   require_xspec_models:
     type: boolean
     default: False
+  force_reexecute:
+    type: string
+    default: ""
+  cache_specs:
+    type: string
+    default: "{}"
 
 # Defines the different workflows that we could run on CircleCI - a workflow is a combination of
 #  jobs that can be run sequentially or in parallel.
@@ -42,6 +48,8 @@ workflows:
           require_xmm_ccf: << pipeline.parameters.require_xmm_ccf >>
           require_chandra: << pipeline.parameters.require_chandra >>
           require_xspec_models: << pipeline.parameters.require_xspec_models >>
+          force_reexecute: << pipeline.parameters.force_reexecute >>
+          cache_specs: << pipeline.parameters.cache_specs >>
 
 
 # Here we define the different jobs that can be run in different CircleCI workflows.
@@ -68,6 +76,12 @@ jobs:
       require_xspec_models:
         type: boolean
         default: False
+      force_reexecute:
+        type: string
+        default: ""
+      cache_specs:
+        type: string
+        default: "{}"
     # We're using a docker container as a run environment - particularly the NASA Fornax
     #  high-energy image that we maintain as part of the Fornax initiative
     docker:
@@ -110,10 +124,23 @@ jobs:
             # Then make a new support data directory, if it didn't already exist
             mkdir -p $SUPPORT_DATA_DIR
 
-      # 1. Load the most recent cache that matches the stub of the MyST notebook cache key
-      # 2. Restore the XMM calibration file cache, saves us downloading it every time!
-      # 3. And the same thing with the Chandra CalDB cache
-      # 4. Load the XSPEC models cache (not included in the Fornax-Hea image as it is large!)
+      # Restore the selective data cache and the MyST notebook cache
+      - restore_cache:
+          name: Restoring data cache
+          keys:
+            - data-cache-{{ .Branch }}-
+            - data-cache-
+
+      - run:
+          name: Restoring data cache
+          command: |
+            # Use the data_cache_manager.py script to surgically restore data for
+            #  clean dependencies while ensuring dirty notebooks run fresh.
+            export CACHE_SPECS='<< parameters.cache_specs >>'
+            export NOTEBOOKS_TO_BUILD='<< parameters.notebooks_to_build >>'
+            python3 .github/workflows/data_cache_manager.py --mode restore
+
+      # Load the most recent MyST notebook cache
       - restore_cache:
           name: Restoring MyST notebook cache
           # If there isn't a cache for this branch, we'll try and find the most recent cache.
@@ -214,6 +241,38 @@ jobs:
           command: |
             find /opt/jupyter/share/jupyter/kernels -maxdepth 1 -type d ! -name 'python3' -exec ln -s {} /opt/envs/build_docs/share/jupyter/kernels/ \;
 
+      - run:
+          name: Force re-execution of dependent notebooks
+          command: |
+            export FORCE_REEXECUTE='<< parameters.force_reexecute >>'
+            if [ -z "$FORCE_REEXECUTE" ]; then
+              echo "No notebooks flagged for forced re-execution"
+              exit 0
+            fi
+            micromamba run -n build_docs python - \<<'PY'
+            import os
+            from pathlib import Path
+            from jupyter_cache import get_cache
+
+            cache = get_cache("_build/.jupyter_cache")
+            targets = [t.strip() for t in os.environ["FORCE_REEXECUTE"].split(",") if t.strip()]
+
+            # URIs are stored as they were at cache time (usually absolute, e.g.
+            #  /home/jovyan/project/tutorials/...), so match on resolved path or suffix.
+            wanted = {str(Path(t).resolve()) for t in targets}
+            removed = set()
+            for rec in cache.list_cache_records():
+                uri = str(Path(rec.uri))
+                if uri in wanted or any(uri.endswith(t.lstrip("./")) for t in targets):
+                    print(f"Removing cache record PK={rec.pk} uri={rec.uri}")
+                    cache.remove_cache(rec.pk)
+                    removed.add(uri)
+
+            missing = [t for t in targets if not any(str(Path(t).resolve()) == r or r.endswith(t.lstrip('./')) for r in removed)]
+            if missing:
+                raise SystemExit(f"ERROR: no cache record found/removed for: {missing}")
+            PY
+
       # Now we're going to start building the documentation
       - run:
           name: Build HTML rendering of notebooks
@@ -235,6 +294,16 @@ jobs:
             # Cleans up some of the HTML, removing caption text
             sed -E -i.bak '/caption-text/{N; s/.+caption-text.+\n<ul>/<ul>/; P;D;}' _build/html/index.html
             bash -c 'rm _build/html/index.html.bak'
+
+      - run:
+          name: Collecting data for cache
+          when: always
+          command: |
+            # Use the data_cache_manager.py script to synthesize a new state_cache directory.
+            # It preserves existing cached files and updates with fresh data from this run.
+            export CACHE_SPECS='<< parameters.cache_specs >>'
+            export NOTEBOOKS_TO_BUILD='<< parameters.notebooks_to_build >>'
+            python3 .github/workflows/data_cache_manager.py --mode collect
 
       - run:
           name: Rearrange built HTML and executed notebooks for artifact storage
@@ -298,7 +367,14 @@ jobs:
             # Close the notebook index HTML file
             echo "</ul></body></html>" >> artifacts/executed_notebooks/nb_index.html
 
-      # The MySTNB build cache, so we can hopefully avoid re-executing notebooks unnecessarily
+      # Save the synthesized state and the MyST notebook cache
+      - save_cache:
+          when: always
+          key: data-cache-{{ .Branch }}-{{ epoch }}
+          paths:
+            - state_cache
+            - _build/.jupyter_cache
+
       - save_cache:
           key: jupyter_ch-{{ .Branch }}-{{epoch}}
           paths:
