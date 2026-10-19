@@ -24,6 +24,7 @@ execution:
     chandra: false
     xspec-models: false
   dependencies: [workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.md]
+  cache_outputs: [casa_output/CasA-filtered-selected-chandra-observations.csv]
 file_format: mystnb
 jupytext:
   text_representation:
@@ -35,7 +36,7 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: "Full Guide 2 - Watching a supernova remnant evolve!"
+title: Full Guide 2 - Watching a supernova remnant evolve!
 ---
 
 # Full Guide 2 – Watching a supernova remnant evolve!
@@ -51,7 +52,7 @@ By the end of this tutorial, you will be able to:
 
 This notebook follows the `1-data-acquisition-full-guide` notebook, which downloads publicly available Chandra observations of **Cas A**.
 
-+++
+
 
 ## Imports
 
@@ -139,9 +140,7 @@ SRC_COORD
 
 ## 2. Loading our observation information table
 
-+++
-
-If you recall, at the end of the first notebook we saved our table of selected observations as a comma-separated-value (CSV) file. That file contains information that we're going to need to use in this notebook, so our first task is to read it back into an `astropy` `Table` object. As we know the name we gave to the file, and where we saved it, defining the path is easy.
+If you recall, at the end of the first notebook we saved our table of selected observations as a comma-separated-value (CSV) file. That file contains information that we're going to need to use in this notebook, so our first task is to read it back into an `astropy` `Table` object. As we know the name we gave the file, and where we saved it, defining the path is easy.
 
 That path can then be passed to the `Table.read(...)` function, which will return an instance of the `Table` class for our observation table (we used the counterpart `.write(...)` function to save the file to disk in the first place).
 
@@ -161,15 +160,11 @@ obs_table[:5]
 You could quickly test what happens if you remove the `converters={"obsid": str}` in the `read(...)` call above - see if you can spot the difference in the ObsID column.
 ```
 
-+++
-
 ### 2.1 Make sure observations are ordered by start time
-
-+++
 
 Seeing as our goal is to make a GIF of the evolution of Cassiopeia A's X-ray emission, it would be quite nice to know that the observations in our `obs_table` variable are ordered from first-taken to last-taken. Now, thanks to the process we went through to give our table a _year_best_ column **at the end of the first notebook** (particularly the bit where we grouped observations by the year they were taken in), the table should be in nearly the right order.
 
-However, seeing as it is critical that the observations be ordered correctly (if they aren't we might see some quite confusing things in our eventual GIF), we should make absolutely sure through the use of the `.sort(...)` function that is built-in to the `Table` class! We simply need to pass the name of the column we want to sort by - _time_.
+However, seeing as it is critical that the observations be ordered correctly (if they aren't then we might see some quite confusing things in our eventual GIF), we should make absolutely sure through the use of the `.sort(...)` function that is built-in to the `Table` class! We simply need to pass the name of the column we want to sort by - _time_.
 
 The default behavior of the `.sort(...)` function is to sort in **ascending order**, but if for some reason you needed a table ordered _the other way_, you could pass an extra argument to the function - e.g. `obs_table.sort('time', reverse=True)`.
 
@@ -187,25 +182,19 @@ obs_table[:10]
 You could quickly test what happens if you sort the table by a column other than _time_. **Don't forgot to re-sort by _time_ afterwards though, otherwise your GIF will not be showing the evolution of Cas A correctly!**
 ```
 
-+++
-
 ## 3. Loading the Chandra FITS images into memory
-
-+++
 
 FITS is a very versatile format, used almost ubiquitously in the astronomy community (at least until the last couple of years - conversations about what we're going to replace it with have begun, and some missions are **already** using other file formats). It can be used to store anything from **images**, to spectra, to tables of catalog information, to **event lists** (restricted to high-energy missions, and one of the things that makes archival X-ray and Gamma-ray data so flexible and useful for serendipitous science).
 
 As our goal for this notebook is to examine how Chandra's view of Cas A has changed over ~2 decades worth of observations, we will want to make nice image visualizations for us to look at. To do that we could use a piece of software running with a graphical user interface (GUI), [such as SAOImage DS9](https://sites.google.com/cfa.harvard.edu/saoimageds9), which is probably the most commonly used FITS image viewer - **however**, we are in a Python environment, and if we load the data here we will not only be able to make visualizations of the images that look just as good as DS9's, but we can perform a lot of analysis that is simply not possible in GUI software (it is also **much easier to scale to multiple observations** when working in a coding environment than in a GUI tool).
 
-+++
+
 
 ### 3.1 Opening a FITS file in Python using `astropy`
 
-+++
-
 The `astropy` module (think of it as the core library for astronomy/astrophysics in Python) contains a powerful submodule for interacting with FITS files - "_interacting_", in this case, covers everything from reading data from the various storage structures that FITS files can contain, to making completely new files, to modifying existing ones.
 
-`astropy` also implements the functionality necessary to load FITS files remotely, from URLs and AWS-S3 URIs (or the Google/Microsoft equivalents), either downloading them automatically to local storage and reading them, or streaming them straight into memory. We won't really cover what that means in this workshop, but if any of you are interested to learn please ask one of the team - suffice it to say that it **can be** (though isn't always) a much more efficient way of loading data when working on a cloud platform like NASA Fornax.
+`astropy` also implements the functionality necessary to load FITS files remotely, from URLs and AWS-S3 URIs (or the Google/Microsoft equivalents), either downloading them automatically to local storage and reading them, or streaming them straight into memory. We won't really cover what that means in this workshop, but if any of you are interested please ask one of the team – suffice it to say that it **can be** (though it isn't always) a much more efficient way of loading data when working on a cloud platform like NASA Fornax.
 
 Specifically, we will use the `astropy.io.fits(...)` function.
 
@@ -224,9 +213,7 @@ Set up a variable containing the full path to the chosen ObsID directory:
 demo_dir = os.path.join(OBS_ROOT_DATA_DIR, demo_obs_id)
 ```
 
-### 3.2 Lets look at an **event list**
-
-+++
+### 3.2 Let's look at an **event list**
 
 Event lists are the foundation of observational high-energy astrophysics. They contain information like the time, position, and energy of *every* photon that makes it to the detector. Therefore, these datasets contain the most complete information and can be organized and simplifed to produce easy-to-use science data products like images, spectra and lightcurves.
 
@@ -284,8 +271,6 @@ with fits.open(demo_evt_path) as evto:
 The built-in Python function `dir(<put Python object here>)` is a **very** useful way of learning your way around a new-to-you type of object (a `BinTableHDU` instance, for example), as it will list all of the functions, attributes, and properties of the object. Try it out!
 ```
 
-+++
-
 Now, onto the `.data` property. While the _contents_ of a header will change depending on the type of HDU it is a part of, the _form_ of the header will not. That is not true for the `.data` property, as different types of HDU represent fundamentally different kinds of data - an events list takes the form of a table, with named columns, potentially with different data types (strings, integers, floats, etc.); an image, as we'll see very soon, takes the form of an array, with no named columns or rows, and a uniform data type.
 
 The return from the `.data` property of a `BinTableHDU` comes in the form of a `FITS_rec` object - this is what `astropy` uses to represent and interact with FITS tables (see the second `print` we do below, of a small subset of the events list table). We also include a `print` of the `.data` property of the `PrimaryHDU`, to show that in this case there is no data associated.
@@ -316,18 +301,12 @@ Recording all this informaton about individual X-ray/Gamma-ray photons is possib
 
 All the information we gain from observing our lovely X-ray/Gamma-ray photons does come at a cost though - _because_ they are so high-energy, it is actually very difficult to **focus** these photons, which means X-ray and Gamma-ray observations cannot attain the high level of spatial (also described as "angular") resolution possible for longer-wavelength telescopes. The optics in a focusing X-ray telescope look nothing like those of an optical telescope.
 
-+++
-
 ```{admonition} Extra Task
 :class: seealso
 **As an extension to this notebook** - attempt to make and plot your own images, lightcurves, and spectra from this event list. You should an idea of how to extract columns of data from an `astropy` `Table` from both this and the first notebook of the workshop. The `numpy` module provides both **1D** ([`np.histogram(...)`](https://numpy.org/doc/stable/reference/generated/numpy.histogram.html)) and **2D** ([`np.histogram2d(...)`](https://numpy.org/doc/stable/reference/generated/numpy.histogram2d.html)) binning functions, and you can use `matplotlib` to plot the resulting data products.
 ```
 
-+++
-
 ### 3.3 The anatomy of a FITS image
-
-+++
 
 You'll recall from our first notebook that we downloaded pre-generated images for all our selected Chandra observations - those are what we'll be using to examine the evolution of **Cas A**.
 
@@ -360,11 +339,7 @@ with fits.open(demo_img_path) as imgo:
 The `fits.open(...)` function has many configurable options that can help to optimize its performance for reading in large images, remote files, etc. - wading in to all those options is outside the scope of this workshop, but see [the `astropy.io.fits` documentation](https://docs.astropy.org/en/stable/io/fits/index.html) for more information.
 ```
 
-+++
-
 #### 3.3.1 Data
-
-+++
 
 Looking at the `.data` property of the image file's `PrimaryHDU`, you'll note that we get the data returned as a standard numpy array. We've shown a 2D slice of values around the center of the image - each of those numbers is the 'count' of events within that spatial bin (or pixel of the image):
 
@@ -380,8 +355,6 @@ with fits.open(demo_img_path) as imgo:
 ```
 
 #### 3.3.2 Header
-
-+++
 
 Looking at the image header, we once again show a 30-long slice of entries (as the whole header is much longer). If you compare this to the event list _table_ header, you'll likely notice some differences - for instance, the first entry of the events list table header was `XTENSION` (with the value set to "BINTABLE"), whereas that entry is missing entirely here (as an image HDU is considered the default).
 
@@ -403,8 +376,6 @@ with fits.open(demo_img_path) as imgo:
 ```
 
 #### 3.3.3 World Coordinate System (WCS) - constructed from header
-
-+++
 
 Think back to the quick look we took at an events list, and you'll remember we highlighted two sets of column pairs that provided spatial information in different coordinate systems (_x_/_y_ and _detx_/_dety_), and mentioned a third coordinate system RA-Dec (generally the coordinate system we ultimately want to end up in, as it describes positions on the actual sky).
 
@@ -456,8 +427,6 @@ print(SkyCoord.from_pixel(600, 600, wcs=demo_wcs))
 
 ### 3.4 Extracting relevant information from our Chandra image files
 
-+++
-
 Now we've discussed the contents of a FITS file, and how to access them through `astropy`, we will load images for all of the entries in the our table of selected observations (`obs_table`). We've already discussed that we don't want to leave file handler connections open any longer than we have to, so we make sure to store all the information we need from the image headers and data arrays in a Python dictionary `all_loaded_img_info` for easy access later in the notebook:
 
 ```{code-cell} python
@@ -496,19 +465,11 @@ with tqdm(desc="Loading Chandra images into memory", total=len(obs_table)) as on
 We've already touched on the ways in which leaving a file handler connection open can be detrimental to performance, but you must also understand that reading and writing files ('I/O') is **almost always an 'expensive' operation**. That means that we generally want to read files as few times as possible - so if we have enough RAM to keep the images in memory (which we do, in this case) then we should!
 ```
 
-+++
-
 ## 4. Visualizing the images side-by-side
-
-+++
 
 We've now loaded the image data for all of our selected observations - we want to start looking at it for signs of Cas A's evolution! Eventually we're going to visualize that evolution with an animation showing the changes over the ~2-decades worth of Chandra observations, but before that we just want to look at stationary images. In this section we will demonstrate how you display nice-looking X-ray images using `matplotlib` (the very commonly used Python plotting module) and some `astropy` features, as well as introduce you to the idea of 'stretching' or 'scaling' your data using mathematical functions to visually highlight certain features.
 
-+++
-
 ### 4.1 Visualizing image arrays using matplotlib
-
-+++
 
 Using `matplotlib` (or more specifically `pyplot`, usually imported as `from matplotlib import pyplot as plt`), makes it very easy to visualize images stored as `numpy` arrays - we can just set up a figure, use the `plt.imshow(...)` function, add a colorbar with the `plt.colorbar(...)` function, and show the figure.
 
@@ -569,11 +530,7 @@ plt.show()
 The `astropy.visualization` submodule includes several other stretch classes ([this documentation](https://docs.astropy.org/en/stable/visualization/ref_api.html#classes) shows a list of them, amongst other classes) that could be imported and used in place of `LogStretch` - this includes a `LinearStretch` class that will apply no stretch at all. **As an extension to this notebook**, import one of the other stretches (e.g. `SqrtStretch`) and use it to normalize an image - how does it look different, and why?
 ```
 
-+++
-
 ### 4.2 How do we center and crop the images?
-
-+++
 
 When dealing with multiple observations of an object, we cannot guarantee that they will all be perfectly aligned - in fact, it is incredibly unlikely that they will be. As such, we shouldn't just plot all the images as they are, because any evidence of Cas A's evolution would likely be obscured by the misalignment that comes from the telescope being oriented or pointed in slightly different directions.
 
@@ -618,15 +575,11 @@ demo_cutout.data
 **As an extension to this notebook**, you could take what you learned about visualizing X-ray images earlier in the notebook, and try to make a nice figure out of our demonstration cutout.
 ```
 
-+++
-
 ### 4.3 How do we normalize the images by their exposure time?
-
-+++
 
 These images have different exposures so to show an apples-to-apples comparison we want to have the images scaled to similar flux which is proportional to count rate. Since the pure images are in counts we need to divide the image values by the exposure times.
 
-+++
+
 
 Just as observations of an object aren't always going to be pointed exactly the same, they are very rarely going to have the exact same exposure time. As such, we can't just compare our _images_ to one another to see how Cas A evolves, as an image represents the number of 'counts' (events) per pixel - if you observed something for half an hour, then the same thing for two days, you would expect the latter observation to have many more counts per pixel (unless of course the _emission from the object is changing_).
 
@@ -651,8 +604,6 @@ all_loaded_img_info["00114"]["data"]
 ```
 
 ### 4.4 Setting up for the side-by-side comparison figure
-
-+++
 
 We're nearly ready to produce our figure that will compare images from all the observations we've selected - we just need to set up some variables to configure it. First of all, how large each image's panel will be (`fig_side_size`), how many columns the comparison figure will have (`fig_num_cols`), the colormap to use (`fig_color_map`), and where the _saved to disk_ version will be stored:
 
@@ -706,8 +657,6 @@ fig_img_norm = ImageNormalize(interval=fig_img_interval, stretch=fig_img_stretch
 ```
 
 ### 4.5 Producing the side-by-side comparison figure
-
-+++
 
 Finally, we use `matplotlib` to produce a comparison figure, showing all of observations side-by-side. As `matplotlib` is not the main focus of this workshop, we won't go into details right now, but if you do have questions/would _like_ the details, please ask one of the presenters.
 
@@ -778,17 +727,11 @@ plt.show()
 
 ## 5. Considering our data
 
-+++
-
 It is **always** a good idea to visually inspect your data before using it for science! It allows us to do basic validity checks - looking for any obvious problems with the data, either in the form of errors or unsuitability for the task we want to do.
 
 Thanks to our large side-by-side plot we now have a view of all our observations - we can take this opportunity to consider if we want to utilize all of it.
 
-+++
-
 ### 5.1 Does the side-by-side plot show any observations we should exclude?
-
-+++
 
 It is hard to see the evolution of Cas A's X-ray emission from looking at our comparison figure - it isn't made easier by the fact that some of these observations were clearly taken in a different mode to the others, as they show a much thinner strip of Cas A.
 
@@ -819,11 +762,7 @@ filt_obs_table = obs_table[~np.isin(obs_table["obsid"], to_exclude_obs_ids)]
 While looking through ~30 images and recording the ObsIDs you want to exclude is perfectly feasible, what if you had to look at _1000_? **Try to come up with a way of using the information in the cutout image data arrays to find the 'thin strip' images automatically.**
 ```
 
-+++
-
 ### 5.2 Flagging the 'best' (longest exposure) observation made each year
-
-+++
 
 If you think back to the histogram we made in the first notebook, that showed us the distribution of how many Chandra observations were made of Cas A each year, you will recall that, for some years, we selected more than one observation. While in many cases, more observations are better, when we make a movie of the evolution of Cas A's X-ray emission, we might want to restrict ourselves to just **one** observation per year.
 
@@ -897,11 +836,7 @@ filt_obs_table[filt_obs_table["year_best"] is True][:3]
 
 ## 6. Examining the evolution of Cas A's X-ray emission as a movie
 
-+++
-
 ### 6.1 Setting up for the evolution GIF
-
-+++
 
 First, we define the file path where we'll save the completed GIF of Cassiopeia A's X-ray evolution:
 
@@ -923,7 +858,7 @@ Finally, we define the radius (in pixels) of a circle that will be overlaid on t
 illustrative_circle_pix_radius = 270
 ```
 
-Extracting the ObsIDs to include in the GIF - we're going to limit ourselves to using the best one from each year, but you could use _all_ of the filtered ObsIDs if you wanted (`gif_obs_ids = filt_obs_table['obsid']`):
+Extracting the ObsIDs to include in the GIF – we're going to limit ourselves to using the best one from each year, but you could use _all_ of the filtered ObsIDs if you wanted (`gif_obs_ids = filt_obs_table['obsid']`):
 
 ```{code-cell} python
 gif_obs_ids = filt_obs_table[filt_obs_table["year_best"]]["obsid"]
@@ -942,8 +877,6 @@ filt_obs_table[filt_obs_table["year_best"]].write(
 ```
 
 ### 6.2 Setting up the frame update function
-
-+++
 
 We're using `matplotlib` to create our animation, and for that to work we need to define a function that will update the visualization for each 'frame' (i.e. observation). The function below will generate the new cutout for the ObsID, based on the input coordinate and side-length information, and then update the `img_frame` (which is the return of a `plt.imshow(...)` call you'll see in the next cell) with the new array.
 
@@ -976,8 +909,6 @@ def update_frame(frame_obs_id):
 ```
 
 ### 6.3 Creating and watching our evolution animation!
-
-+++
 
 Finally, we set up a count-rate map visualization (essentially as we've done in the other parts of this notebook we've looked at images), and overlay observation date, ObsID, and a circle. The `animation.FuncAnimation(...)` imported from `matplotlib` then takes a list of our chosen ObsIDs, and iterates through them, passing each to our `update_frame` in turn.
 
@@ -1088,11 +1019,7 @@ Image(filename=gif_out_path)
 A circle is overlaid to give context to the expansion - **try adding a different shape, or altering the circle's position and radius, to convince yourself of the movement of a specific feature.**
 ```
 
-+++
-
 ## 7. How would you make the changes compared to the first observation more visually obvious?
-
-+++
 
 ```{admonition} Extra Task
 :class: seealso
@@ -1103,7 +1030,6 @@ The evolution of Cas A's X-ray emission is considerably more visually obvious in
 ratio_gif_out_path = os.path.join(
     ROOT_OUT_PATH, f"{SRC_NAME.replace(" ", "")}-chandra-ratio-evolution.gif"
 )
-ratio_gif_out_path
 ```
 
 ```{code-cell} python
@@ -1251,6 +1177,27 @@ plt.close(fig)
 Image(filename=ratio_gif_out_path)
 ```
 
-```{code-cell} python
+## About this notebook
 
-```
+Author: David J Turner, HEASARC Staff Scientist.
+
+Author: Antara Basu-Zych, HEASARC Archive Scientist.
+
+Author: Tess Jaffe, HEASARC Chief Archive Scientist.
+
+Author: Mike Corcoran, Associate Research Professor.
+
+Updated On: 2026-10-19
+
++++
+
+### Additional Resources
+
+**HEASARC Help Desk**: [https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc)
+
+### Acknowledgements
+
+We thank the Villanova One Sky Center for Astrophysics, particularly Professor Kelly Hambleton and
+Professor Ekta Patel, for their contributions and feedback.
+
+### References
