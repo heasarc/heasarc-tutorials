@@ -179,7 +179,7 @@ Now we run the sort and look at the first ten rows:
 
 ```{code-cell} python
 # Sorting an astropy Table is an 'in place' operation, so we don't assign the
-#  return to a variable (as there is no return)
+#  return to a variable (there is no return)
 obs_table.sort("time")
 obs_table[:10]
 ```
