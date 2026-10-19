@@ -265,7 +265,7 @@ jobs:
               echo "No notebooks flagged for forced re-execution"
               exit 0
             fi
-            micromamba run -n build_docs python - <<\'PY'
+            micromamba run -n build_docs python - \<<'PY'
             import os
             from pathlib import Path
             from jupyter_cache import get_cache
