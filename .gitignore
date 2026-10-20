@@ -1,4 +1,5 @@
 # HEASARC-tutorials-specific
+state_cache
 
 # Data and Output files
 # data and output files should not be committed to the code repository
