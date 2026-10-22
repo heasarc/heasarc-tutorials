@@ -23,10 +23,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.tox', '.tmp', '.pytest
                     'README.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', '**/*_template*',
                     '**/README.md', '*_template*']
 
-# Registering custom JS files
-#  1. Adds a surface level password-unlocked screen over the website
-# THIS HAS BEEN DISABLED, BUT NOT YET REMOVED - "internal_screen.js"
-html_js_files = []
 # ----------------------------------------------------------------------------
 
 # --------------------------- Sphinx configuration ---------------------------
@@ -156,6 +152,16 @@ nb_execution_excludepatterns = BASE_EXCLUDE_PATTERNS + execution_disallow_list
 
 
 # -------------------------- Configure HTML output ---------------------------
+# Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named "default.css" will overwrite the builtin "default.css".
+html_static_path = ['_static']
+html_css_files = ['custom.css']
+
+# Registering custom JS files
+#  1. Adds a surface level password-unlocked screen over the website
+html_js_files = []
+
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme = 'sphinx_book_theme'
@@ -187,15 +193,25 @@ if 'HEASARC_TUTORIALS_ENABLE_ANALYTICS' in os.environ:
 else:
     enable_analytics = False
 
+# TODO REMOVE THIS AFTER TESTING - we have to check its working on the test builds, so
+#  analytics does want to be enabled.
+enable_analytics = True
+
 # If analytics are enabled, add the Google Analytics ID to the theme options
 if enable_analytics:
     html_theme_options["analytics"] = {
         "google_analytics_id": "G-R7YGYK7HYQ"
     }
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
-html_css_files = ['custom.css']
+    # Consent banner library (CDN) must load before our consent-init.js,
+    #  which in turn must run before the theme's own injected GA snippet
+    #  (added automatically by html_theme_options["analytics"] above).
+    html_js_files.append(
+        "https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.umd.js"
+    )
+    html_js_files.append("consent-init.js")
+    html_css_files.append(
+        "https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.css"
+    )
+
 # ----------------------------------------------------------------------------
