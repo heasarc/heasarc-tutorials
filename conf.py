@@ -193,10 +193,6 @@ if 'HEASARC_TUTORIALS_ENABLE_ANALYTICS' in os.environ:
 else:
     enable_analytics = False
 
-# TODO REMOVE THIS AFTER TESTING - we have to check its working on the test builds, so
-#  analytics does want to be enabled.
-enable_analytics = True
-
 # If analytics are enabled, add the Google Analytics ID to the theme options
 if enable_analytics:
     html_theme_options["analytics"] = {
