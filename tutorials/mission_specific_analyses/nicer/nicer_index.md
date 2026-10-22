@@ -10,4 +10,5 @@ caption: NICER tutorials
 ---
 
 data-analysis-nicer
+combined-observation-spectra-nicer
 ```
