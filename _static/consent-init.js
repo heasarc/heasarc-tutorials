@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           preferencesModal: {
             title: 'Analytics Preferences',
-            acceptAllBtn: 'Accept all',
-            acceptNecessaryBtn: 'Reject all',
+            acceptAllBtn: 'Accept',
+            acceptNecessaryBtn: 'Reject',
             savePreferencesBtn: 'Save preferences',
             sections: [
               {
