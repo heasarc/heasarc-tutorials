@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         en: {
           consentModal: {
             title: 'Analytics Consent',
-            description: 'This site uses Google Analytics to understand how visitors use it. Do you consent to analytics tracking?',
+            description: 'HEASARC-Tutorials uses Google Analytics to understand how visitors use it. Do you consent to analytics tracking?',
             acceptAllBtn: 'Accept',
             acceptNecessaryBtn: 'Reject',
             showPreferencesBtn: 'Manage preferences'
