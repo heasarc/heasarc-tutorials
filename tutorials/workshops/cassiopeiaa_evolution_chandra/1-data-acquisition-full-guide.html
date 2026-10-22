@@ -1,0 +1,1875 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Full Guide 1 – Identifying and downloading Chandra observations &#8212; HEASARC Tutorial Notebooks</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+            </script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-R7YGYK7HYQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-R7YGYK7HYQ');
+            </script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <script src="../../../_static/consent-init.js?v=d73bda4a"></script>
+    <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="Full Guide 0 – Python for this workshop" href="0-python-intro-full-guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+<aside class="bd-header-announcement" aria-label="Announcement">
+  <div class="bd-header-announcement__content"><p class='beta-banner'>The HEASARC tutorials resource is in <strong>BETA</strong> and may be subject to significant changes.</p></div>
+</aside>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/heasarc_logo.png" class="logo__image only-light" alt="High Energy Astrophysics Science Archive Research Center - Home"/>
+    <img src="../../../_static/heasarc_logo.png" class="logo__image only-dark pst-js-only" alt="High Energy Astrophysics Science Archive Research Center - Home"/>
+  
+  
+    <p class="title logo__title">v0.1</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/HEASARC/heasarc-tutorials" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../about/about_index.html">About</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../about/authors.html">Contributors</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developing skills with HEASARC services</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../heasarc_service_skills/heasarc_data/heasarc_data_index.html">Accessing HEASARC Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../heasarc_service_skills/heasarc_data/astroquery-data-acquisition.html">Using Astroquery to download HEASARC observation data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../heasarc_service_skills/heasarc_data/pyvo-data-acquisition.html">Using PyVO to find and acquire HEASARC data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../heasarc_service_skills/heasarc_catalogs/heasarc_catalogs_index.html">Accessing HEASARC Catalogs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../heasarc_service_skills/heasarc_catalogs/finding_relevant_heasarc_catalog.html">Find specific HEASARC catalogs using Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../heasarc_service_skills/heasarc_catalogs/heasarc_catalog_contents.html">Exploring the contents of HEASARC catalogs using Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../heasarc_service_skills/heasarc_catalogs/uploading_matching_table_heasarc_catalogs.html">Cross-matching local and HEASARC catalogs using Python</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Mission specific tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/nustar/nustar_index.html">NuSTAR</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/nustar/data-analysis-nustar.html">Analyzing a single NuSTAR observation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/rxte/rxte_index.html">RXTE</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/rxte/analyze-rxte-spectra.html">Exploring RXTE spectral observations of Eta Car</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/rxte/analyze-rxte-lightcurves.html">Using archived and newly generated RXTE light curves</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/nicer/nicer_index.html">NICER</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/nicer/data-analysis-nicer.html">Getting started with NICER data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/ixpe/ixpe_index.html">IXPE</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/ixpe/data-analysis-ixpe.html">Getting started with preprocessed IXPE data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/swift/swift_index.html">Swift</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/swift/getting-started-swift-xrt.html">Getting started with Swift-XRT</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../mission_specific_analyses/rosat/rosat_index.html">ROSAT</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../mission_specific_analyses/rosat/getting-started-rosat-all-sky-survey.html">Getting started with ROSAT All Sky Survey data</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Useful high-energy tools</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pyxspec/pyxspec_index.html">PyXspec</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pyxspec/pyxspec-basics.html">PyXspec basics – fitting models to data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/heasoftpy/heasoftpy_index.html">HEASoftPy</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/heasoftpy/heasoftpy-getting-started.html">Getting started with HEASoftPy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas_index.html">pySAS</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas-short-intro.html">Short introduction to pySAS</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshops</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="cassiopeiaa_evolution_chandra_index.html">X-ray evolution of Cassiopeia A</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="0-python-intro-full-guide.html">Full Guide 0 – Python for this workshop</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Full Guide 1 – Identifying and downloading Chandra observations</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/HEASARC/heasarc-tutorials" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/HEASARC/heasarc-tutorials/edit/main/tutorials/workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/HEASARC/heasarc-tutorials/issues/new?title=Issue%20on%20page%20%2Ftutorials/workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/tutorials/workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Full Guide 1 – Identifying and downloading Chandra observations</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outputs">Outputs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-setup">Global Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-chandra-observations-of-cas-a">1. Identifying Chandra observations of Cas A</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-name-and-position-of-our-target">Setting up the name and position of our target</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-to-search-the-chandra-data-archive">Preparing to search the Chandra data archive</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-search-for-chandra-observations">Running the search for Chandra observations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deciding-which-chandra-observations-we-want-to-download">2. Deciding which Chandra observations we want to download</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering-out-future-and-proprietary-observations">Filtering out <em>future</em> and <em>proprietary</em> observations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-which-of-chandras-instruments-we-want-to-use">Specifying which of Chandra’s instruments we want to use</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#excluding-observations-that-used-a-transmission-grating-spectrometer">Excluding observations that used a transmission grating spectrometer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dropping-calibration-observations">Dropping calibration observations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-distribution-of-chandra-observations">Temporal distribution of Chandra observations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-upper-and-lower-limits-of-the-histogram">Defining upper and lower limits of the histogram</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-histogram-bins">Setting up histogram bins</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-distribution-of-observations">Visualizing the distribution of observations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reformatting-the-obsid-column-to-be-easier-to-work-with">Reformatting the ObsID column to be easier to work with</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-data">3. Downloading the data!</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-where-the-observation-data-are-stored">Determining where the observation data are stored</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-easiest-way-to-download-chandra-data">The <strong>easiest</strong> way to download Chandra data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-only-images-to-save-time-and-storage">Downloading <strong>only images</strong> to save time and storage</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-the-full-file-names">Identifying the full file names</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fetching-the-files">Fetching the files</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#organizing-the-downloaded-files">Organizing the downloaded files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-for-the-next-notebook">4. Preparing for the next notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-the-modified-selected-observation-table">Saving the modified selected observation table</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-this-notebook">About this notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">Additional Resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="full-guide-1-identifying-and-downloading-chandra-observations">
+<h1>Full Guide 1 – Identifying and downloading Chandra observations<a class="headerlink" href="#full-guide-1-identifying-and-downloading-chandra-observations" title="Link to this heading">#</a></h1>
+<section id="learning-goals">
+<h2>Learning Goals<a class="headerlink" href="#learning-goals" title="Link to this heading">#</a></h2>
+<p>By the end of this tutorial, you will be able to:</p>
+<ul class="simple">
+<li><p>Look up the coordinates of a famous astrophysical source, in this case <strong>Cassiopeia A</strong> (or <em>Cas A</em>), an archetypal supernova remnant (SNR).</p></li>
+<li><p>Identify Chandra X-ray telescope observations of Cas A using the <code class="docutils literal notranslate"><span class="pre">astroquery</span></code> Python module.</p></li>
+<li><p>Filter the observations to a smaller set of data based on different criteria.</p></li>
+<li><p>Download the selected Chandra data.</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>This notebook presents a tutorial of how to access HEASARC data using astroquery, specifically Chandra observation data.</p>
+<p>We handle the case of a user searching for data on a specific astronomical object
+from a <em>specific</em> high-energy mission observation table.</p>
+<p>We will find all publicly available Chandra observations of <strong>Cas A</strong>.</p>
+<section id="inputs">
+<h3>Inputs<a class="headerlink" href="#inputs" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The name of the target source, in this case <strong>Cas A</strong>.</p></li>
+</ul>
+</section>
+<section id="outputs">
+<h3>Outputs<a class="headerlink" href="#outputs" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Chandra observation directories and data files.</p></li>
+<li><p>A visualization of the distribution of Chandra observations of Cas A over the last ~2-decades.</p></li>
+<li><p>Comma-separated-value table file summarizing the selected Chandra observations of Cas A.</p></li>
+</ul>
+</section>
+<section id="runtime">
+<h3>Runtime<a class="headerlink" href="#runtime" title="Link to this heading">#</a></h3>
+<p>As of 24th September 2026, this notebook takes ~2 minutes to run to completion on Fornax using the ‘small’ server with 8GB RAM/ 2 cores.</p>
+</section>
+</section>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.dates</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mdates</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy</span><span class="w"> </span><span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy.coordinates</span><span class="w"> </span><span class="kn">import</span> <span class="n">SkyCoord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astropy.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astroquery.heasarc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Heasarc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s3fs</span><span class="w"> </span><span class="kn">import</span> <span class="n">S3FileSystem</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="global-setup">
+<h2>Global Setup<a class="headerlink" href="#global-setup" title="Link to this heading">#</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
+</section>
+<section id="constants">
+<h3>Constants<a class="headerlink" href="#constants" title="Link to this heading">#</a></h3>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h3>
+<div class="cell tag_hide-input config_scroll_outputs docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># -------------- Set paths and create directories --------------</span>
+<span class="c1"># Set up the path of the directory into which we will download Chandra data</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">):</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">),</span> <span class="s2">"CasA-Chandra"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="s2">"CasA-Chandra/"</span>
+
+<span class="c1"># Whatever the data directory is, make sure it is absolute.</span>
+<span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
+
+<span class="c1"># Make sure the download directory exists.</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Setup path and directory into which we save output files from this example.</span>
+<span class="n">OUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"casa_output"</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># --------------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="identifying-chandra-observations-of-cas-a">
+<h2>1. Identifying Chandra observations of Cas A<a class="headerlink" href="#identifying-chandra-observations-of-cas-a" title="Link to this heading">#</a></h2>
+<p>Our first task is to determine which of Chandra’s very large archive of observations are relevant to our target - this essentially involves searching a summary of all the Chandra observations ever taken for those that were aimed near to or at the target.</p>
+<p>To access and download the Chandra data relevant to the Cas A supernova remnant (SNR) we are going to make use of <a class="reference external" href="https://astroquery.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">astroquery</span></code></a> - this is a popular (in observational astrophysics circles at least) Python module that provides interfaces to a good fraction of the many astronomical data archives that are publicly accessible.</p>
+<section id="setting-up-the-name-and-position-of-our-target">
+<h3>Setting up the name and position of our target<a class="headerlink" href="#setting-up-the-name-and-position-of-our-target" title="Link to this heading">#</a></h3>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The name of the source of interest (variable name in ALL CAPS to</span>
+<span class="c1">#  indicate it is a constant)</span>
+<span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">"Cas A"</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before we start searching for Chandra observations of Cas A, we first need to know <strong>where in the sky</strong> our target is located. While the vast majority of observations (taken by Chandra, or really any high-energy telescope) will have a particular target object associated with them, it <em>isn’t a good idea</em> to just try and select them based on the recorded target name matching our source’s name.</p>
+<p>It would be a very <strong>fragile</strong> (in this context meaning easy to break, or to miss relevant observations) approach for a myriad of reasons, e.g.:</p>
+<ol class="arabic simple">
+<li><p>A unique astrophysical source can have different names assigned to it by different surveys, astronomers, etc. (<strong>though not really a concern for this demonstration</strong>, as Cassiopeia A is one of the most famous objects in the sky).</p></li>
+<li><p>There can be multiple common versions or contractions of the same name - e.g. <strong>Cassiopeia A</strong> vs <em><strong>Cas A</strong></em> - if you just try and match the source name column of a table summarizing all Chandra observations to Cas A, you’ll miss all of the observations where it was called <em>Cassiopeia A</em>, for instance.</p></li>
+<li><p>Sometimes you don’t know if the object you’re studying even <em>has a recognizable name</em> - you might have seen something curious in another observation you were looking at, all you have are the coordinates of the object, and you want to know if it has been observed by Chandra.</p></li>
+<li><p>Finally, it is quite possible that your object of interest may appear in an observation that someone made of <strong>another object close by</strong> - in that case the recorded source name for that observation would be whatever the target was. It is very rare that only a single object appear in a high-energy observation though, and high-energy data are uniquely well suited to archival/serendipitous analysis, so we wouldn’t want to miss out on potentially useful data by just matching the target name!</p></li>
+</ol>
+<p>Luckily, as we’ve already mentioned, Cas A is a very famous and recognizable object - that means it’s coordinates will be stored in one or more of the major astronomical object databases, and we can look up its position very easily. The most significant of those databases are:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ned.ipac.caltech.edu/">NASA/IPAC Extragalactic Database (NED)</a> - meant mostly, but not exclusively, for objects outside our galaxy (Cassiopeia A is within the Milky Way, but has an entry).</p></li>
+<li><p><a class="reference external" href="https://simbad.u-strasbg.fr/simbad/">SIMBAD Astronomical Database</a> - for objects outside of our solar system.</p></li>
+<li><p><a class="reference external" href="https://vizier.unistra.fr/">VizieR Catalogue Service</a> - a database of <em>many</em> published catalogs.</p></li>
+</ul>
+<p>We can use a <strong>name resolver</strong> service (<a class="reference external" href="https://cds.unistra.fr/cgi-bin/Sesame">Sesame</a>, in this case) to take our target’s name and run queries through all of the above databases to retrieve its position. The <code class="docutils literal notranslate"><span class="pre">astropy</span></code> module (which is essentially the core astrophysics library for Python) provides a simple interface where we can just pass the <code class="docutils literal notranslate"><span class="pre">SRC_NAME</span></code> variable we defined earlier and get a coordinate back:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find the coordinates of the source</span>
+<span class="n">SRC_POSITION</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="o">.</span><span class="n">from_name</span><span class="p">(</span><span class="n">SRC_NAME</span><span class="p">)</span>
+
+<span class="c1"># Show the retrieved coordinates (note that you will only see an output from</span>
+<span class="c1">#  adding a variable name like this if it is at the END of the cell). Also, displaying</span>
+<span class="c1">#  the value of a variable by just typing the name only works in Jupyter notebooks</span>
+<span class="c1">#  and iPython, not in command-line Python or scripts - there you would have to use</span>
+<span class="c1">#  the print(SRC_POSITION) function.</span>
+<span class="n">SRC_POSITION</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;SkyCoord (ICRS): (ra, dec) in deg
+    (350.8584, 58.8113)&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>What happened there is that we declared an “<strong>instance</strong>” of <code class="docutils literal notranslate"><span class="pre">astropy</span></code>’s <code class="docutils literal notranslate"><span class="pre">SkyCoord</span></code> “<strong>class</strong>” - this is a type of Python object (like a string, list, or integer) that stores and allows us to interact with astronomical coordinates. It has many built-in methods to make common tasks (such as transforming to a different coordinate system) much easier, as we don’t have to implement them ourselves.</p>
+<p>Our <code class="docutils literal notranslate"><span class="pre">SkyCoord</span></code> instance represents a single coordinate in this case, but they can be used to interact with as many coordinates as you like.</p>
+<p>The terms “object” and “instance” are related to something called <em>object oriented programming</em> (OOP) - if you aren’t familiar with the concept and want to learn more later <a class="reference external" href="https://www.geeksforgeeks.org/dsa/introduction-of-object-oriented-programming/">you can read about it here</a>, as it is outside the scope of this workshop.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>You should always treat coordinates retrieved from a database with a little caution. They
+are likely to be very reliable for point-like sources, but <strong>for extended sources in particular</strong>
+there is often not a single ‘correct’ position definition, and you will want to check
+exactly what coordinate has been returned.</p>
+<p>In fact, you might want to define your own coordinate directly - we set up our <code class="docutils literal notranslate"><span class="pre">SRC_POSITION</span></code> variable (the <code class="docutils literal notranslate"><span class="pre">SkyCoord</span></code> instance) indirectly, by using the <code class="docutils literal notranslate"><span class="pre">from_name(...)</span></code> function, but you can pass coordinates to <code class="docutils literal notranslate"><span class="pre">SkyCoord</span></code> manually as well:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">manual_source_coord</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="mf">350.8584</span><span class="p">,</span> <span class="mf">58.8113</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"deg"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This declares the same coordinate we got from the name lookup, but demonstrates how to manually define a coordinate object.</p>
+</div>
+</section>
+<section id="preparing-to-search-the-chandra-data-archive">
+<h3>Preparing to search the Chandra data archive<a class="headerlink" href="#preparing-to-search-the-chandra-data-archive" title="Link to this heading">#</a></h3>
+<p>Now that we have retrieved Cas A’s coordinates, we can search for Chandra observations!</p>
+<p>For this data discovery part, we’ll use <code class="docutils literal notranslate"><span class="pre">astroquery</span></code>, the Python module we mentioned in the introduction to this section. As the main data archive for high-energy astrophysics observations, HEASARC maintains an <code class="docutils literal notranslate"><span class="pre">astroquery</span></code> submodule (<code class="docutils literal notranslate"><span class="pre">astroquery.heasarc</span></code>) that provides an easy Python interface to our data and catalog holdings.</p>
+<p>Before we get to the data, we need to use a <strong>catalog</strong> – specifically one of HEASARC’s ‘master’ (or observation summary) catalogs. Each master catalog corresponds to a different high-energy mission, and are used to record the basic properties (observation ID, target coordinate, target name, exposure time, etc.) of every observation made by that mission. These observation summary catalogs are a very small subset of our catalog holdings, as we archive many catalogs containing the scientific outputs of different research projects.</p>
+<p>The name of the catalog that summarizes every Chandra observation is <em><strong>chanmaster</strong></em> – we assign it to a variable below:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">obs_catalog_name</span> <span class="o">=</span> <span class="s2">"chanmaster"</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="seealso admonition">
+<p class="admonition-title">Extra Task</p>
+<p>As an <em><strong>extension to this notebook</strong></em>, you could determine the master observation catalog name for <em><strong>XMM</strong></em>, then use it to see how many observations XMM has made of Cas A. See this <a class="reference external" href="https://heasarc.github.io/heasarc-tutorials/tutorials/heasarc_service_skills/heasarc_data/astroquery-data-acquisition.html">HEASARC-Tutorials article on data acquisition through <code class="docutils literal notranslate"><span class="pre">astroquery</span></code></a> to learn how to find the names of master catalogs.</p>
+</div>
+<p>We will find relevant Chandra observations by defining a ‘matching radius’ around Cas A’s position, and accepting any observation with a target coordinate within that circle. So, the distance between our target’s coordinates and each observation’s coordinates is calculated, and if said distance is less than the matching radius, we will select the observation.</p>
+<p>The specific matching radius you choose will depend on:</p>
+<ol class="arabic simple">
+<li><p>The mission you need observations from - every mission has a different field of view (FoV).</p></li>
+<li><p>Which instrument you are most interested in (different instruments on the same mission will oftentimes have different FoVs).</p></li>
+<li><p>Whether the instrument’s FoV is circular, square, or rectangular (Chandra’s ACIS-S, for instance, is often used in a rectangular configuration that is much longer than it is wide).</p></li>
+<li><p>Your source and science goal – a low-redshift galaxy cluster, for instance, might motivate a larger matching radius as the whole source may not fit within the instrument’s FoV.</p></li>
+<li><p>If you only want observations where your source is near the center of the field, where many high-energy telescopes are the most sensitive.</p></li>
+</ol>
+<p>Each of HEASARC’s observation summary catalogs has a default search radius, which can be found using (the default for <em>chanmaster</em> is 21 arcminutes):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">default_chan_search_rad</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">get_default_radius</span><span class="p">(</span><span class="n">obs_catalog_name</span><span class="p">)</span>
+<span class="n">default_chan_search_rad</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_latex math notranslate nohighlight">
+\[21\mathrm{{}^{\prime}}\]</div>
+</div>
+</div>
+<p>Note that we are looking at a relatively nearby supernova remnant, which is most definitely an “extended” source and is fairly large on the sky. We opt for 1 arcminute matching radius.</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The u.arcmin applies arcmin units</span>
+<span class="n">match_radius</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">arcminute</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="seealso admonition">
+<p class="admonition-title">Extra Task</p>
+<p>As an <em><strong>extension to this notebook</strong></em>, you could test different values for the matching radius to see what effect it has on the number of observations selected.</p>
+</div>
+</section>
+<section id="running-the-search-for-chandra-observations">
+<h3>Running the search for Chandra observations<a class="headerlink" href="#running-the-search-for-chandra-observations" title="Link to this heading">#</a></h3>
+<p>Finally, we are ready to run the search! We use the <code class="docutils literal notranslate"><span class="pre">query_region</span></code> function of the <code class="docutils literal notranslate"><span class="pre">astroquery</span></code> package’s HEASARC submodule, passing it Cas A’s coordinates (<code class="docutils literal notranslate"><span class="pre">SRC_POSITION</span></code>), the name of the catalog to search (<code class="docutils literal notranslate"><span class="pre">obs_catalog_name</span></code>, set to the name of the Chandra master catalog), and the matching radius (<code class="docutils literal notranslate"><span class="pre">match_radius</span></code>). We also pass <code class="docutils literal notranslate"><span class="pre">columns='*'</span></code>, which tells the function to include every column in the table in the return, rather than a standard subset of columns (defined separately for each HEASARC-hosted catalog):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># columns="*" returns every catalog column, not the mission-specific default subset</span>
+<span class="n">search_result</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_region</span><span class="p">(</span>
+    <span class="n">SRC_POSITION</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="n">obs_catalog_name</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">match_radius</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"*"</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">search_result</span></code> variable, unsurprisingly perhaps, now contains the results of our search through the Chandra data archive! The results are stored in a <code class="docutils literal notranslate"><span class="pre">Table</span></code> object, which is another <code class="docutils literal notranslate"><span class="pre">astropy</span></code> addition (if you’ve ever used the nearly-ubiquitous-for-data-science <code class="docutils literal notranslate"><span class="pre">pandas</span></code> module - an <code class="docutils literal notranslate"><span class="pre">astropy</span> <span class="pre">Table</span></code> is similar to a dataframe).</p>
+<p>We can now see a compressed version of the results table (as there are quite a few rows, the default behavior is to skip most of them, with middle row of ellipses representing the hidden entries) by just putting the variable name in a cell and running it (see the number of rows in the table by looking at the top left corner):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">search_result</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><i>Table length=371</i>
+<table id="table139507449245392" class="table-striped table-bordered table-condensed">
+<thead><tr><th>__row</th><th>obsid</th><th>status</th><th>name</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>time</th><th>detector</th><th>grating</th><th>exposure</th><th>type</th><th>pi</th><th>cycle</th><th>proposal</th><th>public_date</th><th>sequence_number</th><th>data_mode</th><th>category</th><th>class</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
+<thead><tr><th></th><th></th><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>d</th><th></th><th></th><th>s</th><th></th><th></th><th></th><th></th><th>d</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
+<thead><tr><th>object</th><th>int32</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>object</th><th>object</th><th>int16</th><th>object</th><th>int32</th><th>int32</th><th>object</th><th>object</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
+<tr><td>27358</td><td>1038</td><td>archived</td><td>Cas A</td><td>350.86604</td><td>58.81169</td><td>111.74147</td><td>-2.13546</td><td>52171.2068981481</td><td>HRC-S</td><td>NONE</td><td>50400</td><td>GTO</td><td>Murray</td><td>2</td><td>02500086</td><td>52545</td><td>500104</td><td>S_TIMING</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0822056080074039</td><td>0.511286053518394</td><td>0.855469934883581</td></tr>
+<tr><td>27359</td><td>1857</td><td>archived</td><td>CAS A</td><td>350.86606</td><td>58.81169</td><td>111.74148</td><td>-2.13546</td><td>51821.9463888889</td><td>HRC-S</td><td>NONE</td><td>48880</td><td>GTO</td><td>Murray</td><td>1</td><td>01500136</td><td>52214</td><td>500124</td><td>SIMGLLD1</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.082205429534898</td><td>0.511286082213534</td><td>0.855469934883581</td></tr>
+<tr><td>27360</td><td>26655</td><td>archived</td><td>CXOU J232327.8+584842</td><td>350.86667</td><td>58.81178</td><td>111.74181</td><td>-2.13548</td><td>59943.1372106482</td><td>ACIS-S</td><td>NONE</td><td>30100</td><td>GO</td><td>Posselt</td><td>24</td><td>24500364</td><td>60141</td><td>503415</td><td>TE_00AD6</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821997728188163</td><td>0.511285630652487</td><td>0.855470748323298</td></tr>
+<tr><td>27361</td><td>27099</td><td>archived</td><td>CXOU J232327.8+584842</td><td>350.86667</td><td>58.81178</td><td>111.74181</td><td>-2.13548</td><td>59946.4267939815</td><td>ACIS-S</td><td>NONE</td><td>39100</td><td>GO</td><td>Posselt</td><td>24</td><td>24500364</td><td>60141</td><td>503415</td><td>TE_00AD6</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821997728188163</td><td>0.511285630652487</td><td>0.855470748323298</td></tr>
+<tr><td>27362</td><td>27100</td><td>archived</td><td>CXOU J232327.8+584842</td><td>350.86667</td><td>58.81178</td><td>111.74181</td><td>-2.13548</td><td>59959.8246180556</td><td>ACIS-S</td><td>NONE</td><td>28400</td><td>GO</td><td>Posselt</td><td>24</td><td>24500364</td><td>60141</td><td>503415</td><td>TE_00AD6</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821997728188163</td><td>0.511285630652487</td><td>0.855470748323298</td></tr>
+<tr><td>27363</td><td>23040</td><td>archived</td><td>Cassiopeia A</td><td>350.85000</td><td>58.81181</td><td>111.73368</td><td>-2.13258</td><td>58973.567337963</td><td>ACIS-S</td><td>HETG</td><td>25240</td><td>GTO</td><td>Canizares</td><td>20</td><td>20501019</td><td>59354</td><td>503145</td><td>TE_0088E</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0823484548155734</td><td>0.511261251061989</td><td>0.855471019469402</td></tr>
+<tr><td>27364</td><td>21691</td><td>archived</td><td>Cassiopeia A</td><td>350.85000</td><td>58.81181</td><td>111.73368</td><td>-2.13258</td><td>58976.3580092593</td><td>ACIS-S</td><td>HETG</td><td>22940</td><td>GTO</td><td>Canizares</td><td>20</td><td>20501019</td><td>59354</td><td>503145</td><td>TE_0088E</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0823484548155734</td><td>0.511261251061989</td><td>0.855471019469402</td></tr>
+<tr><td>27365</td><td>23241</td><td>archived</td><td>Cassiopeia A</td><td>350.85000</td><td>58.81181</td><td>111.73368</td><td>-2.13258</td><td>58976.9666666667</td><td>ACIS-S</td><td>HETG</td><td>23670</td><td>GTO</td><td>Canizares</td><td>20</td><td>20501019</td><td>59354</td><td>503145</td><td>TE_0088E</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0823484548155734</td><td>0.511261251061989</td><td>0.855471019469402</td></tr>
+<tr><td>27366</td><td>23245</td><td>archived</td><td>Cassiopeia A</td><td>350.85000</td><td>58.81181</td><td>111.73368</td><td>-2.13258</td><td>58974.3696875</td><td>ACIS-S</td><td>HETG</td><td>21700</td><td>GTO</td><td>Canizares</td><td>20</td><td>20501019</td><td>59354</td><td>503145</td><td>TE_0088E</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0823484548155734</td><td>0.511261251061989</td><td>0.855471019469402</td></tr>
+<tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>27721</td><td>31576</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27722</td><td>31577</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27723</td><td>31578</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27724</td><td>31579</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>61346.0</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27725</td><td>31580</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27726</td><td>31581</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27727</td><td>31582</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27728</td><td>31583</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>30000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+<tr><td>27729</td><td>31124</td><td>unobserved</td><td>Cassiopeia A</td><td>350.86749</td><td>58.82030</td><td>111.74505</td><td>-2.12759</td><td>--</td><td>ACIS-S</td><td>NONE</td><td>40000</td><td>GO</td><td>Patnaude</td><td>27</td><td>27500044</td><td>--</td><td>503602</td><td>TE_00DB0</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821722639388175</td><td>0.511161203639191</td><td>0.855547744391453</td></tr>
+</table></div></div></div>
+</div>
+<p>Though we can see the length of the table in the top left corner, we can also use a quick print statement to show how many entries the table has (found by using the built-in Python function <code class="docutils literal notranslate"><span class="pre">len(...)</span></code>, which returns the length of Python object, if applicable), and how many columns the table has (again using <code class="docutils literal notranslate"><span class="pre">len(...)</span></code>, but applied to the <code class="docutils literal notranslate"><span class="pre">.columns</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">search_result</span></code> table).</p>
+<p>Here we are constructing the Python string (i.e. everything within the “…” double quotation marks) for printing using the <em>f-string</em> functionality built into Python. An <em>f-string</em> is denoted by placing an “f” just before the opening quotation mark, and allows you to use snippets of Python code to define parts of the string (in this case we are running the two length measurements, which are then substituted into the string):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">search_result</span><span class="p">)</span><span class="si">}</span><span class="s2"> Chandra observations have been selected, and the results "</span>
+    <span class="sa">f</span><span class="s2">"table has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">search_result</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> columns."</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>371 Chandra observations have been selected, and the results table has 24 columns.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will only see an output from placing a variable name in a cell like this if it is at the <strong>end</strong> of the cell. Also, displaying
+the value of a variable by just typing the name will only work in Jupyter Notebooks and iPython, not in command-line Python or
+scripts - there you would have to use the <code class="docutils literal notranslate"><span class="pre">print(...)</span></code> function.</p>
+</div>
+</section>
+</section>
+<section id="deciding-which-chandra-observations-we-want-to-download">
+<h2>2. Deciding which Chandra observations we want to download<a class="headerlink" href="#deciding-which-chandra-observations-we-want-to-download" title="Link to this heading">#</a></h2>
+<section id="filtering-out-future-and-proprietary-observations">
+<h3>Filtering out <em>future</em> and <em>proprietary</em> observations<a class="headerlink" href="#filtering-out-future-and-proprietary-observations" title="Link to this heading">#</a></h3>
+<p>Chandra is an <strong>active mission</strong> – meaning that it is still operating and people are still proposing observation targets. This is relevant for two reasons:</p>
+<ol class="arabic simple">
+<li><p>The observation summary table (master catalog) for Chandra doesn’t <em>just</em> contain entries for observations that have already been made. It also contains an entry for each <strong>scheduled</strong> (but not yet completed) observation. So, if Chandra is planning on observing Cas A in the future (which is <strong>true</strong> at the time of writing, 16th August 2026), we have likely included those scheduled observations in our search results.</p></li>
+<li><p>For many Chandra observations, a ‘proprietary period’ is enforced. This ensures that the person/team that proposed the observation have exclusive access to the data for some time after it has been taken (typically <strong>six months</strong>, though shorter/no proprietary periods are also possible). So, even though the data have been taken, and we could technically download them, we won’t have the information necessary to unencrypt the files, and they would be useless to us.</p></li>
+</ol>
+<p>To make sure we don’t include future and proprietary observations, we can filter the results table using the “status” column, so that only observations that are “archived” are included:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Boolean array indexing: keeps only rows where the condition is True</span>
+<span class="n">all_avail_obs</span> <span class="o">=</span> <span class="n">search_result</span><span class="p">[</span><span class="n">search_result</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"archived"</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_avail_obs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Chandra observations remain after excluding "</span>
+    <span class="sa">f</span><span class="s2">"not-yet-taken and proprietary data."</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>317 Chandra observations remain after excluding not-yet-taken and proprietary data.
+</pre></div>
+</div>
+</div>
+</div>
+<p>If this is your first exposure to interacting with <code class="docutils literal notranslate"><span class="pre">astropy</span></code> tables, <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dataframes, or another similar object, you may be wondering what we just did. Let us first discuss how we accessed <em>only</em> the relevant data from the results table. We knew that the information needed to perform this filtering resided in the “status” column, and we ‘indexed’ the <code class="docutils literal notranslate"><span class="pre">astropy</span></code> <code class="docutils literal notranslate"><span class="pre">Table</span></code> using the column name (passing it in square brackets at the end of the variable name) to retrieve it.</p>
+<p>To ‘index’ something in Python is to access a single element of a multi-element object (such as a list, tuple, <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array, and so on and so on) - e.g. Python lists are indexed with integers (e.g. indexing with 0 will access the first entry in that list, whereas using a string ‘0’ will result in an error), Python dictionaries are indexed with <em>keys</em> (which are often strings, but can be any kind of hashable object (<a class="reference external" href="https://realpython.com/ref/glossary/hashable/">see this dictionary definition</a>, e.g. integers, floats, etc.).</p>
+<p>Exactly how you interact with a type of object imported from a non-standard Python module (e.g. an <code class="docutils literal notranslate"><span class="pre">astropy</span></code> <code class="docutils literal notranslate"><span class="pre">Table</span></code> or a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> instance) will depend on how that module was designed, but it is quite common for that type of object to assume that <strong>string</strong> indexes are column names, and <strong>integer</strong> indexes are row numbers (so again, <em>0</em> would be the first row, as Python indexes from zero).</p>
+<p>Anyway, as an example:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">search_result</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">&lt;MaskedColumn name=&apos;status&apos; dtype=&apos;object&apos; description=&apos;Status of Observation&apos; length=371&gt;
+<table>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>archived</td></tr>
+<tr><td>...</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+<tr><td>unobserved</td></tr>
+</table></div></div>
+</div>
+<p>The vanilla Python approach to a task like this might be to use a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop to iterate over each row one-by-one, see if the “status” column entry is equal to “archived”, and then somehow put only those rows into a new <code class="docutils literal notranslate"><span class="pre">Table</span></code> object. While that might be a valid solution, it is preferable to avoid iterating like that if possible (which it is in this case), as for-loops are typically slower than other ‘vectorized’ options.</p>
+<blockquote>
+<div><p>“Vectorisation in Python is a programming style where operations on a single piece of data, typically in a loop, are replaced by operations on entire arrays. Vectorisation can improve the performance of a code and can make the code more concise and easier to maintain.” - <a class="reference external" href="https://nesi.github.io/perf-training/python-scatter/vectorising">New Zealand eScience Infrastructure - Performance Optimisation Training</a></p>
+</div></blockquote>
+<p>Our vectorized solution is to compare every entry in the “status” column to the “archived” string, which produces a boolean array:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">search_result</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"archived"</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>masked_array(data=[ True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True, False, False, False, False, False, False,
+                   False, False, False, False, False, False, False, False,
+                   False, False, False, False,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True,  True,
+                    True,  True,  True,  True,  True,  True,  True, False,
+                   False, False, False, False, False, False, False, False,
+                   False, False, False, False, False, False, False, False,
+                   False, False, False, False, False, False, False, False,
+                   False, False, False, False, False, False, False, False,
+                   False, False, False],
+             mask=False,
+       fill_value=True)
+</pre></div>
+</div>
+</div>
+</div>
+<p>That boolean array can then itself be used to <strong>index</strong> the <code class="docutils literal notranslate"><span class="pre">astropy</span></code> <code class="docutils literal notranslate"><span class="pre">Table</span></code> - meaning that a new table, with only those rows that have a <code class="docutils literal notranslate"><span class="pre">True</span></code> entry in the array above, is created and returned. This returned Table is a subset of the original, and has been filtered to exclude any observation that does not have “archived” status.</p>
+</section>
+<section id="specifying-which-of-chandras-instruments-we-want-to-use">
+<h3>Specifying which of Chandra’s instruments we want to use<a class="headerlink" href="#specifying-which-of-chandras-instruments-we-want-to-use" title="Link to this heading">#</a></h3>
+<p>We are going to restrict ourselves to using <em>one</em> of Chandra’s instruments - <strong>ACIS</strong>. This will make it easier for us to create our movie of Cas A’s evolution, later in the workshop, as the other instrument (<strong>HRC</strong>) has significantly different spatial resolution and sensitivity characteristics.</p>
+<p>The ACIS instrument consists of several separate charge-coupled-device (CCD) chips (the same technology used in most digital cameras), and can be run in a variety of different configurations, with different combinations of chips enabled and disabled to match the needs of the observer. There are two broad groupings, labelled ACIS-<strong>S</strong> and ACIS-<strong>I</strong> respectively - these labels are what appear in the <em>detector</em> column of the Chandra master catalog, and thus in our results table.</p>
+<p>A single Chandra observation will only ever make use of a single instrument (ACIS <em>or</em> HRC), as they have to be moved into the focal plane of the single X-ray telescope that Chandra possesses - this is in contrast to some other high-energy missions with multiple instruments, such as XMM-Newton, which has three separate sets of X-ray telescope optics, and generally observes with all of its instruments simultaneously.</p>
+<p>With that knowledge, we can whittle down our table to those observations with ACIS data just using the contents of the <em>detector</em> column.</p>
+<p>If we only wanted to select observations taken with the ‘<strong>S</strong>’ group of ACIS chips, we could use the same approach as in the previous filtering step - <code class="docutils literal notranslate"><span class="pre">all_avail_obs[all_avail_obs['detector']</span> <span class="pre">==</span> <span class="pre">&quot;ACIS-S&quot;]</span></code> - but what if we want to spread the widest net possible and include ACIS-<strong>I</strong> based observations as well? In <em>that</em> case we’d need to find all table entries whose <em>detector</em> column value <em><strong>contained</strong></em> the string ‘ACIS’, rather than specifically matched ‘ACIS-I’ or ‘ACIS-S’.</p>
+<p>That kind of check is a little easier to perform with <code class="docutils literal notranslate"><span class="pre">pandas</span></code> dataframes, but still possible with our <code class="docutils literal notranslate"><span class="pre">astropy</span></code> Table. First, let’s examine the detector column (we’ve “sliced” - the <code class="docutils literal notranslate"><span class="pre">[:10]</span></code> syntax - the column to the first 10 entries just for display purposes, it hasn’t actually effected the contents of the table):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_avail_obs</span><span class="p">[</span><span class="s2">"detector"</span><span class="p">][:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">&lt;MaskedColumn name=&apos;detector&apos; dtype=&apos;object&apos; description=&apos;Detector&apos; length=10&gt;
+<table>
+<tr><td>HRC-S</td></tr>
+<tr><td>HRC-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+</table></div></div>
+</div>
+<p>We are going to use a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> function to do a vectorized search of the detector column for entries that contain the string ‘ACIS’. First, however, we have to prepare the <code class="docutils literal notranslate"><span class="pre">astropy</span></code> column to be passed to that <code class="docutils literal notranslate"><span class="pre">numpy</span></code> function. You will note that, above the column contents in the last output cell, it says “&lt;MaskedColumn…”.</p>
+<p>The ‘masked’ part of the class name means that it is a special type of <code class="docutils literal notranslate"><span class="pre">astropy</span></code> column that is designed to handle there potentially being missing or invalid entries. <code class="docutils literal notranslate"><span class="pre">MaskedColumn</span></code>s will have a ‘fill’  value assigned, which is meant to be set to some value (a blank string, for instance) that would be ‘safe’ to replace the missing data with if the user requested it. This type of column is built on top of a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> ‘masked array’.</p>
+<p>The concept of missing entries is irrelevant to our particular case because the instrument configuration of each observation is a mandatory requirement for an entry in the Chandra master catalog - however, the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> function we want to use will not accept masked arrays (or columns).</p>
+<p>So, we will trigger the <code class="docutils literal notranslate"><span class="pre">.filled()</span></code> function to produce a normal column, with the ‘fill value’ in place of any missing information - that can then be passed to the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> function. Incidentally, if you’re wondering why an <code class="docutils literal notranslate"><span class="pre">astropy</span></code> column object works so well with <code class="docutils literal notranslate"><span class="pre">numpy</span></code> functions, it’s because the column object is built on top of the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array class.</p>
+<p>We also take the opportunity to make sure the resulting column has the ‘str’ datatype, otherwise we might get an error later on. Once again, for this example, we slice the column so only 10 entries are displayed:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># .filled() replaces masked (missing) values with the column's fill value;</span>
+<span class="c1"># np.char.find requires a plain string array, not a MaskedColumn</span>
+<span class="n">all_avail_obs</span><span class="p">[</span><span class="s2">"detector"</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"str"</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">&lt;Column name=&apos;detector&apos; dtype=&apos;str6&apos; description=&apos;Detector&apos; length=10&gt;
+<table>
+<tr><td>HRC-S</td></tr>
+<tr><td>HRC-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+<tr><td>ACIS-S</td></tr>
+</table></div></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We can also find that same information by using Python’s built-in <code class="docutils literal notranslate"><span class="pre">type(...)</span></code> function. The “type” of a Python object is the class that the object is an instance of - so the type of <code class="docutils literal notranslate"><span class="pre">search_result</span></code>, and the table (<code class="docutils literal notranslate"><span class="pre">all_avail_obs</span></code>) produced after our first filtering step, will be <code class="docutils literal notranslate"><span class="pre">astropy.table.table.Table</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">all_avail_obs</span><span class="p">[</span><span class="s1">'detector'</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">search_result</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>With those necessary modifications made to the column, we can finally make use of the <code class="docutils literal notranslate"><span class="pre">np.char.find(...)</span></code> function (note that we loaded numpy as <code class="docutils literal notranslate"><span class="pre">np</span></code> in the imports section of this demonstration notebook, it is an almost universal contraction).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">find()</span></code> function takes two main arguments, the first is an array (or in this case column) of strings, and the second is the ‘substring’ that we wish to find in each column/array element (<code class="docutils literal notranslate"><span class="pre">'ACIS'</span></code> in this case). The return of this function is an array of integers, the same length as the input array/column, with each integer element representing the position of the first character of the <em>substring</em> in the corresponding input string.</p>
+<p><strong>If an element of the output array is set to -1</strong> then the substring could not be found in the corresponding input string. See this example, where the first two entries are <strong>-1</strong>, as the corresponding observations were made using the <strong>HRC</strong> instrument:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">all_avail_obs</span><span class="p">[</span><span class="s2">"detector"</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"str"</span><span class="p">),</span> <span class="s2">"ACIS"</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">&lt;Column name=&apos;detector&apos; dtype=&apos;int64&apos; description=&apos;Detector&apos; length=10&gt;
+<table>
+<tr><td>-1</td></tr>
+<tr><td>-1</td></tr>
+<tr><td>0</td></tr>
+<tr><td>0</td></tr>
+<tr><td>0</td></tr>
+<tr><td>0</td></tr>
+<tr><td>0</td></tr>
+<tr><td>0</td></tr>
+<tr><td>0</td></tr>
+<tr><td>0</td></tr>
+</table></div></div>
+</div>
+<p>Now, all that’s left to do is to turn that array into a boolean masking array that we can apply to the table, just like we did in the last filtering step:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">all_avail_obs</span><span class="p">[</span><span class="s2">"detector"</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"str"</span><span class="p">),</span> <span class="s2">"ACIS"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([False, False,  True,  True,  True,  True,  True,  True,  True,
+        True])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Having broken down the different snippets of code required to find observations whose <em>detector</em> entry value contains the ‘ACIS’ string, we now actually <em>produce</em> the filtered table (making sure to act on the filtered output of the last step):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># np.char.find returns the index of the substring match, or -1 if absent</span>
+<span class="n">acis_avail_obs</span> <span class="o">=</span> <span class="n">all_avail_obs</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_avail_obs</span><span class="p">[</span><span class="s2">"detector"</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"str"</span><span class="p">),</span> <span class="s2">"ACIS"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">acis_avail_obs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Chandra observations remain after selecting "</span>
+    <span class="sa">f</span><span class="s2">"data taken with the ACIS instrument."</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>276 Chandra observations remain after selecting data taken with the ACIS instrument.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="excluding-observations-that-used-a-transmission-grating-spectrometer">
+<h3>Excluding observations that used a transmission grating spectrometer<a class="headerlink" href="#excluding-observations-that-used-a-transmission-grating-spectrometer" title="Link to this heading">#</a></h3>
+<p>In addition to the <strong>ACIS</strong> and <strong>HRC</strong> instruments, Chandra can also place ‘transmission gratings’ (a type of diffraction grating) between the incoming photons and the currently selected instrument - this enables high resolution X-ray <em>spectroscopy</em> of a target using Chandra. However, the images produced by such observations are not well suited to our current task, so we want to exclude them.</p>
+<p>Thankfully, that is very easy! The grating used for a particular observation is stored in the <em>grating</em> column, with a string value of “NONE” meaning that no grating was deployed:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nograt_acis_avail_obs</span> <span class="o">=</span> <span class="n">acis_avail_obs</span><span class="p">[</span><span class="n">acis_avail_obs</span><span class="p">[</span><span class="s2">"grating"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"NONE"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">nograt_acis_avail_obs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Chandra observations remain after excluding "</span>
+    <span class="sa">f</span><span class="s2">"data taken with a grating deployed."</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>269 Chandra observations remain after excluding data taken with a grating deployed.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="dropping-calibration-observations">
+<h3>Dropping calibration observations<a class="headerlink" href="#dropping-calibration-observations" title="Link to this heading">#</a></h3>
+<p>Finally, we’re going to select only those Chandra observations that were intended for <strong>science</strong>, as opposed to any observations scheduled by the Chandra control team to take data used to calibrate the telescope and detectors.</p>
+<p>You shouldn’t necessarily take our exclusion of calibration observations as a statement that they <strong>can’t</strong> be utilized for scientific purposes - however, doing so requires more care and careful analysis than using observations intended for science, and we don’t want to get into that in an introductory workshop!</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">selected_obs</span> <span class="o">=</span> <span class="n">nograt_acis_avail_obs</span><span class="p">[</span><span class="n">nograt_acis_avail_obs</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"CAL"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_obs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Chandra observations remain after excluding calibration data."</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>35 Chandra observations remain after excluding calibration data.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>We implemented the filtering of the observation table in a step-by-step manner so that we could talk about why we were making each filtering choice. Setting it up like that is is quite fragile in a Jupyter Notebook environment, however, as cells can be run out of order, and each cell required the one before it to have already been executed. Additionally, if a change was made to a filtering step that <em>wasn’t</em> the last in the chain, every subsequent step would need to be re-run.</p>
+<p>As such, we would generally recommend imposing all of the filters at the same time, for instance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">selected_obs</span> <span class="o">=</span> <span class="n">search_result</span><span class="p">[(</span><span class="n">search_result</span><span class="p">[</span><span class="s1">'status'</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"archived"</span><span class="p">)</span>
+                             <span class="o">&amp;</span> <span class="p">(</span><span class="n">search_result</span><span class="p">[</span><span class="s1">'grating'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'NONE'</span><span class="p">)</span>
+                             <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">search_result</span><span class="p">[</span><span class="s1">'detector'</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'str'</span><span class="p">),</span> <span class="s1">'ACIS'</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                             <span class="o">&amp;</span> <span class="p">(</span><span class="n">search_result</span><span class="p">[</span><span class="s1">'type'</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"CAL"</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="temporal-distribution-of-chandra-observations">
+<h3>Temporal distribution of Chandra observations<a class="headerlink" href="#temporal-distribution-of-chandra-observations" title="Link to this heading">#</a></h3>
+<p>Our ultimate goal is to see how the supernova remnant changes with time, so we want to select images that span a reasonable time. Note that these times are given in <a class="reference external" href="https://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html">Modified Julian Dates (MJDs)</a>, which are essentially dates that start from November 17, 1858. For our general purposes, units of MJD are equivalent to days, so these data span from MJD = 51410 to 61217, roughly, which is ~27 years. Cas A is a popular and frequently observed source, so this spans the entire lifetime of the Chandra mission (from 1999 to 2026).</p>
+<p>So that we can get an idea of how our observations are distributed through the years of Chandra’s operation, we will construct a histogram that bins the observation dates into year-long chunks.</p>
+<section id="defining-upper-and-lower-limits-of-the-histogram">
+<h4>Defining upper and lower limits of the histogram<a class="headerlink" href="#defining-upper-and-lower-limits-of-the-histogram" title="Link to this heading">#</a></h4>
+<p>Chandra was launched in 1999, so we will start the first bin of our histogram at the very beginning of the year. As the <em>time</em> column is in MJD units (as we’ve already mentioned), we want to make sure our bin start value is also in MJD.</p>
+<p>Once again, <code class="docutils literal notranslate"><span class="pre">astropy</span></code> comes to our rescue - we can use the <code class="docutils literal notranslate"><span class="pre">Time</span></code> class to take a string representation of the start date and convert it to MJD:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">low_time_lim</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="s2">"1999-01-01"</span><span class="p">)</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="s2">"mjd"</span><span class="p">)</span>
+<span class="n">low_time_lim</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(51179.0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also use the <code class="docutils literal notranslate"><span class="pre">Time</span></code> class to fetch the <em>current</em> date/time in MJD units (we’ll use this to determine where to end the binning):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">now_time</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="s2">"mjd"</span><span class="p">)</span>
+<span class="n">now_time</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.float64(61307.830992400566)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="setting-up-histogram-bins">
+<h4>Setting up histogram bins<a class="headerlink" href="#setting-up-histogram-bins" title="Link to this heading">#</a></h4>
+<p>Now we will actually construct the upper and lower limits (or edges) of each of our <em>time</em> bins - in this case all of our bins are going to correspond to the same amount of time, though of course that is not a hard requirement when constructing a histogram.</p>
+<p>We choose to set the bin size to <strong>365.0</strong> MJD, which is the equivalent of a year.</p>
+<p>The construction of our bins is performed using <code class="docutils literal notranslate"><span class="pre">np.arange(...)</span></code>, which is a function that will produce an array of evenly spaced (by the bin size) values between the lower limit and upper limit.</p>
+<p>Unless you’re running this notebook on the 1st of January, the interval between <code class="docutils literal notranslate"><span class="pre">now_time</span></code> and <code class="docutils literal notranslate"><span class="pre">low_time_lim</span></code> is not going to be perfectly divisible by our <em>360.0</em> step size, in which case the bins <code class="docutils literal notranslate"><span class="pre">arange</span></code> produces would end at approximately the beginning of this year. As we do want to include any observations taken this year in our histogram, we can simply set the upper limit of the interval to our current time plus another 365 MJD:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mjd_bin_size</span> <span class="o">=</span> <span class="mf">365.0</span>
+
+<span class="n">mjd_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">low_time_lim</span><span class="p">,</span> <span class="p">(</span><span class="n">now_time</span> <span class="o">+</span> <span class="n">mjd_bin_size</span><span class="p">),</span> <span class="n">step</span><span class="o">=</span><span class="n">mjd_bin_size</span><span class="p">)</span>
+<span class="n">mjd_bins</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([51179., 51544., 51909., 52274., 52639., 53004., 53369., 53734.,
+       54099., 54464., 54829., 55194., 55559., 55924., 56289., 56654.,
+       57019., 57384., 57749., 58114., 58479., 58844., 59209., 59574.,
+       59939., 60304., 60669., 61034., 61399.])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizing-the-distribution-of-observations">
+<h4>Visualizing the distribution of observations<a class="headerlink" href="#visualizing-the-distribution-of-observations" title="Link to this heading">#</a></h4>
+<p>Finally, we are ready to visualize our distribution!</p>
+<p>Though really we’re showing <strong>two</strong> distributions, as we want to see the contrast between the distribution of observations at the beginning of our filtering process (after having excluded all proprietary and future observations), and the final set of observations we’ve selected:</p>
+<div class="cell tag_hide-input config_scroll_outputs docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">main_ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
+    <span class="n">all_avail_obs</span><span class="p">[</span><span class="s2">"time"</span><span class="p">],</span>
+    <span class="n">bins</span><span class="o">=</span><span class="n">mjd_bins</span><span class="p">,</span>
+    <span class="n">histtype</span><span class="o">=</span><span class="s2">"stepfilled"</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"darkgoldenrod"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"goldenrod"</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"All available observations"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
+    <span class="n">selected_obs</span><span class="p">[</span><span class="s2">"time"</span><span class="p">],</span>
+    <span class="n">bins</span><span class="o">=</span><span class="n">mjd_bins</span><span class="p">,</span>
+    <span class="n">histtype</span><span class="o">=</span><span class="s2">"step"</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"darkcyan"</span><span class="p">,</span>
+    <span class="n">hatch</span><span class="o">=</span><span class="s2">"///"</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"Selected observations"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"N"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Start Time [MJD]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">date_ax</span> <span class="o">=</span> <span class="n">main_ax</span><span class="o">.</span><span class="n">secondary_xaxis</span><span class="p">(</span>
+    <span class="s2">"top"</span><span class="p">,</span>
+    <span class="n">functions</span><span class="o">=</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Time</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"mjd"</span><span class="p">)</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="n">Time</span><span class="p">(</span><span class="n">mdates</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span><span class="n">val</span><span class="p">))</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="s2">"mjd"</span><span class="p">)),</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">date_ax</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
+<span class="n">date_ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="../../../_images/0c80f7cf1a46b52e89a303d1473c460c3e610379e47aeeb700213b77c8afebcc.png" src="../../../_images/0c80f7cf1a46b52e89a303d1473c460c3e610379e47aeeb700213b77c8afebcc.png" />
+</div>
+</div>
+<div class="seealso admonition">
+<p class="admonition-title">Extra Task</p>
+<p>As an <em><strong>extension to this notebook</strong></em>, you could add the distributions of the observations remaining after each of the filtering steps (i.e. the <code class="docutils literal notranslate"><span class="pre">acis_avail_obs</span></code> and <code class="docutils literal notranslate"><span class="pre">nograt_acis_avail_obs</span></code> tables) - don’t forget to label the new distributions so they appear in the legend, and try to choose colors/styles that are easily distinguishable from one another, while being mindful of how the figure would look to viewers <a class="reference external" href="https://www.color-blindness.com/coblis-color-blindness-simulator/">with different forms of color blindness</a>.</p>
+</div>
+</section>
+</section>
+<section id="reformatting-the-obsid-column-to-be-easier-to-work-with">
+<h3>Reformatting the ObsID column to be easier to work with<a class="headerlink" href="#reformatting-the-obsid-column-to-be-easier-to-work-with" title="Link to this heading">#</a></h3>
+<p>Finally, before we move on to downloading the observation data, we make a small quality-of-life change to the ObsID column of our <code class="docutils literal notranslate"><span class="pre">selected_obs</span></code> table. Specifically, we make sure that the integer ObsID column is converted to a string datatype, and that each ObsID is <em>exactly</em> 5 characters long by adding “0” characters to the front of the string.</p>
+<p>So an ObsID of <code class="docutils literal notranslate"><span class="pre">104</span></code> becomes <code class="docutils literal notranslate"><span class="pre">00104</span></code>, for instance.</p>
+<p>Chandra ObsIDs are often presented in both formats (with and without the prepended zeros), but it is often quite convenient to <em>know</em> that the ObsID is going to be exactly five characters.</p>
+<p>Python has a built-in function <code class="docutils literal notranslate"><span class="pre">zfill(...)</span></code> that will perform this action on a single string, but again, rather than looping through each column entry individually, we would much rather use a vectorized solution that can be applied to every column entry at once. The <code class="docutils literal notranslate"><span class="pre">numpy</span></code> module provides such a solution in the <code class="docutils literal notranslate"><span class="pre">char</span></code> submodule (which we used earlier when matching the ACIS substring to the detector column entries):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># np.char.zfill is the vectorized equivalent of Python's str.zfill</span>
+<span class="n">selected_obs</span><span class="p">[</span><span class="s2">"obsid"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="n">selected_obs</span><span class="p">[</span><span class="s2">"obsid"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">selected_obs</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><i>Table length=5</i>
+<table id="table139507531723552" class="table-striped table-bordered table-condensed">
+<thead><tr><th>__row</th><th>obsid</th><th>status</th><th>name</th><th>ra</th><th>dec</th><th>lii</th><th>bii</th><th>time</th><th>detector</th><th>grating</th><th>exposure</th><th>type</th><th>pi</th><th>cycle</th><th>proposal</th><th>public_date</th><th>sequence_number</th><th>data_mode</th><th>category</th><th>class</th><th>__x_ra_dec</th><th>__y_ra_dec</th><th>__z_ra_dec</th></tr></thead>
+<thead><tr><th></th><th></th><th></th><th></th><th>deg</th><th>deg</th><th>deg</th><th>deg</th><th>d</th><th></th><th></th><th>s</th><th></th><th></th><th></th><th></th><th>d</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
+<thead><tr><th>object</th><th>str5</th><th>object</th><th>object</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>float64</th><th>object</th><th>object</th><th>float64</th><th>object</th><th>object</th><th>int16</th><th>object</th><th>int32</th><th>int32</th><th>object</th><th>object</th><th>int16</th><th>float64</th><th>float64</th><th>float64</th></tr></thead>
+<tr><td>27360</td><td>26655</td><td>archived</td><td>CXOU J232327.8+584842</td><td>350.86667</td><td>58.81178</td><td>111.74181</td><td>-2.13548</td><td>59943.1372106482</td><td>ACIS-S</td><td>NONE</td><td>30100</td><td>GO</td><td>Posselt</td><td>24</td><td>24500364</td><td>60141</td><td>503415</td><td>TE_00AD6</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821997728188163</td><td>0.511285630652487</td><td>0.855470748323298</td></tr>
+<tr><td>27361</td><td>27099</td><td>archived</td><td>CXOU J232327.8+584842</td><td>350.86667</td><td>58.81178</td><td>111.74181</td><td>-2.13548</td><td>59946.4267939815</td><td>ACIS-S</td><td>NONE</td><td>39100</td><td>GO</td><td>Posselt</td><td>24</td><td>24500364</td><td>60141</td><td>503415</td><td>TE_00AD6</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821997728188163</td><td>0.511285630652487</td><td>0.855470748323298</td></tr>
+<tr><td>27362</td><td>27100</td><td>archived</td><td>CXOU J232327.8+584842</td><td>350.86667</td><td>58.81178</td><td>111.74181</td><td>-2.13548</td><td>59959.8246180556</td><td>ACIS-S</td><td>NONE</td><td>28400</td><td>GO</td><td>Posselt</td><td>24</td><td>24500364</td><td>60141</td><td>503415</td><td>TE_00AD6</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0821997728188163</td><td>0.511285630652487</td><td>0.855470748323298</td></tr>
+<tr><td>27367</td><td>06690</td><td>archived</td><td>CAS A CCO</td><td>350.86625</td><td>58.81181</td><td>111.74162</td><td>-2.13538</td><td>54027.3460763889</td><td>ACIS-S</td><td>NONE</td><td>70180</td><td>GO</td><td>Pavlov</td><td>7</td><td>07500535</td><td>54396</td><td>500641</td><td>TE_00746</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.082203449632799</td><td>0.511284585838895</td><td>0.855471019469402</td></tr>
+<tr><td>27376</td><td>13783</td><td>archived</td><td>Cas A CCO</td><td>350.86625</td><td>58.81183</td><td>111.74162</td><td>-2.13536</td><td>56052.8659490741</td><td>ACIS-S</td><td>NONE</td><td>72060</td><td>GO</td><td>Pavlov</td><td>13</td><td>13500605</td><td>56419</td><td>501615</td><td>TE_00ADC</td><td>SN, SNR AND ISOLATED NS</td><td>3200</td><td>-0.0822034022306319</td><td>0.511284291009451</td><td>0.85547120023334</td></tr>
+</table></div></div></div>
+</div>
+</section>
+</section>
+<section id="downloading-the-data">
+<h2>3. Downloading the data!<a class="headerlink" href="#downloading-the-data" title="Link to this heading">#</a></h2>
+<p>Now we’ve decided which Chandra observations we might want to use to explore the evolution of the Cassiopeia A supernova remnant, the next step is to download the files!</p>
+<section id="determining-where-the-observation-data-are-stored">
+<h3>Determining where the observation data are stored<a class="headerlink" href="#determining-where-the-observation-data-are-stored" title="Link to this heading">#</a></h3>
+<p>To be able to download the Chandra observation data, we first have to know <strong>where to download it from</strong>.</p>
+<p>Returning to the HEASARC-specific part of the <code class="docutils literal notranslate"><span class="pre">astroquery</span></code> module, we can find that out quite easily by using the <code class="docutils literal notranslate"><span class="pre">Heasarc.locate_data(...)</span></code> function - passing our table of selected observations, we will get another table in return (with the same number of rows as there are observations in <code class="docutils literal notranslate"><span class="pre">selected_obs</span></code>). The returned table contains several <strong>“datalinks”</strong> per observation, which tell us exactly where to find the files we need:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Returns a table with one row per input observation, containing multiple</span>
+<span class="c1">#  datalink columns (ftp, aws, sciserver)</span>
+<span class="n">obs_data_links</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">locate_data</span><span class="p">(</span><span class="n">selected_obs</span><span class="p">)</span>
+
+<span class="c1"># Slicing to 5 entries to avoid the table visualization taking up so much</span>
+<span class="n">obs_data_links</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><i>Table length=5</i>
+<table id="table139507448362144" class="table-striped table-bordered table-condensed">
+<thead><tr><th>ID</th><th>access_url</th><th>sciserver</th><th>aws</th><th>content_length</th><th>error_message</th></tr></thead>
+<thead><tr><th></th><th></th><th></th><th></th><th>byte</th><th></th></tr></thead>
+<thead><tr><th>object</th><th>object</th><th>str34</th><th>str47</th><th>int64</th><th>object</th></tr></thead>
+<tr><td>ivo://nasa.heasarc/chanmaster?27360</td><td>https://heasarc.gsfc.nasa.gov/FTP/chandra/data/byobsid/5//26655/</td><td>/FTP/chandra/data/byobsid/5/26655/</td><td>s3://nasa-heasarc/chandra/data/byobsid/5/26655/</td><td>--</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/chanmaster?27361</td><td>https://heasarc.gsfc.nasa.gov/FTP/chandra/data/byobsid/9//27099/</td><td>/FTP/chandra/data/byobsid/9/27099/</td><td>s3://nasa-heasarc/chandra/data/byobsid/9/27099/</td><td>--</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/chanmaster?27362</td><td>https://heasarc.gsfc.nasa.gov/FTP/chandra/data/byobsid/0//27100/</td><td>/FTP/chandra/data/byobsid/0/27100/</td><td>s3://nasa-heasarc/chandra/data/byobsid/0/27100/</td><td>--</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/chanmaster?27367</td><td>https://heasarc.gsfc.nasa.gov/FTP/chandra/data/byobsid/0//6690/</td><td>/FTP/chandra/data/byobsid/0/6690/</td><td>s3://nasa-heasarc/chandra/data/byobsid/0/6690/</td><td>--</td><td></td></tr>
+<tr><td>ivo://nasa.heasarc/chanmaster?27376</td><td>https://heasarc.gsfc.nasa.gov/FTP/chandra/data/byobsid/3//13783/</td><td>/FTP/chandra/data/byobsid/3/13783/</td><td>s3://nasa-heasarc/chandra/data/byobsid/3/13783/</td><td>--</td><td></td></tr>
+</table></div></div></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Looking at the table of datalinks, you’ll notice three columns of links. We will ignore the <em>sciserver</em> column to focus on the <em>access_url</em> and <em>aws</em> columns. Both of these columns contain links to the data that you can use from any internet-connected computer, and represent two different copies of the data maintained by HEASARC in different locations:</p>
+<ul class="simple">
+<li><p><em><strong>access_url</strong></em> - Provides a URL that points to the copy of the data that we store on our own servers at NASA Goddard Space Flight Center (GSFC), and that we serve to the community through the <a class="reference external" href="https://heasarc.gsfc.nasa.gov/FTP/">HEASARC FTP</a>. You could paste one of these links into your web browser and see the directory of Chandra data.</p></li>
+<li><p><em><strong>aws</strong></em> - Provides a <strong>Uniform Resource Identifier</strong> (URI) that tells us where to find the data on the <strong>HEASARC S3 bucket</strong>. This is a storage solution provided by Amazon Web Services (AWS) as part of the <a class="reference external" href="https://registry.opendata.aws/collab/nasa/">NASA Space Act</a> agreement, into which we mirror all of our high-energy astrophysics data. The advantage of this is that the access speeds to this bucket are <em>much</em> faster when working in the Amazon cloud (which, if you are running this notebook on NASA Fornax, you are doing).</p></li>
+</ul>
+</div>
+</section>
+<section id="the-easiest-way-to-download-chandra-data">
+<h3>The <strong>easiest</strong> way to download Chandra data<a class="headerlink" href="#the-easiest-way-to-download-chandra-data" title="Link to this heading">#</a></h3>
+<p><strong>We now know where the relevant Chandra data are stored</strong> (both in the HEASARC S3 bucket, and on the HEASARC FTP server), and can start downloading them for local use.</p>
+<p>At this point, you may wish to simply download the entire set of files for all the observations you’ve identified.
+That is easily achieved using Astroquery, with the <code class="docutils literal notranslate"><span class="pre">download_data</span></code> method of <code class="docutils literal notranslate"><span class="pre">Heasarc</span></code>, we just need to pass
+the datalinks we found in the previous step.</p>
+<p>We demonstrate this approach using the first two observations represented in the datalinks table, though in the following sections we will
+demonstrate a more complicated, but targeted, approach that will let us download only the image files. Before we download, though, we’re going to set up a directory to store the downloaded data in:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">full_obs_download_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">"full_obs_data_dirs"</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_obs_download_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we use <em>another</em> feature of the HEASARC submodule of <code class="docutils literal notranslate"><span class="pre">astroquery</span></code>, the <code class="docutils literal notranslate"><span class="pre">.download_data(...)</span></code> function. This takes the datalinks table we just created as an input (<em>though here we slice the table so only the first two rows are given to the function</em>). It also takes a <code class="docutils literal notranslate"><span class="pre">host=</span></code> input, which just tells it where to download the data from (i.e. which column of the datalinks table to use) - here we telling it to download from AWS. Finally, we use the <code class="docutils literal notranslate"><span class="pre">location=</span></code> argument to ensure that the downloaded Chandra data directories are stored in the output directory we just set up:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># host= selects which datalink column to pull the URI from</span>
+<span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">obs_data_links</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">host</span><span class="o">=</span><span class="s2">"aws"</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">full_obs_download_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Downloading data AWS S3 ... [astroquery.heasarc.core]
+INFO: Enabling anonymous cloud data access ... [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/chandra/data/byobsid/5/26655/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/chandra/data/byobsid/9/27099/ [astroquery.heasarc.core]
+INFO: downloading s3://nasa-heasarc/chandra/data/byobsid/9/27099/ [astroquery.heasarc.core]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Chandra observation data directories can be on the order of several gigabytes in size, so if you are downloading large numbers of observations you need to make sure you have the storage space, and be prepared for a little bit of a wait!</p>
+</div>
+</section>
+<section id="downloading-only-images-to-save-time-and-storage">
+<h3>Downloading <strong>only images</strong> to save time and storage<a class="headerlink" href="#downloading-only-images-to-save-time-and-storage" title="Link to this heading">#</a></h3>
+<p>Rather than downloading all files for all our observations, we will now <em>only</em> fetch those that are directly
+relevant to what we want to do in this notebook - this method is a little more involved than using Astroquery, but
+it is more efficient and flexible.</p>
+<p>We make use of a Python module called <code class="docutils literal notranslate"><span class="pre">s3fs</span></code>, which allows us to interact with files stored on Amazon’s S3
+platform through Python commands.</p>
+<p>We create an <code class="docutils literal notranslate"><span class="pre">S3FileSystem</span></code> object, which lets us interact with the S3 bucket as if it were a filesystem (the <code class="docutils literal notranslate"><span class="pre">anon=True</span></code> argument tells the module that the S3 bucket we’re going to access <strong>does not require an access key or password</strong>):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># anon=True skips AWS credential lookup, required for this public bucket</span>
+<span class="n">heasarc_aws_s3</span> <span class="o">=</span> <span class="n">S3FileSystem</span><span class="p">(</span><span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we identify the specific files we want to download. The datalink table tells us the AWS S3 ‘path’ (the Uniform
+Resource Identifier, or URI) to each observation’s <em>whole</em> data directory, which itself contains multiple directories and many files.</p>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">.ls(...)</span></code> function, which behaves essentially the same as the Linux command-line <code class="docutils literal notranslate"><span class="pre">ls</span></code> command, to list the contents of one of our data directories, as it is stored in the S3 bucket, without downloading anything:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">heasarc_aws_s3</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">obs_data_links</span><span class="p">[</span><span class="s2">"aws"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['nasa-heasarc/chandra/data/byobsid/5/26655/00README',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/axaff26655N002_VV001_vv2.pdf',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/oif.fits',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/secondary']
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The ‘<a class="reference external" href="https://cxc.cfa.harvard.edu/ciao/threads/intro_data/index.html">Introduction to the Data Products</a>’ documentation thread provides an overview of the layout and contents of a standard Chandra observation directory. Also, the ‘<a class="reference external" href="https://cxc.cfa.harvard.edu/ciao/data_products_guide/index.html">Data Products Guide</a>’ contains tables that give more detailed information on each file (and type of data product) that can be found in a Chandra observation directory.</p>
+</div>
+<p>The Chandra documentation that we linked to above tells us that the ‘processed’ data products (essentially meaning they are ready for scientific use)
+are all stored in a folder called <em>primary</em>, contained within a Chandra observation directory. <strong>That is where we will find the Chandra image we need.</strong></p>
+<p>In fact, we will typically find <em>several</em> image files:</p>
+<ul class="simple">
+<li><p><em><strong>acisf&lt;OBSERVATION ID&gt;N&lt;REPROCESSING VERSION&gt;_cntr_img2.fits.gz</strong></em></p></li>
+<li><p>acisf&lt;OBSERVATION ID&gt;N&lt;REPROCESSING VERSION&gt;_cntr_img2.jpg</p></li>
+<li><p>acisf&lt;OBSERVATION ID&gt;N&lt;REPROCESSING VERSION&gt;_full_img2.fits.gz</p></li>
+<li><p>acisf&lt;OBSERVATION ID&gt;N&lt;REPROCESSING VERSION&gt;_full_img2.jpg</p></li>
+</ul>
+<p>For our purpose, the CNTR data (ones that center the supernova remnant) will be most useful.</p>
+<p>Also, we note that the Chandra (ACIS instrument) default images are generated for the 0.5-7 keV energy band.</p>
+<p>Now we can use the same function as the last code cell to examine the contents of the <em>primary</em> directory:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">heasarc_aws_s3</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">obs_data_links</span><span class="p">[</span><span class="s2">"aws"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"primary"</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['nasa-heasarc/chandra/data/byobsid/5/26655/primary/acisf26655N002_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/acisf26655N002_cntr_img2.jpg',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/acisf26655N002_evt2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/acisf26655N002_full_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/acisf26655N002_full_img2.jpg',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/acisf26655_000N002_bpix1.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/acisf26655_000N002_fov1.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/orbitf788357105N001_eph1.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/5/26655/primary/pcadf26655_000N002_asol1.fits.gz']
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The file names above are only valid for Chandra’s <em><strong>ACIS</strong></em> instrument - we specified earlier in the notebook that we only wanted observations that used ACIS. If we were looking at data taken using the <em><strong>HRC</strong></em> instrument, the file names would include ‘hrc’ in place of ‘acis’.</p>
+</div>
+<p>The file name structure of Chandra images, shown in the list above, includes a piece of information that <strong>will</strong> change from observation to observation (the ObsID), and another piece of information that <strong>might</strong> change (the reprocessing version - some observations will have been reprocessed more times than others).</p>
+<p>What you should take from that is that the image file name is going to be different for each observation, which matters because it means we can’t just download <em>path/to/chandra/data/obsid/primary/image.fits</em> (for instance) for each observation, and as the reprocessing version isn’t included in the Chandra master observation catalog, we can’t construct the expected file name beforehand. Instead, we’ll have to use <strong>pattern matching</strong> to find the actual image file names as they appear in the HEASARC S3 bucket <em><strong>before</strong></em> we download them.</p>
+<p>Here we define a file pattern that uses ‘wildcards’ (i.e. the asterisks) to indicate that a matching file is allowed to contain <em>anything</em> between the parts of the file name that we specify. You will note that we defined the pattern in a list with one entry - that lets us design the next step (actually finding the <em>full</em> file names) in such a way that it would be very easy to later decide that there is an additional file pattern (or patterns) that we want to match to and download - <strong>we would just have to add another entry to <code class="docutils literal notranslate"><span class="pre">match_file_patterns</span></code></strong>.</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single-element list so additional patterns can be appended later without</span>
+<span class="c1">#  changing the code below</span>
+<span class="n">match_file_patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"primary/acis*cntr_img*.fits*"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Wildcards are a very common concept throughout computer science, and can be very helpful in finding matching files when you are on the command line (e.g. using <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">*.fits</span></code> to find all fits files in your current directory).</p>
+<p>This technique is called ‘globbing’ and is a very simple form of pattern matching.</p>
+<p>There are other forms of pattern matching - ‘regular expressions’ (regex) are a much more powerful form of pattern matching than globbing, but are also much more complex. See <a class="reference external" href="https://blog.hpc.qmul.ac.uk/Beginners-Guide-to-Regular-Expressions/">this article by Queen Mary University of London</a> for an introduction to regex. Regular expressions can be used in many terminals, just like wildcards, and are also supported through the Python standard library <code class="docutils literal notranslate"><span class="pre">re</span></code> module.</p>
+</div>
+<section id="identifying-the-full-file-names">
+<h4>Identifying the full file names<a class="headerlink" href="#identifying-the-full-file-names" title="Link to this heading">#</a></h4>
+<p>Our next goal is to tack the file patterns we defined in <code class="docutils literal notranslate"><span class="pre">match_file_patterns</span></code> on to the end of the AWS datalinks contained in the <code class="docutils literal notranslate"><span class="pre">obs_data_links</span></code> table; that way the pattern matching will be run for every observation.</p>
+<p>We do this using a list comprehension, which is a very useful way of containing a simple <code class="docutils literal notranslate"><span class="pre">for</span></code>-loop <em>within</em> a list definition (the square brackets). In fact, we’re going to use a <strong>nested</strong> list comprehension, which is the equivalent of a simple <code class="docutils literal notranslate"><span class="pre">for</span></code>-loop within <em>another</em> simple <code class="docutils literal notranslate"><span class="pre">for</span></code>-loop - this is because we don’t just want to iterate across every observation’s AWS datalink and add a <strong>single</strong> file pattern to the end.</p>
+<p>Instead, because we defined our file pattern as a single element list (to make it easy to add additional patterns to match), we want to iterate across both the observation datalinks <strong>and</strong> for each datalink iterate across the file patterns. So the final length of the list of the <code class="docutils literal notranslate"><span class="pre">all_file_patt</span></code> output will be the number of observations we selected multiplied by the number of file pattern entries we added to <code class="docutils literal notranslate"><span class="pre">match_file_patterns</span></code>.</p>
+<p>We combine each datalink with each file pattern using the <code class="docutils literal notranslate"><span class="pre">os.path.join(...)</span></code> function, which is intended to help construct file paths by ensuring you don’t have to manually add “/” characters, but works equally well for this:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Nested list comprehension: outer loop over observations, inner loop over patterns</span>
+<span class="n">all_file_patt</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_uri</span><span class="p">,</span> <span class="n">current_file_patt</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">base_uri</span> <span class="ow">in</span> <span class="n">obs_data_links</span><span class="p">[</span><span class="s2">"aws"</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">for</span> <span class="n">current_file_patt</span> <span class="ow">in</span> <span class="n">match_file_patterns</span>
+<span class="p">]</span>
+
+<span class="n">all_file_patt</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['s3://nasa-heasarc/chandra/data/byobsid/5/26655/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/9/27099/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/0/27100/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/0/6690/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/3/13783/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/2/14482/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/6/16946/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/9/17639/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/6/22426/primary/acis*cntr_img*.fits*',
+ 's3://nasa-heasarc/chandra/data/byobsid/8/23248/primary/acis*cntr_img*.fits*']
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now want to actually run the pattern match to find the URIs of the files we wish to download (again without downloading anything from the S3 bucket beforehand). That is achieved using the <code class="docutils literal notranslate"><span class="pre">.expand_path(...)</span></code> function of the S3FS module. We pass it the list of file patterns, and get a list of full URIs in return (as you can see below):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># expand_path resolves the wildcard patterns against the actual bucket contents;</span>
+<span class="c1">#  no data is downloaded at this stage</span>
+<span class="n">relevant_img_uris</span> <span class="o">=</span> <span class="n">heasarc_aws_s3</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="n">all_file_patt</span><span class="p">)</span>
+
+<span class="n">relevant_img_uris</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['nasa-heasarc/chandra/data/byobsid/0/12020/primary/acisf12020N003_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/0/14480/primary/acisf14480N003_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/0/27100/primary/acisf27100N002_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/0/5320/primary/acisf05320N004_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/0/6690/primary/acisf06690N003_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/1/14481/primary/acisf14481N003_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/2/14482/primary/acisf14482N002_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/2/1952/primary/acisf01952N004_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/3/13783/primary/acisf13783N002_cntr_img2.fits.gz',
+ 'nasa-heasarc/chandra/data/byobsid/3/19903/primary/acisf19903N002_cntr_img2.fits.gz']
+</pre></div>
+</div>
+</div>
+</div>
+<div class="seealso admonition">
+<p class="admonition-title">Extra Task</p>
+<p>As an <em><strong>extension to this notebook</strong></em>, you could add another entry to the <code class="docutils literal notranslate"><span class="pre">match_file_patterns</span></code> list, and re-run the matching step above, to find the full file names of a different file in the Chandra data directories.</p>
+</div>
+</section>
+<section id="fetching-the-files">
+<h4>Fetching the files<a class="headerlink" href="#fetching-the-files" title="Link to this heading">#</a></h4>
+<p>As a final preparatory step before we download all our images, we set up another directory to store them in:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">only_ims_download_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">"individual_files"</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">only_ims_download_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we use the <code class="docutils literal notranslate"><span class="pre">.get(...)</span></code> function of the S3Fs module, passing the pattern-matched URIs we retrieved in the last step, as well as the path to the download directory we just created.</p>
+<p>It’s worth noting that the S3FS module won’t download different files to different local directories - it’ll write the whole lot of Chandra images into that one download directory. As it is <strong>very important</strong> to keep data files organized while doing research, we will, in the next step, re-organize those downloaded images so they live in their own ObsID directories.</p>
+<p>We prepare for that by constructing a <code class="docutils literal notranslate"><span class="pre">downloaded_files</span></code> variable, which is a list of the files contained in the download directory - we use <code class="docutils literal notranslate"><span class="pre">scandir</span></code> to fetch the names and properties of every file and folder stored in the download directory - iterating through the results of the <code class="docutils literal notranslate"><span class="pre">scandir</span></code> call in a list comprehension, we keep only those entries that are marked as being a <em>file</em>, as opposed to a <em>folder</em>:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">heasarc_aws_s3</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">relevant_img_uris</span><span class="p">,</span> <span class="n">only_ims_download_dir</span><span class="p">)</span>
+
+<span class="n">downloaded_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">en</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">only_ims_download_dir</span><span class="p">)</span> <span class="k">if</span> <span class="n">en</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+<span class="n">downloaded_files</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['acisf12020N003_cntr_img2.fits.gz',
+ 'acisf27100N002_cntr_img2.fits.gz',
+ 'acisf13783N002_cntr_img2.fits.gz',
+ 'acisf14482N002_cntr_img2.fits.gz',
+ 'acisf19903N002_cntr_img2.fits.gz',
+ 'acisf14480N003_cntr_img2.fits.gz',
+ 'acisf01952N004_cntr_img2.fits.gz',
+ 'acisf05320N004_cntr_img2.fits.gz',
+ 'acisf06690N003_cntr_img2.fits.gz',
+ 'acisf09773N003_cntr_img2.fits.gz']
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="organizing-the-downloaded-files">
+<h4>Organizing the downloaded files<a class="headerlink" href="#organizing-the-downloaded-files" title="Link to this heading">#</a></h4>
+<p>Finally, we’ll reorganize the files we just downloaded (as we already said we would in the last section). Every image will be placed in its own ObsID-named directory.</p>
+<p>We iterate through the rows of our <code class="docutils literal notranslate"><span class="pre">selected_obs</span></code> table, extracting the ObsID into a variable name for convenience - that will be used to figure out which of the file names stored in the <code class="docutils literal notranslate"><span class="pre">download_files</span></code> list are from that observation.</p>
+<p>We use the <code class="docutils literal notranslate"><span class="pre">np.char.find(...)</span></code> function (that we used in the instrument filtering step in a previous section) to check each entry in <code class="docutils literal notranslate"><span class="pre">downloaded_files</span></code> to see if it contains the current ObsID - recall that it returns an array of integer values the same length as the input array (or list in this case) - a value of <em>-1</em> means that the file name <strong>doesn’t</strong> contain the current ObsID.</p>
+<p>We’ll take this opportunity to demonstrate another useful <code class="docutils literal notranslate"><span class="pre">numpy</span></code> function - <code class="docutils literal notranslate"><span class="pre">argwhere</span></code>. This basically takes a True/False input array (from <code class="docutils literal notranslate"><span class="pre">np.char.find(downloaded_files,</span> <span class="pre">cur_obs_id)</span> <span class="pre">!=</span> <span class="pre">-1</span></code> in this case) and gives us the integer indexes where that array has a value of True. So:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>would return:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>That return is in the form of a 2-by-1 array, as <code class="docutils literal notranslate"><span class="pre">argwhere</span></code> treats every input array as though it were multidimensional - even ‘flat’ 1D arrays like our four-element True/False example array. We squash the return from <code class="docutils literal notranslate"><span class="pre">argwhere</span></code> back into a 1D array using the <code class="docutils literal notranslate"><span class="pre">.flatten()</span></code> function.</p>
+<p>From there, we iterate (in another <code class="docutils literal notranslate"><span class="pre">for</span></code>-loop nested within the first) through the matching indexes (if the <code class="docutils literal notranslate"><span class="pre">match_file_patterns</span></code> list contains only one entry, there should be only one index per ObsID) and read out the relevant file name to the <code class="docutils literal notranslate"><span class="pre">cur_downloaded_file</span></code> variable, for convenience.</p>
+<p>The full path to that file, and the path we want to move it to, are set up by joining the file name to the download directory path, and the ObsID directory within that download directory path with <code class="docutils literal notranslate"><span class="pre">os.path.join(...)</span></code>, and we can finally move the file using the <code class="docutils literal notranslate"><span class="pre">os.path.rename(...)</span></code> function:</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">specific_img_file_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">cur_obs</span> <span class="ow">in</span> <span class="n">selected_obs</span><span class="p">:</span>
+
+    <span class="n">cur_obs_id</span> <span class="o">=</span> <span class="n">cur_obs</span><span class="p">[</span><span class="s2">"obsid"</span><span class="p">]</span>
+
+    <span class="n">file_name_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">char</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">downloaded_files</span><span class="p">,</span> <span class="n">cur_obs_id</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">cur_fn_ind</span> <span class="ow">in</span> <span class="n">file_name_ind</span><span class="p">:</span>
+
+        <span class="n">cur_downloaded_file</span> <span class="o">=</span> <span class="n">downloaded_files</span><span class="p">[</span><span class="n">cur_fn_ind</span><span class="p">]</span>
+
+        <span class="n">cur_downloaded_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">only_ims_download_dir</span><span class="p">,</span> <span class="n">cur_downloaded_file</span>
+        <span class="p">)</span>
+
+        <span class="n">final_downloaded_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">only_ims_download_dir</span><span class="p">,</span> <span class="n">cur_obs_id</span><span class="p">,</span> <span class="n">cur_downloaded_file</span>
+        <span class="p">)</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">renames</span><span class="p">(</span><span class="n">cur_downloaded_file_path</span><span class="p">,</span> <span class="n">final_downloaded_file_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">"img"</span> <span class="ow">in</span> <span class="n">cur_downloaded_file</span><span class="p">:</span>
+            <span class="n">specific_img_file_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_downloaded_file</span><span class="p">)</span>
+
+<span class="n">selected_obs</span><span class="p">[</span><span class="s2">"img_file_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">specific_img_file_names</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="preparing-for-the-next-notebook">
+<h2>4. Preparing for the next notebook<a class="headerlink" href="#preparing-for-the-next-notebook" title="Link to this heading">#</a></h2>
+<section id="saving-the-modified-selected-observation-table">
+<h3>Saving the modified selected observation table<a class="headerlink" href="#saving-the-modified-selected-observation-table" title="Link to this heading">#</a></h3>
+<p>The selected observations table contains useful information that we will want to use in later notebooks. So let’s store it!</p>
+<p><code class="docutils literal notranslate"><span class="pre">Table</span></code> instances have a <code class="docutils literal notranslate"><span class="pre">.write(...)</span></code> function, which is exactly what it sounds like - we tell it <em>where</em> to write the output file, and what format we want it to be written in (comma-separated values, in this case):</p>
+<div class="cell config_scroll_outputs docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">selected_obs</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">OUT_PATH</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">SRC_NAME</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">' '</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2">-selected-chandra-observations.csv"</span>
+    <span class="p">),</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">"csv"</span><span class="p">,</span>
+    <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="about-this-notebook">
+<h2>About this notebook<a class="headerlink" href="#about-this-notebook" title="Link to this heading">#</a></h2>
+<p>Author: David J Turner, HEASARC Staff Scientist.</p>
+<p>Author: Antara Basu-Zych, HEASARC Archive Scientist.</p>
+<p>Author: Tess Jaffe, HEASARC Chief Archive Scientist.</p>
+<p>Author: Mike Corcoran, Associate Research Professor.</p>
+<p>Updated On: 2026-09-24</p>
+<section id="additional-resources">
+<h3>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h3>
+<p><strong>HEASARC Help Desk</strong>: <a class="reference external" href="https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc">https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selected=heasarc</a></p>
+</section>
+<section id="acknowledgements">
+<h3>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Link to this heading">#</a></h3>
+<p>We thank the Villanova One Sky Center for Astrophysics, particularly Professor Kelly Hambleton and
+Professor Ekta Patel, for their contributions and feedback.</p>
+</section>
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="0-python-intro-full-guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Full Guide 0 – Python for this workshop</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs">Inputs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outputs">Outputs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-setup">Global Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constants">Constants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-chandra-observations-of-cas-a">1. Identifying Chandra observations of Cas A</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-name-and-position-of-our-target">Setting up the name and position of our target</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-to-search-the-chandra-data-archive">Preparing to search the Chandra data archive</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-search-for-chandra-observations">Running the search for Chandra observations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deciding-which-chandra-observations-we-want-to-download">2. Deciding which Chandra observations we want to download</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering-out-future-and-proprietary-observations">Filtering out <em>future</em> and <em>proprietary</em> observations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-which-of-chandras-instruments-we-want-to-use">Specifying which of Chandra’s instruments we want to use</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#excluding-observations-that-used-a-transmission-grating-spectrometer">Excluding observations that used a transmission grating spectrometer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dropping-calibration-observations">Dropping calibration observations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-distribution-of-chandra-observations">Temporal distribution of Chandra observations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-upper-and-lower-limits-of-the-histogram">Defining upper and lower limits of the histogram</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-histogram-bins">Setting up histogram bins</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-distribution-of-observations">Visualizing the distribution of observations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reformatting-the-obsid-column-to-be-easier-to-work-with">Reformatting the ObsID column to be easier to work with</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-data">3. Downloading the data!</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#determining-where-the-observation-data-are-stored">Determining where the observation data are stored</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-easiest-way-to-download-chandra-data">The <strong>easiest</strong> way to download Chandra data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-only-images-to-save-time-and-storage">Downloading <strong>only images</strong> to save time and storage</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-the-full-file-names">Identifying the full file names</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fetching-the-files">Fetching the files</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#organizing-the-downloaded-files">Organizing the downloaded files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-for-the-next-notebook">4. Preparing for the next notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-the-modified-selected-observation-table">Saving the modified selected observation table</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-this-notebook">About this notebook</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">Additional Resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By HEASARC developers
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, HEASARC developers.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

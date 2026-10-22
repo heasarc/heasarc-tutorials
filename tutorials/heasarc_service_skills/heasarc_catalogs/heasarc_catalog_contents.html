@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.css" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -69,6 +70,8 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/heasarc_service_skills/heasarc_catalogs/heasarc_catalog_contents';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <script src="../../../_static/consent-init.js?v=d73bda4a"></script>
     <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -298,6 +301,14 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas_index.html">pySAS</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas-short-intro.html">Short introduction to pySAS</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshops</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_index.html">X-ray evolution of Cassiopeia A</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/0-python-intro-full-guide.html">Full Guide 0 – Python for this workshop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.html">Full Guide 1 – Identifying and downloading Chandra observations</a></li>
 </ul>
 </details></li>
 </ul>
@@ -695,7 +706,7 @@ units even though this catalog has <em>79</em> columns:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We pass the name of the catalog as the first argument</span>
-<span class="n">Heasarc</span><span class="o">.</span><span class="n">list_columns</span><span class="p">(</span><span class="s2">&quot;acceptcat&quot;</span><span class="p">)</span>
+<span class="n">Heasarc</span><span class="o">.</span><span class="n">list_columns</span><span class="p">(</span><span class="s2">"acceptcat"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -722,7 +733,7 @@ units even though this catalog has <em>79</em> columns:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pass an additional argument to ensure all columns are returned</span>
-<span class="n">all_accept_cols</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_columns</span><span class="p">(</span><span class="s2">&quot;acceptcat&quot;</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">all_accept_cols</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_columns</span><span class="p">(</span><span class="s2">"acceptcat"</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">all_accept_cols</span>
 </pre></div>
 </div>
@@ -763,7 +774,7 @@ safely sidestep this issue by using the <code class="docutils literal notranslat
 output (an Astropy <code class="docutils literal notranslate"><span class="pre">Table</span></code> object, more on them in <a class="reference internal" href="#interacting-with-heasarc-catalog-contents">Section 4</a>):</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The &#39;pprint&#39; stands for &#39;pretty print&#39;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The 'pprint' stands for 'pretty print'</span>
 <span class="n">all_accept_cols</span><span class="o">.</span><span class="n">pprint_all</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -846,10 +857,10 @@ bf_100k_entropy_4_error                                       Uncertainty in Bes
               p_value_1                               Probability of Worse Fit Given Chi-Squared and DOF         
        exposure_obsid_2                                          Exposure Time for Chandra Observation 2        s
      center_ccd_obsid_2                          CCD Location of Cluster Center in Chandra Observation 2         
-           &quot;__x_ra_dec&quot;                                                        System unit vector column         
-           &quot;__y_ra_dec&quot;                                                        System unit vector column         
-           &quot;__z_ra_dec&quot;                                                        System unit vector column         
-                &quot;__row&quot;                                                              System index column
+           "__x_ra_dec"                                                        System unit vector column         
+           "__y_ra_dec"                                                        System unit vector column         
+           "__z_ra_dec"                                                        System unit vector column         
+                "__row"                                                              System index column
 </pre></div>
 </div>
 </div>
@@ -866,7 +877,7 @@ getting into with respect to the size of the table.</p>
 in our catalog:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accept_nrows</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">count_rows</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">&quot;acceptcat&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accept_nrows</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">count_rows</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">"acceptcat"</span><span class="p">)</span>
 <span class="n">accept_nrows</span>
 </pre></div>
 </div>
@@ -892,7 +903,7 @@ for instance:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Same again, but CSC</span>
-<span class="n">Heasarc</span><span class="o">.</span><span class="n">count_rows</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">&quot;csc&quot;</span><span class="p">)</span>
+<span class="n">Heasarc</span><span class="o">.</span><span class="n">count_rows</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">"csc"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -916,7 +927,7 @@ required:</p>
 </ul>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accept_cat</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_region</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">&quot;acceptcat&quot;</span><span class="p">,</span> <span class="n">spatial</span><span class="o">=</span><span class="s2">&quot;all-sky&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accept_cat</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_region</span><span class="p">(</span><span class="n">catalog</span><span class="o">=</span><span class="s2">"acceptcat"</span><span class="p">,</span> <span class="n">spatial</span><span class="o">=</span><span class="s2">"all-sky"</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"*"</span><span class="p">)</span>
 <span class="n">accept_cat</span>
 </pre></div>
 </div>
@@ -961,10 +972,10 @@ value of the <code class="docutils literal notranslate"><span class="pre">redshi
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accept_cat_higherz</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_region</span><span class="p">(</span>
-    <span class="n">catalog</span><span class="o">=</span><span class="s2">&quot;acceptcat&quot;</span><span class="p">,</span>
-    <span class="n">spatial</span><span class="o">=</span><span class="s2">&quot;all-sky&quot;</span><span class="p">,</span>
-    <span class="n">column_filters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;redshift&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;0.4&quot;</span><span class="p">)},</span>
-    <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="n">catalog</span><span class="o">=</span><span class="s2">"acceptcat"</span><span class="p">,</span>
+    <span class="n">spatial</span><span class="o">=</span><span class="s2">"all-sky"</span><span class="p">,</span>
+    <span class="n">column_filters</span><span class="o">=</span><span class="p">{</span><span class="s2">"redshift"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"&gt;"</span><span class="p">,</span> <span class="s2">"0.4"</span><span class="p">)},</span>
+    <span class="n">columns</span><span class="o">=</span><span class="s2">"*"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">accept_cat_higherz</span>
 </pre></div>
@@ -1004,10 +1015,10 @@ higher-redshift, low-central-entropy, galaxy clusters to be returned:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accept_cat_higherz_lowk</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_region</span><span class="p">(</span>
-    <span class="n">catalog</span><span class="o">=</span><span class="s2">&quot;acceptcat&quot;</span><span class="p">,</span>
-    <span class="n">spatial</span><span class="o">=</span><span class="s2">&quot;all-sky&quot;</span><span class="p">,</span>
-    <span class="n">column_filters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;redshift&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;0.4&quot;</span><span class="p">),</span> <span class="s2">&quot;bf_core_entropy_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;15&quot;</span><span class="p">)},</span>
-    <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="n">catalog</span><span class="o">=</span><span class="s2">"acceptcat"</span><span class="p">,</span>
+    <span class="n">spatial</span><span class="o">=</span><span class="s2">"all-sky"</span><span class="p">,</span>
+    <span class="n">column_filters</span><span class="o">=</span><span class="p">{</span><span class="s2">"redshift"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"&gt;"</span><span class="p">,</span> <span class="s2">"0.4"</span><span class="p">),</span> <span class="s2">"bf_core_entropy_1"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"&lt;"</span><span class="p">,</span> <span class="s2">"15"</span><span class="p">)},</span>
+    <span class="n">columns</span><span class="o">=</span><span class="s2">"*"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">accept_cat_higherz_lowk</span>
 </pre></div>
@@ -1050,7 +1061,7 @@ column name string retrieves the entries in that column:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract source names from our subset of the ACCEPT catalog</span>
-<span class="n">accept_cat_higherz_lowk</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+<span class="n">accept_cat_higherz_lowk</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>

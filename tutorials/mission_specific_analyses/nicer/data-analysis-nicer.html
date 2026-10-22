@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.css" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -69,6 +70,8 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/mission_specific_analyses/nicer/data-analysis-nicer';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <script src="../../../_static/consent-init.js?v=d73bda4a"></script>
     <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -298,6 +301,14 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas_index.html">pySAS</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas-short-intro.html">Short introduction to pySAS</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshops</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_index.html">X-ray evolution of Cassiopeia A</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/0-python-intro-full-guide.html">Full Guide 0 – Python for this workshop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.html">Full Guide 1 – Identifying and downloading Chandra observations</a></li>
 </ul>
 </details></li>
 </ul>
@@ -760,8 +771,8 @@ Note: you may need to restart the kernel to use updated packages.
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NICER ObsID that we will use for this example.</span>
-<span class="n">OBS_ID</span> <span class="o">=</span> <span class="s2">&quot;4020180445&quot;</span>
-<span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">&quot;PSR B0833-45&quot;</span>
+<span class="n">OBS_ID</span> <span class="o">=</span> <span class="s2">"4020180445"</span>
+<span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">"PSR B0833-45"</span>
 
 <span class="c1"># Controls the verbosity of all HEASoftPy tasks</span>
 <span class="n">TASK_CHATTER</span> <span class="o">=</span> <span class="mi">3</span>
@@ -788,10 +799,10 @@ Note: you may need to restart the kernel to use updated packages.
 
 <span class="c1"># -------------- Set paths and create directories --------------</span>
 <span class="c1"># Set up the path of the directory into which we will download NICER data</span>
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;../../../_data&quot;</span><span class="p">):</span>
-    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;../../../_data&quot;</span><span class="p">),</span> <span class="s2">&quot;NICER&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">):</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">),</span> <span class="s2">"NICER"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;NICER/&quot;</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="s2">"NICER/"</span>
 
 <span class="c1"># Whatever the data directory is, make sure it is absolute.</span>
 <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
@@ -800,13 +811,13 @@ Note: you may need to restart the kernel to use updated packages.
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Setup path and directory into which we save output files from this example.</span>
-<span class="n">OUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;NICER_output&quot;</span><span class="p">)</span>
+<span class="n">OUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"NICER_output"</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 
 <span class="c1"># -------- Get geomagnetic data ---------</span>
 <span class="c1"># This ensures that geomagnetic data required for NICER analyses are downloaded</span>
-<span class="n">GEOMAG_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">&quot;geomag&quot;</span><span class="p">)</span>
+<span class="n">GEOMAG_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">"geomag"</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">GEOMAG_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">nigeodown</span><span class="p">(</span><span class="n">outdir</span><span class="o">=</span><span class="n">GEOMAG_PATH</span><span class="p">)</span>
 <span class="c1"># ---------------------------------------</span>
@@ -831,13 +842,13 @@ command searches for tables with a ‘nicer’ keyword, and then the <code class
 the observation summary table is returned:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">catalog_name</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_catalogs</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="s2">&quot;nicer&quot;</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s2">&quot;name&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">catalog_name</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_catalogs</span><span class="p">(</span><span class="n">keywords</span><span class="o">=</span><span class="s2">"nicer"</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s2">"name"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">catalog_name</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.str_(&#39;nicermastr&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.str_('nicermastr')
 </pre></div>
 </div>
 </div>
@@ -854,7 +865,7 @@ subsection near the top of this notebook:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;PSR B0833-45&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>'PSR B0833-45'
 </pre></div>
 </div>
 </div>
@@ -891,7 +902,7 @@ is stored in a constant defined in the ‘Global Setup: Constants’ subsection 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;4020180445&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>'4020180445'
 </pre></div>
 </div>
 </div>
@@ -959,7 +970,7 @@ argument and passing an Astropy distance quantity.</p>
 <p>Now we can very easily filter the <code class="docutils literal notranslate"><span class="pre">nicer_obs</span></code> table to select the one ObsID we’re interested in:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rel_nicer_obs</span> <span class="o">=</span> <span class="n">nicer_obs</span><span class="p">[</span><span class="n">nicer_obs</span><span class="p">[</span><span class="s2">&quot;obsid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">OBS_ID</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rel_nicer_obs</span> <span class="o">=</span> <span class="n">nicer_obs</span><span class="p">[</span><span class="n">nicer_obs</span><span class="p">[</span><span class="s2">"obsid"</span><span class="p">]</span> <span class="o">==</span> <span class="n">OBS_ID</span><span class="p">]</span>
 <span class="n">rel_nicer_obs</span>
 </pre></div>
 </div>
@@ -981,9 +992,9 @@ retrieves every column of the row whose ObsID matches the one we’re looking fo
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;SELECT * &quot;</span>
-    <span class="s2">&quot;from </span><span class="si">{c}</span><span class="s2"> as cat &quot;</span>
-    <span class="s2">&quot;where cat.obsid=&#39;</span><span class="si">{oi}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">OBS_ID</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">catalog_name</span><span class="p">)</span>
+    <span class="s2">"SELECT * "</span>
+    <span class="s2">"from </span><span class="si">{c}</span><span class="s2"> as cat "</span>
+    <span class="s2">"where cat.obsid='</span><span class="si">{oi}</span><span class="s2">'"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">OBS_ID</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">catalog_name</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="n">query</span>
@@ -991,7 +1002,7 @@ retrieves every column of the row whose ObsID matches the one we’re looking fo
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;SELECT * from nicermastr as cat where cat.obsid=&#39;4020180445&#39;&quot;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>"SELECT * from nicermastr as cat where cat.obsid='4020180445'"
 </pre></div>
 </div>
 </div>
@@ -1039,10 +1050,10 @@ as passing the query return to the <code class="docutils literal notranslate"><s
 will be downloaded into the directory specified by <code class="docutils literal notranslate"><span class="pre">ROOT_DATA_DIR</span></code>.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"aws"</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
 
 <span class="c1"># We remove the existing cleaned event list directory from the data we just downloaded</span>
-<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">OBS_ID</span><span class="p">,</span> <span class="s2">&quot;xti&quot;</span><span class="p">,</span> <span class="s2">&quot;event_cl&quot;</span><span class="p">))</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">OBS_ID</span><span class="p">,</span> <span class="s2">"xti"</span><span class="p">,</span> <span class="s2">"event_cl"</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1084,7 +1095,7 @@ HEASoftPy module.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;1.5&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>'1.5'
 </pre></div>
 </div>
 </div>
@@ -1118,14 +1129,14 @@ to identify which version of HEASoft we’re using by extracting the version str
 the <code class="docutils literal notranslate"><span class="pre">fversion</span></code> output, and setting up a <code class="docutils literal notranslate"><span class="pre">Version</span></code> object:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fver_out</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">HEA_VER</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">fver_out</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fver_out</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">HEA_VER</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">fver_out</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">HEA_VER</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Version(&#39;6.36&#39;)&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Version('6.36')&gt;
 </pre></div>
 </div>
 </div>
@@ -1135,10 +1146,10 @@ version is too low, we set the <code class="docutils literal notranslate"><span 
 set it to the default value:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">HEA_VER</span> <span class="o">&lt;</span> <span class="n">Version</span><span class="p">(</span><span class="s2">&quot;v6.36&quot;</span><span class="p">):</span>
-    <span class="n">evt_suffix</span> <span class="o">=</span> <span class="s2">&quot;_demo&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">HEA_VER</span> <span class="o">&lt;</span> <span class="n">Version</span><span class="p">(</span><span class="s2">"v6.36"</span><span class="p">):</span>
+    <span class="n">evt_suffix</span> <span class="o">=</span> <span class="s2">"_demo"</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">evt_suffix</span> <span class="o">=</span> <span class="s2">&quot;NONE&quot;</span>
+    <span class="n">evt_suffix</span> <span class="o">=</span> <span class="s2">"NONE"</span>
 </pre></div>
 </div>
 </div>
@@ -1166,7 +1177,7 @@ screening, and filtering of data. The outputs are an updated filter file and a c
 <span class="n">out</span> <span class="o">=</span> <span class="n">nicerl2</span><span class="p">(</span>
     <span class="n">indir</span><span class="o">=</span><span class="n">OBS_ID_PATH</span><span class="p">,</span>
     <span class="n">geomag_path</span><span class="o">=</span><span class="n">GEOMAG_PATH</span><span class="p">,</span>
-    <span class="n">filtcolumns</span><span class="o">=</span><span class="s2">&quot;NICERV5&quot;</span><span class="p">,</span>
+    <span class="n">filtcolumns</span><span class="o">=</span><span class="s2">"NICERV5"</span><span class="p">,</span>
     <span class="n">evtsuffix</span><span class="o">=</span><span class="n">evt_suffix</span><span class="p">,</span>
     <span class="n">clobber</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">noprompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1207,16 +1218,16 @@ section of <a class="reference external" href="https://heasarc.gsfc.nasa.gov/doc
     <span class="c1"># Run the spectral extraction task</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">nicerl3_spect</span><span class="p">(</span>
         <span class="n">indir</span><span class="o">=</span><span class="n">OBS_ID_PATH</span><span class="p">,</span>
-        <span class="n">phafile</span><span class="o">=</span><span class="s2">&quot;spec.pha&quot;</span><span class="p">,</span>
-        <span class="n">rmffile</span><span class="o">=</span><span class="s2">&quot;spec.rmf&quot;</span><span class="p">,</span>
-        <span class="n">arffile</span><span class="o">=</span><span class="s2">&quot;spec.arf&quot;</span><span class="p">,</span>
-        <span class="n">bkgfile</span><span class="o">=</span><span class="s2">&quot;spec_sc.bgd&quot;</span><span class="p">,</span>
+        <span class="n">phafile</span><span class="o">=</span><span class="s2">"spec.pha"</span><span class="p">,</span>
+        <span class="n">rmffile</span><span class="o">=</span><span class="s2">"spec.rmf"</span><span class="p">,</span>
+        <span class="n">arffile</span><span class="o">=</span><span class="s2">"spec.arf"</span><span class="p">,</span>
+        <span class="n">bkgfile</span><span class="o">=</span><span class="s2">"spec_sc.bgd"</span><span class="p">,</span>
         <span class="n">evtsuffix</span><span class="o">=</span><span class="n">evt_suffix</span><span class="p">,</span>
-        <span class="n">grouptype</span><span class="o">=</span><span class="s2">&quot;optmin&quot;</span><span class="p">,</span>
+        <span class="n">grouptype</span><span class="o">=</span><span class="s2">"optmin"</span><span class="p">,</span>
         <span class="n">groupscale</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-        <span class="n">updatepha</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span>
-        <span class="n">bkgformat</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">,</span>
-        <span class="n">bkgmodeltype</span><span class="o">=</span><span class="s2">&quot;scorpeon&quot;</span><span class="p">,</span>
+        <span class="n">updatepha</span><span class="o">=</span><span class="s2">"yes"</span><span class="p">,</span>
+        <span class="n">bkgformat</span><span class="o">=</span><span class="s2">"file"</span><span class="p">,</span>
+        <span class="n">bkgmodeltype</span><span class="o">=</span><span class="s2">"scorpeon"</span><span class="p">,</span>
         <span class="n">clobber</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">noprompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">chatter</span><span class="o">=</span><span class="n">TASK_CHATTER</span><span class="p">,</span>
@@ -1243,7 +1254,7 @@ HEASoftPy; <code class="docutils literal notranslate"><span class="pre">nicerl3-
     <span class="n">out</span> <span class="o">=</span> <span class="n">nicerl3_lc</span><span class="p">(</span>
         <span class="n">indir</span><span class="o">=</span><span class="n">OBS_ID_PATH</span><span class="p">,</span>
         <span class="n">timebinsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">lcfile</span><span class="o">=</span><span class="s2">&quot;lc.fits&quot;</span><span class="p">,</span>
+        <span class="n">lcfile</span><span class="o">=</span><span class="s2">"lc.fits"</span><span class="p">,</span>
         <span class="n">evtsuffix</span><span class="o">=</span><span class="n">evt_suffix</span><span class="p">,</span>
         <span class="n">clobber</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">noprompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1271,9 +1282,9 @@ plot axes are energy (for the x-axis), and normalized counts per second (for the
 
 <span class="c1"># Other xspec settings</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">=</span> <span class="s2">&quot;keV&quot;</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">=</span> <span class="s2">"keV"</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="s2">"no"</span>
 </pre></div>
 </div>
 </div>
@@ -1287,7 +1298,7 @@ generated.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">):</span>
     <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="n">spec</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Spectrum</span><span class="p">(</span><span class="s2">&quot;spec.pha&quot;</span><span class="p">)</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Spectrum</span><span class="p">(</span><span class="s2">"spec.pha"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1295,7 +1306,7 @@ generated.</p>
 <p>We make sure to exclude any channels with energies that fall outside the nominal energy range of NICER’s detectors:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spec</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">&quot;0.0-0.3, 10.0-**&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spec</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">"0.0-0.3, 10.0-**"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1313,11 +1324,11 @@ linear scale) - recall that we already set the x-axis to be energy in a previous
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit a simple absorbed broken powerlaw model</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;wabs*bknpow&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">"wabs*bknpow"</span><span class="p">)</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
 
 <span class="c1"># Read out the plotting information for spectrum and model.</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">&quot;ldata&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">"ldata"</span><span class="p">)</span>
 <span class="c1"># The y-axis values/errors of the observed spectrum (normalized by response)</span>
 <span class="n">norm_cnt_rates</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
 <span class="n">norm_cnt_rates_err</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">yErr</span><span class="p">()</span>
@@ -1381,29 +1392,29 @@ visualization - this offers a little more flexibility than using PyXspec directl
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the spectra</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
     <span class="n">en_cents</span><span class="p">,</span>
     <span class="n">norm_cnt_rates</span><span class="p">,</span>
     <span class="n">xerr</span><span class="o">=</span><span class="n">en_widths</span><span class="p">,</span>
     <span class="n">yerr</span><span class="o">=</span><span class="n">norm_cnt_rates_err</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;k.&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"k."</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">en_cents</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;wabs $\times$ bknpow&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">en_cents</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="s2">"r-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"wabs $\times$ bknpow"</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{n}</span><span class="s2"> - NICER </span><span class="si">{o}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">SRC_NAME</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">OBS_ID</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"</span><span class="si">{n}</span><span class="s2"> - NICER </span><span class="si">{o}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">SRC_NAME</span><span class="p">,</span> <span class="n">o</span><span class="o">=</span><span class="n">OBS_ID</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Energy [keV]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Counts cm$^{-2}$ s$^{-1}$ keV$^{-1}$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Energy [keV]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Counts cm$^{-2}$ s$^{-1}$ keV$^{-1}$"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -1443,18 +1454,18 @@ TIME column of the light curve data points, which converts them from a time rela
 observation to an absolute timescale.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;lc.fits&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"lc.fits"</span><span class="p">))</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
     <span class="c1"># Reading reference values that help define the light curves</span>
     <span class="c1">#  timing system from the FITS header</span>
-    <span class="n">time_bin</span> <span class="o">=</span> <span class="n">fp</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;timedel&quot;</span><span class="p">]</span>
-    <span class="n">time_zero</span> <span class="o">=</span> <span class="n">fp</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;timezero&quot;</span><span class="p">]</span>
+    <span class="n">time_bin</span> <span class="o">=</span> <span class="n">fp</span><span class="p">[</span><span class="s2">"rate"</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"timedel"</span><span class="p">]</span>
+    <span class="n">time_zero</span> <span class="o">=</span> <span class="n">fp</span><span class="p">[</span><span class="s2">"rate"</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">"timezero"</span><span class="p">]</span>
 
     <span class="c1"># Reading out the whole light curve table (contains data to plot the light curve)</span>
-    <span class="n">lc_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">fp</span><span class="p">[</span><span class="s2">&quot;rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">lc_table</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">time_zero</span>
+    <span class="n">lc_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">fp</span><span class="p">[</span><span class="s2">"rate"</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">lc_table</span><span class="p">[</span><span class="s2">"TIME"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">time_zero</span>
 
     <span class="c1"># Getting the good-time-intervals table as well, to help with plotting</span>
-    <span class="n">gti_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">fp</span><span class="p">[</span><span class="s2">&quot;gti&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">gti_table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">fp</span><span class="p">[</span><span class="s2">"gti"</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1512,20 +1523,20 @@ survey data taken by ROSAT and eROSITA.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
-    <span class="n">lc_table</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_zero</span><span class="p">,</span>
-    <span class="n">lc_table</span><span class="p">[</span><span class="s2">&quot;RATE&quot;</span><span class="p">],</span>
-    <span class="n">yerr</span><span class="o">=</span><span class="n">lc_table</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">],</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
+    <span class="n">lc_table</span><span class="p">[</span><span class="s2">"TIME"</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_zero</span><span class="p">,</span>
+    <span class="n">lc_table</span><span class="p">[</span><span class="s2">"RATE"</span><span class="p">],</span>
+    <span class="n">yerr</span><span class="o">=</span><span class="n">lc_table</span><span class="p">[</span><span class="s2">"ERROR"</span><span class="p">],</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"+"</span><span class="p">,</span>
     <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;cadetblue&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"cadetblue"</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Count Rate [ct s$^{-1}$]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Time [s]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Count Rate [ct s$^{-1}$]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1548,8 +1559,8 @@ re-imagine the above figure in a way that is much more useful.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">valid_gtis</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">cur_gti</span> <span class="ow">in</span> <span class="n">gti_table</span><span class="p">:</span>
-    <span class="n">gti_check</span> <span class="o">=</span> <span class="p">(</span><span class="n">lc_table</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_bin</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="n">cur_gti</span><span class="p">[</span><span class="s2">&quot;START&quot;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span>
-        <span class="n">lc_table</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_bin</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">cur_gti</span><span class="p">[</span><span class="s2">&quot;STOP&quot;</span><span class="p">]</span>
+    <span class="n">gti_check</span> <span class="o">=</span> <span class="p">(</span><span class="n">lc_table</span><span class="p">[</span><span class="s2">"TIME"</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_bin</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="n">cur_gti</span><span class="p">[</span><span class="s2">"START"</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span>
+        <span class="n">lc_table</span><span class="p">[</span><span class="s2">"TIME"</span><span class="p">]</span> <span class="o">+</span> <span class="n">time_bin</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">cur_gti</span><span class="p">[</span><span class="s2">"STOP"</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">gti_check</span><span class="p">):</span>
         <span class="n">valid_gtis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gti_check</span><span class="p">)</span>
@@ -1582,27 +1593,27 @@ the figure we pass <code class="docutils literal notranslate"><span class="pre">
     <span class="n">cur_lc_tab</span> <span class="o">=</span> <span class="n">lc_table</span><span class="p">[</span><span class="n">cur_gti</span><span class="p">]</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
-        <span class="n">cur_lc_tab</span><span class="p">[</span><span class="s2">&quot;TIME&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_zero</span><span class="p">,</span>
-        <span class="n">cur_lc_tab</span><span class="p">[</span><span class="s2">&quot;RATE&quot;</span><span class="p">],</span>
-        <span class="n">yerr</span><span class="o">=</span><span class="n">cur_lc_tab</span><span class="p">[</span><span class="s2">&quot;ERROR&quot;</span><span class="p">],</span>
-        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
+        <span class="n">cur_lc_tab</span><span class="p">[</span><span class="s2">"TIME"</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_zero</span><span class="p">,</span>
+        <span class="n">cur_lc_tab</span><span class="p">[</span><span class="s2">"RATE"</span><span class="p">],</span>
+        <span class="n">yerr</span><span class="o">=</span><span class="n">cur_lc_tab</span><span class="p">[</span><span class="s2">"ERROR"</span><span class="p">],</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">"+"</span><span class="p">,</span>
         <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;cadetblue&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">"cadetblue"</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Time [s]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
     <span class="c1"># We only want to add a y-axis label to the left-most subplot</span>
     <span class="k">if</span> <span class="n">cur_gti_ind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Count Rate [ct s$^{-1}$]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Count Rate [ct s$^{-1}$]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="c1"># Saving the figure to a PDF</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-    <span class="s2">&quot;</span><span class="si">{n}</span><span class="s2">-nicer-gti-lightcurve.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">SRC_NAME</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
-    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+    <span class="s2">"</span><span class="si">{n}</span><span class="s2">-nicer-gti-lightcurve.pdf"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">SRC_NAME</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

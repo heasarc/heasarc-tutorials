@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.css" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -69,6 +70,8 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/mission_specific_analyses/swift/getting-started-swift-xrt';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <script src="../../../_static/consent-init.js?v=d73bda4a"></script>
     <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -298,6 +301,14 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas_index.html">pySAS</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas-short-intro.html">Short introduction to pySAS</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshops</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_index.html">X-ray evolution of Cassiopeia A</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/0-python-intro-full-guide.html">Full Guide 0 – Python for this workshop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.html">Full Guide 1 – Identifying and downloading Chandra observations</a></li>
 </ul>
 </details></li>
 </ul>
@@ -678,17 +689,17 @@ of the demonstrations in this notebook.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/site-packages/xga/utils.py:39: DeprecationWarning: The XGA &#39;find_all_wcs&#39; function should be imported from imagetools.misc, in the future it will be removed from utils.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/envs/heasoft/lib/python3.12/site-packages/xga/utils.py:39: DeprecationWarning: The XGA 'find_all_wcs' function should be imported from imagetools.misc, in the future it will be removed from utils.
   warn(message, DeprecationWarning)
 /opt/envs/heasoft/lib/python3.12/site-packages/xga/utils.py:619: UserWarning: SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such all functions in xga.sas will not work.
-  warn(&quot;SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such &quot;
-/opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you&#39;ve used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
+  warn("SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such "
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you've used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
   from .utils import xga_conf, CENSUS, OUTPUT, NUM_CORES, XGA_EXTRACT, BASE_XSPEC_SCRIPT, CROSS_ARF_XSPEC_SCRIPT, \
 /opt/envs/heasoft/lib/python3.12/site-packages/xga/products/relation.py:12: DeprecationWarning: `scipy.odr` is deprecated as of version 1.17.0 and will be removed in SciPy 1.19.0. Please use `https://pypi.org/project/odrpack/` instead.
   import scipy.odr as odr
 /opt/envs/heasoft/lib/python3.12/site-packages/xga/utils.py:619: UserWarning: SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such all functions in xga.sas will not work.
-  warn(&quot;SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such &quot;
-/opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you&#39;ve used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
+  warn("SAS_DIR environment variable is not set, unable to verify SAS is present on system, as such "
+/opt/envs/heasoft/lib/python3.12/site-packages/xga/__init__.py:6: UserWarning: This is the first time you've used XGA; to use most functionality you will need to configure /home/jovyan/.config/xga/xga.cfg to match your setup, though you can use product classes regardless.
   from .utils import xga_conf, CENSUS, OUTPUT, NUM_CORES, XGA_EXTRACT, BASE_XSPEC_SCRIPT, CROSS_ARF_XSPEC_SCRIPT, \
 /opt/envs/heasoft/lib/python3.12/site-packages/xga/products/relation.py:12: DeprecationWarning: `scipy.odr` is deprecated as of version 1.17.0 and will be removed in SciPy 1.19.0. Please use `https://pypi.org/project/odrpack/` instead.
   import scipy.odr as odr
@@ -711,7 +722,7 @@ of the demonstrations in this notebook.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">process_swift_xrt</span><span class="p">(</span>
     <span class="n">cur_obs_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rel_coord</span><span class="p">:</span> <span class="n">SkyCoord</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">hsp</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">HSPResult</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A wrapper for the HEASoftPy xrtpipeline task, which prepares data taken by the</span>
 <span class="sd">    Swift-XRT instrument for scientific use; the wrapper is primarily to enable the</span>
 <span class="sd">    use of multiprocessing.</span>
@@ -719,7 +730,7 @@ of the demonstrations in this notebook.</p>
 <span class="sd">    The XRT pipeline has three stages, which, broadly speaking, do the following:</span>
 <span class="sd">        1. Stage 1 assembles and calibrates initial unfiltered event lists.</span>
 <span class="sd">        2. Stage 2 performs standard screening of events to produce</span>
-<span class="sd">            &#39;cleaned&#39; (nominally ready for scientific use) event lists.</span>
+<span class="sd">            'cleaned' (nominally ready for scientific use) event lists.</span>
 <span class="sd">        3. Stage 3 generates standard data products, though fine-grained control over</span>
 <span class="sd">            the outputs is not possible, so we do not use this stage (instead we call</span>
 <span class="sd">            xrtproducts directly in another function).</span>
@@ -731,7 +742,7 @@ of the demonstrations in this notebook.</p>
 <span class="sd">    :return: A tuple containing the processed ObsID, the log output of the</span>
 <span class="sd">        pipeline, and a boolean flag indicating success (True) or failure (False).</span>
 <span class="sd">    :rtype: Tuple[str, Union[str, hsp.core.HSPResult], bool]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Ensures we exit at the second step, before any standard products are generated.</span>
     <span class="n">xrt_pipe_exit</span> <span class="o">=</span> <span class="mi">2</span>
@@ -744,30 +755,30 @@ of the demonstrations in this notebook.</p>
     <span class="c1">#  there are no clashes with other processes).</span>
     <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">out_dir</span><span class="p">),</span> <span class="n">hsp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">local_pfiles_context</span><span class="p">():</span>
 
-        <span class="n">xrt_pipeline</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">HSPTask</span><span class="p">(</span><span class="s2">&quot;xrtpipeline&quot;</span><span class="p">)</span>
+        <span class="n">xrt_pipeline</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">HSPTask</span><span class="p">(</span><span class="s2">"xrtpipeline"</span><span class="p">)</span>
 
         <span class="n">og_par_names</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">xrt_pipeline</span><span class="o">.</span><span class="n">par_names</span><span class="p">)</span>
-        <span class="n">og_par_names</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">og_par_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">))</span>
+        <span class="n">og_par_names</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">og_par_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"mode"</span><span class="p">))</span>
         <span class="n">xrt_pipeline</span><span class="o">.</span><span class="n">par_names</span> <span class="o">=</span> <span class="n">og_par_names</span>
 
         <span class="n">src_ra</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rel_coord</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="n">src_dec</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rel_coord</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-        <span class="c1"># The processing/preparation stage of any X-ray telescope&#39;s data is the most</span>
+        <span class="c1"># The processing/preparation stage of any X-ray telescope's data is the most</span>
         <span class="c1">#  likely to go wrong, and we use a Python try-except as an automated way to</span>
         <span class="c1">#  collect ObsIDs that had an issue during processing.</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">xrt_pipeline</span><span class="p">(</span>
                 <span class="n">indir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">cur_obs_id</span><span class="p">),</span>
-                <span class="n">outdir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
-                <span class="n">steminputs</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;sw</span><span class="si">{</span><span class="n">cur_obs_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">outdir</span><span class="o">=</span><span class="s2">"."</span><span class="p">,</span>
+                <span class="n">steminputs</span><span class="o">=</span><span class="sa">f</span><span class="s2">"sw</span><span class="si">{</span><span class="n">cur_obs_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                 <span class="n">exitstage</span><span class="o">=</span><span class="n">xrt_pipe_exit</span><span class="p">,</span>
                 <span class="n">srcra</span><span class="o">=</span><span class="n">src_ra</span><span class="p">,</span>
                 <span class="n">srcdec</span><span class="o">=</span><span class="n">src_dec</span><span class="p">,</span>
                 <span class="n">chatter</span><span class="o">=</span><span class="n">TASK_CHATTER</span><span class="p">,</span>
                 <span class="n">clobber</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">datamode</span><span class="o">=</span><span class="s2">&quot;PC&quot;</span><span class="p">,</span>
-                <span class="n">obsmode</span><span class="o">=</span><span class="s2">&quot;POINTING&quot;</span><span class="p">,</span>
+                <span class="n">datamode</span><span class="o">=</span><span class="s2">"PC"</span><span class="p">,</span>
+                <span class="n">obsmode</span><span class="o">=</span><span class="s2">"POINTING"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">task_success</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -781,7 +792,7 @@ of the demonstrations in this notebook.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">gen_xrt_expmap</span><span class="p">(</span>
     <span class="n">evt_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">att_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hd_path</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hsp</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">HSPResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A wrapper for the HEASoftPy implementation of the xrtexpomap task, which generates</span>
 <span class="sd">    exposure maps for Swift-XRT observations.</span>
 
@@ -791,7 +802,7 @@ of the demonstrations in this notebook.</p>
 <span class="sd">    :param str hd_path: Path to the Swift-XRT housekeeping file for the observation.</span>
 <span class="sd">    :return: A HEASoftPy result object containing the log output of the xrtexpomap task.</span>
 <span class="sd">    :rtype: hsp.core.HSPResult</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">out_dir</span><span class="p">),</span> <span class="n">hsp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">local_pfiles_context</span><span class="p">():</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">xrtexpomap</span><span class="p">(</span>
@@ -814,10 +825,10 @@ of the demonstrations in this notebook.</p>
     <span class="n">exp_map_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">att_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">hd_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">lc_lo_lim</span><span class="p">:</span> <span class="n">Quantity</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;chan&quot;</span><span class="p">),</span>
-    <span class="n">lc_hi_lim</span><span class="p">:</span> <span class="n">Quantity</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;chan&quot;</span><span class="p">),</span>
+    <span class="n">lc_lo_lim</span><span class="p">:</span> <span class="n">Quantity</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="s2">"chan"</span><span class="p">),</span>
+    <span class="n">lc_hi_lim</span><span class="p">:</span> <span class="n">Quantity</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">"chan"</span><span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A Python wrapper for the HEASoft xrtproducts tool, which generates light curves,</span>
 <span class="sd">    images, and spectra from cleaned Swift-XRT event lists.</span>
 
@@ -833,12 +844,12 @@ of the demonstrations in this notebook.</p>
 <span class="sd">    :return: String versions of the stdout and stderr captured from</span>
 <span class="sd">        the run of xrtproducts.</span>
 <span class="sd">    :rtype: Tuple[str, str]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">lc_lo_lim</span> <span class="o">&gt;</span> <span class="n">lc_hi_lim</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;The lower channel limit must be less than or equal to the upper &quot;</span>
-            <span class="s2">&quot;channel limit.&quot;</span>
+            <span class="s2">"The lower channel limit must be less than or equal to the upper "</span>
+            <span class="s2">"channel limit."</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lc_lo_lim</span><span class="p">,</span> <span class="n">Quantity</span><span class="p">):</span>
@@ -849,12 +860,12 @@ of the demonstrations in this notebook.</p>
     <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">out_dir</span><span class="p">),</span> <span class="n">hsp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">local_pfiles_context</span><span class="p">():</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">xrtproducts</span><span class="p">(</span>
             <span class="n">infile</span><span class="o">=</span><span class="n">evt_path</span><span class="p">,</span>
-            <span class="n">outdir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+            <span class="n">outdir</span><span class="o">=</span><span class="s2">"."</span><span class="p">,</span>
             <span class="n">regionfile</span><span class="o">=</span><span class="n">sreg_path</span><span class="p">,</span>
-            <span class="n">bkgextract</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+            <span class="n">bkgextract</span><span class="o">=</span><span class="s2">"yes"</span><span class="p">,</span>
             <span class="n">bkgregionfile</span><span class="o">=</span><span class="n">breg_path</span><span class="p">,</span>
             <span class="n">chatter</span><span class="o">=</span><span class="n">TASK_CHATTER</span><span class="p">,</span>
-            <span class="n">clobber</span><span class="o">=</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+            <span class="n">clobber</span><span class="o">=</span><span class="s2">"yes"</span><span class="p">,</span>
             <span class="n">expofile</span><span class="o">=</span><span class="n">exp_map_path</span><span class="p">,</span>
             <span class="n">attfile</span><span class="o">=</span><span class="n">att_path</span><span class="p">,</span>
             <span class="n">hdfile</span><span class="o">=</span><span class="n">hd_path</span><span class="p">,</span>
@@ -880,15 +891,15 @@ of the demonstrations in this notebook.</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The name of the recurrent nova we will analyze in this tutorial</span>
-<span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">&quot;T Pyx&quot;</span>
+<span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">"T Pyx"</span>
 <span class="c1"># The MJD discovery time of the 6th historical outburst of the nova</span>
-<span class="n">DISC_TIME</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="s2">&quot;55665&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mjd&quot;</span><span class="p">)</span>
+<span class="n">DISC_TIME</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="s2">"55665"</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"mjd"</span><span class="p">)</span>
 
 <span class="c1"># Controls the verbosity of all HEASoftPy tasks</span>
 <span class="n">TASK_CHATTER</span> <span class="o">=</span> <span class="mi">3</span>
 
 <span class="c1"># The nominal mapping between Swift-XRT channel and energy</span>
-<span class="n">EV_PER_CHAN</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;eV/chan&quot;</span><span class="p">)</span>
+<span class="n">EV_PER_CHAN</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"eV/chan"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -910,7 +921,7 @@ of the demonstrations in this notebook.</p>
 <span class="n">hsp</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">allow_failure</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Set up the method for spawning processes.</span>
-<span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">"fork"</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 
 <span class="c1"># ------------- Setting how many cores we can use --------------</span>
@@ -921,21 +932,21 @@ of the demonstrations in this notebook.</p>
     <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="n">total_cores</span>
 <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-        <span class="s2">&quot;If manually overriding &#39;NUM_CORES&#39;, you must set it to an integer value.&quot;</span>
+        <span class="s2">"If manually overriding 'NUM_CORES', you must set it to an integer value."</span>
     <span class="p">)</span>
 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">NUM_CORES</span> <span class="o">&gt;</span> <span class="n">total_cores</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;If manually overriding &#39;NUM_CORES&#39;, the value must be less than or &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;equal to the total available cores (</span><span class="si">{</span><span class="n">total_cores</span><span class="si">}</span><span class="s2">).&quot;</span>
+        <span class="sa">f</span><span class="s2">"If manually overriding 'NUM_CORES', the value must be less than or "</span>
+        <span class="sa">f</span><span class="s2">"equal to the total available cores (</span><span class="si">{</span><span class="n">total_cores</span><span class="si">}</span><span class="s2">)."</span>
     <span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 
 <span class="c1"># -------------- Set paths and create directories --------------</span>
 <span class="c1"># Set up the path of the directory into which we will download Swift data</span>
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;../../../_data&quot;</span><span class="p">):</span>
-    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;../../../_data&quot;</span><span class="p">),</span> <span class="s2">&quot;Swift&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">):</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">),</span> <span class="s2">"Swift"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;Swift/&quot;</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="s2">"Swift/"</span>
 
 <span class="c1"># Whatever the data directory is, make sure it is absolute.</span>
 <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
@@ -944,7 +955,7 @@ of the demonstrations in this notebook.</p>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Setup path and directory into which we save output files from this example.</span>
-<span class="n">OUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;Swift_output&quot;</span><span class="p">)</span>
+<span class="n">OUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"Swift_output"</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 </pre></div>
@@ -976,13 +987,13 @@ summary table of observations). This should only return one catalog for any
 mission you pass to ‘keywords’:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">catalog_name</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_catalogs</span><span class="p">(</span><span class="n">master</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keywords</span><span class="o">=</span><span class="s2">&quot;swift&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">catalog_name</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">list_catalogs</span><span class="p">(</span><span class="n">master</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keywords</span><span class="o">=</span><span class="s2">"swift"</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"name"</span><span class="p">]</span>
 <span class="n">catalog_name</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.str_(&#39;swiftmastr&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>np.str_('swiftmastr')
 </pre></div>
 </div>
 </div>
@@ -1047,7 +1058,7 @@ changed over time.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swift_obs</span> <span class="o">=</span> <span class="n">Heasarc</span><span class="o">.</span><span class="n">query_region</span><span class="p">(</span><span class="n">src_coord</span><span class="p">,</span> <span class="n">catalog_name</span><span class="p">)</span>
 
 <span class="c1"># We sort by start time, so the table is in order of ascending start</span>
-<span class="n">swift_obs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;start_time&quot;</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">swift_obs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">"start_time"</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">swift_obs</span>
 </pre></div>
@@ -1093,15 +1104,15 @@ bright.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defining an Astropy Time object, to match the Time object we defined</span>
 <span class="c1">#  to hold the discovery time, in the global setup section.</span>
-<span class="n">obs_times</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">swift_obs</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mjd&quot;</span><span class="p">)</span>
+<span class="n">obs_times</span> <span class="o">=</span> <span class="n">Time</span><span class="p">(</span><span class="n">swift_obs</span><span class="p">[</span><span class="s2">"start_time"</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"mjd"</span><span class="p">)</span>
 
 <span class="c1"># Simply subtract the discovery time from the observation times to get the delta</span>
-<span class="n">obs_day_from_disc</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs_times</span> <span class="o">-</span> <span class="n">DISC_TIME</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;day&quot;</span><span class="p">)</span>
+<span class="n">obs_day_from_disc</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs_times</span> <span class="o">-</span> <span class="n">DISC_TIME</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"day"</span><span class="p">)</span>
 
 <span class="c1"># Make a dictionary of that information with ObsIDs as keys, which will make</span>
 <span class="c1">#  some plotting code neater later on in the notebook</span>
 <span class="n">obs_day_from_disc_dict</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="n">oi</span><span class="p">:</span> <span class="n">obs_day_from_disc</span><span class="p">[</span><span class="n">oi_ind</span><span class="p">]</span> <span class="k">for</span> <span class="n">oi_ind</span><span class="p">,</span> <span class="n">oi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">swift_obs</span><span class="p">[</span><span class="s2">&quot;obsid&quot;</span><span class="p">])</span>
+    <span class="n">oi</span><span class="p">:</span> <span class="n">obs_day_from_disc</span><span class="p">[</span><span class="n">oi_ind</span><span class="p">]</span> <span class="k">for</span> <span class="n">oi_ind</span><span class="p">,</span> <span class="n">oi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">swift_obs</span><span class="p">[</span><span class="s2">"obsid"</span><span class="p">])</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1111,8 +1122,8 @@ bright.</p>
 applied to the retrieved observation table as a mask:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sel_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs_day_from_disc</span> <span class="o">&gt;</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">142</span><span class="p">,</span> <span class="s2">&quot;day&quot;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span>
-    <span class="n">obs_day_from_disc</span> <span class="o">&lt;</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">149</span><span class="p">,</span> <span class="s2">&quot;day&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sel_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">obs_day_from_disc</span> <span class="o">&gt;</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">142</span><span class="p">,</span> <span class="s2">"day"</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span>
+    <span class="n">obs_day_from_disc</span> <span class="o">&lt;</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">149</span><span class="p">,</span> <span class="s2">"day"</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -1123,7 +1134,7 @@ out our selected ObsIDs into another variable, for later use:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cut_swift_obs</span> <span class="o">=</span> <span class="n">swift_obs</span><span class="p">[</span><span class="n">sel_mask</span><span class="p">]</span>
-<span class="n">rel_obsids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cut_swift_obs</span><span class="p">[</span><span class="s2">&quot;obsid&quot;</span><span class="p">])</span>
+<span class="n">rel_obsids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cut_swift_obs</span><span class="p">[</span><span class="s2">"obsid"</span><span class="p">])</span>
 
 <span class="n">cut_swift_obs</span>
 </pre></div>
@@ -1159,32 +1170,32 @@ sixth outburst.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">obs_day_from_disc</span><span class="p">,</span>
-    <span class="n">swift_obs</span><span class="p">[</span><span class="s2">&quot;xrt_exposure&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;+&quot;</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;steelblue&quot;</span><span class="p">,</span>
+    <span class="n">swift_obs</span><span class="p">[</span><span class="s2">"xrt_exposure"</span><span class="p">],</span>
+    <span class="s2">"+"</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"steelblue"</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Not selected for tutorial&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"Not selected for tutorial"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">obs_day_from_disc</span><span class="p">[</span><span class="n">sel_mask</span><span class="p">],</span>
-    <span class="n">cut_swift_obs</span><span class="p">[</span><span class="s2">&quot;xrt_exposure&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;d&quot;</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;goldenrod&quot;</span><span class="p">,</span>
-    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Selected for tutorial&quot;</span><span class="p">,</span>
+    <span class="n">cut_swift_obs</span><span class="p">[</span><span class="s2">"xrt_exposure"</span><span class="p">],</span>
+    <span class="s2">"d"</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"goldenrod"</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"Selected for tutorial"</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">380</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Delta(\rm{Observation-Discovery})$ [days]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Swift-XRT Exposure [s]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"$\Delta(\rm{Observation-Discovery})$ [days]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Swift-XRT Exposure [s]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -1238,7 +1249,7 @@ observation, which will include BAT and UVOT instrument files that are not relev
 to this tutorial.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"aws"</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1275,42 +1286,42 @@ on SciServer, you may pass ‘sciserver’ to use the pre-mounted HEASARC datase
 <h3>What do the downloaded data directories contain?<a class="headerlink" href="#what-do-the-downloaded-data-directories-contain" title="Link to this heading">#</a></h3>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">rel_obsids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">rel_obsids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">""</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"*"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/home/jovyan/project/_data/Swift/00031968059/auxil&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/bat&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/log&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/uvot&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['/home/jovyan/project/_data/Swift/00031968059/auxil',
+ '/home/jovyan/project/_data/Swift/00031968059/bat',
+ '/home/jovyan/project/_data/Swift/00031968059/log',
+ '/home/jovyan/project/_data/Swift/00031968059/uvot',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt']
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">rel_obsids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;xrt&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;**/*&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">rel_obsids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"xrt"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"**/*"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_cl.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_uf.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_cl.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_uf.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_ufre.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_cl.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_uf.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_ufre.evt.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xbf_rw.img.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xen.hk.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xhd.hk.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xtr.hk.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059x_skim.gif&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059xpc_ex.img.gz&#39;,
- &#39;/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059xpc_sk.img.gz&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_cl.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xpcw3po_uf.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_cl.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_uf.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2sl_ufre.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_cl.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_uf.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/event/sw00031968059xwtw2st_ufre.evt.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xbf_rw.img.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xen.hk.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xhd.hk.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/hk/sw00031968059xtr.hk.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059x_skim.gif',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059xpc_ex.img.gz',
+ '/home/jovyan/project/_data/Swift/00031968059/xrt/products/sw00031968059xpc_sk.img.gz']
 </pre></div>
 </div>
 </div>
@@ -1425,7 +1436,7 @@ arguments that modify the name of the event lists, they will have the default
 structure.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evt_path_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3po_cl.evt&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evt_path_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3po_cl.evt"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1438,20 +1449,20 @@ around that source region, with a 240” radius and a 390” radius.</p>
 sources close to the source you wish to analyze, and you would like to exclude them.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">src_pos</span> <span class="o">=</span> <span class="n">src_coord</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="s2">&quot;hmsdms&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">src_pos</span> <span class="o">=</span> <span class="n">src_coord</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="s2">"hmsdms"</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">":"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">", "</span><span class="p">)</span>
 
-<span class="n">src_reg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;src.reg&quot;</span><span class="p">)</span>
+<span class="n">src_reg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"src.reg"</span><span class="p">)</span>
 
-<span class="n">src_region</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;circle(</span><span class="si">{</span><span class="n">src_pos</span><span class="si">}</span><span class="s1">, 180&quot;)&#39;</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src_reg_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fk5</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">src_region</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'circle(</span><span class="si">{</span><span class="n">src_pos</span><span class="si">}</span><span class="s1">, 180")'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src_reg_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"fk5</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">src_region</span><span class="p">)</span>
 
-<span class="n">bck_reg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;bck.reg&quot;</span><span class="p">)</span>
+<span class="n">bck_reg_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"bck.reg"</span><span class="p">)</span>
 
-<span class="n">bgd_region</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;annulus(</span><span class="si">{</span><span class="n">src_pos</span><span class="si">}</span><span class="s1">, 240&quot;, 390&quot;)&#39;</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">bck_reg_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fk5</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">bgd_region</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'annulus(</span><span class="si">{</span><span class="n">src_pos</span><span class="si">}</span><span class="s1">, 240", 390")'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">bck_reg_path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"fk5</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">bgd_region</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1482,17 +1493,17 @@ The header of the EVENTS table in the event file can identify the correct attitu
 <span class="n">att_files</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">oi</span> <span class="ow">in</span> <span class="n">rel_obsids</span><span class="p">:</span>
     <span class="n">cur_evts</span> <span class="o">=</span> <span class="n">EventList</span><span class="p">(</span><span class="n">evt_path_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">))</span>
-    <span class="n">att_ident</span> <span class="o">=</span> <span class="n">cur_evts</span><span class="o">.</span><span class="n">event_header</span><span class="p">[</span><span class="s2">&quot;ATTFLAG&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">att_ident</span> <span class="o">==</span> <span class="s2">&quot;100&quot;</span><span class="p">:</span>
-        <span class="n">att_temp</span> <span class="o">=</span> <span class="s2">&quot;sw</span><span class="si">{oi}</span><span class="s2">sat.fits.gz&quot;</span>
-    <span class="k">elif</span> <span class="n">att_ident</span> <span class="o">==</span> <span class="s2">&quot;110&quot;</span><span class="p">:</span>
-        <span class="n">att_temp</span> <span class="o">=</span> <span class="s2">&quot;sw</span><span class="si">{oi}</span><span class="s2">pat.fits.gz&quot;</span>
-    <span class="k">elif</span> <span class="n">att_ident</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;111&quot;</span><span class="p">,</span> <span class="s2">&quot;101&quot;</span><span class="p">]:</span>
-        <span class="n">att_temp</span> <span class="o">=</span> <span class="s2">&quot;sw</span><span class="si">{oi}</span><span class="s2">uat.fits.gz&quot;</span>
+    <span class="n">att_ident</span> <span class="o">=</span> <span class="n">cur_evts</span><span class="o">.</span><span class="n">event_header</span><span class="p">[</span><span class="s2">"ATTFLAG"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">att_ident</span> <span class="o">==</span> <span class="s2">"100"</span><span class="p">:</span>
+        <span class="n">att_temp</span> <span class="o">=</span> <span class="s2">"sw</span><span class="si">{oi}</span><span class="s2">sat.fits.gz"</span>
+    <span class="k">elif</span> <span class="n">att_ident</span> <span class="o">==</span> <span class="s2">"110"</span><span class="p">:</span>
+        <span class="n">att_temp</span> <span class="o">=</span> <span class="s2">"sw</span><span class="si">{oi}</span><span class="s2">pat.fits.gz"</span>
+    <span class="k">elif</span> <span class="n">att_ident</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"111"</span><span class="p">,</span> <span class="s2">"101"</span><span class="p">]:</span>
+        <span class="n">att_temp</span> <span class="o">=</span> <span class="s2">"sw</span><span class="si">{oi}</span><span class="s2">uat.fits.gz"</span>
 
-    <span class="n">att_files</span><span class="p">[</span><span class="n">oi</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/auxil&quot;</span><span class="p">,</span> <span class="n">att_temp</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">)</span>
+    <span class="n">att_files</span><span class="p">[</span><span class="n">oi</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/auxil"</span><span class="p">,</span> <span class="n">att_temp</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">)</span>
 
-<span class="n">hd_file_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/xrt/hk/sw</span><span class="si">{oi}</span><span class="s2">xhd.hk.gz&quot;</span><span class="p">)</span>
+<span class="n">hd_file_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/xrt/hk/sw</span><span class="si">{oi}</span><span class="s2">xhd.hk.gz"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1531,7 +1542,7 @@ Setup’ section of this notebook.</p>
 generated, as we need to pass them to the xrtproducts task:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_map_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3po_ex.img&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_map_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3po_ex.img"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1547,8 +1558,8 @@ decide (somewhat arbitrarily) to generate light curves within the 0.5-2.5 keV en
 band.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lc_lo_en</span> <span class="o">=</span> <span class="p">(</span><span class="n">Quantity</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;keV&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">EV_PER_CHAN</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;chan&quot;</span><span class="p">)</span>
-<span class="n">lc_hi_en</span> <span class="o">=</span> <span class="p">(</span><span class="n">Quantity</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="s2">&quot;keV&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">EV_PER_CHAN</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;chan&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lc_lo_en</span> <span class="o">=</span> <span class="p">(</span><span class="n">Quantity</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">"keV"</span><span class="p">)</span> <span class="o">/</span> <span class="n">EV_PER_CHAN</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"chan"</span><span class="p">)</span>
+<span class="n">lc_hi_en</span> <span class="o">=</span> <span class="p">(</span><span class="n">Quantity</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="s2">"keV"</span><span class="p">)</span> <span class="o">/</span> <span class="n">EV_PER_CHAN</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"chan"</span><span class="p">)</span>
 
 <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">)</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
 
@@ -1584,10 +1595,10 @@ analysis, as more often than not, our data are quite Poissonian.</p>
 <p>Once again we create variables that define the paths to relevant data products:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sp_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3posr.pha&quot;</span><span class="p">)</span>
-<span class="n">bsp_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3pobkg.pha&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sp_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3posr.pha"</span><span class="p">)</span>
+<span class="n">bsp_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3pobkg.pha"</span><span class="p">)</span>
 
-<span class="n">grp_sp_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3posr_grp.pha&quot;</span><span class="p">)</span>
+<span class="n">grp_sp_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3posr_grp.pha"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1609,7 +1620,7 @@ the other processing steps in this notebook.</p>
     <span class="n">hsp</span><span class="o">.</span><span class="n">ftgrouppha</span><span class="p">(</span>
         <span class="n">infile</span><span class="o">=</span><span class="n">sp_path</span><span class="p">,</span>
         <span class="n">outfile</span><span class="o">=</span><span class="n">grp_sp_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">),</span>
-        <span class="n">grouptype</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
+        <span class="n">grouptype</span><span class="o">=</span><span class="s2">"min"</span><span class="p">,</span>
         <span class="n">groupscale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="p">)</span>
 </pre></div>
@@ -1633,7 +1644,7 @@ serves both as a simple validity check and as a first chance to identify any
 interesting features in your data.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3po_sk.img&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">im_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3po_sk.img"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1656,12 +1667,12 @@ a dictionary, with the ObsID as the key (makes them easier to access later):</p>
     <span class="n">oi</span><span class="p">:</span> <span class="n">Image</span><span class="p">(</span>
         <span class="n">path</span><span class="o">=</span><span class="n">im_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">),</span>
         <span class="n">obs_id</span><span class="o">=</span><span class="n">oi</span><span class="p">,</span>
-        <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;XRT&quot;</span><span class="p">,</span>
-        <span class="n">stdout_str</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">stderr_str</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">gen_cmd</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">lo_en</span><span class="o">=</span><span class="n">Quantity</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;keV&quot;</span><span class="p">),</span>
-        <span class="n">hi_en</span><span class="o">=</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;keV&quot;</span><span class="p">),</span>
+        <span class="n">instrument</span><span class="o">=</span><span class="s2">"XRT"</span><span class="p">,</span>
+        <span class="n">stdout_str</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+        <span class="n">stderr_str</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+        <span class="n">gen_cmd</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+        <span class="n">lo_en</span><span class="o">=</span><span class="n">Quantity</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">"keV"</span><span class="p">),</span>
+        <span class="n">hi_en</span><span class="o">=</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"keV"</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">oi</span> <span class="ow">in</span> <span class="n">rel_obsids</span>
 <span class="p">}</span>
@@ -1691,7 +1702,7 @@ functionality to manually zoom in on a 3x3’ region centered on T Pyx:</p>
 <span class="n">num_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_ims</span> <span class="o">/</span> <span class="n">num_cols</span><span class="p">))</span>
 
 <span class="n">fig_side_size</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">reg_side_size</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;arcmin&quot;</span><span class="p">)</span>
+<span class="n">reg_side_size</span> <span class="o">=</span> <span class="n">Quantity</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"arcmin"</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax_arr</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
     <span class="n">ncols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span>
@@ -1710,9 +1721,9 @@ functionality to manually zoom in on a 3x3’ region centered on T Pyx:</p>
     <span class="n">cur_im</span> <span class="o">=</span> <span class="n">ims</span><span class="p">[</span><span class="n">cur_oi</span><span class="p">]</span>
 
     <span class="n">pd_scale</span> <span class="o">=</span> <span class="n">pix_deg_scale</span><span class="p">(</span><span class="n">src_coord_quant</span><span class="p">,</span> <span class="n">cur_im</span><span class="o">.</span><span class="n">radec_wcs</span><span class="p">)</span>
-    <span class="n">pix_half_size</span> <span class="o">=</span> <span class="p">((</span><span class="n">reg_side_size</span> <span class="o">/</span> <span class="n">pd_scale</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;pix&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">pix_half_size</span> <span class="o">=</span> <span class="p">((</span><span class="n">reg_side_size</span> <span class="o">/</span> <span class="n">pd_scale</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"pix"</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
-    <span class="n">pix_coord</span> <span class="o">=</span> <span class="n">cur_im</span><span class="o">.</span><span class="n">coord_conv</span><span class="p">(</span><span class="n">src_coord_quant</span><span class="p">,</span> <span class="s2">&quot;pix&quot;</span><span class="p">)</span>
+    <span class="n">pix_coord</span> <span class="o">=</span> <span class="n">cur_im</span><span class="o">.</span><span class="n">coord_conv</span><span class="p">(</span><span class="n">src_coord_quant</span><span class="p">,</span> <span class="s2">"pix"</span><span class="p">)</span>
     <span class="n">x_lims</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="n">pix_coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pix_half_size</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
         <span class="p">(</span><span class="n">pix_coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">pix_half_size</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
@@ -1722,7 +1733,7 @@ functionality to manually zoom in on a 3x3’ region centered on T Pyx:</p>
         <span class="p">(</span><span class="n">pix_coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">pix_half_size</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
     <span class="p">]</span>
 
-    <span class="n">day_title</span> <span class="o">=</span> <span class="s2">&quot;Day </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obs_day_from_disc_dict</span><span class="p">[</span><span class="n">cur_im</span><span class="o">.</span><span class="n">obs_id</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">day_title</span> <span class="o">=</span> <span class="s2">"Day </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obs_day_from_disc_dict</span><span class="p">[</span><span class="n">cur_im</span><span class="o">.</span><span class="n">obs_id</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="n">cur_im</span><span class="o">.</span><span class="n">get_view</span><span class="p">(</span>
         <span class="n">ax</span><span class="p">,</span>
@@ -1789,8 +1800,8 @@ spectra, both individually and using XSPEC’s joint-fitting functionality.</p>
 spectra:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arf_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3posr.arf&quot;</span><span class="p">)</span>
-<span class="n">rmf_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{oi}</span><span class="s2">/swxpc0to12s6_20110101v014.rmf&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arf_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/sw</span><span class="si">{oi}</span><span class="s2">xpcw3posr.arf"</span><span class="p">)</span>
+<span class="n">rmf_temp</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"</span><span class="si">{oi}</span><span class="s2">/swxpc0to12s6_20110101v014.rmf"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1814,10 +1825,10 @@ spectra:</p>
 
 <span class="c1"># Other xspec settings</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">=</span> <span class="s2">&quot;keV&quot;</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">=</span> <span class="s2">"keV"</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">statMethod</span> <span class="o">=</span> <span class="s2">&quot;cstat&quot;</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">statMethod</span> <span class="o">=</span> <span class="s2">"cstat"</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="s2">"no"</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">nIterations</span> <span class="o">=</span> <span class="mi">500</span>
 </pre></div>
 </div>
@@ -1850,25 +1861,25 @@ could have happened in the processing/generation of our X-ray data products.</p>
 
 <span class="c1"># Iterating through all the ObsIDs</span>
 <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span>
-    <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Loading Swift-XRT spectra into pyXspec&quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rel_obsids</span><span class="p">)</span>
+    <span class="n">desc</span><span class="o">=</span><span class="s2">"Loading Swift-XRT spectra into pyXspec"</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rel_obsids</span><span class="p">)</span>
 <span class="p">)</span> <span class="k">as</span> <span class="n">onwards</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">oi_ind</span><span class="p">,</span> <span class="n">oi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rel_obsids</span><span class="p">):</span>
         <span class="n">data_grp</span> <span class="o">=</span> <span class="n">oi_ind</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="c1"># Loading in the spectrum - making sure they all have different data groups</span>
-        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_grp</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">data_grp</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="n">grp_sp_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">))</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">data_grp</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">data_grp</span><span class="si">}</span><span class="s2"> "</span> <span class="o">+</span> <span class="n">grp_sp_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">))</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="n">data_grp</span><span class="p">)</span>
         <span class="n">spec</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">rmf_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">)</span>
         <span class="n">spec</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">arf</span> <span class="o">=</span> <span class="n">arf_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">)</span>
         <span class="n">spec</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">bsp_temp</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">oi</span><span class="p">)</span>
 
-        <span class="n">spec</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">&quot;**-0.3 7.0-**&quot;</span><span class="p">)</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">"**-0.3 7.0-**"</span><span class="p">)</span>
         <span class="n">onwards</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="c1"># Ignore any channels that have been marked as &#39;bad&#39;</span>
+<span class="c1"># Ignore any channels that have been marked as 'bad'</span>
 <span class="c1"># This CANNOT be done on a spectrum-by-spectrum basis, only after all spectra</span>
 <span class="c1">#  have been declared</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">&quot;bad&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">"bad"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1904,7 +1915,7 @@ them completely independent:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up the pyXspec model</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;tbabs*(bb+brems)&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">"tbabs*(bb+brems)"</span><span class="p">)</span>
 
 <span class="c1"># Setting start values for model parameters</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">AllModels</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">setPars</span><span class="p">({</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
@@ -2741,17 +2752,17 @@ low-energy (&lt;0.5 keV) X-ray emission, compared to the other spectra.</p>
     <span class="n">cur_sp_data</span> <span class="o">=</span> <span class="n">spec_plot_data</span><span class="p">[</span><span class="n">cur_obsid</span><span class="p">]</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"minor"</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
         <span class="n">cur_sp_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
         <span class="n">cur_sp_data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
         <span class="n">xerr</span><span class="o">=</span><span class="n">cur_sp_data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
         <span class="n">yerr</span><span class="o">=</span><span class="n">cur_sp_data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
-        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;kx&quot;</span><span class="p">,</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">"kx"</span><span class="p">,</span>
         <span class="n">capsize</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_obsid</span><span class="si">}</span><span class="s2"> Data&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cur_obsid</span><span class="si">}</span><span class="s2"> Data"</span><span class="p">,</span>
         <span class="n">lw</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
     <span class="p">)</span>
@@ -2760,24 +2771,24 @@ low-energy (&lt;0.5 keV) X-ray emission, compared to the other spectra.</p>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
             <span class="n">cur_sp_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">fit_plot_data</span><span class="p">[</span><span class="n">cur_obsid</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;firebrick&quot;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Model Fit&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">"firebrick"</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"Model Fit"</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper right"</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">0.29</span><span class="p">,</span> <span class="mf">7.01</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Energy [keV]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Energy [keV]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ax_arr_ind</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Spectrum [ct cm$^{-2}$ s$^{-1}$ keV$^{-1}$]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Spectrum [ct cm$^{-2}$ s$^{-1}$ keV$^{-1}$]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-    <span class="n">day_title</span> <span class="o">=</span> <span class="s2">&quot;Day </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obs_day_from_disc_dict</span><span class="p">[</span><span class="n">cur_obsid</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">day_title</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;navy&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">day_title</span> <span class="o">=</span> <span class="s2">"Day </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obs_day_from_disc_dict</span><span class="p">[</span><span class="n">cur_obsid</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">day_title</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"navy"</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">"bold"</span><span class="p">)</span>
 
     <span class="n">ax_ind</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -2816,7 +2827,7 @@ passing 2.706 to <code class="docutils literal notranslate"><span class="pre">er
 <span class="n">cur_mod</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">AllModels</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">par_per_mod</span> <span class="o">=</span> <span class="n">cur_mod</span><span class="o">.</span><span class="n">nParameters</span>
 
-<span class="n">local_pars</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;bb_kT&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;br_kT&quot;</span><span class="p">}</span>
+<span class="n">local_pars</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="s2">"bb_kT"</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="s2">"br_kT"</span><span class="p">}</span>
 
 <span class="c1"># Get the global parameter index for each column density, bb temperature, and</span>
 <span class="c1">#  br temperature</span>
@@ -2827,7 +2838,7 @@ passing 2.706 to <code class="docutils literal notranslate"><span class="pre">er
 <span class="p">]</span>
 
 <span class="c1"># Run the error calculation!</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;2.706 &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">err_par_ids</span><span class="p">))</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"2.706 "</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">err_par_ids</span><span class="p">))</span>
 
 <span class="c1"># Retrieve the parameter values and uncertainties for plotting later</span>
 <span class="n">indiv_pars</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">local_pars</span><span class="o">.</span><span class="n">values</span><span class="p">()}</span>
@@ -2840,12 +2851,12 @@ passing 2.706 to <code class="docutils literal notranslate"><span class="pre">er
         <span class="n">cur_err</span> <span class="o">=</span> <span class="p">[</span><span class="n">cur_val</span><span class="p">,</span> <span class="n">cur_val</span> <span class="o">-</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cur_val</span><span class="p">]</span>
         <span class="n">indiv_pars</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_err</span><span class="p">)</span>
 
-        <span class="c1"># Check the error string output by XSPEC&#39;s error command and show a warning</span>
+        <span class="c1"># Check the error string output by XSPEC's error command and show a warning</span>
         <span class="c1">#  if there might be a problem</span>
-        <span class="k">if</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;FFFFFFFFF&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"FFFFFFFFF"</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Error calculation for the </span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2"> parameter of model </span><span class="si">{</span><span class="n">mod_id</span><span class="si">}</span><span class="s2"> &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;indicated a possible problem (</span><span class="si">{</span><span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"Error calculation for the </span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2"> parameter of model </span><span class="si">{</span><span class="n">mod_id</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"indicated a possible problem (</span><span class="si">{</span><span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -2900,9 +2911,9 @@ resolve.</p>
 
 <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">ax_arr</span><span class="p">:</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">bb_kt_arr</span> <span class="o">=</span> <span class="n">indiv_pars</span><span class="p">[</span><span class="s2">&quot;bb_kT&quot;</span><span class="p">]</span>
+<span class="n">bb_kt_arr</span> <span class="o">=</span> <span class="n">indiv_pars</span><span class="p">[</span><span class="s2">"bb_kT"</span><span class="p">]</span>
 <span class="c1"># Some uncertainties may be negative, in cases where the error</span>
 <span class="c1">#  calculation encountered issues. This will cause a matplotlib error</span>
 <span class="c1">#  so we replace negative uncertainties with NaN</span>
@@ -2912,42 +2923,42 @@ resolve.</p>
     <span class="n">spec_days</span><span class="p">,</span>
     <span class="n">bb_kt_arr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
     <span class="n">yerr</span><span class="o">=</span><span class="n">bb_kt_arr</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;teal&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"teal"</span><span class="p">,</span>
     <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">ax_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Blackbody $T_{\rm</span><span class="si">{X}</span><span class="s2">}$ [keV]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">ax_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Blackbody $T_{\rm</span><span class="si">{X}</span><span class="s2">}$ [keV]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-<span class="n">br_kt_arr</span> <span class="o">=</span> <span class="n">indiv_pars</span><span class="p">[</span><span class="s2">&quot;br_kT&quot;</span><span class="p">]</span>
+<span class="n">br_kt_arr</span> <span class="o">=</span> <span class="n">indiv_pars</span><span class="p">[</span><span class="s2">"br_kT"</span><span class="p">]</span>
 <span class="n">br_kt_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">br_kt_arr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
 <span class="n">ax_arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
     <span class="n">spec_days</span><span class="p">,</span>
     <span class="n">br_kt_arr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
     <span class="n">yerr</span><span class="o">=</span><span class="n">br_kt_arr</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"d"</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">"darkgoldenrod"</span><span class="p">,</span>
     <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">ax_arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Bremss $T_{\rm</span><span class="si">{X}</span><span class="s2">}$ [keV]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">ax_arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Bremss $T_{\rm</span><span class="si">{X}</span><span class="s2">}$ [keV]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="s2">&quot;nH&quot;</span> <span class="ow">in</span> <span class="n">indiv_pars</span><span class="p">:</span>
-    <span class="n">nh_arr</span> <span class="o">=</span> <span class="n">indiv_pars</span><span class="p">[</span><span class="s2">&quot;nH&quot;</span><span class="p">]</span>
+<span class="k">if</span> <span class="s2">"nH"</span> <span class="ow">in</span> <span class="n">indiv_pars</span><span class="p">:</span>
+    <span class="n">nh_arr</span> <span class="o">=</span> <span class="n">indiv_pars</span><span class="p">[</span><span class="s2">"nH"</span><span class="p">]</span>
     <span class="n">nh_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nh_arr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="n">ax_arr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
         <span class="n">spec_days</span><span class="p">,</span>
         <span class="n">nh_arr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
         <span class="n">yerr</span><span class="o">=</span><span class="n">nh_arr</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;p&quot;</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;firebrick&quot;</span><span class="p">,</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">"p"</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">"firebrick"</span><span class="p">,</span>
         <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">ax_arr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;nH $10^</span><span class="si">{22}</span><span class="s2">\:\rm</span><span class="si">{cm}</span><span class="s2">^{-2}$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">ax_arr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"nH $10^</span><span class="si">{22}</span><span class="s2">\:\rm</span><span class="si">{cm}</span><span class="s2">^{-2}$"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-<span class="n">ax_arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\Delta(\rm{Observation-Discovery})$ [days]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">ax_arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"$\Delta(\rm{Observation-Discovery})$ [days]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -2981,7 +2992,7 @@ declare the model, and pyXspec will automatically link all the parameter values:
 <span class="n">xs</span><span class="o">.</span><span class="n">AllModels</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
 <span class="c1"># Set up the pyXspec model</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;tbabs*(bb+brems)&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">"tbabs*(bb+brems)"</span><span class="p">)</span>
 
 <span class="c1"># Setting start values for model parameters</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">AllModels</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">setPars</span><span class="p">({</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
@@ -2999,7 +3010,7 @@ temperature:</p>
 <span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">perform</span><span class="p">()</span>
 
 <span class="c1"># Run the error calculation</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;2.706 &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">p_ind</span><span class="p">)</span> <span class="k">for</span> <span class="n">p_ind</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">local_pars</span><span class="o">.</span><span class="n">keys</span><span class="p">())]))</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"2.706 "</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">p_ind</span><span class="p">)</span> <span class="k">for</span> <span class="n">p_ind</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">local_pars</span><span class="o">.</span><span class="n">keys</span><span class="p">())]))</span>
 
 <span class="n">xs</span><span class="o">.</span><span class="n">Xset</span><span class="o">.</span><span class="n">chatter</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">AllModels</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -3127,23 +3138,23 @@ ________________________________________________________________________
     <span class="n">cur_lims_out</span> <span class="o">=</span> <span class="n">cur_mod</span><span class="p">(</span><span class="n">par_id</span><span class="p">)</span><span class="o">.</span><span class="n">error</span>
     <span class="n">cur_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cur_val</span> <span class="o">-</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cur_val</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;FFFFFFFFF&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"FFFFFFFFF"</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Error calculation for the </span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2"> parameter &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;indicated a possible problem (</span><span class="si">{</span><span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"Error calculation for the </span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2"> parameter "</span>
+            <span class="sa">f</span><span class="s2">"indicated a possible problem (</span><span class="si">{</span><span class="n">cur_lims_out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">par_name</span> <span class="o">==</span> <span class="s2">&quot;nH&quot;</span><span class="p">:</span>
-        <span class="n">u_str</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; $\times 10^</span><span class="si">{22}</span><span class="s2">$ cm$^{-2}$&quot;</span>
-    <span class="k">elif</span> <span class="n">par_name</span> <span class="o">==</span> <span class="s2">&quot;bb_kT&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">par_name</span> <span class="o">==</span> <span class="s2">"nH"</span><span class="p">:</span>
+        <span class="n">u_str</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">" $\times 10^</span><span class="si">{22}</span><span class="s2">$ cm$^{-2}$"</span>
+    <span class="k">elif</span> <span class="n">par_name</span> <span class="o">==</span> <span class="s2">"bb_kT"</span><span class="p">:</span>
         <span class="n">cur_val</span> <span class="o">*=</span> <span class="mi">1000</span>
         <span class="n">cur_err</span> <span class="o">*=</span> <span class="mi">1000</span>
-        <span class="n">u_str</span> <span class="o">=</span> <span class="s2">&quot; eV&quot;</span>
-    <span class="k">elif</span> <span class="n">par_name</span> <span class="o">==</span> <span class="s2">&quot;br_kT&quot;</span><span class="p">:</span>
-        <span class="n">u_str</span> <span class="o">=</span> <span class="s2">&quot; keV&quot;</span>
+        <span class="n">u_str</span> <span class="o">=</span> <span class="s2">" eV"</span>
+    <span class="k">elif</span> <span class="n">par_name</span> <span class="o">==</span> <span class="s2">"br_kT"</span><span class="p">:</span>
+        <span class="n">u_str</span> <span class="o">=</span> <span class="s2">" keV"</span>
 
-    <span class="n">r_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2"> = $</span><span class="si">{</span><span class="n">cur_val</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">_</span><span class="se">{{</span><span class="s2">-</span><span class="si">{</span><span class="n">cur_err</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="se">}}</span><span class="si">}</span><span class="s2">^</span><span class="se">{{</span><span class="s2">+</span><span class="si">{</span><span class="n">cur_err</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="se">}}</span><span class="si">}</span><span class="s2">$&quot;</span>
+    <span class="n">r_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2"> = $</span><span class="si">{</span><span class="n">cur_val</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">_</span><span class="se">{{</span><span class="s2">-</span><span class="si">{</span><span class="n">cur_err</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="se">}}</span><span class="si">}</span><span class="s2">^</span><span class="se">{{</span><span class="s2">+</span><span class="si">{</span><span class="n">cur_err</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="se">}}</span><span class="si">}</span><span class="s2">$"</span>
     <span class="n">full_out</span> <span class="o">=</span> <span class="n">r_str</span> <span class="o">+</span> <span class="n">u_str</span>
 
     <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="n">full_out</span><span class="p">))</span>

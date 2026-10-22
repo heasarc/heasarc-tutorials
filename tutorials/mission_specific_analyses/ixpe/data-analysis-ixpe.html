@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=79d33dc3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.css" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -69,6 +70,8 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/mission_specific_analyses/ixpe/data-analysis-ixpe';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <script src="../../../_static/consent-init.js?v=d73bda4a"></script>
     <link rel="icon" href="../../../_static/heasarc_favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -298,6 +301,14 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas_index.html">pySAS</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../useful_high_energy_tools/pysas/pysas-short-intro.html">Short introduction to pySAS</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshops</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/cassiopeiaa_evolution_chandra_index.html">X-ray evolution of Cassiopeia A</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/0-python-intro-full-guide.html">Full Guide 0 – Python for this workshop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../workshops/cassiopeiaa_evolution_chandra/1-data-acquisition-full-guide.html">Full Guide 1 – Identifying and downloading Chandra observations</a></li>
 </ul>
 </details></li>
 </ul>
@@ -656,39 +667,39 @@ this notebook.</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">extract_spec</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">region_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A function that will use HEASoftPy to extract a source or background spectrum</span>
 <span class="sd">    from an IXPE Level 2 event file.</span>
 
-<span class="sd">    :param inst: The instrument name (e.g. &#39;det1&#39;, &#39;det2&#39;, &#39;det3&#39;)</span>
+<span class="sd">    :param inst: The instrument name (e.g. 'det1', 'det2', 'det3')</span>
 <span class="sd">    :param region_file: The region file to use for extraction.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Setup the full path where we wish to write the new spectrum</span>
     <span class="n">spec_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="n">OUT_PATH</span><span class="p">,</span>
-        <span class="s2">&quot;ixpe_</span><span class="si">{i}</span><span class="s2">_</span><span class="si">{r}</span><span class="s2">_.pha&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">inst</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">r</span><span class="o">=</span><span class="n">region_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="s2">"ixpe_</span><span class="si">{i}</span><span class="s2">_</span><span class="si">{r}</span><span class="s2">_.pha"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">inst</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">r</span><span class="o">=</span><span class="n">region_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
     <span class="p">)</span>
     <span class="n">region_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="n">region_file</span><span class="p">)</span>
 
-    <span class="c1"># Setting &#39;allow_failure=False&#39; means exceptions will be raised if the call fails</span>
+    <span class="c1"># Setting 'allow_failure=False' means exceptions will be raised if the call fails</span>
     <span class="k">with</span> <span class="n">hsp</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">local_pfiles_context</span><span class="p">():</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">extractor</span><span class="p">(</span>
             <span class="n">filename</span><span class="o">=</span><span class="n">evt_file_paths</span><span class="p">[</span><span class="n">inst</span><span class="o">.</span><span class="n">lower</span><span class="p">()],</span>
             <span class="n">binlc</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
-            <span class="n">eventsout</span><span class="o">=</span><span class="s2">&quot;NONE&quot;</span><span class="p">,</span>
-            <span class="n">imgfile</span><span class="o">=</span><span class="s2">&quot;NONE&quot;</span><span class="p">,</span>
-            <span class="n">fitsbinlc</span><span class="o">=</span><span class="s2">&quot;NONE&quot;</span><span class="p">,</span>
+            <span class="n">eventsout</span><span class="o">=</span><span class="s2">"NONE"</span><span class="p">,</span>
+            <span class="n">imgfile</span><span class="o">=</span><span class="s2">"NONE"</span><span class="p">,</span>
+            <span class="n">fitsbinlc</span><span class="o">=</span><span class="s2">"NONE"</span><span class="p">,</span>
             <span class="n">phafile</span><span class="o">=</span><span class="n">spec_out</span><span class="p">,</span>
             <span class="n">regionfile</span><span class="o">=</span><span class="n">region_file</span><span class="p">,</span>
-            <span class="n">timefile</span><span class="o">=</span><span class="s2">&quot;NONE&quot;</span><span class="p">,</span>
-            <span class="n">stokes</span><span class="o">=</span><span class="s2">&quot;NEFF&quot;</span><span class="p">,</span>
-            <span class="n">polwcol</span><span class="o">=</span><span class="s2">&quot;W_MOM&quot;</span><span class="p">,</span>
-            <span class="n">tcol</span><span class="o">=</span><span class="s2">&quot;TIME&quot;</span><span class="p">,</span>
-            <span class="n">ecol</span><span class="o">=</span><span class="s2">&quot;PI&quot;</span><span class="p">,</span>
-            <span class="n">xcolf</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span>
-            <span class="n">xcolh</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span>
-            <span class="n">ycolf</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
-            <span class="n">ycolh</span><span class="o">=</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+            <span class="n">timefile</span><span class="o">=</span><span class="s2">"NONE"</span><span class="p">,</span>
+            <span class="n">stokes</span><span class="o">=</span><span class="s2">"NEFF"</span><span class="p">,</span>
+            <span class="n">polwcol</span><span class="o">=</span><span class="s2">"W_MOM"</span><span class="p">,</span>
+            <span class="n">tcol</span><span class="o">=</span><span class="s2">"TIME"</span><span class="p">,</span>
+            <span class="n">ecol</span><span class="o">=</span><span class="s2">"PI"</span><span class="p">,</span>
+            <span class="n">xcolf</span><span class="o">=</span><span class="s2">"X"</span><span class="p">,</span>
+            <span class="n">xcolh</span><span class="o">=</span><span class="s2">"X"</span><span class="p">,</span>
+            <span class="n">ycolf</span><span class="o">=</span><span class="s2">"Y"</span><span class="p">,</span>
+            <span class="n">ycolh</span><span class="o">=</span><span class="s2">"Y"</span><span class="p">,</span>
             <span class="n">noprompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">clobber</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">allow_failure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -711,12 +722,12 @@ this notebook.</p>
 </summary>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># IXPE ObsID that we will use for this example.</span>
-<span class="n">OBS_ID</span> <span class="o">=</span> <span class="s2">&quot;01004701&quot;</span>
+<span class="n">OBS_ID</span> <span class="o">=</span> <span class="s2">"01004701"</span>
 <span class="c1"># The source name as well</span>
-<span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">&quot;Mrk 501&quot;</span>
+<span class="n">SRC_NAME</span> <span class="o">=</span> <span class="s2">"Mrk 501"</span>
 
 <span class="c1"># The name of the HEASARC table that logs all IXPE observations</span>
-<span class="n">HEASARC_TABLE_NAME</span> <span class="o">=</span> <span class="s2">&quot;ixmaster&quot;</span>
+<span class="n">HEASARC_TABLE_NAME</span> <span class="o">=</span> <span class="s2">"ixmaster"</span>
 </pre></div>
 </div>
 </div>
@@ -738,21 +749,21 @@ this notebook.</p>
 <span class="n">hsp</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">allow_failure</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Set up the method for spawning processes.</span>
-<span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mp</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">"fork"</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 
 
 <span class="c1"># ------------- Setting how many cores we can use --------------</span>
 <span class="c1"># We use a service called CircleCI to execute, test, and validate these notebooks</span>
-<span class="c1">#  as we&#39;re writing and maintaining them. Unfortunately we have to treat the</span>
+<span class="c1">#  as we're writing and maintaining them. Unfortunately we have to treat the</span>
 <span class="c1">#  determination of the number of cores we can use differently, as the</span>
-<span class="c1">#  &#39;os.cpu_count()&#39; call will return the number of cores of the host machine, rather</span>
+<span class="c1">#  'os.cpu_count()' call will return the number of cores of the host machine, rather</span>
 <span class="c1">#  than the number that have actually been allocated to us.</span>
-<span class="k">if</span> <span class="s2">&quot;CIRCLECI&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CIRCLECI&quot;</span><span class="p">]):</span>
+<span class="k">if</span> <span class="s2">"CIRCLECI"</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"CIRCLECI"</span><span class="p">]):</span>
     <span class="c1"># Here we read the CPU quota (total CPU time allowed) and the CPU period (how</span>
     <span class="c1">#  long the scheduling window is) from a cgroup (a linux kernel feature) file.</span>
-    <span class="c1"># Dividing one by t&#39;other provides the number of cores we&#39;ve been allocated.</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/sys/fs/cgroup/cpu.max&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cpu_maxo</span><span class="p">:</span>
+    <span class="c1"># Dividing one by t'other provides the number of cores we've been allocated.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"/sys/fs/cgroup/cpu.max"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">cpu_maxo</span><span class="p">:</span>
         <span class="n">quota</span><span class="p">,</span> <span class="n">period</span> <span class="o">=</span> <span class="n">cpu_maxo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">quota</span><span class="p">)</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
 
@@ -765,29 +776,29 @@ this notebook.</p>
 <span class="c1"># Determines the number of CPU cores available</span>
 <span class="n">total_cores</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
 
-<span class="c1"># If NUM_CORES is None, then we use the number of cores returned by &#39;os.cpu_count()&#39;</span>
+<span class="c1"># If NUM_CORES is None, then we use the number of cores returned by 'os.cpu_count()'</span>
 <span class="k">if</span> <span class="n">NUM_CORES</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">NUM_CORES</span> <span class="o">=</span> <span class="n">total_cores</span>
-<span class="c1"># Otherwise, NUM_CORES has been overridden (either by the user, or because we&#39;re</span>
+<span class="c1"># Otherwise, NUM_CORES has been overridden (either by the user, or because we're</span>
 <span class="c1">#  running on CircleCI, and we do a validity check.</span>
 <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-        <span class="s2">&quot;If manually overriding &#39;NUM_CORES&#39;, you must set it to an integer value.&quot;</span>
+        <span class="s2">"If manually overriding 'NUM_CORES', you must set it to an integer value."</span>
     <span class="p">)</span>
 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">NUM_CORES</span> <span class="o">&gt;</span> <span class="n">total_cores</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;If manually overriding &#39;NUM_CORES&#39;, the value must be less than or &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;equal to the total available cores (</span><span class="si">{</span><span class="n">total_cores</span><span class="si">}</span><span class="s2">).&quot;</span>
+        <span class="sa">f</span><span class="s2">"If manually overriding 'NUM_CORES', the value must be less than or "</span>
+        <span class="sa">f</span><span class="s2">"equal to the total available cores (</span><span class="si">{</span><span class="n">total_cores</span><span class="si">}</span><span class="s2">)."</span>
     <span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 
 
 <span class="c1"># -------------- Set paths and create directories --------------</span>
 <span class="c1"># Set up the path of the directory into which we will download IXPE data</span>
-<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;../../../_data&quot;</span><span class="p">):</span>
-    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;../../../_data&quot;</span><span class="p">),</span> <span class="s2">&quot;IXPE&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">):</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"../../../_data"</span><span class="p">),</span> <span class="s2">"IXPE"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="s2">&quot;IXPE/&quot;</span>
+    <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="s2">"IXPE/"</span>
 
 <span class="c1"># Whatever the data directory is, make sure it is absolute.</span>
 <span class="n">ROOT_DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
@@ -796,7 +807,7 @@ this notebook.</p>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Setup path and directory into which we save output files from this example.</span>
-<span class="n">OUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;IXPE_output&quot;</span><span class="p">)</span>
+<span class="n">OUT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">"IXPE_output"</span><span class="p">)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># --------------------------------------------------------------</span>
 </pre></div>
@@ -822,7 +833,7 @@ can achieve this using the IXPE summary table of observations, accessed using <c
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;ixmaster&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>'ixmaster'
 </pre></div>
 </div>
 </div>
@@ -832,9 +843,9 @@ that corresponds to our chosen ObsID. This retrieves every column of the row who
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;SELECT * &quot;</span>
-    <span class="s2">&quot;from </span><span class="si">{c}</span><span class="s2"> as cat &quot;</span>
-    <span class="s2">&quot;where cat.obsid=&#39;</span><span class="si">{oi}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">OBS_ID</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">HEASARC_TABLE_NAME</span><span class="p">)</span>
+    <span class="s2">"SELECT * "</span>
+    <span class="s2">"from </span><span class="si">{c}</span><span class="s2"> as cat "</span>
+    <span class="s2">"where cat.obsid='</span><span class="si">{oi}</span><span class="s2">'"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">oi</span><span class="o">=</span><span class="n">OBS_ID</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">HEASARC_TABLE_NAME</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="n">query</span>
@@ -842,7 +853,7 @@ that corresponds to our chosen ObsID. This retrieves every column of the row who
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;SELECT * from ixmaster as cat where cat.obsid=&#39;01004701&#39;&quot;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>"SELECT * from ixmaster as cat where cat.obsid='01004701'"
 </pre></div>
 </div>
 </div>
@@ -886,7 +897,7 @@ to the <code class="docutils literal notranslate"><span class="pre">locate_data<
 will be downloaded into the directory specified by <code class="docutils literal notranslate"><span class="pre">ROOT_DATA_DIR</span></code>.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;aws&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Heasarc</span><span class="o">.</span><span class="n">download_data</span><span class="p">(</span><span class="n">data_links</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"aws"</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="n">ROOT_DATA_DIR</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -916,15 +927,15 @@ read it carefully, as it will contain information about any known issues with th
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">OBS_ID_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">OBS_ID</span><span class="p">)</span>
-<span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OBS_ID_PATH</span><span class="si">}</span><span class="s2">/*&quot;</span><span class="p">)</span>
+<span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">OBS_ID_PATH</span><span class="si">}</span><span class="s2">/*"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/home/jovyan/project/_data/IXPE/01004701/auxil&#39;,
- &#39;/home/jovyan/project/_data/IXPE/01004701/event_l1&#39;,
- &#39;/home/jovyan/project/_data/IXPE/01004701/event_l2&#39;,
- &#39;/home/jovyan/project/_data/IXPE/01004701/hk&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['/home/jovyan/project/_data/IXPE/01004701/auxil',
+ '/home/jovyan/project/_data/IXPE/01004701/event_l1',
+ '/home/jovyan/project/_data/IXPE/01004701/event_l2',
+ '/home/jovyan/project/_data/IXPE/01004701/hk']
 </pre></div>
 </div>
 </div>
@@ -941,11 +952,11 @@ the full paths to these files in a directory, with the keys being ‘det1’, �
 some inelegant string formatting every time we want to access them:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">l2_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">OBS_ID</span><span class="p">,</span> <span class="s2">&quot;event_l2&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">l2_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROOT_DATA_DIR</span><span class="p">,</span> <span class="n">OBS_ID</span><span class="p">,</span> <span class="s2">"event_l2"</span><span class="p">)</span>
 <span class="n">l2_path_files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">l2_path</span><span class="p">)</span>
 
 <span class="n">evt_file_paths</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;det</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;det&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]):</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">l2_path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="s2">"det</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"det"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]):</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">l2_path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">l2_path_files</span>
 <span class="p">}</span>
 
@@ -954,9 +965,9 @@ some inelegant string formatting every time we want to access them:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;det1&#39;: &#39;/home/jovyan/project/_data/IXPE/01004701/event_l2/ixpe01004701_det1_evt2_v01.fits.gz&#39;,
- &#39;det2&#39;: &#39;/home/jovyan/project/_data/IXPE/01004701/event_l2/ixpe01004701_det2_evt2_v01.fits.gz&#39;,
- &#39;det3&#39;: &#39;/home/jovyan/project/_data/IXPE/01004701/event_l2/ixpe01004701_det3_evt2_v01.fits.gz&#39;}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'det1': '/home/jovyan/project/_data/IXPE/01004701/event_l2/ixpe01004701_det1_evt2_v01.fits.gz',
+ 'det2': '/home/jovyan/project/_data/IXPE/01004701/event_l2/ixpe01004701_det2_evt2_v01.fits.gz',
+ 'det3': '/home/jovyan/project/_data/IXPE/01004701/event_l2/ixpe01004701_det3_evt2_v01.fits.gz'}
 </pre></div>
 </div>
 </div>
@@ -965,7 +976,7 @@ some inelegant string formatting every time we want to access them:</p>
 going to the command line, we will simply use a HEASoftPy interface:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">fstruct</span><span class="p">(</span><span class="n">infile</span><span class="o">=</span><span class="n">evt_file_paths</span><span class="p">[</span><span class="s2">&quot;det1&quot;</span><span class="p">],</span> <span class="n">allow_failure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">stdout</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">fstruct</span><span class="p">(</span><span class="n">infile</span><span class="o">=</span><span class="n">evt_file_paths</span><span class="p">[</span><span class="s2">"det1"</span><span class="p">],</span> <span class="n">allow_failure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">stdout</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1012,11 +1023,11 @@ images using <a class="reference external" href="https://sites.google.com/cfa.ha
 <p>The region files should be independently defined for each telescope; in this example, the source location has the same celestial coordinates within 0.25” for all three detectors, so a single source and a single background region can be used.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;src.reg&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">srco</span><span class="p">:</span>
-    <span class="n">srco</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;circle(16:53:51.766,+39:45:44.41,60.000&quot;)&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"src.reg"</span><span class="p">),</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">srco</span><span class="p">:</span>
+    <span class="n">srco</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">'circle(16:53:51.766,+39:45:44.41,60.000")'</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;bck.reg&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">bcko</span><span class="p">:</span>
-    <span class="n">bcko</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;annulus(16:53:51.766,+39:45:44.41,132.000&quot;,252.000&quot;)&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"bck.reg"</span><span class="p">),</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">bcko</span><span class="p">:</span>
+    <span class="n">bcko</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">'annulus(16:53:51.766,+39:45:44.41,132.000",252.000")'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1090,7 +1101,7 @@ extractor(args=None, **kwargs)
     timeref            :  TJD time 0 in MJD: (default: 40000.0)
     tpixrpar           :  TIMEPIXR value to use if not in events file: (default: -999.0)
     usetpixrsel        :  Use TIMEPIXR correction when selecting events: (default: no)
-    eventkey           :  File with list of keywords you don&#39;t want copied:&quot;&#39; (default: NONE)
+    eventkey           :  File with list of keywords you don't want copied:"' (default: NONE)
     phamax             :  Keyword for maximum pha channel: (default: PHA_BINS)
     xfkey              :  Name of keyword for size of X for region: (default: NONE)
     yfkey              :  Name of keyword for size of Y for region: (default: NONE)
@@ -1117,7 +1128,7 @@ number and the region file to generate the product within as arguments; the func
 <p>Output files are saved in the <code class="docutils literal notranslate"><span class="pre">OUT_PATH</span></code> directory, which is set up in the ‘Global Setup: Constants’ subsection.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arg_combs</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">evt_file_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="p">[</span><span class="s2">&quot;src.reg&quot;</span><span class="p">,</span> <span class="s2">&quot;bck.reg&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">arg_combs</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">evt_file_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="p">[</span><span class="s2">"src.reg"</span><span class="p">,</span> <span class="s2">"bck.reg"</span><span class="p">])</span>
 
 <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">NUM_CORES</span><span class="p">)</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">extract_spec</span><span class="p">,</span> <span class="n">arg_combs</span><span class="p">)</span>
@@ -1134,26 +1145,26 @@ HEASoftPy call will also raise exceptions if the extraction fails (as we passed 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;src.reg&#39;,
- &#39;bck.reg&#39;,
- &#39;ixpe_det1_bck_I.pha&#39;,
- &#39;ixpe_det1_src_I.pha&#39;,
- &#39;ixpe_det2_src_I.pha&#39;,
- &#39;ixpe_det1_bck_Q.pha&#39;,
- &#39;ixpe_det1_src_Q.pha&#39;,
- &#39;ixpe_det2_src_Q.pha&#39;,
- &#39;ixpe_det1_bck_U.pha&#39;,
- &#39;ixpe_det1_src_U.pha&#39;,
- &#39;ixpe_det2_src_U.pha&#39;,
- &#39;ixpe_det2_bck_I.pha&#39;,
- &#39;ixpe_det3_bck_I.pha&#39;,
- &#39;ixpe_det3_src_I.pha&#39;,
- &#39;ixpe_det2_bck_Q.pha&#39;,
- &#39;ixpe_det3_bck_Q.pha&#39;,
- &#39;ixpe_det3_src_Q.pha&#39;,
- &#39;ixpe_det2_bck_U.pha&#39;,
- &#39;ixpe_det3_bck_U.pha&#39;,
- &#39;ixpe_det3_src_U.pha&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['src.reg',
+ 'bck.reg',
+ 'ixpe_det1_bck_I.pha',
+ 'ixpe_det1_src_I.pha',
+ 'ixpe_det2_src_I.pha',
+ 'ixpe_det1_bck_Q.pha',
+ 'ixpe_det1_src_Q.pha',
+ 'ixpe_det2_src_Q.pha',
+ 'ixpe_det1_bck_U.pha',
+ 'ixpe_det1_src_U.pha',
+ 'ixpe_det2_src_U.pha',
+ 'ixpe_det2_bck_I.pha',
+ 'ixpe_det3_bck_I.pha',
+ 'ixpe_det3_src_I.pha',
+ 'ixpe_det2_bck_Q.pha',
+ 'ixpe_det3_bck_Q.pha',
+ 'ixpe_det3_src_Q.pha',
+ 'ixpe_det2_bck_U.pha',
+ 'ixpe_det3_bck_U.pha',
+ 'ixpe_det3_src_U.pha']
 </pre></div>
 </div>
 </div>
@@ -1203,7 +1214,7 @@ quzcif(args=None, **kwargs)
     retrieve           :  Download remote file via ftp or http? (default: no)
     clobber            :  Overwrite existing output file? (default: no)
     chatter            :  Chatter flag (default: 0)
-    quality            :  &#39;Quality value of &quot;good&quot; file (default = 0)&#39; (default: 0)
+    quality            :  'Quality value of "good" file (default = 0)' (default: 0)
     nfound             :  Number of datasets found which match selection criteria (default: 0)
     mode               :   (default: ql)
 
@@ -1233,9 +1244,9 @@ different versions of those files.</p>
 <p>We’ll set up variables to hold the response version numbers:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rmf_ver</span> <span class="o">=</span> <span class="s2">&quot;02&quot;</span>
-<span class="n">arf_ver</span> <span class="o">=</span> <span class="s2">&quot;03&quot;</span>
-<span class="n">mrf_ver</span> <span class="o">=</span> <span class="s2">&quot;03&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rmf_ver</span> <span class="o">=</span> <span class="s2">"02"</span>
+<span class="n">arf_ver</span> <span class="o">=</span> <span class="s2">"03"</span>
+<span class="n">mrf_ver</span> <span class="o">=</span> <span class="s2">"03"</span>
 </pre></div>
 </div>
 </div>
@@ -1247,55 +1258,55 @@ different versions of those files.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the on-axis RMFs, ARFs, and MRFs</span>
-<span class="n">resps</span> <span class="o">=</span> <span class="p">{</span><span class="n">det</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;rmf&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;arf&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;mrf&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">det</span> <span class="ow">in</span> <span class="n">evt_file_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+<span class="n">resps</span> <span class="o">=</span> <span class="p">{</span><span class="n">det</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rmf"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"arf"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"mrf"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span> <span class="k">for</span> <span class="n">det</span> <span class="ow">in</span> <span class="n">evt_file_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
 
 <span class="k">for</span> <span class="n">det</span> <span class="ow">in</span> <span class="n">evt_file_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">det_str</span> <span class="o">=</span> <span class="s2">&quot;DU</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">det</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">det_str</span> <span class="o">=</span> <span class="s2">"DU</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">det</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="n">rmf_res</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">quzcif</span><span class="p">(</span>
-        <span class="n">mission</span><span class="o">=</span><span class="s2">&quot;ixpe&quot;</span><span class="p">,</span>
-        <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;gpd&quot;</span><span class="p">,</span>
+        <span class="n">mission</span><span class="o">=</span><span class="s2">"ixpe"</span><span class="p">,</span>
+        <span class="n">instrument</span><span class="o">=</span><span class="s2">"gpd"</span><span class="p">,</span>
         <span class="n">detector</span><span class="o">=</span><span class="n">det_str</span><span class="p">,</span>
-        <span class="nb">filter</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">date</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">time</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">codename</span><span class="o">=</span><span class="s2">&quot;MATRIX&quot;</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">date</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">time</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">expr</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">codename</span><span class="o">=</span><span class="s2">"MATRIX"</span><span class="p">,</span>
         <span class="n">allow_failure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">][</span><span class="s2">&quot;rmf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rmf_res</span><span class="o">.</span><span class="n">output</span> <span class="k">if</span> <span class="s2">&quot;alpha075_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rmf_ver</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span>
+    <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">][</span><span class="s2">"rmf"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rmf_res</span><span class="o">.</span><span class="n">output</span> <span class="k">if</span> <span class="s2">"alpha075_</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rmf_ver</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span>
     <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="n">arf_res</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">quzcif</span><span class="p">(</span>
-        <span class="n">mission</span><span class="o">=</span><span class="s2">&quot;ixpe&quot;</span><span class="p">,</span>
-        <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;gpd&quot;</span><span class="p">,</span>
+        <span class="n">mission</span><span class="o">=</span><span class="s2">"ixpe"</span><span class="p">,</span>
+        <span class="n">instrument</span><span class="o">=</span><span class="s2">"gpd"</span><span class="p">,</span>
         <span class="n">detector</span><span class="o">=</span><span class="n">det_str</span><span class="p">,</span>
-        <span class="nb">filter</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">date</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">time</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">codename</span><span class="o">=</span><span class="s2">&quot;SPECRESP&quot;</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">date</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">time</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">expr</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">codename</span><span class="o">=</span><span class="s2">"SPECRESP"</span><span class="p">,</span>
         <span class="n">allow_failure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">][</span><span class="s2">&quot;arf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arf_res</span><span class="o">.</span><span class="n">output</span> <span class="k">if</span> <span class="s2">&quot;alpha075_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arf_ver</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span>
+    <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">][</span><span class="s2">"arf"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arf_res</span><span class="o">.</span><span class="n">output</span> <span class="k">if</span> <span class="s2">"alpha075_</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arf_ver</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span>
     <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="n">mrf_res</span> <span class="o">=</span> <span class="n">hsp</span><span class="o">.</span><span class="n">quzcif</span><span class="p">(</span>
-        <span class="n">mission</span><span class="o">=</span><span class="s2">&quot;ixpe&quot;</span><span class="p">,</span>
-        <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;gpd&quot;</span><span class="p">,</span>
+        <span class="n">mission</span><span class="o">=</span><span class="s2">"ixpe"</span><span class="p">,</span>
+        <span class="n">instrument</span><span class="o">=</span><span class="s2">"gpd"</span><span class="p">,</span>
         <span class="n">detector</span><span class="o">=</span><span class="n">det_str</span><span class="p">,</span>
-        <span class="nb">filter</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">date</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">time</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
-        <span class="n">codename</span><span class="o">=</span><span class="s2">&quot;MODSPECRESP&quot;</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">date</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">time</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">expr</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
+        <span class="n">codename</span><span class="o">=</span><span class="s2">"MODSPECRESP"</span><span class="p">,</span>
         <span class="n">allow_failure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">][</span><span class="s2">&quot;mrf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mrf_res</span><span class="o">.</span><span class="n">output</span> <span class="k">if</span> <span class="s2">&quot;alpha075_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mrf_ver</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span>
+    <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">][</span><span class="s2">"mrf"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mrf_res</span><span class="o">.</span><span class="n">output</span> <span class="k">if</span> <span class="s2">"alpha075_</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mrf_ver</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span>
     <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -1319,9 +1330,9 @@ plot axes are energy (for the x-axis), and normalized counts per second (for the
 
 <span class="c1"># Other xspec settings</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">=</span> <span class="s2">&quot;keV&quot;</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">xAxis</span> <span class="o">=</span> <span class="s2">"keV"</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="s2">"no"</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">nIterations</span> <span class="o">=</span> <span class="mi">500</span>
 </pre></div>
 </div>
@@ -1341,7 +1352,7 @@ then to ensure that the working directory is reset.</p>
 <span class="c1"># Dictionary to store sort detector responses into - makes it neater to load them in</span>
 <span class="n">resps</span> <span class="o">=</span> <span class="p">{</span><span class="n">det</span><span class="p">:</span> <span class="n">resps</span><span class="p">[</span><span class="n">det</span><span class="p">]</span> <span class="k">for</span> <span class="n">det</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">resps</span><span class="p">)}</span>
 
-<span class="c1"># Changing directory to the directory we&#39;ve been writing spectra to, we now</span>
+<span class="c1"># Changing directory to the directory we've been writing spectra to, we now</span>
 <span class="c1">#  load them into PyXspec.</span>
 <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">):</span>
     <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Iterator index to keep the spectrum numbering correct</span>
@@ -1349,34 +1360,34 @@ then to ensure that the working directory is reset.</p>
         <span class="n">du</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">det</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># ----------- Load the I data -----------</span>
-        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">:</span><span class="si">%i</span><span class="s2"> ixpe_det</span><span class="si">%i</span><span class="s2">_src_I.pha&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">du</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">du</span><span class="p">))</span>
-        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">du</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">du</span><span class="o">+</span><span class="n">x</span><span class="si">}</span><span class="s2"> ixpe_det</span><span class="si">{</span><span class="n">du</span><span class="si">}</span><span class="s2">_src_I.pha&quot;</span><span class="p">)</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">:</span><span class="si">%i</span><span class="s2"> ixpe_det</span><span class="si">%i</span><span class="s2">_src_I.pha"</span> <span class="o">%</span> <span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">du</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">du</span><span class="p">))</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">du</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">du</span><span class="o">+</span><span class="n">x</span><span class="si">}</span><span class="s2"> ixpe_det</span><span class="si">{</span><span class="n">du</span><span class="si">}</span><span class="s2">_src_I.pha"</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="n">du</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span>
 
         <span class="c1"># Load response and background files</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">&quot;rmf&quot;</span><span class="p">]</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">arf</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">&quot;arf&quot;</span><span class="p">]</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;ixpe_det</span><span class="si">%i</span><span class="s2">_bck_I.pha&quot;</span> <span class="o">%</span> <span class="n">du</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">"rmf"</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">arf</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">"arf"</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">"ixpe_det</span><span class="si">%i</span><span class="s2">_bck_I.pha"</span> <span class="o">%</span> <span class="n">du</span>
         <span class="c1"># ---------------------------------------</span>
 
         <span class="c1"># ----------- Load the Q data -----------</span>
-        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">:</span><span class="si">%i</span><span class="s2"> ixpe_det</span><span class="si">%i</span><span class="s2">_src_Q.pha&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">du</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">du</span><span class="p">))</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">:</span><span class="si">%i</span><span class="s2"> ixpe_det</span><span class="si">%i</span><span class="s2">_src_Q.pha"</span> <span class="o">%</span> <span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">du</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">du</span><span class="p">))</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="n">du</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># #Load response and background files</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">&quot;rmf&quot;</span><span class="p">]</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">arf</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">&quot;mrf&quot;</span><span class="p">]</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;ixpe_det</span><span class="si">%i</span><span class="s2">_bck_Q.pha&quot;</span> <span class="o">%</span> <span class="n">du</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">"rmf"</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">arf</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">"mrf"</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">"ixpe_det</span><span class="si">%i</span><span class="s2">_bck_Q.pha"</span> <span class="o">%</span> <span class="n">du</span>
         <span class="c1"># ---------------------------------------</span>
 
         <span class="c1"># ----------- Load the U data -----------</span>
-        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">:</span><span class="si">%i</span><span class="s2"> ixpe_det</span><span class="si">%i</span><span class="s2">_src_U.pha&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">du</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">du</span><span class="p">))</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">:</span><span class="si">%i</span><span class="s2"> ixpe_det</span><span class="si">%i</span><span class="s2">_src_U.pha"</span> <span class="o">%</span> <span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">du</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">du</span><span class="p">))</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="p">(</span><span class="n">du</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># #Load response and background files</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">&quot;rmf&quot;</span><span class="p">]</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">arf</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">&quot;mrf&quot;</span><span class="p">]</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">&quot;ixpe_det</span><span class="si">%i</span><span class="s2">_bck_U.pha&quot;</span> <span class="o">%</span> <span class="n">du</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">"rmf"</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">arf</span> <span class="o">=</span> <span class="n">supp_files</span><span class="p">[</span><span class="s2">"mrf"</span><span class="p">]</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="s2">"ixpe_det</span><span class="si">%i</span><span class="s2">_bck_U.pha"</span> <span class="o">%</span> <span class="n">du</span>
         <span class="c1"># ---------------------------------------</span>
 
         <span class="n">x</span> <span class="o">+=</span> <span class="mi">2</span>
@@ -1396,7 +1407,7 @@ ignore a range of <strong>channels</strong>. So don’t be tempted to use xs.All
 </div>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">&quot;0.0-2.0, 8.0-**&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="s2">"0.0-2.0, 8.0-**"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1413,7 +1424,7 @@ constant with energy.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set up the model that we want to fit</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;polconst*tbabs(constant*powerlaw)&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">"polconst*tbabs(constant*powerlaw)"</span><span class="p">)</span>
 
 <span class="c1"># Set initial guesses for parameter values</span>
 <span class="n">model</span><span class="o">.</span><span class="n">polconst</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="mf">0.05</span>
@@ -1475,7 +1486,7 @@ an individual instrument.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This command will construct a logged-data plot of the spectrum</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">&quot;lda&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">"lda"</span><span class="p">)</span>
 
 <span class="n">yVals</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
 <span class="n">yErr</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">yErr</span><span class="p">()</span>
@@ -1496,7 +1507,7 @@ an individual instrument.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Plot the spectral data points, with error bars</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
@@ -1504,27 +1515,27 @@ an individual instrument.</p>
     <span class="n">yVals</span><span class="p">,</span>
     <span class="n">xerr</span><span class="o">=</span><span class="n">xErr</span><span class="p">,</span>
     <span class="n">yerr</span><span class="o">=</span><span class="n">yErr</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;k.&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"k."</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;IXPE Data [01004701]&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"IXPE Data [01004701]"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># Add the fitted model line to the plot</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">xVals</span><span class="p">,</span> <span class="n">mop</span><span class="p">,</span> <span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;polconst$\times$tbabs$\times$(constant$\times$powerlaw)&quot;</span>
+    <span class="n">xVals</span><span class="p">,</span> <span class="n">mop</span><span class="p">,</span> <span class="s2">"r-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"polconst$\times$tbabs$\times$(constant$\times$powerlaw)"</span>
 <span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_minor_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">inp</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">inp</span><span class="p">)))</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Energy [keV]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Counts cm$^{-2}$ s$^{-1}$ keV$^{-1}$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Energy [keV]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Counts cm$^{-2}$ s$^{-1}$ keV$^{-1}$"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"best"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1543,7 +1554,7 @@ an individual instrument.</p>
 <p>We can extract the data and model information that will let us plot the polarization angle against energy:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">&quot;polangle&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">"polangle"</span><span class="p">)</span>
 <span class="n">yVals</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
 <span class="n">yErr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">yErr</span><span class="p">()]</span>
 <span class="n">xVals</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
@@ -1563,26 +1574,26 @@ an individual instrument.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
     <span class="n">xVals</span><span class="p">,</span>
     <span class="n">yVals</span><span class="p">,</span>
     <span class="n">xerr</span><span class="o">=</span><span class="n">xErr</span><span class="p">,</span>
     <span class="n">yerr</span><span class="o">=</span><span class="n">yErr</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;k.&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"k."</span><span class="p">,</span>
     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;IXPE Data [01004701]&quot;</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="s2">"IXPE Data [01004701]"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">xVals</span><span class="p">,</span> <span class="n">mop</span><span class="p">,</span> <span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;polconst$\times$tbabs$\times$(constant$\times$powerlaw)&quot;</span>
+    <span class="n">xVals</span><span class="p">,</span> <span class="n">mop</span><span class="p">,</span> <span class="s2">"r-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">"polconst$\times$tbabs$\times$(constant$\times$powerlaw)"</span>
 <span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Energy [keV]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Polarization Angle [$^\circ$]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Energy [keV]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Polarization Angle [$^\circ$]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"best"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1603,12 +1614,12 @@ to deduce confidence intervals for these parameters.</p>
 <p>We can estimate the 99% confidence interval for these two parameters.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We&#39;re using the XSPEC error command to estimate parameter uncertainties</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We're using the XSPEC error command to estimate parameter uncertainties</span>
 <span class="c1"># Parameter 1 is the polarization fraction</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;6.635 1&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"6.635 1"</span><span class="p">)</span>
 
 <span class="c1"># Parameter 2 is the polarization angle</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;6.635 2&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"6.635 2"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1622,11 +1633,11 @@ to deduce confidence intervals for these parameters.</p>
 
 <span class="c1"># Create and open a log file for XSPEC output.</span>
 <span class="c1"># This step can sometimes take a few minutes. Please be patient!</span>
-<span class="n">logFile</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Xset</span><span class="o">.</span><span class="n">openLog</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">&quot;steppar.txt&quot;</span><span class="p">))</span>
+<span class="n">logFile</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Xset</span><span class="o">.</span><span class="n">openLog</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">OUT_PATH</span><span class="p">,</span> <span class="s2">"steppar.txt"</span><span class="p">))</span>
 
-<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">steppar</span><span class="p">(</span><span class="s2">&quot;1 0.00 0.21 41 2 -90 0 36&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Fit</span><span class="o">.</span><span class="n">steppar</span><span class="p">(</span><span class="s2">"1 0.00 0.21 41 2 -90 0 36"</span><span class="p">)</span>
 
-<span class="c1"># Close XSPEC&#39;s currently opened log file.</span>
+<span class="c1"># Close XSPEC's currently opened log file.</span>
 <span class="n">xs</span><span class="o">.</span><span class="n">Xset</span><span class="o">.</span><span class="n">closeLog</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1636,7 +1647,7 @@ to deduce confidence intervals for these parameters.</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fetch the plotting information</span>
-<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">&quot;contour ,,4 1.386, 4.61 9.21 13.81&quot;</span><span class="p">)</span>
+<span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="s2">"contour ,,4 1.386, 4.61 9.21 13.81"</span><span class="p">)</span>
 <span class="n">yVals</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">y</span><span class="p">()</span>
 <span class="n">xVals</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">x</span><span class="p">()</span>
 <span class="n">zVals</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">Plot</span><span class="o">.</span><span class="n">z</span><span class="p">()</span>
@@ -1657,13 +1668,13 @@ to deduce confidence intervals for these parameters.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">"both"</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">"in"</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">xVals</span><span class="p">,</span> <span class="n">yVals</span><span class="p">,</span> <span class="n">zVals</span><span class="p">,</span> <span class="n">levelvals</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">m1</span><span class="o">.</span><span class="n">polconst</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m1</span><span class="o">.</span><span class="n">polconst</span><span class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">m1</span><span class="o">.</span><span class="n">polconst</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m1</span><span class="o">.</span><span class="n">polconst</span><span class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"+"</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Polarization Angle ($\psi$) [$^{\circ}$]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Polarization Fraction (A)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Polarization Angle ($\psi$) [$^{\circ}$]"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Polarization Fraction (A)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1682,7 +1693,7 @@ to deduce confidence intervals for these parameters.</p>
 <p>To do this, we first use XSPEC to determine the (model) flux on the 2-8 keV energy range:</p>
 <div class="cell config_scroll_outputs docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">AllModels</span><span class="o">.</span><span class="n">calcFlux</span><span class="p">(</span><span class="s2">&quot;2.0 8.0&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span><span class="o">.</span><span class="n">AllModels</span><span class="o">.</span><span class="n">calcFlux</span><span class="p">(</span><span class="s2">"2.0 8.0"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
