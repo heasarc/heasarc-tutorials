@@ -8,7 +8,7 @@ authors:
   affiliations: ['University of Maryland, Baltimore County', 'HEASARC, NASA Goddard']
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-07-28'
+date: '2026-10-22'
 file_format: mystnb
 jupytext:
   text_representation:
@@ -110,12 +110,10 @@ def worker(in_dir: str) -> hsp.core.HSPResult:
     """
 
     with hsp.utils.local_pfiles_context():
-
         # Call the tasks of interest
         out = hsp.nicerl2(
             indir=in_dir, noprompt=True, clobber=True, geomag_path=GEOMAG_PATH
         )
-
         # Run any other tasks...
 
     return out
@@ -532,7 +530,7 @@ Author: Abdu Zoghbi, HEASARC Staff Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-07-28
+Updated On: 2026-10-22
 
 +++
 
