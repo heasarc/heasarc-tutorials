@@ -7,7 +7,7 @@ repos:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
 - repo: https://github.com/nbQA-dev/nbQA
-  rev: 1.9.1
+  rev: 1.10.0
   hooks:
     - id: nbqa-black
       additional_dependencies: [ black==25.1.0, jupytext==1.17.3 ]
