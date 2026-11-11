@@ -19,6 +19,8 @@ caption: Full guides
 0-python-intro-full-guide
 
 1-data-acquisition-full-guide
+
+2-fits-files-and-evolution-gif-full-guide
 ```
 
 ## Who is this for?

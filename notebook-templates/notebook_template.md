@@ -297,6 +297,28 @@ It would be nice if all contributed codes did the following, but these guideline
 
 ```
 
+### 3.3 Making a notebook dependent on another notebook
+
+We now support 'chains' of dependent notebooks - i.e. the outputs of one notebook are required for another
+to execute, and if those outputs change then the second notebook needs to be re-run. Output files can be
+explicitly cached by adding entries to the frontmatter at the very top of the notebook file:
+
+```
+execution:
+  cache_outputs: [data/test_output.txt]
+```
+
+To define a notebook as dependent on another notebook's outputs, you can add a different entry to the
+frontmatter:
+
+```
+execution:
+  dependencies: [workshops/test_framework/0-provider.md]
+```
+
+Additionally, a notebook can both cache its outputs and be dependent on another notebook, so chains
+of dependent notebooks can be formed.
+
 ## 4. PR Review
 
 Notebooks go through a two step process: first step is getting into the repo, and the second step gets it into the [published tutorials](https://nasa-fornax.github.io/fornax-demo-notebooks/).

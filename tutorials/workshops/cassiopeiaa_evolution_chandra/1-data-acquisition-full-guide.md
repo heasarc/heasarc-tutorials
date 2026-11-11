@@ -17,12 +17,13 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-09-24'
+date: '2026-10-19'
 execution:
   cal-files:
     xmm-ccf: false
     chandra: false
     xspec-models: false
+  cache_outputs: [../../../_data/CasA-Chandra, casa_output]
 file_format: mystnb
 jupytext:
   text_representation:
@@ -502,6 +503,7 @@ plt.figure(figsize=(6, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=False)
 
+# Pulling out the main current axis
 main_ax = plt.gca()
 
 plt.hist(
@@ -836,7 +838,7 @@ Author: Tess Jaffe, HEASARC Chief Archive Scientist.
 
 Author: Mike Corcoran, Associate Research Professor.
 
-Updated On: 2026-09-24
+Updated On: 2026-10-19
 
 +++
 

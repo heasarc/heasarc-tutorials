@@ -198,9 +198,16 @@ def main():
         ordered_list = topological_sort(graph, full_set)
 
         # 2.5 Identify which notebooks need forced re-execution
-        # Any notebook that is in the full_set but NOT in the original 'changed' list
-        # (or any notebook that has a changed ancestor)
-        force_reexecute = [nb for nb in ordered_list if nb not in changed or any(anc in changed for anc in get_full_execution_set(graph, {}, [nb]) if anc != nb)]
+        # Re-execute if:
+        #  a) The notebook file itself was changed
+        #  b) Any of its ancestors (dependencies) were changed
+        force_reexecute = []
+        for nb in ordered_list:
+            # Re-fetch dependencies for THIS specific notebook to see if any have changed
+            # Note: get_full_execution_set with empty rev_graph only looks upstream
+            ancestors = get_full_execution_set(graph, {}, [nb])
+            if any(anc in changed for anc in ancestors):
+                force_reexecute.append(nb)
 
         # 3. Determine calibration needs
         cal_needs, bad_cal = get_calibration_needs(args.tutorials_dir, ordered_list, allowed_cal)
