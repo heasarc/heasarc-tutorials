@@ -19,6 +19,7 @@
 
 # AI-related files
 CLAUDE.md
+.claude/
 
 # Tests and reports
 htmlcov/

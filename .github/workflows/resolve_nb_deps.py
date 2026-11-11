@@ -23,18 +23,32 @@ def parse_metadata(file_path: str) -> dict:
     except yaml.YAMLError:
         return {}
 
-def get_allowed_cal_names(root_dir: str) -> List[str]:
-    """Reads the allowed calibration names from the notebook template."""
-    template_path = os.path.join(os.path.dirname(root_dir), 'notebook-templates', 'notebook_template.md')
-    if not os.path.exists(template_path):
-        # Fallback if template missing
-        return ['xmm-ccf', 'chandra', 'xspec-models']
+def load_notebook_schema(root_dir: str, schema_file: str = "notebook-schema.yml") -> dict:
+    """Loads the top-level HEASARC notebook schema YAML specification."""
+    candidates = [
+        schema_file,
+        os.path.join(os.path.dirname(os.path.abspath(root_dir)), schema_file),
+    ]
+    for path in candidates:
+        if os.path.exists(path):
+            with open(path, 'r', encoding='utf-8') as f:
+                return yaml.safe_load(f) or {}
 
-    metadata = parse_metadata(template_path)
-    try:
-        return list(metadata.get('execution', {}).get('cal-files', {}).keys())
-    except Exception:
-        return ['xmm-ccf', 'chandra', 'xspec-models']
+    raise FileNotFoundError(f"Notebook schema file '{schema_file}' not found.")
+
+
+def get_allowed_cal_names(root_dir: str, schema_file: str = "notebook-schema.yml") -> List[str]:
+    """Reads the allowed calibration dataset names from notebook-schema.yml."""
+    schema = load_notebook_schema(root_dir, schema_file)
+    allowed_sets = (
+        schema.get('frontmatter', {})
+        .get('execution', {})
+        .get('cal-files', {})
+        .get('allowed_sets', {})
+    )
+    if not allowed_sets:
+        raise ValueError(f"No allowed calibration sets defined in '{schema_file}'.")
+    return list(allowed_sets.keys())
 
 def build_reverse_graph(graph: Dict[str, List[str]]) -> Dict[str, List[str]]:
     """Builds a map of notebooks to their dependents."""
@@ -135,11 +149,18 @@ def get_calibration_needs(root_dir: str, notebooks: List[str], allowed_names: Li
             continue
 
         cal_files = exec_meta.get('cal-files', {})
+        if not isinstance(cal_files, dict):
+            bad_meta[nb] = [f"cal-files must be a mapping, got {type(cal_files).__name__}"]
+            continue
 
-        # Check for invalid names
-        invalid = [n for n in cal_files.keys() if n not in allowed_names]
-        if invalid:
-            bad_meta[nb] = invalid
+        # Check for invalid calibration set names or non-boolean values
+        invalid_names = [n for n in cal_files.keys() if n not in allowed_names]
+        invalid_vals = [
+            f"{n} ({v})" for n, v in cal_files.items()
+            if n in allowed_names and not isinstance(v, bool)
+        ]
+        if invalid_names or invalid_vals:
+            bad_meta[nb] = invalid_names + invalid_vals
             continue
 
         for name, value in cal_files.items():
@@ -163,10 +184,9 @@ def main():
     parser = argparse.ArgumentParser(description="Resolve notebook dependencies and calibration needs.")
     parser.add_argument("--changed-files", required=True, help="Comma-separated list of changed .md files relative to tutorials/")
     parser.add_argument("--tutorials-dir", default="tutorials", help="Path to the tutorials directory")
+    parser.add_argument("--schema-file", default="notebook-schema.yml", help="Path to the notebook schema YAML file")
 
     args = parser.parse_args()
-
-    abs_tutorials_dir = os.path.abspath(args.tutorials_dir)
 
     # 1. Clean up changed files list
     changed = [f.strip() for f in args.changed_files.split(',') if f.strip().endswith('.md')]
@@ -174,19 +194,22 @@ def main():
     # Remove 'tutorials/' prefix if present
     changed = [f[len('tutorials/'):] if f.startswith('tutorials/') else f for f in changed]
 
-    if not changed:
-        print("NOTEBOOKS_TO_BUILD=")
-        print("ANY_BAD_CAL_SPEC=false")
-        print("REQUIRE_XMM_CCF=false")
-        print("REQUIRE_CHANDRA=false")
-        print("REQUIRE_XSPEC_MODELS=false")
-        return
-
     # 2. Build graphs and find all required notebooks
     try:
+        allowed_cal = get_allowed_cal_names(args.tutorials_dir, args.schema_file)
+
+        if not changed:
+            print("NOTEBOOKS_TO_BUILD=")
+            print("FORCE_REEXECUTE=")
+            print("ANY_BAD_CAL_SPEC=false")
+            for name in allowed_cal:
+                param_name = name.replace('-', '_').upper()
+                print(f"REQUIRE_{param_name}=false")
+            print("CACHE_SPECS={}")
+            return
+
         graph = build_dependency_graph(args.tutorials_dir)
         rev_graph = build_reverse_graph(graph)
-        allowed_cal = get_allowed_cal_names(args.tutorials_dir)
 
         # Filter changed files to only those inside the graph (ignores templates, etc.)
         targets = [f for f in changed if f in graph]
