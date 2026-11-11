@@ -1,0 +1,81 @@
+# HEASARC-Tutorials Markdown Notebook Format Specification
+# This file is the single source of truth for the custom frontmatter metadata
+#  and structural conventions of HEASARC tutorial notebooks (.md).
+schema_version: "1.0"
+
+frontmatter:
+  required_fields:
+    - authors
+    - date
+    - file_format
+    - jupytext
+    - kernelspec
+    - execution
+    - title
+
+  authors:
+    type: list
+    required_keys:
+      - name
+      - affiliations
+    optional_keys:
+      - email
+      - orcid
+      - website
+      - github
+
+  date:
+    type: str
+    format: "YYYY-MM-DD"
+
+  file_format:
+    type: str
+    allowed_values:
+      - mystnb
+
+  jupytext:
+    text_representation:
+      extension: ".md"
+      format_name: "myst"
+
+  kernelspec:
+    required:
+      name: "heasoft"
+      language: "python"
+      display_name: "heasoft"
+
+  execution:
+    required_keys:
+      - cal-files
+    optional_keys:
+      - dependencies
+      - cache_outputs
+    cal-files:
+      type: bool
+      default_if_missing: true
+      allowed_sets:
+        xmm-ccf:
+          circleci_param: require_xmm_ccf
+          description: "XMM-Newton Current Calibration Files (CCF)"
+        chandra:
+          circleci_param: require_chandra
+          description: "Chandra Calibration Database (CALDB) files"
+        xspec-models:
+          circleci_param: require_xspec_models
+          description: "XSPEC spectral model data files"
+    dependencies:
+      type: list
+      description: "Relative paths (from tutorials/) to upstream notebooks that must execute prior to this notebook"
+    cache_outputs:
+      type: list
+      description: "Relative paths to files/directories produced by this notebook to cache for downstream dependent notebooks"
+
+sections:
+  standard:
+    - "## Learning Goals"
+    - "## Introduction"
+    - "### Inputs"
+    - "### Outputs"
+    - "### Runtime"
+  bite_sized:
+    - "## Learning Goals"
