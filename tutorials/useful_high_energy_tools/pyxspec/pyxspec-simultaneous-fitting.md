@@ -148,38 +148,38 @@ def plot_fit_residual_spec(
     as a truly general-purpose plotting function, more as a possible inspiration
     for your own versions.
 
-    :param Union[dict, Sequence[dict]] plot_data: Dictionary (or sequence of
+    :param dict | Sequence[dict] plot_data: Dictionary (or sequence of
         dictionaries) containing all information necessary to produce the fitted
         spectrum and residual visualization for each spectrum/group.
-    :param Union[str, Sequence[str]] sp_color: Matplotlib color (or sequence of colors)
+    :param str | Sequence[str] sp_color: Matplotlib color (or sequence of colors)
         to use for the spectral data points of each dataset.
-    :param Union[str, Sequence[str]] mod_color: Matplotlib color (or sequence of colors)
+    :param str | Sequence[str] mod_color: Matplotlib color (or sequence of colors)
         to use for the fitted model line of each dataset.
-    :param Optional[Union[str, Sequence[str]]] res_color: Matplotlib color (or sequence
+    :param str | Sequence[str] | None res_color: Matplotlib color (or sequence
         of colors) to use for the residual data points. Defaults to matching
         `sp_color` if None.
-    :param Union[str, Sequence[Union[str, tuple]]] mod_ls: Matplotlib linestyle (or
+    :param str | Sequence[str | tuple] mod_ls: Matplotlib linestyle (or
         sequence of linestyles) to use for the fitted model line of each dataset.
-    :param Optional[Tuple[float, float]] x_lims: Optional limits on which parts
+    :param tuple[float, float] | None x_lims: Optional limits on which parts
         of the x-axis to plot. Must be a two-element tuple containing the lower and
         then the upper limit.
-    :param Optional[Tuple[float, float]] y_lims: Optional limits on which parts
+    :param tuple[float, float] | None y_lims: Optional limits on which parts
         of the y-axis to plot. Must be a two-element tuple containing the lower and
         then the upper limit.
-    :param Optional[Union[str, Sequence[str]]] inst_name: Optionally, a
+    :param str | Sequence[str] | None inst_name: Optionally, a
         mission/instrument or dataset label (or sequence of labels, one per dictionary
         in `plot_data`) to add to the legend label given to the spectral data points.
     :param bool stepped_model: Controls whether the fitted model is plotted as a
         staircase (to match XSPEC's plotting style) or as a smooth line. Default is
         True, resulting in a staircase.
-    :param Optional[Union[str, Sequence[str]]] mod_expr: Optionally, the 'expression' of
+    :param str | Sequence[str] | None mod_expr: Optionally, the 'expression' of
         the fitted model (or sequence of expressions/labels) - to be added to its
         legend label.
     :param str x_scale: Scaling that should be applied to the x-axis, accepts all
         matplotlib-supported scales. Default is "log".
     :param str y_scale: Scaling that should be applied to the y-axis, accepts all
         matplotlib-supported scales. Default is "log".
-    :param tuple(float, float) | None fig_size: Defines the size of the figure produced
+    :param tuple[float, float] | None fig_size: Defines the size of the figure produced
         by this function. Default is None, in which case (7.5, 6.5) is used.
     """
     # Normalize a single dictionary input into a one-element list so that single-
@@ -455,11 +455,17 @@ number, and does not take group number into account. So, to ignore channels 1–
 37–48 of both files:
 
 <span style="color:red">**Suggested context & potential code cells (Inspecting spectra before fitting)**:</span>
-1. In `pyxspec-basics.md`, we strongly encouraged plotting the raw spectra *before* ignoring channels or fitting a model. Consider adding a code cell and figure here showing the two raw spectra (`losum` and `hisum`) across all 48 channels so the reader can visually see why channels 1–3 and 37–48 are ignored and how much lower the pre-eclipse count rate is compared to post-eclipse.
-2. Explain *why* `xs.AllData.ignore("1-3 37-48")` applies to both spectra: when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum. It would also be helpful to remind the reader that integer values specify channel numbers whereas floating-point numbers specify energies (e.g. `1.0-3.0`), and show how one would ignore channels in only a specific spectrum (e.g. `1:1-3` vs `1-2:1-3`).
+1. In `pyxspec-basics.md`, we strongly encouraged plotting the raw spectra *before* ignoring channels or fitting a model. Consider adding a code cell and figure here showing the two raw spectra (`losum` and `hisum`) across all 48 channels so the reader can visually see why channels 1–3 and 37–48 are ignored and how much lower the pre-eclipse count rate is compared to post-eclipse. (In the CLI XSPEC manual output, XSPEC prints `Net count rate (cts/s) for Spectrum:1  1.401e+02 +/- 3.549e-01` and `Net count rate (cts/s) for Spectrum:2  1.371e+03 +/- 3.123e+00`, with `Exposure Time: 1 sec` in both PHA headers.)
+2. Explain *why* `xs.AllData.ignore("1-3 37-48")` applies to both spectra: when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum. In the CLI XSPEC manual walkthrough (`node65.html`), this command is written with the explicit file number range as `ignore 1-2:1-3 37-48` to directly illustrate the preceding sentence (*"The ignore method works on file number, and does not take group number into account"*). It would also be helpful to remind the reader that integer values specify channel numbers whereas floating-point numbers specify energies (e.g. `1.0-3.0`).
 
 ```{code-cell} python
 xs.AllData.ignore("1-3 37-48")
+```
+
+```{code-cell} python
+# SUGGESTION: REPLICATE THE EXPLICIT FILE-NUMBER RANGE SYNTAX FROM THE CLI XSPEC
+#  MANUAL (node65.html)
+xs.AllData.ignore("1-2:1-3 37-48")
 ```
 
 The model we'll use at first to fit the two files is an absorbed power law with a
@@ -476,6 +482,12 @@ xs.Model("phabs * highecut(pow)")
 
 <br>
 
+<span style="color:red">**Text from the CLI XSPEC manual (`node65.html`) omitted from the original PyXspec notebook**:</span>
+<span style="color:red">After defining the model, we will be prompted for two sets of parameter values, one for the first group of data files (losum.pha), the other for the second group (hisum.pha). Here, we'll enter the absorption column of the first group as $10^{24}\ \mathrm{cm}^{-2}$ and enter the default values for all the other parameters in the first group. Now, when it comes to the second group of parameters, we enter a column of $10^{22}\ \mathrm{cm}^{-2}$ and then enter defaults for the other parameters. The rule being applied here is as follows: to tie parameters in the second group to their equivalents in the first group, take the default when entering the second-group parameters; to allow parameters in the second group to vary independently of their equivalents in the first group, enter different values explicitly.</span>
+
+<span style="color:red">**Text from the CLI XSPEC manual (`node65.html`) following the model initialization**:</span>
+<span style="color:red">Notice how the summary of the model, displayed immediately above, is different now that we have two groups, as opposed to one (as in all the previous examples). We can see that of the 10 model parameters, 6 are free (i.e., 4 of the second group parameters are tied to their equivalents in the first group). Fitting this model results in a huge $\chi^2$ (not shown here), because our assumption that only a change in absorption can account for the spectral variation before and after eclipse is clearly wrong.</span>
+
 Notice how the summary of the model, displayed immediately above, is different now that
 we have two groups, as opposed to one. We can see that of the 10 model parameters, 5
 for each data group and, by default, the parameters for the second data group are
@@ -485,15 +497,27 @@ between parameters 1 and 6 and the fit. When there are two datagroups there are 
 separate model objects created so to change the sixth parameter, which is the first
 parameter of the model for the second datagroup we do:
 
-<span style="color:red">**Suggested context (Retrieving data group models & untying parameters)**:</span>
-1. Fix the slight typo in the original text above ("5 for each data group" $\rightarrow$ "there are 5 for each data group", and "between parameters 1 and 6 and the fit" $\rightarrow$ "between parameters 1 and 6 and then fit").
+<span style="color:red">**Suggested context (Retrieving data group models, setting initial $N_{\mathrm{H}}$, & untying parameters)**:</span>
+1. Fix the slight typo in the original PyXspec text above ("5 for each data group" $\rightarrow$ "there are 5 for each data group", and "between parameters 1 and 6 and the fit" $\rightarrow$ "between parameters 1 and 6 and then fit"), or adopt the cleaner wording from the CLI XSPEC manual quoted above.
 2. Consider using more descriptive Python variable names than `m1` and `m2` (e.g. `lo_grp_mod` and `hi_grp_mod`, or `grp1_mod` and `grp2_mod`).
 3. Show that `m2(1).untie()` can also be written using component/parameter attribute names (`m2.phabs.nH.untie()`), which is much less error-prone for complex multi-component models than counting parameter indices across groups.
+4. Notice that in the CLI XSPEC manual (`node65.html`), Group 1's `phabs.nH` was explicitly initialized to `100.0` ($10^{24}\ \mathrm{cm}^{-2}$) while Group 2's `phabs.nH` was set to `1.0` ($10^{22}\ \mathrm{cm}^{-2}$), whereas the PyXspec notebook left both at `1.0` and only called `m2(1).untie()`. Replicating the CLI initialization (`m1.phabs.nH = 100.0`) before fitting is shown in the suggested cell below.
 
 ```{code-cell} python
 m1 = xs.AllModels(1)
 m2 = xs.AllModels(2)
 m2(1).untie()
+xs.Fit.perform()
+```
+
+```{code-cell} python
+# SUGGESTION: REPLICATE THE INITIAL PARAMETER VALUES FROM THE CLI XSPEC MANUAL
+#  (node65.html) WHERE GROUP 1 nH IS SET TO 100 (10^24 cm^-2) AND GROUP 2 nH IS
+#  SET TO 1 (10^22 cm^-2)
+m1 = xs.AllModels(1)
+m2 = xs.AllModels(2)
+m1.phabs.nH = 100.0
+m2.phabs.nH = 1.0
 xs.Fit.perform()
 ```
 
@@ -588,6 +612,13 @@ This decoupling improves the fit, but it still clearly not good. Indeed, this si
 attempt to account for the spectral variability in terms of "blanket" cold absorption
 and scattering does not work. More sophisticated models, involving additional
 components and partial absorption, should be tried.
+
+<span style="color:red">**Text from the CLI XSPEC manual (`node65.html`) concluding the second fit**:</span>
+<span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption and scattering does not work. More sophisticated models, involving additional components and partial absorption, should be tried.</span>
+
+<span style="color:red">**Suggested context (Quantitative discussion of the second fit from `node65.html`)**:</span>
+1. Replace *"This decoupling improves the fit, but it still clearly not good"* (which is missing "is") with the more informative sentence from `node65.html` quoted above (*"After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high."*). Note that in `node65.html`, the first fit had a $\chi^2$ around ~90,000+ (when initialized with $N_{\mathrm{H},1}=100$), and the second fit reaches $\chi^2 = 15,308.95$ with 59 d.o.f. (`Spectrum 1`: $13,992.93$ using 33 bins; `Spectrum 2`: $1,316.02$ using 33 bins).
+2. Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).
 
 <span style="color:red">**Suggested extension (Completing the scientific story & plotting additive components)**:</span>
 The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ for 64 d.o.f.) and prominent residuals around ~6.4–7 keV (Fe K$\alpha$ emission line / iron edge) and at soft energies!
