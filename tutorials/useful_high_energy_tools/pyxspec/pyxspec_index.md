@@ -8,4 +8,5 @@ caption: PyXspec tutorials
 ---
 
 pyxspec-basics
+pyxspec-simultaneous-fitting
 ```
