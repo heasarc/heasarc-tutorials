@@ -10,6 +10,11 @@ authors:
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
 date: '2026-11-12'
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: true
 file_format: mystnb
 jupytext:
   text_representation:
@@ -21,11 +26,6 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-execution:
-  cal-files:
-    xmm-ccf: False
-    chandra: False
-    xspec-models: True
 title: PyXspec - simultaneous fitting
 ---
 
@@ -65,10 +65,10 @@ the amount of absorption. The spectra and corresponding response matrices were o
 from the HEASARC and are available from
 [the full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough.tar.gz).
 
-<span style="color:red">**Suggested context (Introduction)**:
+<span style="color:red">**Suggested context (Introduction)**:</span>
 1. Consider linking back to `pyxspec-basics.md` at the start of the Introduction (as this notebook says "Again, this is an older dataset..." which implicitly assumes the reader just came from the first walkthrough).
 2. Spell out the **LAC** acronym ("Large Area Proportional Counter") on Ginga and briefly introduce **Centaurus X-3** (an eclipsing high-mass X-ray binary / accreting X-ray pulsar) and add the original literature reference ([Ebisawa et al. 1992](https://ui.adsabs.harvard.edu/abs/1992PASJ...44..225E/abstract) or [Nagase et al. 1992](https://ui.adsabs.harvard.edu/abs/1992ApJ...396..147N/abstract)), just as `pyxspec-basics.md` cites Seward et al. (1986).
-3. Add a sentence linking to the [Global Setup: Constants](#constants) / [Configuration](#configuration) section once individual S3 URLs are set up.</span>
+3. Add a sentence linking to the [Global Setup: Constants](#constants) / [Configuration](#configuration) section once individual S3 URLs are set up.
 
 ### Inputs
 
@@ -93,7 +93,7 @@ As of 9th April 2026, this notebook takes ~30-seconds to run to completion on Fo
 import contextlib
 import os
 import tarfile
-from typing import Optional, Sequence, Tuple, Union
+from collections.abc import Sequence
 from urllib.request import urlretrieve
 
 import numpy as np
@@ -113,26 +113,29 @@ jupyter:
   source_hidden: true
 ---
 def plot_fit_residual_spec(
-    plot_data: Union[dict, Sequence[dict]],
-    sp_color: Union[str, Sequence[str]] = ("navy", "darkgreen", "darkorange", "teal"),
-    mod_color: Union[str, Sequence[str]] = (
+    plot_data: dict | Sequence[dict],
+    sp_color: str | Sequence[str] = ("navy", "darkgreen", "darkorange", "teal"),
+    mod_color: str | Sequence[str] = (
         "firebrick",
         "darkorchid",
         "peru",
         "crimson",
     ),
-    res_color: Optional[Union[str, Sequence[str]]] = None,
-    mod_ls: Union[str, Sequence[Union[str, tuple]]] = (
+    res_color: str | Sequence[str] | None = None,
+    mod_ls: str | Sequence[str | tuple] = (
         "solid",
         "dashed",
         (0, (3, 1, 1, 1)),
         "dotted",
     ),
-    x_lims: Optional[Tuple[float, float]] = None,
-    y_lims: Optional[Tuple[float, float]] = None,
-    inst_name: Optional[Union[str, Sequence[str]]] = None,
+    x_lims: tuple[float, float] | None = None,
+    y_lims: tuple[float, float] | None = None,
+    inst_name: str | Sequence[str] | None = None,
     stepped_model: bool = True,
-    mod_expr: Optional[Union[str, Sequence[str]]] = None,
+    mod_expr: str | Sequence[str] | None = None,
+    x_scale: str = "log",
+    y_scale: str = "log",
+    fig_size: tuple[float, float] | None = None,
 ):
     """
     A convenience function used to plot one or more spectra, fitted models, and
@@ -172,6 +175,12 @@ def plot_fit_residual_spec(
     :param Optional[Union[str, Sequence[str]]] mod_expr: Optionally, the 'expression' of
         the fitted model (or sequence of expressions/labels) - to be added to its
         legend label.
+    :param str x_scale: Scaling that should be applied to the x-axis, accepts all
+        matplotlib-supported scales. Default is "log".
+    :param str y_scale: Scaling that should be applied to the y-axis, accepts all
+        matplotlib-supported scales. Default is "log".
+    :param tuple(float, float) | None fig_size: Defines the size of the figure produced
+        by this function. Default is None, in which case (7.5, 6.5) is used.
     """
     # Normalize a single dictionary input into a one-element list so that single-
     #  and multi-spectrum plotting follow the exact same code path.
@@ -229,8 +238,11 @@ def plot_fit_residual_spec(
     inst_names = _broadcast_arg(inst_name, num_spec)
     mod_exprs = _broadcast_arg(mod_expr, num_spec)
 
+    if fig_size is None:
+        fig_size = (7.5, 6.5)
+
     fig, ax_arr = plt.subplots(
-        nrows=2, figsize=(7.5, 6.5), height_ratios=(3, 1.5), sharex=True
+        nrows=2, figsize=fig_size, height_ratios=(3, 1.5), sharex=True
     )
     # Shrink the vertical gap between the panels to zero
     fig.subplots_adjust(hspace=0)
@@ -329,9 +341,9 @@ def plot_fit_residual_spec(
     if y_lims is not None:
         spec_ax.set_ylim(y_lims)
 
-    # We just assume the user wants a logged y-scale, which I don't think is too
-    #  restrictive.
-    spec_ax.set_yscale("log")
+    # The user may pass the y and x scale values separately; the default for
+    #  both is log.
+    spec_ax.set_yscale(y_scale)
     # Alter the formatting of the labels so that they are 0.1, 0.01, 0.001 etc.
     spec_ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
     # And make sure to set the y-axis label
@@ -348,7 +360,8 @@ def plot_fit_residual_spec(
         r"Residuals [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
     )
 
-    res_ax.set_xscale("log")
+    # Users may pass x and y scale values separately, the default for both is log.
+    res_ax.set_xscale(x_scale)
     res_ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
     res_ax.xaxis.set_minor_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
 
@@ -410,11 +423,11 @@ with tarfile.open(tar_download_path, mode="r:gz") as tar_obj:
 
 ## 1. Simultaneous fitting
 
-<span style="color:red">**Suggested structural improvement (Section Headings)**: The original notebook only had a single `##Simultaneous Fitting` heading at the very top for the entire notebook. Consider splitting this into numbered top-level sections to match `pyxspec-basics.md`, for example:
+<span style="color:red">**Suggested structural improvement (Section Headings)**: The original notebook only had a single `##Simultaneous Fitting` heading at the very top for the entire notebook. Consider splitting this into numbered top-level sections to match `pyxspec-basics.md`, for example:</span>
 - `## 1. Loading multiple spectra into data groups`
 - `## 2. Fitting a shared model with untied absorption`
 - `## 3. Decoupling the power-law normalization`
-(And potentially a `## 4. ...` section if you extend the analysis).</span>
+(And potentially a `## 4. ...` section if you extend the analysis).
 
 This kind of fitting relies on introducing an extra dimension, the group, to the
 indexing of the data files. The files in each group share the same model but not
@@ -441,9 +454,9 @@ each of the two groups (`lo1.pha`, `lo2.pha`, `lo3.pha`, `hi1.pha`, `hi2.pha`, a
 number, and does not take group number into account. So, to ignore channels 1–3 and
 37–48 of both files:
 
-<span style="color:red">**Suggested context & potential code cells (Inspecting spectra before fitting)**:
+<span style="color:red">**Suggested context & potential code cells (Inspecting spectra before fitting)**:</span>
 1. In `pyxspec-basics.md`, we strongly encouraged plotting the raw spectra *before* ignoring channels or fitting a model. Consider adding a code cell and figure here showing the two raw spectra (`losum` and `hisum`) across all 48 channels so the reader can visually see why channels 1–3 and 37–48 are ignored and how much lower the pre-eclipse count rate is compared to post-eclipse.
-2. Explain *why* `xs.AllData.ignore("1-3 37-48")` applies to both spectra: when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum. It would also be helpful to remind the reader that integer values specify channel numbers whereas floating-point numbers specify energies (e.g. `1.0-3.0`), and show how one would ignore channels in only a specific spectrum (e.g. `1:1-3` vs `1-2:1-3`).</span>
+2. Explain *why* `xs.AllData.ignore("1-3 37-48")` applies to both spectra: when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum. It would also be helpful to remind the reader that integer values specify channel numbers whereas floating-point numbers specify energies (e.g. `1.0-3.0`), and show how one would ignore channels in only a specific spectrum (e.g. `1:1-3` vs `1-2:1-3`).
 
 ```{code-cell} python
 xs.AllData.ignore("1-3 37-48")
@@ -452,10 +465,10 @@ xs.AllData.ignore("1-3 37-48")
 The model we'll use at first to fit the two files is an absorbed power law with a
 high-energy cut-off:
 
-<span style="color:red">**Suggested context (Model definition & components)**:
+<span style="color:red">**Suggested context (Model definition & components)**:</span>
 1. Consider replacing `phabs` with `tbabs` to match `pyxspec-basics.md` (and modern X-ray analysis practice), or adding a note explaining why `phabs` is shown here.
 2. Explain what `highecut` is (a multiplicative high-energy exponential cutoff component commonly used for accreting X-ray pulsars, parameterized by a cutoff energy `cutoffE` below which it has no effect, and an e-folding energy `foldE` above `cutoffE`).
-3. Note that in the original notebook `Model("phabs * highecut(pow)")` was called without assigning the return value to a variable, because with two data groups PyXspec creates two distinct `Model` instances inside `AllModels` (one per data group). Pointing this out explicitly will save readers confusion if they are used to `mod = xs.Model(...)` from the first tutorial.</span>
+3. Note that in the original notebook `Model("phabs * highecut(pow)")` was called without assigning the return value to a variable, because with two data groups PyXspec creates two distinct `Model` instances inside `AllModels` (one per data group). Pointing this out explicitly will save readers confusion if they are used to `mod = xs.Model(...)` from the first tutorial.
 
 ```{code-cell} python
 xs.Model("phabs * highecut(pow)")
@@ -472,10 +485,10 @@ between parameters 1 and 6 and the fit. When there are two datagroups there are 
 separate model objects created so to change the sixth parameter, which is the first
 parameter of the model for the second datagroup we do:
 
-<span style="color:red">**Suggested context (Retrieving data group models & untying parameters)**:
+<span style="color:red">**Suggested context (Retrieving data group models & untying parameters)**:</span>
 1. Fix the slight typo in the original text above ("5 for each data group" $\rightarrow$ "there are 5 for each data group", and "between parameters 1 and 6 and the fit" $\rightarrow$ "between parameters 1 and 6 and then fit").
 2. Consider using more descriptive Python variable names than `m1` and `m2` (e.g. `lo_grp_mod` and `hi_grp_mod`, or `grp1_mod` and `grp2_mod`).
-3. Show that `m2(1).untie()` can also be written using component/parameter attribute names (`m2.phabs.nH.untie()`), which is much less error-prone for complex multi-component models than counting parameter indices across groups.</span>
+3. Show that `m2(1).untie()` can also be written using component/parameter attribute names (`m2.phabs.nH.untie()`), which is much less error-prone for complex multi-component models than counting parameter indices across groups.
 
 ```{code-cell} python
 m1 = xs.AllModels(1)
@@ -486,9 +499,9 @@ xs.Fit.perform()
 
 <br>
 
-<span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:
+<span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:</span>
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
-2. Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).</span>
+2. Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).
 
 ```{code-cell} python
 xs.Plot.device = "/null"
@@ -518,6 +531,8 @@ plot_fit_residual_spec(
     untied_nh_plot_data,
     inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
     mod_expr=["Group 1: untied nH", "Group 2: untied nH"],
+    y_scale="linear",
+    fig_size=(9.5, 7.5),
 )
 ```
 
@@ -529,9 +544,9 @@ eclipse. To decouple tied parameters, we can change the parameter value in the s
 group to a value – any value – different from that in the first group (changing the
 value in the first group has the effect of changing both without decoupling).
 
-<span style="color:red">**Suggested context (Two ways to untie parameters)**:
+<span style="color:red">**Suggested context (Two ways to untie parameters)**:</span>
 1. Note the duplicate word in the original text ("Clearly our assumption ... is clearly wrong").
-2. Highlight that this demonstrates a *second* method for untying a parameter in PyXspec: assigning a new numerical value directly to the secondary group's parameter (`m2.powerlaw.norm = 1.0`) automatically breaks the link `= p5`, just like calling `m2.powerlaw.norm.untie()`. Consider adding a tip admonition comparing `.untie()` vs direct value assignment (and how to *re-tie* a parameter via `m2.powerlaw.norm.link = "5"` or `m2(10).link = "p5"`).</span>
+2. Highlight that this demonstrates a *second* method for untying a parameter in PyXspec: assigning a new numerical value directly to the secondary group's parameter (`m2.powerlaw.norm = 1.0`) automatically breaks the link `= p5`, just like calling `m2.powerlaw.norm.untie()`. Consider adding a tip admonition comparing `.untie()` vs direct value assignment (and how to *re-tie* a parameter via `m2.powerlaw.norm.link = "5"` or `m2(10).link = "p5"`).
 
 ```{code-cell} python
 m2.powerlaw.norm = 1.0
@@ -574,9 +589,9 @@ attempt to account for the spectral variability in terms of "blanket" cold absor
 and scattering does not work. More sophisticated models, involving additional
 components and partial absorption, should be tried.
 
-<span style="color:red">**Suggested extension (Completing the scientific story & plotting additive components)**:
+<span style="color:red">**Suggested extension (Completing the scientific story & plotting additive components)**:</span>
 The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ for 64 d.o.f.) and prominent residuals around ~6.4–7 keV (Fe K$\alpha$ emission line / iron edge) and at soft energies!
-Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.</span>
+Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.
 
 ## About this notebook
 
@@ -584,7 +599,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-04-09
+Updated On: 2026-11-12
 
 +++
 
