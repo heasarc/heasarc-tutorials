@@ -40,9 +40,12 @@ By the end of this tutorial, you will be able to:
 - Untie (decouple) selected model parameters across data groups while keeping others linked.
 - Visualize simultaneously fitted spectra, models, and residuals using PyXspec and matplotlib.
 
-<span style="color:red">**Suggested addition (Learning Goals)**: Depending on how much you expand the science/analysis at the end of this notebook (e.g. if you add a partial covering model or iron line component), we may want to add a learning goal about testing physically motivated multi-group parameterizations.</span>
-
 ## Introduction
+
+This demonstration focuses...
+
+This PyXspec tutorial follows on from the previous '{doc}`PyXspec basics <pyxspec-basics>`' demonstration, which we strongly encourage you to go through first.
+
 
 XSPEC has the very useful facility of allowing models to be fitted simultaneously to
 more than one data file. It is even possible to group files together and to fit
@@ -56,19 +59,26 @@ Other scenarios are possible – the important thing is to recognize the flexibi
 XSPEC in this regard.
 
 As an example we will look at a case of fitting the same model to two different data
-files but where not all the parameters are identical. Again, this is an older dataset
-that provides a simpler illustration than more modern data. The massive X-ray binary
-Centaurus X-3 was observed with the LAC on Ginga in 1989. Its flux level before eclipse
+files but where not all the parameters are identical.
+
+Just as in the {doc}`first PyXspec tutorial <pyxspec-basics>`' we will make use of an old dataset, as
+it provides a simpler illustration than more modern data.
+
+In particular, we will use two observations of Centaurus X-3 (alternatively known as Cen X-3), a very
+well-studied high-mass X-ray binary (HMXRB) that was the first X-ray pulsar ever discovered.
+
+The observations in question were taken by Ginga (originally known as ASTRO-C), a Japanese Space Agency (JAXA) X-ray
+telescope that was launched in 1987, using the 'Large Area Proportional Counter' (LAC) instrument. Ginga's
+observations of Cen X-3 were taken in 1989.
+
+
+Its flux level before eclipse
 was much lower than the level after eclipse. Here, we'll use XSPEC to see whether
 spectra from these two phases can be fitted with the same model, which differs only in
 the amount of absorption. The spectra and corresponding response matrices were obtained
 from the HEASARC and are available from
 [the full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough.tar.gz).
 
-<span style="color:red">**Suggested context (Introduction)**:</span>
-1. Consider linking back to `pyxspec-basics.md` at the start of the Introduction (as this notebook says "Again, this is an older dataset..." which implicitly assumes the reader just came from the first walkthrough).
-2. Spell out the **LAC** acronym ("Large Area Proportional Counter") on Ginga and briefly introduce **Centaurus X-3** (an eclipsing high-mass X-ray binary / accreting X-ray pulsar) and add the original literature reference ([Ebisawa et al. 1992](https://ui.adsabs.harvard.edu/abs/1992PASJ...44..225E/abstract) or [Nagase et al. 1992](https://ui.adsabs.harvard.edu/abs/1992ApJ...396..147N/abstract)), just as `pyxspec-basics.md` cites Seward et al. (1986).
-3. Add a sentence linking to the [Global Setup: Constants](#constants) / [Configuration](#configuration) section once individual S3 URLs are set up.
 
 ### Inputs
 
@@ -83,16 +93,13 @@ from the HEASARC and are available from
 
 ### Runtime
 
-As of 9th April 2026, this notebook takes ~30-seconds to run to completion on Fornax using the 'small' server with 8GB RAM/2 cores.
-
-<span style="color:red">**Suggested check (Runtime)**: Update the date and measured runtime once executed on Fornax / CI.</span>
+As of 12th November 2026, this notebook takes ~30-seconds to run to completion on Fornax using the 'small' server with 8GB RAM/2 cores.
 
 ## Imports
 
 ```{code-cell} python
 import contextlib
 import os
-import tarfile
 from collections.abc import Sequence
 from urllib.request import urlretrieve
 
@@ -378,10 +385,8 @@ jupyter:
 ---
 SRC_NAME = "Cen X-3"
 
-WALKTHROUGH_TAR_URL = (
-    "https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough.tar.gz"
-)
-REQUIRED_FILES = ("losum.pha", "hisum.pha", "ginga_lac.rsp")
+REMOTE_DATA_ROOT_URL = "https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough/"
+REQUIRED_FILES = ["losum.pha", "hisum.pha", "ginga_lac.rsp"]
 ```
 
 ### Configuration
@@ -406,28 +411,24 @@ os.makedirs(ROOT_DATA_DIR, exist_ok=True)
 # --------------------------------------------------------------
 
 # ------------- Download demonstration data files --------------
-# Download the walkthrough archive and extract the Ginga LAC spectra and response
-#  required for this demonstration.
-tar_download_path = os.path.join(ROOT_DATA_DIR, os.path.basename(WALKTHROUGH_TAR_URL))
-ret = urlretrieve(WALKTHROUGH_TAR_URL, tar_download_path)
-
-with tarfile.open(tar_download_path, mode="r:gz") as tar_obj:
-    for req_file in REQUIRED_FILES:
-        member = tar_obj.getmember(f"walkthrough/{req_file}")
-        member.name = req_file
-        tar_obj.extract(member, path=ROOT_DATA_DIR, filter="data")
+# Download the necessary files from the XSPEC walkthrough dataset.
+for req_file in REQUIRED_FILES:
+    ret = urlretrieve(
+        os.path.join(REMOTE_DATA_ROOT_URL, req_file),
+        os.path.join(ROOT_DATA_DIR, req_file),
+    )
 # --------------------------------------------------------------
+
+# We set XSPEC's plot device to "/null", which means that it won't output figures at
+#  all - instead we'll construct our own figures with matplotlib, extracting data from
+#  PyXspec.
+xs.Plot.device = "/null"
 ```
 
 ***
 
-## 1. Simultaneous fitting
+## 1. Loading multiple spectra into data groups
 
-<span style="color:red">**Suggested structural improvement (Section Headings)**: The original notebook only had a single `##Simultaneous Fitting` heading at the very top for the entire notebook. Consider splitting this into numbered top-level sections to match `pyxspec-basics.md`, for example:</span>
-- `## 1. Loading multiple spectra into data groups`
-- `## 2. Fitting a shared model with untied absorption`
-- `## 3. Decoupling the power-law normalization`
-(And potentially a `## 4. ...` section if you extend the analysis).
 
 This kind of fitting relies on introducing an extra dimension, the group, to the
 indexing of the data files. The files in each group share the same model but not
@@ -497,6 +498,8 @@ between parameters 1 and 6 and the fit. When there are two datagroups there are 
 separate model objects created so to change the sixth parameter, which is the first
 parameter of the model for the second datagroup we do:
 
+## 2. Fitting a shared model
+
 <span style="color:red">**Suggested context (Retrieving data group models, setting initial $N_{\mathrm{H}}$, & untying parameters)**:</span>
 1. Fix the slight typo in the original PyXspec text above ("5 for each data group" $\rightarrow$ "there are 5 for each data group", and "between parameters 1 and 6 and the fit" $\rightarrow$ "between parameters 1 and 6 and then fit"), or adopt the cleaner wording from the CLI XSPEC manual quoted above.
 2. Consider using more descriptive Python variable names than `m1` and `m2` (e.g. `lo_grp_mod` and `hi_grp_mod`, or `grp1_mod` and `grp2_mod`).
@@ -526,6 +529,12 @@ xs.Fit.perform()
 <span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:</span>
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
 2. Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).
+
+```{info}
+We set XSPEC's plot device to "/null" in the [Global Setup: Configuration](#configuration) section, which
+means that it won't output figures - instead we construct our own figures with matplotlib, extracting data
+from PyXspec.
+```
 
 ```{code-cell} python
 xs.Plot.device = "/null"
@@ -559,6 +568,8 @@ plot_fit_residual_spec(
     fig_size=(9.5, 7.5),
 )
 ```
+
+## 3. Decoupling the power-law normalization
 
 Clearly our assumption that only a change in absorption can account for the spectral
 variation before and after eclipse is clearly wrong. Perhaps scattering also plays a
@@ -623,6 +634,10 @@ components and partial absorption, should be tried.
 <span style="color:red">**Suggested extension (Completing the scientific story & plotting additive components)**:</span>
 The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ for 64 d.o.f.) and prominent residuals around ~6.4–7 keV (Fe K$\alpha$ emission line / iron edge) and at soft energies!
 Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.
+
+
+## 4. When might you want to simultaneously fit?
+
 
 ## About this notebook
 
