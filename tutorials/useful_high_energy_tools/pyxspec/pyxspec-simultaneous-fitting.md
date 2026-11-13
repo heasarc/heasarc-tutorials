@@ -472,13 +472,14 @@ xs.AllData.ignore("1-2:1-3 37-48")
 The model we'll use at first to fit the two files is an absorbed power law with a
 high-energy cut-off:
 
-<span style="color:red">**Suggested context (Model definition & components)**:</span>
-1. Consider replacing `phabs` with `tbabs` to match `pyxspec-basics.md` (and modern X-ray analysis practice), or adding a note explaining why `phabs` is shown here.
-2. Explain what `highecut` is (a multiplicative high-energy exponential cutoff component commonly used for accreting X-ray pulsars, parameterized by a cutoff energy `cutoffE` below which it has no effect, and an e-folding energy `foldE` above `cutoffE`).
-3. Note that in the original notebook `Model("phabs * highecut(pow)")` was called without assigning the return value to a variable, because with two data groups PyXspec creates two distinct `Model` instances inside `AllModels` (one per data group). Pointing this out explicitly will save readers confusion if they are used to `mod = xs.Model(...)` from the first tutorial.
+- **tbabs** -
+- **highecut** - This multiplicative model has a constant value of **1** up to the 'cutoff energy'. Beyond that the model value begins to decrease with increasing energy, with the rate of decrease controlled by an 'e-folding energy' parameter.
+- **pow** -
+
+<span style="color:purple">We do not assign the return of the model definition to a variable - even though a single PyXspec `Model` instance is returned, PyXspec has _actually_ set up two separate instances of the model, one per data group. We will access them through PyXspec's `AllModels()` manager later on in this tutorial.</span>
 
 ```{code-cell} python
-xs.Model("phabs * highecut(pow)")
+xs.Model("tbabs * highecut(pow)")
 ```
 
 <br>
@@ -519,8 +520,8 @@ xs.Fit.perform()
 #  SET TO 1 (10^22 cm^-2)
 m1 = xs.AllModels(1)
 m2 = xs.AllModels(2)
-m1.phabs.nH = 100.0
-m2.phabs.nH = 1.0
+m1.TBabs.nH = 100.0
+m2.TBabs.nH = 1.0
 xs.Fit.perform()
 ```
 
@@ -530,14 +531,13 @@ xs.Fit.perform()
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
 2. Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).
 
-```{info}
+```{note}
 We set XSPEC's plot device to "/null" in the [Global Setup: Configuration](#configuration) section, which
 means that it won't output figures - instead we construct our own figures with matplotlib, extracting data
 from PyXspec.
 ```
 
 ```{code-cell} python
-xs.Plot.device = "/null"
 xs.Plot.xAxis = "keV"
 xs.Plot("data resid")
 
@@ -656,6 +656,13 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 [Original PyXspec Jupyter Notebooks Repository](https://github.com/HEASARC/PyXspec-Jupyter-notebooks)
 
 [Full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough.tar.gz)
+
+[XSPEC Model Manual - `highecut`](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node294.html)
+
+[XSPEC Model Manual - `tbabs`](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node318.html)
+
+[XSPEC Model Manual - `pow`](https://heasarc.gsfc.nasa.gov/docs/software/xspec/manual/node251.html)
+
 
 ### Acknowledgements
 
