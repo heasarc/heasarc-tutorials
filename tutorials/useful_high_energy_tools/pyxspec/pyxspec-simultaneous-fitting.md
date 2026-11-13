@@ -36,8 +36,8 @@ title: PyXspec - simultaneous fitting
 By the end of this tutorial, you will be able to:
 
 - Load multiple X-ray spectra into separate PyXspec data groups.
-- Fit a single spectral model simultaneously to multiple datasets.
-- Untie (decouple) selected model parameters across data groups while keeping others linked.
+- Fit a spectral model simultaneously to multiple spectra.
+- Control whether model parameters are allowed to vary separately for different spectra (untied), or if they must be the same (tied).
 - Visualize simultaneously fitted spectra, models, and residuals using PyXspec and matplotlib.
 
 ## Introduction
@@ -431,14 +431,28 @@ xs.Plot.device = "/null"
 
 
 This kind of fitting relies on introducing an extra dimension, the group, to the
-indexing of the data files. The files in each group share the same model but not
+indexing of the data files.
+
+The files in each group share the same model but not
 necessarily the same parameter values, which may be shared as common to all the groups
-or varied separately from group to group. Although each group may contain more than one
-file, there is only one file in each of the two groups in this example. Groups are
+or varied separately from group to group.
+
+Although each group may contain more than one
+file, there is only one file in each of the two groups in this example.
+
+Groups are
 specified with the data command, with the group number preceding the file number, like
 this:
 
-<span style="color:red">**Suggested context (Loading data & `contextlib.chdir`)**: Explain why we use `with contextlib.chdir(ROOT_DATA_DIR):` here (because the `RESPFILE` header keyword in `losum.pha` and `hisum.pha` is a relative filename `ginga_lac.rsp`), or link back to Section 1 of `pyxspec-basics.md`. Also consider mentioning that XSPEC automatically appends `.pha` when omitted (`losum` vs `losum.pha`), or explicitly write `losum.pha` and `hisum.pha` for clarity.</span>
+The spectral files we need for this demonstration were downloaded in
+the [Global Setup: Configuration](#configuration) section. As they were not downloaded to the
+same directory as the notebook, so we will briefly change our working directory (using
+the `chdir` context manager) as we load them.
+
+Of course, we could pass full spectrum paths rather than changing
+directories, but the 'RESPFILE' entry in each spectrum's header is a path relative
+to the location of the spectrum file. As such, if we didn't change directories, PyXspec
+would have been unable to find and automatically load the response file.
 
 ```{code-cell} python
 with contextlib.chdir(ROOT_DATA_DIR):
@@ -446,18 +460,92 @@ with contextlib.chdir(ROOT_DATA_DIR):
 ```
 
 Here, the first group makes up the file `losum.pha`, which contains the spectrum of all
-the low, pre-eclipse emission. The second group makes up the second file, `hisum.pha`,
-which contains all the high, post-eclipse emission. Note that file number is "absolute"
-in the sense that it is independent of group number. Thus, if there were three files in
+the low, pre-eclipse emission.
+
+The second group makes up the second file, `hisum.pha`,
+which contains all the high, post-eclipse emission.
+
+Note that file number is "absolute"
+in the sense that it is independent of group number.
+
+Thus, if there were three files in
 each of the two groups (`lo1.pha`, `lo2.pha`, `lo3.pha`, `hi1.pha`, `hi2.pha`, and
 `hi3.pha`, say), rather than one, the six files would be specified as
-`"1:1 lo1 1:2 lo2 1:3 lo3 2:4 hi1 2:5 hi2 2:6 hi3"`. The ignore method works on file
+`"1:1 lo1 1:2 lo2 1:3 lo3 2:4 hi1 2:5 hi2 2:6 hi3"`.
+
+The ignore method works on file
 number, and does not take group number into account. So, to ignore channels 1–3 and
 37–48 of both files:
 
 <span style="color:red">**Suggested context & potential code cells (Inspecting spectra before fitting)**:</span>
 1. In `pyxspec-basics.md`, we strongly encouraged plotting the raw spectra *before* ignoring channels or fitting a model. Consider adding a code cell and figure here showing the two raw spectra (`losum` and `hisum`) across all 48 channels so the reader can visually see why channels 1–3 and 37–48 are ignored and how much lower the pre-eclipse count rate is compared to post-eclipse. (In the CLI XSPEC manual output, XSPEC prints `Net count rate (cts/s) for Spectrum:1  1.401e+02 +/- 3.549e-01` and `Net count rate (cts/s) for Spectrum:2  1.371e+03 +/- 3.123e+00`, with `Exposure Time: 1 sec` in both PHA headers.)
 2. Explain *why* `xs.AllData.ignore("1-3 37-48")` applies to both spectra: when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum. In the CLI XSPEC manual walkthrough (`node65.html`), this command is written with the explicit file number range as `ignore 1-2:1-3 37-48` to directly illustrate the preceding sentence (*"The ignore method works on file number, and does not take group number into account"*). It would also be helpful to remind the reader that integer values specify channel numbers whereas floating-point numbers specify energies (e.g. `1.0-3.0`).
+
+```{code-cell} python
+# SUGGESTION: EXTRACT THE RAW SPECTRA ACROSS ALL 48 CHANNELS PRIOR TO IGNORING
+#  CHANNELS OR FITTING A MODEL
+xs.Plot.xAxis = "keV"
+xs.Plot("data")
+
+raw_spec_plot_data = []
+for grp_id in (1, 2):
+    grp_data = {
+        "energy": np.array(xs.Plot.x(grp_id, 1)),
+        "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
+        "rate": np.array(xs.Plot.y(grp_id, 1)),
+        "rate_err": np.array(xs.Plot.yErr(grp_id, 1)),
+        "x_label": xs.Plot.labels(1)[0],
+        "y_label": xs.Plot.labels(1)[1],
+        "title": xs.Plot.labels(1)[2],
+    }
+    raw_spec_plot_data.append(grp_data)
+```
+
+```{code-cell} python
+---
+tags: [hide-input]
+jupyter:
+  source_hidden: true
+---
+# SUGGESTION: PLOT THE TWO RAW SPECTRA PRIOR TO IGNORING CHANNELS OR FITTING
+plt.figure(figsize=(7.5, 5))
+plt.minorticks_on()
+plt.tick_params(which="both", direction="in", top=True, right=True)
+
+raw_labels = ("Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)")
+raw_colors = ("navy", "darkgreen")
+
+for idx, p_data in enumerate(raw_spec_plot_data):
+    plt.errorbar(
+        p_data["energy"],
+        p_data["rate"],
+        xerr=p_data["energy_delta"],
+        yerr=p_data["rate_err"],
+        fmt="+",
+        capsize=1.5,
+        label=raw_labels[idx],
+        color=raw_colors[idx],
+    )
+
+plt.xscale("log")
+plt.yscale("log")
+
+ax = plt.gca()
+ax.xaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+ax.xaxis.set_minor_formatter(
+    FuncFormatter(lambda inp, _: "{:g}".format(inp) if inp >= 1 else "")
+)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda inp, _: "{:g}".format(inp)))
+
+plt.xlabel(raw_spec_plot_data[0]["x_label"], fontsize=15)
+plt.ylabel(
+    r"Spectrum [$\frac{\rm{ct}}{\rm{s} \: \rm{cm}^{2} \: \rm{keV}}$]", fontsize=15
+)
+
+plt.legend(fontsize=12)
+plt.tight_layout()
+plt.show()
+```
 
 ```{code-cell} python
 xs.AllData.ignore("1-3 37-48")
