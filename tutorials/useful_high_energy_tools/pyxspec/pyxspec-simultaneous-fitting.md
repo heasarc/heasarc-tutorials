@@ -427,8 +427,10 @@ xs.Plot.device = "/null"
 
 ***
 
-## 1. Loading multiple spectra into data groups
+## 1. Handling multiple spectra and their models
 
+
+### Loading multiple spectra into separate 'data groups'
 
 This kind of fitting relies on introducing an extra dimension, the group, to the
 indexing of the data files.
@@ -439,6 +441,17 @@ or varied separately from group to group.
 
 Although each group may contain more than one
 file, there is only one file in each of the two groups in this example.
+
+```{important}
+Unlike in the first '{doc}`PyXspec basics <pyxspec-basics>`' tutorial, where we defined
+a PyXspec `Spectrum` object directly to load our spectrum, here we are using `xs.AllData()`
+to load our spectra all at once.
+
+This is a less 'Pythonic' interface, but mirrors the syntax used by command-line XSPEC.
+
+Unlike loading using `Spectrum`, `xs.AllData()` **does not** return a `Spectrum`
+object; instead it returns Python's null object, `None`.
+```
 
 Groups are
 specified with the data command, with the group number preceding the file number, like
@@ -457,6 +470,14 @@ would have been unable to find and automatically load the response file.
 ```{code-cell} python
 with contextlib.chdir(ROOT_DATA_DIR):
     xs.AllData("1:1 losum 2:2 hisum")
+```
+
+```{tip}
+The call to `AllData()` above should also display a summary of the spectra currently in
+use (unless you have PyXspec's 'chatter' set to $<10$ using `xs.Xset.chatter=`).
+
+You can also run `xs.AllData.show()` to see that summary at any time (again, if chatter
+has been set high enough).
 ```
 
 Here, the first group makes up the file `losum.pha`, which contains the spectrum of all
@@ -481,12 +502,15 @@ number, and does not take group number into account. So, to ignore channels 1–
 1. In `pyxspec-basics.md`, we strongly encouraged plotting the raw spectra *before* ignoring channels or fitting a model. Consider adding a code cell and figure here showing the two raw spectra (`losum` and `hisum`) across all 48 channels so the reader can visually see why channels 1–3 and 37–48 are ignored and how much lower the pre-eclipse count rate is compared to post-eclipse. (In the CLI XSPEC manual output, XSPEC prints `Net count rate (cts/s) for Spectrum:1  1.401e+02 +/- 3.549e-01` and `Net count rate (cts/s) for Spectrum:2  1.371e+03 +/- 3.123e+00`, with `Exposure Time: 1 sec` in both PHA headers.)
 2. Explain *why* `xs.AllData.ignore("1-3 37-48")` applies to both spectra: when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum. In the CLI XSPEC manual walkthrough (`node65.html`), this command is written with the explicit file number range as `ignore 1-2:1-3 37-48` to directly illustrate the preceding sentence (*"The ignore method works on file number, and does not take group number into account"*). It would also be helpful to remind the reader that integer values specify channel numbers whereas floating-point numbers specify energies (e.g. `1.0-3.0`).
 
+### Examining the 'raw' spectra
+
+<span style="color:red">**Explain how we're configuring plotting behaviour**</span>
 ```{code-cell} python
-# SUGGESTION: EXTRACT THE RAW SPECTRA ACROSS ALL 48 CHANNELS PRIOR TO IGNORING
-#  CHANNELS OR FITTING A MODEL
 xs.Plot.xAxis = "keV"
 xs.Plot("data")
+```
 
+```{code-cell} python
 raw_spec_plot_data = []
 for grp_id in (1, 2):
     grp_data = {
@@ -499,6 +523,12 @@ for grp_id in (1, 2):
         "title": xs.Plot.labels(1)[2],
     }
     raw_spec_plot_data.append(grp_data)
+```
+
+```{note}
+We set XSPEC's plot device to "/null" in the [Global Setup: Configuration](#configuration) section, which
+means that it won't output figures - instead we construct our own figures with matplotlib, extracting data
+from PyXspec.
 ```
 
 ```{code-cell} python
@@ -547,6 +577,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+### Excluding parts of the spectra from our fit
+
 ```{code-cell} python
 xs.AllData.ignore("1-3 37-48")
 ```
@@ -556,6 +588,18 @@ xs.AllData.ignore("1-3 37-48")
 #  MANUAL (node65.html)
 xs.AllData.ignore("1-2:1-3 37-48")
 ```
+
+
+<span style="color:purple">For the mature missions in the HEASARC archives, this information may have already been
+encoded in the headers of the spectral files as a list of bad channels. To remove the
+bad channels from the spectrum that we
+[previously read in](#loading-multiple-spectra-into-separate-data-groups), we can use:</span>
+
+```{code-cell} python
+xs.AllData.ignore("bad")
+```
+
+### Choosing and setting up a model
 
 The model we'll use at first to fit the two files is an absorbed power law with a
 high-energy cut-off:
@@ -579,15 +623,38 @@ xs.Model("tbabs * highecut(pow)")
 <span style="color:red">Notice how the summary of the model, displayed immediately above, is different now that we have two groups, as opposed to one (as in all the previous examples). We can see that of the 10 model parameters, 6 are free (i.e., 4 of the second group parameters are tied to their equivalents in the first group). Fitting this model results in a huge $\chi^2$ (not shown here), because our assumption that only a change in absorption can account for the spectral variation before and after eclipse is clearly wrong.</span>
 
 Notice how the summary of the model, displayed immediately above, is different now that
-we have two groups, as opposed to one. We can see that of the 10 model parameters, 5
+we have two groups, as opposed to one.
+
+We can see that of the 10 model parameters, 5
 for each data group and, by default, the parameters for the second data group are
-linked to those for the first. Let us suppose that we have a theory that the difference
-between the two spectra is a change in the absorption. We want to remove the link
-between parameters 1 and 6 and the fit. When there are two datagroups there are two
+linked to those for the first.
+
+Let us suppose that we have a theory that the difference
+between the two spectra is a change in the absorption.
+
+We want to remove the link
+between parameters 1 and 6 and the fit.
+
+When there are two datagroups there are two
 separate model objects created so to change the sixth parameter, which is the first
 parameter of the model for the second datagroup we do:
 
+
+
+```{tip}
+Setting up the model above should also display an overview of its parameters currently in
+use (unless you have PyXspec's 'chatter' set too low, see [the previous note on viewing a summary of loaded spectra](#loading-multiple-spectra-into-separate-data-groups)).
+
+You can also run `xs.AllModels.show()` to see that summary at any time.
+```
+
+
 ## 2. Fitting a shared model
+
+```{code-cell} python
+xs.Fit.nIterations = 50
+```
+
 
 <span style="color:red">**Suggested context (Retrieving data group models, setting initial $N_{\mathrm{H}}$, & untying parameters)**:</span>
 1. Fix the slight typo in the original PyXspec text above ("5 for each data group" $\rightarrow$ "there are 5 for each data group", and "between parameters 1 and 6 and the fit" $\rightarrow$ "between parameters 1 and 6 and then fit"), or adopt the cleaner wording from the CLI XSPEC manual quoted above.
@@ -619,11 +686,7 @@ xs.Fit.perform()
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
 2. Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).
 
-```{note}
-We set XSPEC's plot device to "/null" in the [Global Setup: Configuration](#configuration) section, which
-means that it won't output figures - instead we construct our own figures with matplotlib, extracting data
-from PyXspec.
-```
+
 
 ```{code-cell} python
 xs.Plot.xAxis = "keV"
