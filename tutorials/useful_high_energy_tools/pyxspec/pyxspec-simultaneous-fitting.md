@@ -512,7 +512,7 @@ xs.Plot("data")
 
 ```{code-cell} python
 raw_spec_plot_data = []
-for grp_id in (1, 2):
+for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
         "energy": np.array(xs.Plot.x(grp_id, 1)),
         "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
@@ -543,9 +543,10 @@ plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
 raw_labels = ("Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)")
-raw_colors = ("navy", "darkgreen")
+raw_colors = ("navy", "darkgreen", "darkorange", "teal")
 
 for idx, p_data in enumerate(raw_spec_plot_data):
+    sp_label = raw_labels[idx] if idx < len(raw_labels) else f"Group {idx + 1} data"
     plt.errorbar(
         p_data["energy"],
         p_data["rate"],
@@ -553,8 +554,8 @@ for idx, p_data in enumerate(raw_spec_plot_data):
         yerr=p_data["rate_err"],
         fmt="+",
         capsize=1.5,
-        label=raw_labels[idx],
-        color=raw_colors[idx],
+        label=sp_label,
+        color=raw_colors[idx % len(raw_colors)],
     )
 
 plt.xscale("log")
@@ -693,7 +694,7 @@ xs.Plot.xAxis = "keV"
 xs.Plot("data resid")
 
 untied_nh_plot_data = []
-for grp_id in (1, 2):
+for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
         "energy": np.array(xs.Plot.x(grp_id, 1)),
         "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
@@ -745,7 +746,7 @@ xs.Fit.perform()
 xs.Plot("data resid")
 
 untied_nh_norm_plot_data = []
-for grp_id in (1, 2):
+for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
         "energy": np.array(xs.Plot.x(grp_id, 1)),
         "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
