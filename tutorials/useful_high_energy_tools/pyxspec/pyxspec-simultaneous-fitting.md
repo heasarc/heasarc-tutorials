@@ -698,17 +698,35 @@ You can also run `xs.AllModels.show()` to see that summary at any time.
 ```
 
 
-## 2. Fitting a shared model
+## 2. Fitting the exact same model to both spectra
+
+### Setting up
 
 ```{code-cell} python
 xs.Fit.nIterations = 50
 ```
 
-### All parameters joined
+### Performing the fit
+
+````{tip}
+At this point we _could_ configure PyXspec to use multiple cores when performing the model fit:
+
+```python
+xs.Xset.parallel.leven = NUM_CORES
+```
+
+_However_, the data and models we're using in this demonstration are so simple (meaning
+very few data points in the spectra, and very few parameters in the models) that making
+XSPEC use multiple cores for the model fit would actually _make the fit take longer_.
+````
+
+Our first demonstration is to fit the model exactly as we defined it
 
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
+### Visualizing the fitted model
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -750,7 +768,7 @@ of the _same_ instrument, there would be two distinct (though not that distinct)
 This is because XSPEC models are 'folded through' the responses of the instruments whose data they are fitting.
 ```
 
-### Untying one parameter across the spectra
+## 3. Fitting the model with nH allowed to vary separately for both spectra
 
 ```{admonition} Hypothesis
 :class: hint
@@ -758,6 +776,7 @@ This is because XSPEC models are 'folded through' the responses of the instrumen
 Let us suppose that we have a theory that the difference between the two spectra **is a change in the absorption**.
 ```
 
+### Setting up
 
 We redeclare the model that we chose [earlier in the tutorial](#choosing-and-setting-up-a-model) to wipe the previous fit:
 
@@ -810,12 +829,16 @@ If you wished to untie _every_ parameter, perhaps as a precursor to just linking
 two together, you can call a global untie method using `spec_two_mod.untie()`.
 ```
 
+### Performing the fit
+
 ```{code-cell} python
 xs.Fit.perform()
 ```
 
 <span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:</span>
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
+
+### Visualizing the fitted model
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -848,7 +871,13 @@ plot_fit_residual_spec(
 )
 ```
 
-## 3. Decoupling the power-law normalization
+## 4. Fitting the model with nH and powerlaw normalization allowed to vary separately for both spectra
+
+```{admonition} Hypothesis
+:class: hint
+
+Perhaps scattering also plays a role in reducing the flux before eclipse.
+```
 
 Our assumption that only a change in absorption can account for the spectral
 variation before and after eclipse is clearly wrong.
@@ -863,13 +892,22 @@ To decouple tied parameters, we can change the parameter value in the second
 group to a value – any value – different from that in the first group (changing the
 value in the first group has the effect of changing both without decoupling).
 
+### Setting up
+
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
 
 ```{code-cell} python
+spec_one_mod = xs.AllModels(1)
+spec_one_mod.TBabs.nH = 100.0
+
+spec_two_mod = xs.AllModels(2)
+spec_two_mod.TBabs.nH = 1.0
+```
+
+```{code-cell} python
 spec_two_mod.powerlaw.norm = 1.0
-xs.AllModels.show()
 ```
 
 ```{tip}
@@ -884,9 +922,30 @@ spectrum one's model would maintain the tie, and of course spectrum two's powerl
 would change to match.
 ```
 
+### Performing the fit
+
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
+This decoupling improves the fit, but it still clearly not good. Indeed, this simple
+attempt to account for the spectral variability in terms of "blanket" cold absorption
+and scattering does not work. More sophisticated models, involving additional
+components and partial absorption, should be tried.
+
+<span style="color:red">**Text from the CLI XSPEC manual (`node65.html`) concluding the second fit**:</span>
+<span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption and scattering does not work. More sophisticated models, involving additional components and partial absorption, should be tried.</span>
+
+<span style="color:red">**Suggested context (Quantitative discussion of the second fit from `node65.html`)**:</span>
+1. Replace *"This decoupling improves the fit, but it still clearly not good"* (which is missing "is") with the more informative sentence from `node65.html` quoted above (*"After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high."*). Note that in `node65.html`, the first fit had a $\chi^2$ around ~90,000+ (when initialized with $N_{\mathrm{H},1}=100$), and the second fit reaches $\chi^2 = 15,308.95$ with 59 d.o.f. (`Spectrum 1`: $13,992.93$ using 33 bins; `Spectrum 2`: $1,316.02$ using 33 bins).
+2. Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).
+
+<span style="color:red">**Suggested extension (Completing the scientific story & plotting additive components)**:</span>
+The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ for 64 d.o.f.) and prominent residuals around ~6.4–7 keV (Fe K$\alpha$ emission line / iron edge) and at soft energies!
+Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.
+
+
+### Visualizing the fitted model
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -918,23 +977,10 @@ plot_fit_residual_spec(
 )
 ```
 
-This decoupling improves the fit, but it still clearly not good. Indeed, this simple
-attempt to account for the spectral variability in terms of "blanket" cold absorption
-and scattering does not work. More sophisticated models, involving additional
-components and partial absorption, should be tried.
 
-<span style="color:red">**Text from the CLI XSPEC manual (`node65.html`) concluding the second fit**:</span>
-<span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption and scattering does not work. More sophisticated models, involving additional components and partial absorption, should be tried.</span>
+## Fitting a model with additional emission components
 
-<span style="color:red">**Suggested context (Quantitative discussion of the second fit from `node65.html`)**:</span>
-1. Replace *"This decoupling improves the fit, but it still clearly not good"* (which is missing "is") with the more informative sentence from `node65.html` quoted above (*"After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high."*). Note that in `node65.html`, the first fit had a $\chi^2$ around ~90,000+ (when initialized with $N_{\mathrm{H},1}=100$), and the second fit reaches $\chi^2 = 15,308.95$ with 59 d.o.f. (`Spectrum 1`: $13,992.93$ using 33 bins; `Spectrum 2`: $1,316.02$ using 33 bins).
-2. Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).
-
-<span style="color:red">**Suggested extension (Completing the scientific story & plotting additive components)**:</span>
-The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ for 64 d.o.f.) and prominent residuals around ~6.4–7 keV (Fe K$\alpha$ emission line / iron edge) and at soft energies!
-Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.
-
-## Where to go from here?
+### Setting up
 
 ```{code-cell} python
 xs.AllModels.clear()
@@ -963,9 +1009,13 @@ spec_one_mod.gaussian.LineE.frozen = True
 xs.AllModels.show()
 ```
 
+### Performing the fit
+
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
+### Visualizing the fitted model
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -1001,6 +1051,31 @@ plot_fit_residual_spec(
     fig_size=(9.5, 7.5),
 )
 ```
+
+### Calculating parameter uncertainties
+
+```{code-cell} python
+xs.Xset.parallel.error = NUM_CORES
+```
+
+```{code-cell} python
+try:
+    xs.Fit.error("2-3 12-13")
+except Exception as err:
+    print(err)
+```
+
+```{code-cell} python
+# xs.Fit.error("5,15")
+```
+
+### Exploring fit goodness
+
+```{code-cell} python
+xs.Xset.parallel.goodness = NUM_CORES
+xs.Fit.goodness(1000)
+```
+
 
 ## About this notebook
 
