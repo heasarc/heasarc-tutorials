@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-11-13'
+date: '2026-11-16'
 execution:
   cal-files:
     xmm-ccf: false
@@ -397,6 +397,45 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
+# ------------- Setting how many cores we can use --------------
+# We use a service called CircleCI to execute, test, and validate these notebooks
+#  as we're writing and maintaining them. Unfortunately we have to treat the
+#  determination of the number of cores we can use differently, as the
+#  'os.cpu_count()' call will return the number of cores of the host machine, rather
+#  than the number that have actually been allocated to us.
+if "CIRCLECI" in os.environ and bool(os.environ["CIRCLECI"]):
+    # Here we read the CPU quota (total CPU time allowed) and the CPU period (how
+    #  long the scheduling window is) from a cgroup (a linux kernel feature) file.
+    # Dividing one by t'other provides the number of cores we've been allocated.
+    with open("/sys/fs/cgroup/cpu.max", "r") as cpu_maxo:
+        quota, period = cpu_maxo.read().strip().split()
+        NUM_CORES = int(quota) // int(period)
+
+# If you, the reader, are running this notebook yourself, this is the
+#  part that is relevant to you - you can override the default number of cores
+#  used by setting this variable to an integer value.
+else:
+    NUM_CORES = None
+
+# Determines the number of CPU cores available
+total_cores = os.cpu_count()
+
+# If NUM_CORES is None, then we use the number of cores returned by 'os.cpu_count()'
+if NUM_CORES is None:
+    NUM_CORES = total_cores
+# Otherwise, NUM_CORES has been overridden (either by the user, or because we're
+#  running on CircleCI, and we do a validity check.
+elif not isinstance(NUM_CORES, int):
+    raise TypeError(
+        "If manually overriding 'NUM_CORES', you must set it to an integer value."
+    )
+elif isinstance(NUM_CORES, int) and NUM_CORES > total_cores:
+    raise ValueError(
+        f"If manually overriding 'NUM_CORES', the value must be less than or "
+        f"equal to the total available cores ({total_cores})."
+    )
+# --------------------------------------------------------------
+
 # -------------- Set paths and create directories --------------
 if os.path.exists("../../../_data"):
     ROOT_DATA_DIR = "../../../_data/PyXspec/Ginga"
@@ -501,6 +540,7 @@ number, and does not take group number into account. So, to ignore channels 1–
 ### Examining the 'raw' spectra
 
 <span style="color:red">**Explain how we're configuring plotting behaviour**</span>
+
 ```{code-cell} python
 xs.Plot.xAxis = "keV"
 ```
@@ -534,14 +574,12 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 To learn about PyXspec plotting in more detail, please see the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial.
 ```
 
-
 ```{code-cell} python
 ---
 tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
 plt.figure(figsize=(7.5, 5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
@@ -666,7 +704,6 @@ You can also run `xs.AllModels.show()` to see that summary at any time.
 xs.Fit.nIterations = 50
 ```
 
-
 ### All parameters joined
 
 ```{code-cell} python
@@ -704,12 +741,29 @@ plot_fit_residual_spec(
 )
 ```
 
+```{important}
+In this circumstance, the model lines produced by XSPEC are identical, because the models for both
+spectra have identical parameters **and** the response file used by both spectra is the same. If
+these two spectra were from different instruments, or even from two different points in the lifetime
+of the _same_ instrument, there would be two distinct (though not that distinct) model lines shown.
 
+This is because XSPEC models are 'folded through' the responses of the instruments whose data they are fitting.
+```
 
 ### Untying one parameter across the spectra
 
-Let us suppose that we have a theory that the difference
-between the two spectra is a change in the absorption.
+```{admonition} Hypothesis
+:class: hint
+
+Let us suppose that we have a theory that the difference between the two spectra **is a change in the absorption**.
+```
+
+
+We redeclare the model that we chose [earlier in the tutorial](#choosing-and-setting-up-a-model) to wipe the previous fit:
+
+```{code-cell} python
+xs.Model("tbabs * highecut(pow)")
+```
 
 We want to remove the link between parameters 1 and 6 and then fit.
 
@@ -763,8 +817,6 @@ xs.Fit.perform()
 <span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:</span>
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
 
-
-
 ```{code-cell} python
 xs.Plot("data resid")
 
@@ -801,8 +853,7 @@ plot_fit_residual_spec(
 Our assumption that only a change in absorption can account for the spectral
 variation before and after eclipse is clearly wrong.
 
-Perhaps scattering also plays a
-role in reducing the flux before eclipse.
+Perhaps scattering also plays a role in reducing the flux before eclipse.
 
 This could be modeled (simply at first) by
 allowing the normalization of the power law to be smaller before eclipse than after
@@ -812,6 +863,9 @@ To decouple tied parameters, we can change the parameter value in the second
 group to a value – any value – different from that in the first group (changing the
 value in the first group has the effect of changing both without decoupling).
 
+```{code-cell} python
+xs.Model("tbabs * highecut(pow)")
+```
 
 ```{code-cell} python
 spec_two_mod.powerlaw.norm = 1.0
@@ -833,7 +887,6 @@ would change to match.
 ```{code-cell} python
 xs.Fit.perform()
 ```
-
 
 ```{code-cell} python
 xs.Plot("data resid")
@@ -881,8 +934,73 @@ components and partial absorption, should be tried.
 The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ for 64 d.o.f.) and prominent residuals around ~6.4–7 keV (Fe K$\alpha$ emission line / iron edge) and at soft energies!
 Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.
 
+## Where to go from here?
 
+```{code-cell} python
+xs.AllModels.clear()
+```
 
+```{code-cell} python
+xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
+
+spec_one_mod = xs.AllModels(1)
+spec_one_mod.TBabs.nH = 100.0
+
+spec_two_mod = xs.AllModels(2)
+spec_two_mod.TBabs.nH = 1.0
+
+spec_two_mod.powerlaw.norm = 1.0
+
+spec_one_mod.gaussian.LineE = 6.4
+spec_one_mod.gaussian.LineE.frozen = True
+
+# spec_two_mod.gaussian.Sigma.untie()
+# spec_two_mod.gaussian.norm.untie()
+
+# spec_two_mod.bbody.kT.untie()
+# spec_two_mod.bbody.norm.untie()
+
+xs.AllModels.show()
+```
+
+```{code-cell} python
+xs.Fit.perform()
+```
+
+```{code-cell} python
+xs.Plot("data resid")
+
+untied_nh_norm_gauss_bbody_plot_data = []
+for grp_id in range(1, xs.AllData.nGroups + 1):
+    grp_data = {
+        "energy": np.array(xs.Plot.x(grp_id, 1)),
+        "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
+        "rate": np.array(xs.Plot.y(grp_id, 1)),
+        "rate_err": np.array(xs.Plot.yErr(grp_id, 1)),
+        "model": np.array(xs.Plot.model(grp_id, 1)),
+        "residual": np.array(xs.Plot.y(grp_id, 2)),
+        "residual_err": np.array(xs.Plot.yErr(grp_id, 2)),
+    }
+    grp_data["energy_step"] = np.append(
+        grp_data["energy"] - grp_data["energy_delta"],
+        grp_data["energy"][-1] + grp_data["energy_delta"][-1],
+    )
+    untied_nh_norm_gauss_bbody_plot_data.append(grp_data)
+```
+
+```{danger}
+NEED TO MAKE SURE ALL THE MOD_EXPRS PASSED TO PLOTTING FUNCTION ARE UPDATED TO REFLECT THE CHANGES
+I'VE MADE.
+```
+
+```{code-cell} python
+plot_fit_residual_spec(
+    untied_nh_norm_gauss_bbody_plot_data,
+    inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
+    mod_expr=["Group 1: untied nH & norm", "Group 2: untied nH & norm"],
+    fig_size=(9.5, 7.5),
+)
+```
 
 ## About this notebook
 
@@ -890,7 +1008,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-11-13
+Updated On: 2026-11-16
 
 +++
 
@@ -913,4 +1031,4 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 
 ### References
 
-<span style="color:red">**Suggested addition (References)**: Add the Ginga LAC Cen X-3 reference (e.g. [Nagase et al. 1992](https://ui.adsabs.harvard.edu/abs/1992ApJ...396..147N/abstract)) once confirmed.</span>
+[Nagase F., Corbet R.H.D., Day C.S.R., Inoue H., Takeshima T., Yoshida K. Mihara T. (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...396..147N/abstract) - _GINGA Observations of Centaurus X-3_
