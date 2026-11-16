@@ -1000,8 +1000,8 @@ spec_two_mod.powerlaw.norm = 1.0
 spec_one_mod.gaussian.LineE = 6.4
 spec_one_mod.gaussian.LineE.frozen = True
 
-# spec_two_mod.gaussian.Sigma.untie()
-# spec_two_mod.gaussian.norm.untie()
+spec_two_mod.gaussian.Sigma.untie()
+spec_two_mod.gaussian.norm.untie()
 
 # spec_two_mod.bbody.kT.untie()
 # spec_two_mod.bbody.norm.untie()
