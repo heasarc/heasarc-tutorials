@@ -42,42 +42,40 @@ By the end of this tutorial, you will be able to:
 
 ## Introduction
 
-This demonstration focuses...
-
-This PyXspec tutorial follows on from the previous '{doc}`PyXspec basics <pyxspec-basics>`' demonstration, which we strongly encourage you to go through first.
-
+This PyXspec tutorial follows on from the previous '{doc}`PyXspec basics <pyxspec-basics>`'
+demonstration (which we strongly encourage you to go through first), and focuses on how you
+can analyze multiple spectra at once.
 
 XSPEC has the very useful facility of allowing models to be fitted simultaneously to
 more than one data file. It is even possible to group files together and to fit
 different models simultaneously. Reasons for fitting in this manner include:
 
-- The same target is observed at several epochs but, although the source stays constant, the response matrix has changed. When this happens, the data files cannot be added together; they have to be fitted separately. Fitting the data files simultaneously yields tighter constraints.
+- The same target has been observed at several epochs but, although the source stays constant, the response matrix has changed. When this happens, the data files cannot be added together; they have to be fitted separately. Fitting the data files simultaneously yields tighter constraints.
 - The same target is observed with different instruments. All the instruments on Suzaku, for example, observe in the same direction simultaneously. As far as XSPEC is concerned, this is just like the previous case: two data files with two responses fitted simultaneously with the same model.
 - Different targets are observed, but the user wants to fit the same model to each data file with some parameters shared and some allowed to vary separately. For example, if we have a series of spectra from a variable AGN, we might want to fit them simultaneously with a model that has the same, common photon index but separately vary the normalization and absorption.
 
-Other scenarios are possible – the important thing is to recognize the flexibility of
-XSPEC in this regard.
+Other scenarios are possible – the important thing is to recognize the flexibility of XSPEC in this regard.
 
-As an example we will look at a case of fitting the same model to two different data
-files but where not all the parameters are identical.
-
-Just as in the {doc}`first PyXspec tutorial <pyxspec-basics>`' we will make use of an old dataset, as
-it provides a simpler illustration than more modern data.
+As an example, we will look at a case of fitting the same model to two different data
+files but where not all the parameters are identical. Just as in the {doc}`first PyXspec tutorial <pyxspec-basics>`
+we will make use of an old dataset, as it provides a simpler illustration than more modern data.
 
 In particular, we will use two observations of Centaurus X-3 (alternatively known as Cen X-3), a very
-well-studied high-mass X-ray binary (HMXRB) that was the first X-ray pulsar ever discovered.
+well-studied high-mass X-ray binary (HMXRB), and which was the first X-ray pulsar ever discovered.
 
 The observations in question were taken by Ginga (originally known as ASTRO-C), a Japanese Space Agency (JAXA) X-ray
 telescope that was launched in 1987, using the 'Large Area Proportional Counter' (LAC) instrument. Ginga's
-observations of Cen X-3 were taken in 1989.
+observations of Cen X-3 were taken in 1989 and cover pre- and post-eclipse emission (note that there are more
+Ginga observations than we use in this tutorial which cover other phases).
 
+Cen X-3's flux level before eclipse was much lower than the level after eclipse.
 
-Its flux level before eclipse
-was much lower than the level after eclipse. Here, we'll use PyXspec to see whether
+<span style="color:purple">Here, we'll use PyXspec to see whether
 spectra from these two phases can be fitted with the same model, which differs only in
-the amount of absorption. The spectra and corresponding response matrices were obtained
-from the HEASARC and are available from
-[the full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough.tar.gz).
+the amount of absorption.</span>
+
+The spectra and corresponding response matrix were obtained from the HEASARC and are available from
+[the full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough).
 
 
 ### Inputs
@@ -474,12 +472,12 @@ xs.Plot.device = "/null"
 This kind of fitting relies on introducing an extra dimension, the group, to the
 indexing of the data files.
 
-The files in each group share the same model but not
-necessarily the same parameter values, which may be shared as common to all the groups
-or varied separately from group to group.
+The files in each group share the same model but not necessarily the same parameter
+values, which may be shared as common to all the groups or varied separately from
+group to group.
 
-Although each group may contain more than one
-file, there is only one file in each of the two groups in this example.
+Although each group may contain more than one file, there is only one file in each
+of the two groups in this example.
 
 ```{important}
 Unlike in the first '{doc}`PyXspec basics <pyxspec-basics>`' tutorial, where we defined
@@ -492,9 +490,7 @@ Unlike loading using `Spectrum`, `xs.AllData()` **does not** return a `Spectrum`
 object; instead it returns Python's null object, `None`.
 ```
 
-Groups are
-specified with the data command, with the group number preceding the file number, like
-this:
+<span style="color:purple">Groups are specified with the data command, with the group number preceding the file number, like this:</span>
 
 The spectral files we need for this demonstration were downloaded in
 the [Global Setup: Configuration](#configuration) section. As they were not downloaded to the
@@ -508,11 +504,11 @@ would have been unable to find and automatically load the response file.
 
 ```{code-cell} python
 with contextlib.chdir(ROOT_DATA_DIR):
-    xs.AllData("1:1 losum 2:2 hisum")
+    xs.AllData("1:1 losum.pha 2:2 hisum.pha")
 ```
 
 ```{tip}
-The call to `AllData()` above should also display a summary of the spectra currently in
+The call to `AllData(...)` above should display a summary of the spectra currently in
 use (unless you have PyXspec's 'chatter' set to $<10$ using `xs.Xset.chatter=`).
 
 You can also run `xs.AllData.show()` to see that summary at any time (again, if chatter
@@ -522,24 +518,20 @@ has been set high enough).
 Here, the first group makes up the file `losum.pha`, which contains the spectrum of all
 the low, pre-eclipse emission.
 
-The second group makes up the second file, `hisum.pha`,
-which contains all the high, post-eclipse emission.
+The second group makes up the second file, `hisum.pha`, which contains all the high,
+post-eclipse emission.
 
-Note that file number is "absolute"
-in the sense that it is independent of group number.
+Note that file number is "absolute" in the sense that it is independent of group number.
 
-Thus, if there were three files in
-each of the two groups (`lo1.pha`, `lo2.pha`, `lo3.pha`, `hi1.pha`, `hi2.pha`, and
-`hi3.pha`, say), rather than one, the six files would be specified as
-`"1:1 lo1 1:2 lo2 1:3 lo3 2:4 hi1 2:5 hi2 2:6 hi3"`.
+Thus, if there were three files in each of the two groups (`lo1.pha`, `lo2.pha`,
+`lo3.pha`, `hi1.pha`, `hi2.pha`, and `hi3.pha`, say), rather than one, the six files
+would be specified as `"1:1 lo1 1:2 lo2 1:3 lo3 2:4 hi1 2:5 hi2 2:6 hi3"`.
 
-The ignore method works on file
-number, and does not take group number into account. So, to ignore channels 1–3 and
-37–48 of both files:
 
 ### Examining the 'raw' spectra
 
-<span style="color:red">**Explain how we're configuring plotting behaviour**</span>
+We want the x-axis of every spectrum we visualize throughout this tutorial to be in terms of
+energy, in units of keV, so we make sure to set that up here:
 
 ```{code-cell} python
 xs.Plot.xAxis = "keV"
@@ -571,7 +563,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 ```
 
 ```{seealso}
-To learn about PyXspec plotting in more detail, please see the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial.
+For more discussion of PyXspec plotting, please see the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial.
 ```
 
 ```{code-cell} python
@@ -629,6 +621,9 @@ However, the situation in this tutorial differs in one crucial way - we have mul
 
 <span style="color:red">when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum</span>
 
+The ignore method works on file number, and does not take group number into account. So,
+to ignore channels 1–3 and 37–48 of both files:
+
 ```{code-cell} python
 xs.AllData.ignore("1-3 37-48")
 ```
@@ -647,20 +642,7 @@ different channels for the first two spectra than for the second two; you could 
 `xs.AllData.ignore("1-2:1-3 37-48 3-4: 37-48")`.
 ```
 
-```{caution}
-Note that `ignore` (and `notice`) interpret **integers as channel numbers** and ***real
-numbers as energies*** - it can be confusing when you think you've ignored everything
-above 8 keV but instead find you only have 8 channels.
-
-Also, the double star (\*\*) is a special indicator which just means the
-extreme value in the spectrum - in this case the upper extreme, but if we instead
-ran `ignore("**-15.0")` we'd ignore everything **up to** 15 keV.
-```
-
-<span style="color:purple">For the mature missions in the HEASARC archives, this information may have already been
-encoded in the headers of the spectral files as a list of bad channels. To remove the
-bad channels from the spectrum that we
-[previously read in](#loading-multiple-spectra-into-separate-data-groups), we can use:</span>
+We also remove any channels from our spectra that were previously marked as bad:
 
 ```{code-cell} python
 xs.AllData.ignore("bad")
@@ -671,24 +653,31 @@ xs.AllData.ignore("bad")
 The model we'll use at first to fit the two files is an absorbed power law with a
 high-energy cut-off:
 
-- **tbabs** -
-- **highecut** - This multiplicative model has a constant value of **1** up to the 'cutoff energy'. Beyond that the model value begins to decrease with increasing energy, with the rate of decrease controlled by an 'e-folding energy' parameter.
-- **pow** -
+- **tbabs** – The Tuebingen-Boulder interstellar-medium (ISM) absorption model, which is used to model the absorption of X-rays by the ISM. It is a multiplicative model that down weights emissive models to account for the absorption of their emission at different energies.
+- **highecut** – This multiplicative model has a constant value of **1** up to the 'cutoff energy'. Beyond that the model value begins to decrease with increasing energy, with the rate of decrease controlled by an 'e-folding energy' parameter.
+- **pow** – A shorthand name for one of XSPEC's simplest models; `powerlaw`.
 
-<span style="color:purple">We do not assign the return of the model definition to a variable - even though a single PyXspec `Model` instance is returned, PyXspec has _actually_ set up two separate instances of the model, one per data group. We will access them through PyXspec's `AllModels()` manager later on in this tutorial.</span>
+We do not assign the return of the `xs.Model(...)` definition to a variable (as we did in the {doc}`first PyXspec tutorial <pyxspec-basics>`).
+
+Even though a single PyXspec `Model` instance is returned, PyXspec has _actually_ set up two separate instances of the model, one per data group.
+
+We will access them through PyXspec's `AllModels()` manager later on in this tutorial.
 
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
 
 Notice how the summary of the model, displayed immediately above, is different now that
-we have two groups, as opposed to one.
+we have two groups, as opposed to one (compared with the summaries we saw in the
+{doc}`first PyXspec tutorial <pyxspec-basics>`).
 
-We can see that of the 10 model parameters, there are 5
-for each data group and, by default, the parameters for the second data group are
-linked to those for the first.
+We can see that though there are **10** model parameters in total, they are split so that
+**5** are associated with each data group.
 
-<span style="color:red">Notice how the summary of the model, displayed immediately above, is different now that we have two groups, as opposed to one (as in all the previous examples). We can see that of the 10 model parameters, 6 are free (i.e., 4 of the second group parameters are tied to their equivalents in the first group). Fitting this model results in a huge $\chi^2$ (not shown here), because our assumption that only a change in absorption can account for the spectral variation before and after eclipse is clearly wrong.</span>
+You might also notice that the second data group's model parameters are **linked to those
+of the first** – this is made evident by the value column entries for group two ending in
+`= p<N>`, where **N** is the parameter ID (first column) of the corresponding parameter in
+the first group's model.
 
 ```{tip}
 Setting up the model above should also display an overview of its parameters currently in
@@ -928,22 +917,12 @@ would change to match.
 xs.Fit.perform()
 ```
 
-This decoupling improves the fit, but it still clearly not good. Indeed, this simple
+This decoupling improves the fit, but its still clearly not good <span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. </span>. Indeed, this simple
 attempt to account for the spectral variability in terms of "blanket" cold absorption
 and scattering does not work. More sophisticated models, involving additional
 components and partial absorption, should be tried.
 
-<span style="color:red">**Text from the CLI XSPEC manual (`node65.html`) concluding the second fit**:</span>
-<span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption and scattering does not work. More sophisticated models, involving additional components and partial absorption, should be tried.</span>
-
-<span style="color:red">**Suggested context (Quantitative discussion of the second fit from `node65.html`)**:</span>
-1. Replace *"This decoupling improves the fit, but it still clearly not good"* (which is missing "is") with the more informative sentence from `node65.html` quoted above (*"After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high."*). Note that in `node65.html`, the first fit had a $\chi^2$ around ~90,000+ (when initialized with $N_{\mathrm{H},1}=100$), and the second fit reaches $\chi^2 = 15,308.95$ with 59 d.o.f. (`Spectrum 1`: $13,992.93$ using 33 bins; `Spectrum 2`: $1,316.02$ using 33 bins).
-2. Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).
-
-<span style="color:red">**Suggested extension (Completing the scientific story & plotting additive components)**:</span>
-The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ for 64 d.o.f.) and prominent residuals around ~6.4–7 keV (Fe K$\alpha$ emission line / iron edge) and at soft energies!
-Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.
-
+<span style="color:red">Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).</span>
 
 ### Visualizing the fitted model
 
@@ -1069,7 +1048,7 @@ except Exception as err:
 # xs.Fit.error("5,15")
 ```
 
-### Exploring fit goodness
+### Highlighting the very low quality of the fit
 
 ```{code-cell} python
 xs.Xset.parallel.goodness = NUM_CORES
