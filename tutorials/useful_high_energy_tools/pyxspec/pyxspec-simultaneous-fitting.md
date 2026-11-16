@@ -73,7 +73,7 @@ observations of Cen X-3 were taken in 1989.
 
 
 Its flux level before eclipse
-was much lower than the level after eclipse. Here, we'll use XSPEC to see whether
+was much lower than the level after eclipse. Here, we'll use PyXspec to see whether
 spectra from these two phases can be fitted with the same model, which differs only in
 the amount of absorption. The spectra and corresponding response matrices were obtained
 from the HEASARC and are available from
@@ -399,9 +399,9 @@ jupyter:
 ---
 # -------------- Set paths and create directories --------------
 if os.path.exists("../../../_data"):
-    ROOT_DATA_DIR = "../../../_data/PyXSPEC/Ginga"
+    ROOT_DATA_DIR = "../../../_data/PyXspec/Ginga"
 else:
-    ROOT_DATA_DIR = "PyXSPEC/Ginga"
+    ROOT_DATA_DIR = "PyXspec/Ginga"
 
 # Ensure that the specified directory is absolute
 ROOT_DATA_DIR = os.path.abspath(ROOT_DATA_DIR)
@@ -498,15 +498,11 @@ The ignore method works on file
 number, and does not take group number into account. So, to ignore channels 1–3 and
 37–48 of both files:
 
-<span style="color:red">**Suggested context & potential code cells (Inspecting spectra before fitting)**:</span>
-2. Explain *why* `xs.AllData.ignore("1-3 37-48")` applies to both spectra: when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum. In the CLI XSPEC manual walkthrough (`node65.html`), this command is written with the explicit file number range as `ignore 1-2:1-3 37-48` to directly illustrate the preceding sentence (*"The ignore method works on file number, and does not take group number into account"*). It would also be helpful to remind the reader that integer values specify channel numbers whereas floating-point numbers specify energies (e.g. `1.0-3.0`).
-
 ### Examining the 'raw' spectra
 
 <span style="color:red">**Explain how we're configuring plotting behaviour**</span>
 ```{code-cell} python
 xs.Plot.xAxis = "keV"
-xs.Plot("data")
 ```
 
 ```{note}
@@ -515,7 +511,11 @@ means that it won't output figures - instead we construct our own figures with m
 from PyXspec.
 ```
 
+<span style="color:red">Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).</span>
+
 ```{code-cell} python
+xs.Plot("data")
+
 raw_spec_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
@@ -530,6 +530,9 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     raw_spec_plot_data.append(grp_data)
 ```
 
+```{seealso}
+To learn about PyXspec plotting in more detail, please see the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial.
+```
 
 
 ```{code-cell} python
@@ -581,6 +584,13 @@ plt.show()
 
 ### Excluding parts of the spectra from our fit
 
+We covered the ignore command in the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial, and we will not repeat that
+discussion of the whys and wherefores of ignoring channels.
+
+However, the situation in this tutorial differs in one crucial way - we have multiple spectra loaded. <span style="color:red">.......</span>
+
+<span style="color:red">when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum</span>
+
 ```{code-cell} python
 xs.AllData.ignore("1-3 37-48")
 ```
@@ -609,13 +619,6 @@ extreme value in the spectrum - in this case the upper extreme, but if we instea
 ran `ignore("**-15.0")` we'd ignore everything **up to** 15 keV.
 ```
 
-```{code-cell} python
-# SUGGESTION: REPLICATE THE EXPLICIT FILE-NUMBER RANGE SYNTAX FROM THE CLI XSPEC
-#  MANUAL (node65.html)
-xs.AllData.ignore("1-2:1-3 37-48")
-```
-
-
 <span style="color:purple">For the mature missions in the HEASARC archives, this information may have already been
 encoded in the headers of the spectral files as a list of bad channels. To remove the
 bad channels from the spectrum that we
@@ -640,19 +643,14 @@ high-energy cut-off:
 xs.Model("tbabs * highecut(pow)")
 ```
 
-<span style="color:red">**Text from the CLI XSPEC manual (`node65.html`) following the model initialization**:</span>
-<span style="color:red">Notice how the summary of the model, displayed immediately above, is different now that we have two groups, as opposed to one (as in all the previous examples). We can see that of the 10 model parameters, 6 are free (i.e., 4 of the second group parameters are tied to their equivalents in the first group). Fitting this model results in a huge $\chi^2$ (not shown here), because our assumption that only a change in absorption can account for the spectral variation before and after eclipse is clearly wrong.</span>
-
 Notice how the summary of the model, displayed immediately above, is different now that
 we have two groups, as opposed to one.
 
-We can see that of the 10 model parameters, 5
+We can see that of the 10 model parameters, there are 5
 for each data group and, by default, the parameters for the second data group are
 linked to those for the first.
 
-
-
-
+<span style="color:red">Notice how the summary of the model, displayed immediately above, is different now that we have two groups, as opposed to one (as in all the previous examples). We can see that of the 10 model parameters, 6 are free (i.e., 4 of the second group parameters are tied to their equivalents in the first group). Fitting this model results in a huge $\chi^2$ (not shown here), because our assumption that only a change in absorption can account for the spectral variation before and after eclipse is clearly wrong.</span>
 
 ```{tip}
 Setting up the model above should also display an overview of its parameters currently in
@@ -676,7 +674,6 @@ xs.Fit.perform()
 ```
 
 ```{code-cell} python
-xs.Plot.xAxis = "keV"
 xs.Plot("data resid")
 
 all_tied_plot_data = []
@@ -708,18 +705,13 @@ plot_fit_residual_spec(
 ```
 
 
-<span style="color:red">**Suggested context (Retrieving data group models, setting initial $N_{\mathrm{H}}$, & untying parameters)**:</span>
-1. Fix the slight typo in the original PyXspec text above ("5 for each data group" $\rightarrow$ "there are 5 for each data group", and "between parameters 1 and 6 and the fit" $\rightarrow$ "between parameters 1 and 6 and then fit"), or adopt the cleaner wording from the CLI XSPEC manual quoted above.
-3. Show that `m2(1).untie()` can also be written using component/parameter attribute names (`m2.phabs.nH.untie()`), which is much less error-prone for complex multi-component models than counting parameter indices across groups.
-
 
 ### Untying one parameter across the spectra
 
 Let us suppose that we have a theory that the difference
 between the two spectra is a change in the absorption.
 
-We want to remove the link
-between parameters 1 and 6 and the fit.
+We want to remove the link between parameters 1 and 6 and then fit.
 
 When there are two datagroups there are two
 separate model objects created so to change the sixth parameter, which is the first
@@ -770,12 +762,10 @@ xs.Fit.perform()
 
 <span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:</span>
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
-2. Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).
 
 
 
 ```{code-cell} python
-xs.Plot.xAxis = "keV"
 xs.Plot("data resid")
 
 untied_nh_plot_data = []
@@ -822,9 +812,6 @@ To decouple tied parameters, we can change the parameter value in the second
 group to a value – any value – different from that in the first group (changing the
 value in the first group has the effect of changing both without decoupling).
 
-<span style="color:red">**Suggested context (Two ways to untie parameters)**:</span>
-1. Note the duplicate word in the original text ("Clearly our assumption ... is clearly wrong").
-2. Highlight that this demonstrates a *second* method for untying a parameter in PyXspec: assigning a new numerical value directly to the secondary group's parameter (`m2.powerlaw.norm = 1.0`) automatically breaks the link `= p5`, just like calling `m2.powerlaw.norm.untie()`. Consider adding a tip admonition comparing `.untie()` vs direct value assignment (and how to *re-tie* a parameter via `m2.powerlaw.norm.link = "5"` or `m2(10).link = "p5"`).
 
 ```{code-cell} python
 spec_two_mod.powerlaw.norm = 1.0
@@ -895,7 +882,6 @@ The original notebook ends abruptly here with a poor fit ($\chi^2 \approx 2483$ 
 Consider adding a follow-up section that actually fits a more realistic model to Cen X-3 (e.g. adding a `gaussian` iron line around 6.4 keV and/or a partial-covering absorber `pcfabs`, or separate soft scattered vs direct absorbed power-law components), and then demonstrating multi-component plotting (`xs.Plot.add = True` and `xs.Plot.addComp(...)`, as in Section 6 of `pyxspec-basics.md`) across the two data groups so the reader finishes the tutorial with a good fit.
 
 
-## 4. When might you want to simultaneously fit?
 
 
 ## About this notebook
