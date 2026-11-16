@@ -38,7 +38,7 @@ By the end of this tutorial, you will be able to:
 - Identify and fetch ROSAT All-Sky Survey (RASS) data relevant to a sample of sources.
 - Examine pregenerated RASS images.
 - Generate new RASS images with custom spatial binning and energy bands.
-- Acquire the ROSAT-PSPCC Redistribution Matrix File (RMF), extract RASS spectra, and generate Ancillary Response Files (ARFs) for a sample of sources; then fit models using PyXSPEC and extract results.
+- Acquire the ROSAT-PSPCC Redistribution Matrix File (RMF), extract RASS spectra, and generate Ancillary Response Files (ARFs) for a sample of sources; then fit models using PyXspec and extract results.
 
 ## Introduction
 
@@ -102,7 +102,7 @@ analyze the data, rather than rely solely on catalogs, may help you with your ow
 - Visualizations of pre-processed RASS images.
 - Newly generated RASS images.
 - Source/background region files and spectra.
-- Result table from fitting spectral models using PyXSPEC, and accompanying visualizations of spectra.
+- Result table from fitting spectral models using PyXspec, and accompanying visualizations of spectra.
 
 ### Runtime
 
@@ -1751,7 +1751,7 @@ to be, to match the spectrum said instrument has observed.
 
 That modeling is basically what X-ray spectral fitting is all about - various tools
 exist to perform the task, but in [Section 5](#5-fitting-spectral-models-using-pyxspec) we'll
-use the PyXSPEC module.
+use the PyXspec module.
 
 We wish to parallelize the generation of ARFs for different spectra, and so create a
 wrapper function (`gen_rosat_pspc_arf(...)`, see the ['Global Setup: Functions'](#functions) section)
@@ -1893,7 +1893,7 @@ The very last thing we want to do before we can fit models to our spectra is to
 alter their FITS headers so they point to the ARF, RMF, and background files.
 
 We don't absolutely *need* to do this, as the paths to supporting files can be
-manually passed to PyXSPEC (and command-line XSPEC) as the data are loaded in.
+manually passed to PyXspec (and command-line XSPEC) as the data are loaded in.
 
 However, including the paths in the headers means the ARF, RMF, and background spectra
 can be loaded in automatically, so we might as well:
@@ -1922,7 +1922,7 @@ for cur_ind, cur_src_name in enumerate(preproc_event_lists):
 ```{caution}
 We add the RESPFILE, ANCRFILE, and BACKFILE keywords _after_ grouping because some
 FITS file modifications (such as using `ftgrouppha`) can add '&' characters to the end
-of long strings in FITS headers. That then causes PyXSPEC to fail to read in supporting
+of long strings in FITS headers. That then causes PyXspec to fail to read in supporting
 files for the spectrum.
 
 As HEASARC-tutorials demonstrations lean toward using easy-to-read, informative, file
@@ -1930,12 +1930,12 @@ names that are by necessity quite long, we add the correct paths using the Astro
 fits module.
 ```
 
-## 5. Fitting spectral models using PyXSPEC
+## 5. Fitting spectral models using PyXspec
 
 Having gone to the trouble of generating ROSAT All-Sky Survey spectra for our sample
 of M dwarfs, we'll now fit some models and try to extract some properties!
 
-Using the Python interface (PyXSPEC) to the ubiquitous XSPEC model fitting
+Using the Python interface (PyXspec) to the ubiquitous XSPEC model fitting
 software, we will:
 1. Fit both power-law and blackbody models to each spectrum.
 2. Calculate and store the model fluxes.
@@ -1946,12 +1946,12 @@ Note that this demonstration was not written by an expert in the X-ray
 emission of M dwarfs (or indeed any kind of star), so please don't necessarily
 take these models as a recommendation for your own work!
 
-### Setting up PyXSPEC
+### Setting up PyXspec
 
-Firstly, we configure how PyXSPEC is going to behave. This includes:
-- Setting the 'chatter' to zero, to minimize the outputs that XSPEC prints. **Note that, at the time of writing, there are some PyXSPEC outputs that cannot be suppressed.**
-- Telling PyXSPEC to use the Cash statistic; generally considered a good choice for low-count spectra.
-- Making sure that PyXSPEC won't ask us for input at any point (`xs.Fit.query = "no"`).
+Firstly, we configure how PyXspec is going to behave. This includes:
+- Setting the 'chatter' to zero, to minimize the outputs that XSPEC prints. **Note that, at the time of writing, there are some PyXspec outputs that cannot be suppressed.**
+- Telling PyXspec to use the Cash statistic; generally considered a good choice for low-count spectra.
+- Making sure that PyXspec won't ask us for input at any point (`xs.Fit.query = "no"`).
 
 ```{code-cell} python
 # The strange comment on the end of this line is for the benefit of our
@@ -1982,12 +1982,12 @@ show_warn = False
 
 ### Loading spectra and fitting models
 
-This section contains the entirety of our interaction with PyXSPEC in this
+This section contains the entirety of our interaction with PyXspec in this
 notebook; the slightly ugly for loop below will load each spectrum individually,
 restrict the energy range, fit models, and create the visualization data (though it
 won't plot it).
 
-What we're doing here represents a fairly simple use of PyXSPEC; some of our other
+What we're doing here represents a fairly simple use of PyXspec; some of our other
 demonstrations, such as '{doc}`Getting started with Swift-XRT <../swift/getting-started-swift-xrt>`,
 contain more complex examples; the simultaneous fitting of a model to multiple spectra, for instance.
 
@@ -2217,7 +2217,7 @@ for ax_arr_ind, ax in np.ndenumerate(ax_arr):
 plt.show()
 ```
 
-### Saving PyXSPEC fit results
+### Saving PyXspec fit results
 
 If you're fitting X-ray spectra as part of a research project, you're probably going to
 want to save the properties you derived to a file, so you can use them later without
