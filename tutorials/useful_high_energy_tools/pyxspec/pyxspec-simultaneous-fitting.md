@@ -800,7 +800,7 @@ This is because XSPEC models are 'folded through' the responses of the instrumen
 ```{admonition} Hypothesis
 :class: hint
 
-Let us suppose that we have a theory that the difference between the two spectra **is a change in the absorption**.
+Let us suppose that we have a theory that the difference between the two spectra **is a significant change in absorption**.
 ```
 
 ### Setting up
@@ -811,7 +811,13 @@ We redeclare the model that we chose [earlier in the tutorial](#choosing-and-set
 xs.Model("tbabs * highecut(pow)")
 ```
 
-We want to remove the link between parameters 1 and 6 and then fit.
+What we want to do now is to **remove the link between the nH parameters of the first and
+second data groups**; looking at the model summary above, you should be able to see that
+the parameter IDs for those nH variables are **1** and **6**.
+
+In PyXspec, there are several ways to break a parameter link, or 'untie', in XSPEC terminology:
+1.
+
 
 When there are two datagroups there are two
 separate model objects created so to change the sixth parameter, which is the first
@@ -830,7 +836,7 @@ equivalents in the first group, enter different values explicitly.
 
 ```{code-cell} python
 spec_one_mod = xs.AllModels(1)
-spec_one_mod.TBabs.nH = 100.0
+spec_one_mod.TBabs.nH = 10.0
 ```
 
 ```{code-cell} python
