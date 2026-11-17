@@ -595,14 +595,13 @@ we will access using the Astroquery Python module ([Ginsburg et al. 2019](https:
 
 We have already [imported](#imports) the `Vizier` class from Astroquery, so we can now
 set up an instance of it (with some non-default arguments) that can be used to fetch
-our catalog of interest.
-
-The `row_limit=-1` argument tells Astroquery to return all rows from the catalog, and
-the `columns=["**", "_RAJ2000", "_DEJ2000"]` tells it to also return every column (as
-well as the VizieR-standard decimal degree RA and Dec values):
+our catalog of interest:
+- `row_limit=-1` - tells Astroquery to return all rows from the catalog.
+- `columns=["**", "_RAJ2000", "_DEJ2000"]` tells it to also return every column (as well as the VizieR-standard decimal degree RA and Dec values).
+- `find_mirror=True` - Tells Astroquery to find the best VizieR mirror (several exist in different parts of the world) to fetch from.
 
 ```{code-cell} python
-viz = Vizier(row_limit=-1, columns=["**", "_RAJ2000", "_DEJ2000"])
+viz = Vizier(row_limit=-1, columns=["**", "_RAJ2000", "_DEJ2000"], find_mirror=True)
 viz
 ```
 
