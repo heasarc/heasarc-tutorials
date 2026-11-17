@@ -119,21 +119,22 @@ jupyter:
 ---
 def plot_fit_residual_spec(
     plot_data: dict | Sequence[dict],
-    sp_color: str | Sequence[str] = ("navy", "darkgreen", "darkorange", "teal"),
-    sp_marker: str | Sequence[str] = ("x", "D", "o", "+"),
+    sp_color: str | Sequence[str] = ("teal", "magenta", "navy", "darkorange"),
+    sp_marker: str | Sequence[str] = ("x", "o", "D", "+"),
     mod_color: str | Sequence[str] = (
-        "firebrick",
+        "crimson",
+        "black",
         "darkorchid",
         "peru",
-        "crimson",
     ),
-    res_color: str | Sequence[str] | None = None,
     mod_ls: str | Sequence[str | tuple] = (
         "solid",
         "dashed",
         (0, (3, 1, 1, 1)),
         "dotted",
     ),
+    mod_lw: float | Sequence[float] = 2.0,
+    res_color: str | Sequence[str] | None = None,
     x_lims: tuple[float, float] | None = None,
     y_lims: tuple[float, float] | None = None,
     inst_name: str | Sequence[str] | None = None,
@@ -163,11 +164,13 @@ def plot_fit_residual_spec(
         to use for the spectral data points of each dataset.
     :param str | Sequence[str] mod_color: Matplotlib color (or sequence of colors)
         to use for the fitted model line of each dataset.
+    :param str | Sequence[str | tuple] mod_ls: Matplotlib linestyle (or
+        sequence of linestyles) to use for the fitted model line of each dataset.
+    :param float | Sequence[float | tuple] mod_lw: Matplotlib linewidth (or
+        sequence of linewidths) to use for the fitted model line of each dataset.
     :param str | Sequence[str] | None res_color: Matplotlib color (or sequence
         of colors) to use for the residual data points. Defaults to matching
         `sp_color` if None.
-    :param str | Sequence[str | tuple] mod_ls: Matplotlib linestyle (or
-        sequence of linestyles) to use for the fitted model line of each dataset.
     :param tuple[float, float] | None x_lims: Optional limits on which parts
         of the x-axis to plot. Must be a two-element tuple containing the lower and
         then the upper limit.
@@ -240,11 +243,13 @@ def plot_fit_residual_spec(
         return [arg_val] * n_items
 
     sp_colors = _broadcast_arg(sp_color, num_spec)
+    sp_markers = _broadcast_arg(sp_marker, num_spec)
     mod_colors = _broadcast_arg(mod_color, num_spec)
-    res_colors = sp_colors if res_color is None else _broadcast_arg(res_color, num_spec)
     mod_lstyles = _broadcast_arg(mod_ls, num_spec)
-    inst_names = _broadcast_arg(inst_name, num_spec)
+    mod_lwidths = _broadcast_arg(mod_lw, num_spec)
+    res_colors = sp_colors if res_color is None else _broadcast_arg(res_color, num_spec)
     mod_exprs = _broadcast_arg(mod_expr, num_spec)
+    inst_names = _broadcast_arg(inst_name, num_spec)
 
     if fig_size is None:
         fig_size = (7.5, 6.5)
@@ -295,7 +300,7 @@ def plot_fit_residual_spec(
             p_data["rate"],
             xerr=p_data["energy_delta"],
             yerr=p_data["rate_err"],
-            fmt=sp_marker[idx],
+            fmt=sp_markers[idx],
             capsize=1.5,
             label=sp_label,
             color=sp_colors[idx],
@@ -314,7 +319,7 @@ def plot_fit_residual_spec(
                 linestyle=mod_lstyles[idx],
                 alpha=0.85,
                 label=mod_label,
-                linewidth=1.4,
+                linewidth=mod_lwidths[idx],
                 zorder=3,
             )
         # Otherwise, the model will be plotted as a smooth line.
@@ -326,7 +331,7 @@ def plot_fit_residual_spec(
                 linestyle=mod_lstyles[idx],
                 label=mod_label,
                 alpha=0.85,
-                linewidth=1.4,
+                linewidth=mod_lwidths[idx],
                 zorder=3,
             )
 
@@ -335,7 +340,7 @@ def plot_fit_residual_spec(
             p_data["residual"],
             xerr=p_data["energy_delta"],
             yerr=p_data["residual_err"],
-            fmt=sp_marker[idx],
+            fmt=sp_markers[idx],
             capsize=1.5,
             color=res_colors[idx],
         )
@@ -729,6 +734,7 @@ left the model configuration just as it was when it was declared. This means:
 - Every parameter in the second (post-eclipse) spectrum's model is tied to its counterpart in the first spectrum's model.
 
 We run the fit (of both spectra) by calling `xs.Fit.perform()`:
+
 ```{code-cell} python
 xs.Fit.perform()
 ```
@@ -831,6 +837,7 @@ the differences between spectra by modeling significantly more absorption.
 First, we have to retrieve the PyXspec model instances for the first and second data groups; this is
 as simple as passing their data group ID (remembering that **XSPEC indexes from 1**, whereas
 **Python indexes from 0**) to `xs.AllModels(...)`:
+
 ```{code-cell} python
 # The pre-eclipse spectrum's model (data group 1)
 spec_one_mod = xs.AllModels(1)
@@ -841,6 +848,7 @@ spec_two_mod = xs.AllModels(2)
 
 Here, we'll enter the absorption column of the first group of data files (losum.pha; pre-eclipse)
 as $100\times10^{22}\: \mathrm{cm}^{-2}$, leaving default values set for all the other parameters:
+
 ```{code-cell} python
 spec_one_mod.TBabs.nH = 100.0
 ```
@@ -865,6 +873,7 @@ the code cell above**, as it is much easier to read and recall what is being unt
 
 We run the fit for our new definition of the model, with nH parameters untied and allowed
 to vary independently, and data group 1's nH starting value much higher than data group 2's:
+
 ```{code-cell} python
 xs.Fit.perform()
 ```
@@ -1005,7 +1014,6 @@ plot_fit_residual_spec(
 )
 ```
 
-
 ## Fitting a model with additional emission components
 
 ```{admonition} Hypothesis
@@ -1023,7 +1031,6 @@ xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
 ```
 
 ```{code-cell} python
-
 spec_one_mod = xs.AllModels(1)
 spec_one_mod.TBabs.nH = 100.0
 
@@ -1103,7 +1110,6 @@ except Exception as err:
 xs.Xset.parallel.goodness = NUM_CORES
 xs.Fit.goodness(1000)
 ```
-
 
 ## About this notebook
 
