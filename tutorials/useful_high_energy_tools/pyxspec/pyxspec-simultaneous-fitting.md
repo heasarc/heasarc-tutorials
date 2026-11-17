@@ -689,13 +689,19 @@ You can also run `xs.AllModels.show()` to see that summary at any time.
 
 ## 2. Fitting the exact same model to both spectra
 
+```{admonition} Hypothesis
+:class: hint
+
+We'll start with the (clearly incorrect, as the flux levels are very different) hypothesis
+that both spectra represent the exact same emission/absorption state, with the same
+physical processes behind them.
+```
+
 ### Setting up
 
 ```{code-cell} python
 xs.Fit.nIterations = 50
 ```
-
-### Performing the fit
 
 ````{tip}
 At this point we _could_ configure PyXspec to use multiple cores when performing the model fit:
@@ -709,15 +715,32 @@ very few data points in the spectra, and very few parameters in the models) that
 XSPEC use multiple cores for the model fit would actually _make the fit take longer_.
 ````
 
-Our first demonstration is to fit the model exactly as we defined it
+### Performing the fit
 
+Our first demonstration is to fit the model exactly as we defined it, meaning that we've
+left the model configuration just as it was when it was declared. This means:
+- We're using default starting values for fit parameters.
+- Every parameter in the second (post-eclipse) spectrum's model is tied to its counterpart in the first spectrum's model.
+
+We run the fit (of both spectra) by calling `xs.Fit.perform()`:
 ```{code-cell} python
 xs.Fit.perform()
 ```
 
+Looking through the fit summary shown above (you may need to scroll if the output cell
+has been partially collapsed), we can see that all the fitted parameters for the second
+data group (i.e. the post-eclipse spectrum) are identical to those for the first data group.
+
+We can also see that **this is an absolutely dreadful fit** – with a total fit statistic $\gt 2\times10^{5}$, and 61 degrees of freedom (DOF), leading to a reduced-$\chi^{2}$ of $\gt 3000$.
+
+From this, we can safely say that our first hypothesis was, as we thought, doomed from the start. These two spectra _do not_ represent Cen X-3 at the exact same emission phase.
+
 ### Visualizing the fitted model
 
+To emphasize just how bad this first fit was, we will visualize it.
+
 ```{code-cell} python
+# Fetch the plotting information for the spectrum, models, and model residuals
 xs.Plot("data resid")
 
 all_tied_plot_data = []
