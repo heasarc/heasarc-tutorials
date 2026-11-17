@@ -110,6 +110,19 @@ As of 12th March 2026, this notebook takes ~13 m to run to completion on Fornax 
 
 ## Imports
 
+This notebook uses a feature from the upcoming v0.4.12 release of Astroquery (the `find_mirror`
+argument  of `Vizier(...)`). We need to install the pre-release version using the command
+below. We will remove this once Astroquery v0.4.12 is officially released.
+
+```{code-cell} python
+---
+tags: [hide-output]
+jupyter:
+  output_hidden: true
+---
+%pip install --pre astroquery --upgrade
+```
+
 ```{code-cell} python
 import contextlib
 import multiprocessing as mp
