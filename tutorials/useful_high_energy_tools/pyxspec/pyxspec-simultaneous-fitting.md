@@ -780,7 +780,7 @@ Note that we are plotting these spectra and models with **linear** scaling appli
 plot_fit_residual_spec(
     all_tied_plot_data,
     inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
-    mod_expr=[f"1: {xs.AllModels(1).expression}", f"1: {xs.AllModels(2).expression}"],
+    mod_expr=[f"1: {xs.AllModels(1).expression}", f"2: {xs.AllModels(2).expression}"],
     y_scale="linear",
     fig_size=(9.5, 7.5),
 )
@@ -820,28 +820,33 @@ In PyXspec, there are several ways to break a parameter link, or 'untie', in XSP
 2. Be less targeted and call the `<model variable>.untie()` (e.g. `spec_two_mod.untie()`); this will untie _every parameter of that model_.
 3. Assign a value to a parameter that is currently tied to another parameter (e.g. `spec_two_mod.TBabs.nH = 1.0`); as a linked parameter does not have a value of its own (instead it mirrors the value of the parameter it is linked to), this implicitly breaks the link.
 
-When there are two datagroups there are two
-separate model objects created so to change the sixth parameter, which is the first
-parameter of the model for the second datagroup we do:
+In this case, we're going to use the third method – assigning a value to the nH parameter of the
+second data group model. We're also going to assign a much larger nH starting value to the
+pre-eclipse spectrum model (group 1), as our current hypothesis is that we can account for
+the differences between spectra by modeling significantly more absorption.
 
-
-Here, we'll enter the absorption column of the first group of data files (losum.pha) as
-$10^{24}\ \mathrm{cm}^{-2}$ and enter the default values for all the other parameters
-in the first group. Now, when it comes to the second group of parameters, we enter a
-column of $10^{22}\ \mathrm{cm}^{-2}$ and then enter defaults for the other parameters.
-
-The rule being applied here is as follows: to tie parameters in the second group to
-their equivalents in the first group, take the default when entering the second-group
-parameters; to allow parameters in the second group to vary independently of their
-equivalents in the first group, enter different values explicitly.
-
+First, we have to retrieve the PyXspec model instances for the first and second data groups; this is
+as simple as passing their data group ID (remembering that **XSPEC indexes from 1**, whereas
+**Python indexes from 0**) to `xs.AllModels(...)`:
 ```{code-cell} python
+# The pre-eclipse spectrum's model (data group 1)
 spec_one_mod = xs.AllModels(1)
-spec_one_mod.TBabs.nH = 10.0
+
+# The post-eclipse spectrum's model (data group 2)
+spec_two_mod = xs.AllModels(2)
 ```
 
+Here, we'll enter the absorption column of the first group of data files (losum.pha; pre-eclipse)
+as $100\times10^{22}\: \mathrm{cm}^{-2}$, leaving default values set for all the other parameters:
 ```{code-cell} python
-spec_two_mod = xs.AllModels(2)
+spec_one_mod.TBabs.nH = 100.0
+```
+
+Now, when it comes to the second group of parameters, we enter a column of $1\times10^{22}\:
+\mathrm{cm}^{-2}$, and again leave default values for the other parameters (this has untied
+the second data group model's nH from the first data group model's:
+
+```{code-cell} python
 spec_two_mod.TBabs.nH = 1.0
 ```
 
@@ -851,11 +856,6 @@ the `spec_two_mod.TBabs.nH = 1.0` call above could be written as `spec_two_mod(1
 
 However, **we do recommend accessing through component model and parameter names as in
 the code cell above**, as it is much easier to read and recall what is being untied.
-```
-
-```{seealso}
-If you wished to untie _every_ parameter, perhaps as a precursor to just linking one or
-two together, you can call a global untie method using `spec_two_mod.untie()`.
 ```
 
 ### Performing the fit
