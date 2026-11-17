@@ -80,9 +80,9 @@ The spectra and corresponding response matrix were obtained from the HEASARC and
 
 ### Inputs
 
-- Ginga LAC pre-eclipse (low-state) spectrum file for Centaurus X-3 – `losum.pha`
-- Ginga LAC post-eclipse (high-state) spectrum file for Centaurus X-3 – `hisum.pha`
-- Corresponding Ginga LAC response file – `ginga_lac.rsp`
+- Ginga-LAC pre-eclipse (low-state) spectrum file for Centaurus X-3 – `losum.pha`
+- Ginga-LAC post-eclipse (high-state) spectrum file for Centaurus X-3 – `hisum.pha`
+- Corresponding Ginga-LAC response file – `ginga_lac.rsp`
 
 ### Outputs
 
@@ -120,6 +120,7 @@ jupyter:
 def plot_fit_residual_spec(
     plot_data: dict | Sequence[dict],
     sp_color: str | Sequence[str] = ("navy", "darkgreen", "darkorange", "teal"),
+    sp_marker: str | Sequence[str] = ("x", "D", "o", "+"),
     mod_color: str | Sequence[str] = (
         "firebrick",
         "darkorchid",
@@ -157,6 +158,8 @@ def plot_fit_residual_spec(
         dictionaries) containing all information necessary to produce the fitted
         spectrum and residual visualization for each spectrum/group.
     :param str | Sequence[str] sp_color: Matplotlib color (or sequence of colors)
+        to use for the spectral data points of each dataset.
+    :param str | Sequence[str] sp_marker: Matplotlib marker (or sequence of markers)
         to use for the spectral data points of each dataset.
     :param str | Sequence[str] mod_color: Matplotlib color (or sequence of colors)
         to use for the fitted model line of each dataset.
@@ -292,7 +295,7 @@ def plot_fit_residual_spec(
             p_data["rate"],
             xerr=p_data["energy_delta"],
             yerr=p_data["rate_err"],
-            fmt="+",
+            fmt=sp_marker[idx],
             capsize=1.5,
             label=sp_label,
             color=sp_colors[idx],
@@ -332,7 +335,7 @@ def plot_fit_residual_spec(
             p_data["residual"],
             xerr=p_data["energy_delta"],
             yerr=p_data["residual_err"],
-            fmt="+",
+            fmt=sp_marker[idx],
             capsize=1.5,
             color=res_colors[idx],
         )
@@ -579,7 +582,7 @@ plt.figure(figsize=(7.5, 5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
-raw_labels = ("Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)")
+raw_labels = ("Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)")
 raw_colors = ("navy", "darkgreen", "darkorange", "teal")
 
 for idx, p_data in enumerate(raw_spec_plot_data):
@@ -779,7 +782,7 @@ Note that we are plotting these spectra and models with **linear** scaling appli
 # Call the plotting convenience function
 plot_fit_residual_spec(
     all_tied_plot_data,
-    inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
+    inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=[f"1: {xs.AllModels(1).expression}", f"2: {xs.AllModels(2).expression}"],
     y_scale="linear",
     fig_size=(9.5, 7.5),
@@ -860,6 +863,8 @@ the code cell above**, as it is much easier to read and recall what is being unt
 
 ### Performing the fit
 
+We run the fit for our new definition of the model, with nH parameters untied and allowed
+to vary independently, and data group 1's nH starting value much higher than data group 2's:
 ```{code-cell} python
 xs.Fit.perform()
 ```
@@ -870,6 +875,7 @@ xs.Fit.perform()
 ### Visualizing the fitted model
 
 ```{code-cell} python
+# Fetch the plotting information for the spectra, models, and model residuals
 xs.Plot("data resid")
 
 untied_nh_plot_data = []
@@ -893,7 +899,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 ```{code-cell} python
 plot_fit_residual_spec(
     untied_nh_plot_data,
-    inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
+    inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=["Group 1: untied nH", "Group 2: untied nH"],
     y_scale="linear",
     fig_size=(9.5, 7.5),
@@ -905,7 +911,7 @@ plot_fit_residual_spec(
 ```{admonition} Hypothesis
 :class: hint
 
-Perhaps scattering also plays a role in reducing the flux before eclipse.
+Perhaps scattering also plays a role in reducing the flux before eclipse?
 ```
 
 Our assumption that only a change in absorption can account for the spectral
@@ -923,42 +929,44 @@ value in the first group has the effect of changing both without decoupling).
 
 ### Setting up
 
+Once again, we redeclare the model that we chose [earlier in the tutorial](#choosing-and-setting-up-a-model)
+to wipe the previous fit:
+
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
 
+We repeat the same nH parameter setup process that we used in [the last fit](#setting-up-1):
+
 ```{code-cell} python
 spec_one_mod = xs.AllModels(1)
-spec_one_mod.TBabs.nH = 100.0
-
 spec_two_mod = xs.AllModels(2)
+
+spec_one_mod.TBabs.nH = 100.0
 spec_two_mod.TBabs.nH = 1.0
 ```
+
+Now we come to what we're changing this time around – the powerlaw normalization. Specifically,
+we're untying the normalization of the second data group model's powerlaw component so that
+it can vary independently of the first data group's equivalent:
 
 ```{code-cell} python
 spec_two_mod.powerlaw.norm = 1.0
 ```
 
-```{tip}
-Earlier in this tutorial we discussed how to 'untie' parameters across different spectra.
-
-It is important to note that setting a new value for a parameter **that is tied to another parameter**
-will remove that link. So our setting a new powerlaw normalization value for spectrum two's
-model (assigned to the `spec_two_mod` variable) _unties_ it from spectrum one's powerlaw normalization.
-
-The opposite is not true, as XSPEC ties are directional, setting a new powerlaw normalization for
-spectrum one's model would maintain the tie, and of course spectrum two's powerlaw normalization
-would change to match.
-```
-
 ### Performing the fit
+
+We run the fit for our new definition of the model, with nH and powerlaw normalization
+parameters untied and allowed to vary independently, and again with data group 1's nH
+starting value much higher than data group 2's:
 
 ```{code-cell} python
 xs.Fit.perform()
 ```
 
-This decoupling improves the fit, but its still clearly not good <span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. </span>. Indeed, this simple
-attempt to account for the spectral variability in terms of "blanket" cold absorption
+This decoupling improves the fit, but its still clearly not good <span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. </span>.
+
+Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption
 and scattering does not work. More sophisticated models, involving additional
 components and partial absorption, should be tried.
 
@@ -967,9 +975,10 @@ components and partial absorption, should be tried.
 ### Visualizing the fitted model
 
 ```{code-cell} python
+# Fetch the plotting information for the spectra, models, and model residuals
 xs.Plot("data resid")
 
-untied_nh_norm_plot_data = []
+untied_nh_plnorm_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
         "energy": np.array(xs.Plot.x(grp_id, 1)),
@@ -984,14 +993,14 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
         grp_data["energy"] - grp_data["energy_delta"],
         grp_data["energy"][-1] + grp_data["energy_delta"][-1],
     )
-    untied_nh_norm_plot_data.append(grp_data)
+    untied_nh_plnorm_plot_data.append(grp_data)
 ```
 
 ```{code-cell} python
 plot_fit_residual_spec(
-    untied_nh_norm_plot_data,
-    inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
-    mod_expr=["Group 1: untied nH & norm", "Group 2: untied nH & norm"],
+    untied_nh_plnorm_plot_data,
+    inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
+    mod_expr=["1: untied nH & norm", "2: untied nH & norm"],
     fig_size=(9.5, 7.5),
 )
 ```
@@ -999,14 +1008,21 @@ plot_fit_residual_spec(
 
 ## Fitting a model with additional emission components
 
+```{admonition} Hypothesis
+:class: hint
+
+That we are missing a low-temperature thermal emission component, and that there is an unmodelled Fe emission line around 6.4 keV.
+```
+
 ### Setting up
 
-```{code-cell} python
-xs.AllModels.clear()
-```
+Now
 
 ```{code-cell} python
 xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
+```
+
+```{code-cell} python
 
 spec_one_mod = xs.AllModels(1)
 spec_one_mod.TBabs.nH = 100.0
@@ -1022,9 +1038,6 @@ spec_one_mod.gaussian.LineE.frozen = True
 spec_two_mod.gaussian.Sigma.untie()
 spec_two_mod.gaussian.norm.untie()
 
-# spec_two_mod.bbody.kT.untie()
-# spec_two_mod.bbody.norm.untie()
-
 xs.AllModels.show()
 ```
 
@@ -1037,6 +1050,7 @@ xs.Fit.perform()
 ### Visualizing the fitted model
 
 ```{code-cell} python
+# Fetch the plotting information for the spectra, models, and model residuals
 xs.Plot("data resid")
 
 untied_nh_norm_gauss_bbody_plot_data = []
@@ -1057,15 +1071,10 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     untied_nh_norm_gauss_bbody_plot_data.append(grp_data)
 ```
 
-```{danger}
-NEED TO MAKE SURE ALL THE MOD_EXPRS PASSED TO PLOTTING FUNCTION ARE UPDATED TO REFLECT THE CHANGES
-I'VE MADE.
-```
-
 ```{code-cell} python
 plot_fit_residual_spec(
     untied_nh_norm_gauss_bbody_plot_data,
-    inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
+    inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=["Group 1: untied nH & norm", "Group 2: untied nH & norm"],
     fig_size=(9.5, 7.5),
 )
