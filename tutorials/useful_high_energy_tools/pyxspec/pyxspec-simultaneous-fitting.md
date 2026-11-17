@@ -545,7 +545,10 @@ from PyXspec.
 
 <span style="color:red">Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).</span>
 
+<span style="color:red">... Something something arranging in a dictionary</span>
+
 ```{code-cell} python
+# Fetch the plotting information for the spectra
 xs.Plot("data")
 
 raw_spec_plot_data = []
@@ -737,10 +740,10 @@ From this, we can safely say that our first hypothesis was, as we thought, doome
 
 ### Visualizing the fitted model
 
-To emphasize just how bad this first fit was, we will visualize it.
+To emphasize just how bad this first fit was, we will visualize it. <span style="color:red">... Something something arranging in a dictionary</span>
 
 ```{code-cell} python
-# Fetch the plotting information for the spectrum, models, and model residuals
+# Fetch the plotting information for the spectra, models, and model residuals
 xs.Plot("data resid")
 
 all_tied_plot_data = []
@@ -761,11 +764,23 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     all_tied_plot_data.append(grp_data)
 ```
 
+Over the course of this tutorial we're going to be plotting the spectra, fitted models, and
+model residuals several times. As such, we've implemented a small convenience function in the
+[Global Setup: Functions](#functions) section near the beginning of the notebook - `plot_fit_residual_spec()`.
+
+This function is very similar to the one we defined in the {doc}`first PyXspec tutorial <pyxspec-basics>`, but
+in this case we've adapted it so that it can plot _multiple_ spectra, models, and residuals, rather than just one.
+
+We encourage you to look through the function definition to get an idea of how you could create similar figures.
+
+Note that we are plotting these spectra and models with **linear** scaling applied to the y-axis:
+
 ```{code-cell} python
+# Call the plotting convenience function
 plot_fit_residual_spec(
     all_tied_plot_data,
     inst_name=["Ginga LAC (pre-eclipse)", "Ginga LAC (post-eclipse)"],
-    mod_expr=["Group 1: all tied", "Group 2: all tied"],
+    mod_expr=[f"1: {xs.AllModels(1).expression}", f"1: {xs.AllModels(2).expression}"],
     y_scale="linear",
     fig_size=(9.5, 7.5),
 )
