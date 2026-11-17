@@ -816,8 +816,9 @@ second data groups**; looking at the model summary above, you should be able to 
 the parameter IDs for those nH variables are **1** and **6**.
 
 In PyXspec, there are several ways to break a parameter link, or 'untie', in XSPEC terminology:
-1.
-
+1. Call the `<model variable>.<component model>.<parameter name>.untie()` method (e.g. `spec_two_mod.TBabs.nH.untie()`) to unlink a specific parameter. It is important to note that XSPEC 'ties' are **directional**; for instance, in the model summary above, the second model's parameters are tied to the first models. If you called `untie()` on any of the first model's parameters, nothing would change.
+2. Be less targeted and call the `<model variable>.untie()` (e.g. `spec_two_mod.untie()`); this will untie _every parameter of that model_.
+3. Assign a value to a parameter that is currently tied to another parameter (e.g. `spec_two_mod.TBabs.nH = 1.0`); as a linked parameter does not have a value of its own (instead it mirrors the value of the parameter it is linked to), this implicitly breaks the link.
 
 When there are two datagroups there are two
 separate model objects created so to change the sixth parameter, which is the first
@@ -844,17 +845,12 @@ spec_two_mod = xs.AllModels(2)
 spec_two_mod.TBabs.nH = 1.0
 ```
 
-<span style="color:red">THIS ISN'T ACTUALLY NECESSARY AS SETTING SPEC_TWO_MOD.TBABS.NH WILL HAVE DONE IT ALREADY</span>
-
-```{code-cell} python
-spec_two_mod.TBabs.nH.untie()
-```
-
 ```{seealso}
 You can also access a model's parameters by passing the component index. For instance,
-the `untie()` call above could be written as `spec_two_mod(1).untie()`. However, we do
-recommend accessing through component model and parameter names as above, as it is
-much easier to read and recall what is being untied.
+the `spec_two_mod.TBabs.nH = 1.0` call above could be written as `spec_two_mod(1).values = 1.0`.
+
+However, **we do recommend accessing through component model and parameter names as in
+the code cell above**, as it is much easier to read and recall what is being untied.
 ```
 
 ```{seealso}
