@@ -10,6 +10,11 @@ authors:
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
 date: '2026-07-30'
+execution:
+  cal-files:
+    xmm-ccf: false
+    chandra: false
+    xspec-models: false
 file_format: mystnb
 jupytext:
   text_representation:
@@ -21,11 +26,6 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-execution:
-  cal-files:
-    xmm-ccf: False
-    chandra: False
-    xspec-models: False
 title: Getting started with ROSAT All Sky Survey data
 ---
 
@@ -109,19 +109,6 @@ analyze the data, rather than rely solely on catalogs, may help you with your ow
 As of 12th March 2026, this notebook takes ~13 m to run to completion on Fornax using the 'medium' server with 16GB RAM/ 4 cores.
 
 ## Imports
-
-This notebook uses a feature from the upcoming v0.4.12 release of Astroquery (the `find_mirror`
-argument  of `Vizier(...)`). We need to install the pre-release version using the command
-below. We will remove this once Astroquery v0.4.12 is officially released.
-
-```{code-cell} python
----
-tags: [hide-output]
-jupyter:
-  output_hidden: true
----
-%pip install --pre astroquery --upgrade
-```
 
 ```{code-cell} python
 import contextlib
@@ -611,10 +598,14 @@ set up an instance of it (with some non-default arguments) that can be used to f
 our catalog of interest:
 - `row_limit=-1` - tells Astroquery to return all rows from the catalog.
 - `columns=["**", "_RAJ2000", "_DEJ2000"]` tells it to also return every column (as well as the VizieR-standard decimal degree RA and Dec values).
-- `find_mirror=True` - Tells Astroquery to find the best VizieR mirror (several exist in different parts of the world) to fetch from.
+- `vizier_server="vizier.cfa.harvard.edu"` - Tells Astroquery to use the CfA's mirror of VizieR.
 
 ```{code-cell} python
-viz = Vizier(row_limit=-1, columns=["**", "_RAJ2000", "_DEJ2000"], find_mirror=True)
+viz = Vizier(
+    row_limit=-1,
+    columns=["**", "_RAJ2000", "_DEJ2000"],
+    vizier_server="vizier.cfa.harvard.edu",
+)
 viz
 ```
 
