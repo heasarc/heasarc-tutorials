@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-11-16'
+date: '2026-11-17'
 execution:
   cal-files:
     xmm-ccf: false
@@ -91,7 +91,7 @@ The spectra and corresponding response matrix were obtained from the HEASARC and
 
 ### Runtime
 
-As of 12th November 2026, this notebook takes ~30-seconds to run to completion on Fornax using the 'small' server with 8GB RAM/2 cores.
+As of 17th November 2026, this notebook takes ~30-seconds to run to completion on Fornax using the 'small' server with 8GB RAM/2 cores.
 
 ## Imports
 
@@ -133,7 +133,7 @@ def plot_fit_residual_spec(
         (0, (3, 1, 1, 1)),
         "dotted",
     ),
-    mod_lw: float | Sequence[float] = 2.0,
+    mod_lw: float | Sequence[float] = 1.8,
     res_color: str | Sequence[str] | None = None,
     x_lims: tuple[float, float] | None = None,
     y_lims: tuple[float, float] | None = None,
@@ -789,7 +789,7 @@ Note that we are plotting these spectra and models with **linear** scaling appli
 plot_fit_residual_spec(
     all_tied_plot_data,
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
-    mod_expr=[f"1: {xs.AllModels(1).expression}", f"2: {xs.AllModels(2).expression}"],
+    mod_expr=["1: Defaults", "2: Defaults"],
     y_scale="linear",
     fig_size=(9.5, 7.5),
 )
@@ -878,6 +878,9 @@ to vary independently, and data group 1's nH starting value much higher than dat
 xs.Fit.perform()
 ```
 
+We can see that this version of the model fit achieved a total fit statistic $\gt 8\times10^{4}$, and 60 degrees of freedom (DOF), leading to a reduced-$\chi^{2}$ of $\gt 1300$.
+
+
 <span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:</span>
 1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
 
@@ -909,7 +912,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 plot_fit_residual_spec(
     untied_nh_plot_data,
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
-    mod_expr=["Group 1: untied nH", "Group 2: untied nH"],
+    mod_expr=["1: untied nH", "2: untied nH"],
     y_scale="linear",
     fig_size=(9.5, 7.5),
 )
@@ -973,11 +976,14 @@ starting value much higher than data group 2's:
 xs.Fit.perform()
 ```
 
-This decoupling improves the fit, but its still clearly not good <span style="color:red">After fitting, this decoupling reduces $\chi^2$ by a factor of six to 15,308, but this is still too high. </span>.
+This decoupling improves the fit, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
+the [last model fit](#performing-the-fit-2) to a reduced-$\chi^{2}$ of $\gt 250$, but we
+still clearly see that it **isn't a good fit**.
 
 Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption
-and scattering does not work. More sophisticated models, involving additional
-components and partial absorption, should be tried.
+and scattering does not work.
+
+<span style="color:red">More sophisticated models involving additional components and partial absorption should be tried.</span>
 
 <span style="color:red">Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).</span>
 
@@ -1054,6 +1060,12 @@ xs.AllModels.show()
 xs.Fit.perform()
 ```
 
+Our final fit is complete, and the reduced-$\chi^{2}$ is now ${\sim}50$, with 53 degrees of freedom.
+
+Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}2220$, and the
+$\chi^2$ of data group 2 is ${\sim}212$; the **fit to the second, post-eclipse, spectrum
+is considerably worse** than the fit to the first, pre-eclipse, data group.
+
 ### Visualizing the fitted model
 
 ```{code-cell} python
@@ -1078,11 +1090,20 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     untied_nh_norm_gauss_bbody_plot_data.append(grp_data)
 ```
 
+Plotting our final model fits, we can see the impact of adding the two new emission
+components – just by eye the lower energy part of the pre-eclipse spectrum is better
+represented now we have an additional thermal component.
+
+The visually obvious (more so in the pre-eclipse than the post-eclipse spectrum) emission
+line around 6.4 keV is being modeled now that we have the additional gaussian component. Examining
+the residuals of the fits, we can see that the emission line seems to be better modeled in the
+pre-eclipse spectrum than in the post-eclipse:
+
 ```{code-cell} python
 plot_fit_residual_spec(
     untied_nh_norm_gauss_bbody_plot_data,
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
-    mod_expr=["Group 1: untied nH & norm", "Group 2: untied nH & norm"],
+    mod_expr=["1: original + bbody + gauss", "2: original + bbody + gauss"],
     fig_size=(9.5, 7.5),
 )
 ```
@@ -1101,7 +1122,7 @@ except Exception as err:
 ```
 
 ```{code-cell} python
-# xs.Fit.error("5,15")
+xs.Fit.error("maximum 50 15")
 ```
 
 ### Highlighting the very low quality of the fit
@@ -1117,7 +1138,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-11-16
+Updated On: 2026-11-17
 
 +++
 
