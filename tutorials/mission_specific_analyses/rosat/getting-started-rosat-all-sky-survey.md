@@ -618,7 +618,7 @@ matches. To narrow them down further, we can display the short description of ea
 returned catalog:
 
 ```{code-cell} python
-cat_search = viz.find_catalogs(["CARMENES", "input"])
+cat_search = viz.find_catalogs(["CARMENES"])
 
 # Return is an ordered dictionary, with bibcode keys and catalog object values
 for cur_bibcode, cur_cat in cat_search.items():
