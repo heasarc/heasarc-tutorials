@@ -878,11 +878,13 @@ to vary independently, and data group 1's nH starting value much higher than dat
 xs.Fit.perform()
 ```
 
-We can see that this version of the model fit achieved a total fit statistic $\gt 8\times10^{4}$, and 60 degrees of freedom (DOF), leading to a reduced-$\chi^{2}$ of $\gt 1300$.
+We can see that this version of the model fit achieved a total fit statistic
+$\gt 8\times10^{4}$, and 60 degrees of freedom (DOF), leading to a
+reduced-$\chi^{2}$ of $\gt 1300$.
 
-
-<span style="color:red">**Suggested context (Fit output & extracting multi-group plot data)**:</span>
-1. Add a short discussion of the fit output above: point out the very large $\chi^2$ (~16386 for 65 degrees of freedom) and the fact that XSPEC reports the individual $\chi^2$ contributions from each data group (`Spectrum 1` and `Spectrum 2`).
+While certainly an improvement on [our first attempt](#performing-the-fit), we cannot
+expect the models to closely follow the spectra's data points when we visualize them
+in the next subsection.
 
 ### Visualizing the fitted model
 
@@ -951,6 +953,7 @@ xs.Model("tbabs * highecut(pow)")
 We repeat the same nH parameter setup process that we used in [the last fit](#setting-up-1):
 
 ```{code-cell} python
+
 spec_one_mod = xs.AllModels(1)
 spec_two_mod = xs.AllModels(2)
 
