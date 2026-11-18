@@ -1051,6 +1051,8 @@ xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
 <br>
 
 ```{code-cell} python
+ORIGINAL_XS_CHATTER = xs.Xset.chatter
+
 spec_one_mod = xs.AllModels(1)
 spec_one_mod.TBabs.nH = 100.0
 
@@ -1065,6 +1067,7 @@ spec_one_mod.gaussian.LineE.frozen = True
 spec_two_mod.gaussian.Sigma.untie()
 spec_two_mod.gaussian.norm.untie()
 
+xs.Xset.chatter = ORIGINAL_XS_CHATTER
 xs.AllModels.show()
 ```
 <br>
