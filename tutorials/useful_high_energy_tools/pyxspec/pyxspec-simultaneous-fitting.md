@@ -677,6 +677,7 @@ We will access them through PyXspec's `AllModels()` manager later on in this tut
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
+<br>
 
 Notice how the summary of the model, displayed immediately above, is different now that
 we have two groups, as opposed to one (compared with the summaries we saw in the
@@ -738,6 +739,7 @@ We run the fit (of both spectra) by calling `xs.Fit.perform()`:
 ```{code-cell} python
 xs.Fit.perform()
 ```
+<br>
 
 Looking through the fit summary shown above (you may need to scroll if the output cell
 has been partially collapsed), we can see that all the fitted parameters for the second
@@ -819,6 +821,7 @@ We redeclare the model that we chose [earlier in the tutorial](#choosing-and-set
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
+<br>
 
 What we want to do now is to **remove the link between the nH parameters of the first and
 second data groups**; looking at the model summary above, you should be able to see that
@@ -852,6 +855,7 @@ as $100\times10^{22}\: \mathrm{cm}^{-2}$, leaving default values set for all the
 ```{code-cell} python
 spec_one_mod.TBabs.nH = 100.0
 ```
+<br>
 
 Now, when it comes to the second group of parameters, we enter a column of $1\times10^{22}\:
 \mathrm{cm}^{-2}$, and again leave default values for the other parameters (this has untied
@@ -860,6 +864,7 @@ the second data group model's nH from the first data group model's:
 ```{code-cell} python
 spec_two_mod.TBabs.nH = 1.0
 ```
+<br>
 
 ```{seealso}
 You can also access a model's parameters by passing the component index. For instance,
@@ -877,6 +882,7 @@ to vary independently, and data group 1's nH starting value much higher than dat
 ```{code-cell} python
 xs.Fit.perform()
 ```
+<br>
 
 We can see that this version of the model fit achieved a total fit statistic
 $\gt 8\times10^{4}$, and 60 degrees of freedom (DOF), leading to a
@@ -949,6 +955,7 @@ to wipe the previous fit:
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
+<br>
 
 We repeat the same nH parameter setup process that we used in [the last fit](#setting-up-1):
 
@@ -960,6 +967,7 @@ spec_two_mod = xs.AllModels(2)
 spec_one_mod.TBabs.nH = 100.0
 spec_two_mod.TBabs.nH = 1.0
 ```
+<br>
 
 Now we come to what we're changing this time around – the powerlaw normalization. Specifically,
 we're untying the normalization of the second data group model's powerlaw component so that
@@ -968,6 +976,7 @@ it can vary independently of the first data group's equivalent:
 ```{code-cell} python
 spec_two_mod.powerlaw.norm = 1.0
 ```
+<br>
 
 ### Performing the fit
 
@@ -978,6 +987,7 @@ starting value much higher than data group 2's:
 ```{code-cell} python
 xs.Fit.perform()
 ```
+<br>
 
 This decoupling improves the fit, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
 the [last model fit](#performing-the-fit-2) to a reduced-$\chi^{2}$ of $\gt 250$, but we
@@ -1038,6 +1048,7 @@ Now
 ```{code-cell} python
 xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
 ```
+<br>
 
 ```{code-cell} python
 spec_one_mod = xs.AllModels(1)
@@ -1056,17 +1067,19 @@ spec_two_mod.gaussian.norm.untie()
 
 xs.AllModels.show()
 ```
+<br>
 
 ### Performing the fit
 
 ```{code-cell} python
 xs.Fit.perform()
 ```
+<br>
 
 Our final fit is complete, and the reduced-$\chi^{2}$ is now ${\sim}50$, with 53 degrees of freedom.
 
-Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}2220$, and the
-$\chi^2$ of data group 2 is ${\sim}212$; the **fit to the second, post-eclipse, spectrum
+Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}2400$, and the
+$\chi^2$ of data group 2 is ${\sim}200$; the **fit to the second, post-eclipse, spectrum
 is considerably worse** than the fit to the first, pre-eclipse, data group.
 
 ### Visualizing the fitted model
