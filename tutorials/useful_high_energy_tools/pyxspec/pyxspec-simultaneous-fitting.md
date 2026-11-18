@@ -524,19 +524,20 @@ has been set high enough).
 ```
 
 Here, the first group makes up the file `losum.pha`, which contains the spectrum of all
-the low, pre-eclipse emission.
+the low-flux, pre-eclipse, emission. The second group makes up the second file, `hisum.pha`, which
+contains all the high-flux, post-eclipse, emission.
 
-The second group makes up the second file, `hisum.pha`, which contains all the high,
-post-eclipse emission.
+Note that the file number is "absolute" in the sense that it is independent of the group
+number. For instance, if you wanted three files in each of the two groups:
+- <span style="color: #1f77b4; font-weight: bold;">Group One</span> - `lo1.pha` (<span style="color: #d62728; font-weight: bold;">file 1</span>), `lo2.pha` (<span style="color: #2ca02c; font-weight: bold;">file 2</span>), and `lo3.pha` (<span style="color: #9467bd; font-weight: bold;">file 3</span>)
+- <span style="color: #ff7f0e; font-weight: bold;">Group Two</span> - `hi1.pha` (<span style="color: #8c564b; font-weight: bold;">file 4</span>), `hi2.pha` (<span style="color: #e377c2; font-weight: bold;">file 5</span>), and `hi3.pha` (<span style="color: #17becf; font-weight: bold;">file 6</span>)
 
-Note that file number is "absolute" in the sense that it is independent of group number.
+You would load them as:
 
-Thus, if there were three files in each of the two groups (`lo1.pha`, `lo2.pha`,
-`lo3.pha`, `hi1.pha`, `hi2.pha`, and `hi3.pha`, say), rather than one, the six files
-would be specified as `"1:1 lo1 1:2 lo2 1:3 lo3 2:4 hi1 2:5 hi2 2:6 hi3"`.
+<div class="highlight"><pre><span></span><code>xs.AllData("<span style="color: #1f77b4; font-weight: bold;">1</span>:<span style="color: #d62728; font-weight: bold;">1</span> lo1.pha <span style="color: #1f77b4; font-weight: bold;">1</span>:<span style="color: #2ca02c; font-weight: bold;">2</span> lo2.pha <span style="color: #1f77b4; font-weight: bold;">1</span>:<span style="color: #9467bd; font-weight: bold;">3</span> lo3.pha <span style="color: #ff7f0e; font-weight: bold;">2</span>:<span style="color: #8c564b; font-weight: bold;">4</span> hi1.pha <span style="color: #ff7f0e; font-weight: bold;">2</span>:<span style="color: #e377c2; font-weight: bold;">5</span> hi2.pha <span style="color: #ff7f0e; font-weight: bold;">2</span>:<span style="color: #17becf; font-weight: bold;">6</span> hi3.pha")</code></pre></div>
 
 
-### Examining the 'raw' spectra
+### Examining the spectra
 
 We want the x-axis of every spectrum we visualize throughout this tutorial to be in terms of
 energy, in units of keV, so we make sure to set that up here:
@@ -1052,6 +1053,7 @@ xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
 
 ```{code-cell} python
 ORIGINAL_XS_CHATTER = xs.Xset.chatter
+xs.Xset.chatter = 0
 
 spec_one_mod = xs.AllModels(1)
 spec_one_mod.TBabs.nH = 100.0
