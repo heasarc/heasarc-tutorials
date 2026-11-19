@@ -484,14 +484,10 @@ xs.Plot.device = "/null"
 ### Loading multiple spectra into separate 'data groups'
 
 This kind of fitting relies on introducing an extra dimension, the group, to the
-indexing of the data files.
-
-The files in each group share the same model but not necessarily the same parameter
-values, which may be shared as common to all the groups or varied separately from
-group to group.
-
-Although each group may contain more than one file, there is only one file in each
-of the two groups in this example.
+indexing of the data files. The files in each group share the same model but not
+necessarily the same parameter values, which may be shared as common to all the
+groups or varied separately from group to group. Although each group may contain more
+than one file, there is only one file in each of the two groups in this example.
 
 ```{important}
 Unlike in the first '{doc}`PyXspec basics <pyxspec-basics>`' tutorial, where we defined
@@ -504,8 +500,6 @@ Unlike loading using `Spectrum`, `xs.AllData()` **does not** return a `Spectrum`
 object; instead it returns Python's null object, `None`.
 ```
 
-<span style="color:purple">Groups are specified with the data command, with the group number preceding the file number, like this:</span>
-
 The spectral files we need for this demonstration were downloaded in
 the [Global Setup: Configuration](#configuration) section. As they were not downloaded to the
 same directory as the notebook, so we will briefly change our working directory (using
@@ -515,6 +509,10 @@ Of course, we could pass full spectrum paths rather than changing
 directories, but the 'RESPFILE' entry in each spectrum's header is a path relative
 to the location of the spectrum file. As such, if we didn't change directories, PyXspec
 would have been unable to find and automatically load the response file.
+
+We load our two spectra into PyXspec, with `1:1 losum.pha` reading the _pre-eclipse_
+spectrum into **group one: file number one**, and `2:2 hisum.pha` reading the
+_post-eclipse_ spectrum into **group two: file number two**:
 
 ```{code-cell} python
 with contextlib.chdir(ROOT_DATA_DIR):
@@ -528,6 +526,8 @@ use (unless you have PyXspec's 'chatter' set to $<10$ using `xs.Xset.chatter=`).
 You can also run `xs.AllData.show()` to see that summary at any time (again, if chatter
 has been set high enough).
 ```
+
+### File and data group numbers
 
 Here, the first group makes up the file `losum.pha`, which contains the spectrum of all
 the low-flux, pre-eclipse, emission. The second group makes up the second file, `hisum.pha`, which
@@ -607,7 +607,7 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-plt.figure(figsize=FIGURE_SIZE)
+plt.figure(figsize=(FIGURE_SIZE[0], FIGURE_SIZE[1] * 0.75))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
@@ -650,37 +650,44 @@ Looking at the spectra above, there are a few features we notice immediately:
 1. Cen X-3 in its _pre-eclipse_ phase had much lower overall flux than in its _post-eclipse_ phase.
 2. There is a prominent emission line evident in the _pre-eclipse_ spectrum, right around the energy we would expect for the iron complex. It seems very wide, which is easily explained by the poor (relative to modern missions) spectral/energy resolution of Ginga-LAC.
 3. Otherwise, the spectra are quite smooth, with little first-pass visual evidence of other emission lines, absorption edges, or absorption lines.
-4. The observed flux drops markedly below ${\sim}1.5-2.0 keV$, which is likely because Ginga-LACs recommended lower bound energy for analysis is 1.5 keV [Angelini L. and Allen, J.](https://heasarc.gsfc.nasa.gov/docs/ginga/ginga.html).
+4. The observed flux drops markedly below ${\sim}1.5-2.0$ keV, which is likely because Ginga-LACs recommended lower bound energy for analysis is 1.5 keV ([Angelini L. and Allen, J.](https://heasarc.gsfc.nasa.gov/docs/ginga/ginga.html)).
+5. Somewhat relatedly, the signal-to-noise above ${\sim} 20$ keV is very low, and those portions of the spectra may hamper our fit.
 
 ### Excluding parts of the spectra from our fit
 
-We covered the ignore command in the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial, and we will not repeat that
-discussion of the whys and wherefores of ignoring channels.
+As we alluded to above, the whole energy range covered by our Ginga-LAC spectral files
+is not necessarily the energy range we wish to perform our analysis in. The lowest
+energy that can be analyzed in reality is ${\sim}1.5$ keV; this corresponds roughly to
+**channel 3** (1.16–1.74 keV).
 
-However, the situation in this tutorial differs in one crucial way – we have multiple spectra loaded. <span style="color:red">.......</span>
+The low-signal-to-noise upper energies of our spectra don't seem like they will contribute
+much to our fits, so we will drop everything above and including **channel 37** (23.26–24.43 keV).
 
-<span style="color:red">when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum</span>
+We covered the ignore command in the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial, and
+won't repeat that discussion of the whys and wherefores of ignoring channels. There is one
+difference worth mentioning, though – we have multiple spectra loaded.
 
-The ignore method works on file number, and does not take group number into account. So,
-to ignore channels 1–3 and 37–48 of both files:
+PyXspec has the capability to ignore different channels of different spectra; this works
+on **a file-by-file basis**, rather than at the level of data groups. When _no file IDs
+are supplied_ the `xs.AllData.ignore(...)` call applies the channel range to every loaded
+spectrum (the input to this function mirrors the syntax of command-line XSPEC):
 
 ```{code-cell} python
 xs.AllData.ignore("1-3 37-48")
 ```
 
-```{seealso}
-The above call to `xs.AllData.ignore(...)` mirrors the syntax of command-line XSPEC. In
-addition to applying the same `ignore` to _all_ loaded spectra, this command can be used
-to apply different channel ignoring to different spectra (or ranges of spectra).
+You can use the file number (see [our previous discussion](#file-and-data-group-numbers))
+to specify which spectrum an ignore command should apply to. For instance, if you wanted
+to ignore channels 1–3 and 37–48 for spectrum one, but only ignore channel 37–48 for
+spectrum two, you could run `xs.AllData.ignore("1:1-3 37-48 2: 37-48")`.
 
-For instance, if you wanted to ignore channels 1-3 and 37-48 for spectrum one, but only
-ignore channel 37-48 for spectrum two, you could run `xs.AllData.ignore("1:1-3 37-48 2: 37-48")`.
+We can also apply different ignore commands to different ranges of file IDs. Imagine
+for a moment that we loaded **four** separate spectra, rather than two, and wanted to
+ignore different channels for the first two spectra than for the second two; you could
+run `xs.AllData.ignore("1-2:1-3 37-48 3-4: 37-48")`.
 
-We can also apply different ignore commands to different ranges of spectrum IDs. Imagine
-for a moment that we loaded **four** separate spectra, rather than two, and wanted to ignore
-different channels for the first two spectra than for the second two; you could run
-`xs.AllData.ignore("1-2:1-3 37-48 3-4: 37-48")`.
-```
+
+### Excluding 'bad' channels
 
 We also remove any channels from our spectra that were previously marked as bad:
 
@@ -769,6 +776,7 @@ We run the fit (of both spectra) by calling `xs.Fit.perform()`:
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
 <br>
 
 Looking through the fit summary shown above (you may need to scroll if the output cell
@@ -1000,7 +1008,7 @@ xs.Model("tbabs * highecut(pow)")
 
 <br>
 
-We repeat the same nH parameter setup process that we used in [the last fit](#setting-up-1):
+We repeat the same nH parameter setup process that we used in [the last fit](#sett):
 
 ```{code-cell} python
 spec_one_mod = xs.AllModels(1)
