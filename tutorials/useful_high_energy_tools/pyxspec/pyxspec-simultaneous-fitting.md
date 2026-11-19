@@ -558,7 +558,6 @@ means that it won't output figures - instead we construct our own figures with m
 from PyXspec.
 ```
 
-
 ### Examining the spectra
 
 If you're working in a Jupyter notebook and are likely to be making multiple versions
@@ -600,7 +599,6 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 ```
 
 Now, we can visualize our two spectra before we ignore any channels or fit any models:
-
 <a id="fig-raw-spectra"></a>
 ```{code-cell} python
 ---
@@ -687,7 +685,6 @@ for a moment that we loaded **four** separate spectra, rather than two, and want
 ignore different channels for the first two spectra than for the second two; you could
 run `xs.AllData.ignore("1-2:1-3 37-48 3-4: 37-48")`.
 
-
 ### Excluding 'bad' channels
 
 We also remove any channels from our spectra that were previously marked as bad:
@@ -745,7 +742,6 @@ We'll start with the (clearly incorrect, as the flux levels are very different) 
 that both spectra represent the exact same emission/absorption state, with the same
 physical processes behind them.
 ```
-
 <a id="setup-all-tied"></a>
 ### Setting up
 
@@ -766,7 +762,6 @@ _However_, the data and models we're using in this demonstration are so simple (
 very few data points in the spectra, and very few parameters in the models) that making
 XSPEC use multiple cores for the model fit would actually _make the fit take longer_.
 ````
-
 <a id="fit-all-tied"></a>
 ### Performing the fit
 
@@ -836,7 +831,6 @@ that it can plot _multiple_ spectra, models, and residuals, rather than just one
 We encourage you to look through the function definition to get an idea of how you
 could create similar figures. Note that we are plotting these spectra and models with
 **linear** scaling applied to the y-axis:
-
 <a id="fig-all-tied"></a>
 ```{code-cell} python
 # Call the plotting convenience function
@@ -867,7 +861,6 @@ This is because XSPEC models are 'folded through' the responses of the instrumen
 
 Let us suppose that we have a theory that the difference between the two spectra **is a significant change in absorption**.
 ```
-
 <a id="setup-untied-nh"></a>
 ### Setting up
 
@@ -931,7 +924,6 @@ the `spec_two_mod.TBabs.nH = 1.0` call above could be written as `spec_two_mod(1
 However, **we do recommend accessing through component model and parameter names as in
 the code cell above**, as it is much easier to read and recall what is being untied.
 ```
-
 <a id="fit-untied-nh"></a>
 ### Performing the fit
 
@@ -943,8 +935,6 @@ xs.Fit.perform()
 ```
 <a id="res-untied-nh"></a>
 
-<br>
-
 We can see that this version of the model fit achieved a total fit statistic
 $\gt 8\times10^{4}$, and 60 degrees of freedom (DOF), leading to a
 reduced-$\chi^{2}$ of $\gt 1300$.
@@ -952,7 +942,6 @@ reduced-$\chi^{2}$ of $\gt 1300$.
 While certainly an improvement on <a href="#fit-all-tied">our first attempt</a>, we cannot
 expect the models to closely follow the spectra's data points when we visualize them
 in the next subsection.
-
 <a id="vis-untied-nh"></a>
 ### Visualizing the fitted model
 
@@ -989,7 +978,6 @@ We have changed the y-axis scaling to `log`, which makes it easier to visually a
 the model fit of the low-flux spectrum, but you could easily swap out `y_scale="log"` in the
 function call below for `y_scale="linear"` if you wished to see this plot with the same scaling
 as the <a href="#fig-all-tied">first model figure</a>:
-
 <a id="fig-untied-nh"></a>
 ```{code-cell} python
 plot_fit_residual_spec(
@@ -1030,7 +1018,6 @@ instance) scattering Cen X-3's emission out of our field of view.
 
 This could be modeled (simply at first) by allowing the normalization of the power law
 to be smaller before eclipse than after eclipse.
-
 <a id="setup-untied-nh-norm"></a>
 ### Setting up
 
@@ -1063,8 +1050,6 @@ it can vary independently of the first data group's equivalent:
 spec_two_mod.powerlaw.norm = 1.0
 ```
 
-<br>
-
 <a id="fit-untied-nh-norm"></a>
 ### Performing the fit
 
@@ -1078,13 +1063,11 @@ xs.Fit.perform()
 
 <br>
 
+<span style="color:red">Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).</span>
+
 This decoupling improves the fit, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
 the <a href="#fit-untied-nh">last model fit</a> to a reduced-$\chi^{2}$ of $\gt 250$, but we
 still clearly see that it **isn't a good fit**.
-
-
-<span style="color:red">Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).</span>
-
 <a id="vis-untied-nh-norm"></a>
 ### Visualizing the fitted model
 
@@ -1133,7 +1116,6 @@ some more emission components.
 
 We will investigate that last idea for the final fitting attempt of this tutorial.
 
-
 ## Fitting a model with additional emission components
 
 ```{admonition} Hypothesis
@@ -1141,7 +1123,6 @@ We will investigate that last idea for the final fitting attempt of this tutoria
 
 That we are missing a low-temperature thermal emission component, and that there is an unmodelled Fe emission line around 6.4 keV.
 ```
-
 <a id="setup-add-comps"></a>
 ### Setting up
 
@@ -1201,9 +1182,6 @@ xs.AllModels.show()
 You may have noticed that we temporarily set `xs.Xset.chatter=0`; this lets us avoid a new
 print-out of the fit and test statistic every time we alter a model parameter during setup.
 ```
-
-<br>
-
 <a id="fit-add-comps"></a>
 ### Performing the fit
 
@@ -1218,7 +1196,6 @@ Our final fit is complete, and the reduced-$\chi^{2}$ is now ${\sim}50$, with 53
 Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}2400$, and the
 $\chi^2$ of data group 2 is ${\sim}200$; the **fit to the second, post-eclipse, spectrum
 is considerably worse** than the fit to the first, pre-eclipse, data group.
-
 <a id="vis-add-comps"></a>
 ### Visualizing the fitted model
 
