@@ -398,7 +398,7 @@ REQUIRED_FILES = ["losum.pha", "hisum.pha", "ginga_lac.rsp"]
 #  shapes, and figure size here to make changing them over all plots easier
 MARKER_COLORS = ["tab:cyan", "magenta"]
 MARKER_SHAPES = ["x", "d"]
-FIGURE_SIZE = ((9.5, 7.5),)
+FIGURE_SIZE = (9.5, 7.5)
 ```
 
 ### Configuration
