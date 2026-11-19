@@ -708,7 +708,6 @@ high-energy cut-off:
 We do not assign the return of the `xs.Model(...)` definition to a variable (as we did
 in the {doc}`first PyXspec tutorial <pyxspec-basics>`); PyXspec has set up two separate
 instances of the model we specified, one per data group, and only the first is returned.
-
 PyXspec's `AllModels()` model manager will be used to access the model instances later
 on in this tutorial.
 
@@ -723,16 +722,15 @@ we have two groups, as opposed to one (compared with the summaries we saw in the
 {doc}`first PyXspec tutorial <pyxspec-basics>`).
 
 We can see that though there are **10** model parameters in total, they are split so that
-**5** are associated with each data group.
-
-You might also notice that the second data group's model parameters are **linked to those
-of the first** – this is made evident by the value column entries for group two ending in
-`= p<N>`, where **N** is the parameter ID (first column) of the corresponding parameter in
-the first group's model.
+**5** are associated with each data group. You might also notice that the second data
+group's model parameters are **linked to those of the first** – this is made evident
+by the value column entries for group two ending in `= p<N>`, where **N** is the
+parameter ID (first column) of the corresponding parameter in the first group's model.
 
 ```{tip}
 Setting up the model above should also display an overview of its parameters currently in
-use (unless you have PyXspec's 'chatter' set too low, see [the previous note on viewing a summary of loaded spectra](#loading-multiple-spectra-into-separate-data-groups)).
+use (unless you have PyXspec's 'chatter' set too low, see
+[the previous note on viewing a summary of loaded spectra](#loading-multiple-spectra-into-separate-data-groups)).
 
 You can also run `xs.AllModels.show()` to see that summary at any time.
 ```
@@ -750,6 +748,8 @@ physical processes behind them.
 
 <a id="setup-all-tied"></a>
 ### Setting up
+
+We start by configuring the maximum number of iterations that each fit can perform:
 
 ```{code-cell} python
 xs.Fit.nIterations = 50
@@ -787,9 +787,12 @@ Looking through the fit summary shown above (you may need to scroll if the outpu
 has been partially collapsed), we can see that all the fitted parameters for the second
 data group (i.e. the post-eclipse spectrum) are identical to those for the first data group.
 
-We can also see that **this is an absolutely dreadful fit** – with a total fit statistic $\gt 2\times10^{5}$, and 61 degrees of freedom (DOF), leading to a reduced-$\chi^{2}$ of $\gt 3000$.
+We can also see that **this is an absolutely dreadful fit** – with a total fit statistic
+$\gt 2\times10^{5}$, and 61 degrees of freedom (DOF), leading to a reduced-$\chi^{2}$
+of $\gt 3000$.
 
-From this, we can safely say that our first hypothesis was, as we thought, doomed from the start. These two spectra _do not_ represent Cen X-3 at the exact same emission phase.
+From this, we can safely say that our first hypothesis was, as we thought, doomed from
+the start. These two spectra _do not_ represent Cen X-3 at the exact same emission phase.
 
 <a id="vis-all-tied"></a>
 ### Visualizing the fitted model
@@ -823,15 +826,16 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 ```
 
 Over the course of this tutorial we're going to be plotting the spectra, fitted models, and
-model residuals several times. As such, we've implemented a small convenience function in the
-[Global Setup: Functions](#functions) section near the beginning of the notebook - `plot_fit_residual_spec()`.
+model residuals several times. As such, we've implemented a small convenience function in
+the[Global Setup: Functions](#functions) section near the beginning of the notebook - `plot_fit_residual_spec()`.
 
-This function is very similar to the one we defined in the {doc}`first PyXspec tutorial <pyxspec-basics>`, but
-in this case we've adapted it so that it can plot _multiple_ spectra, models, and residuals, rather than just one.
+This function is very similar to the one we defined in the
+{doc}`first PyXspec tutorial <pyxspec-basics>`, but in this case we've adapted it so
+that it can plot _multiple_ spectra, models, and residuals, rather than just one.
 
-We encourage you to look through the function definition to get an idea of how you could create similar figures.
-
-Note that we are plotting these spectra and models with **linear** scaling applied to the y-axis:
+We encourage you to look through the function definition to get an idea of how you
+could create similar figures. Note that we are plotting these spectra and models with
+**linear** scaling applied to the y-axis:
 
 <a id="fig-all-tied"></a>
 ```{code-cell} python
@@ -937,6 +941,7 @@ to vary independently, and data group 1's nH starting value much higher than dat
 ```{code-cell} python
 xs.Fit.perform()
 ```
+<a id="res-untied-nh"></a>
 
 <br>
 
@@ -950,6 +955,9 @@ in the next subsection.
 
 <a id="vis-untied-nh"></a>
 ### Visualizing the fitted model
+
+Generating and extracting the plotting data is an identical process to when we did
+it <a href="#vis-all-tied">for the first model</a>:
 
 ```{code-cell} python
 # Fetch the plotting information for the spectra, models, and model residuals
@@ -973,18 +981,35 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     untied_nh_plot_data.append(grp_data)
 ```
 
+Now that we've allowed the absorption applied to each data group's model to vary
+separately, we can at least see that there are two distinct model lines, each _attempting_
+to describe the spectrum they are associated with.
+
+We have changed the y-axis scaling to `log`, which makes it easier to visually assess
+the model fit of the low-flux spectrum, but you could easily swap out `y_scale="log"` in the
+function call below for `y_scale="linear"` if you wished to see this plot with the same scaling
+as the <a href="#fig-all-tied">first model figure</a>:
+
 <a id="fig-untied-nh"></a>
 ```{code-cell} python
 plot_fit_residual_spec(
     untied_nh_plot_data,
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=["1: untied nH", "2: untied nH"],
-    y_scale="linear",
+    y_scale="log",
     fig_size=FIGURE_SIZE,
     sp_color=MARKER_COLORS,
     sp_marker=MARKER_SHAPES,
 )
 ```
+
+Takeaways from the visualization of the freed-nH model fit:
+1. Two separate model lines are now visible because the model parameters are not all identical across data groups.
+2. The model lines are not completely divorced from the shape of the spectra, but they are still a poor fit.
+3. The post-eclipse spectrum is well described by its model at lower energies (<4 keV), but over, and then under, predicts the flux of the data when we move up the energy scale.
+4. We severely underpredict the flux of the pre-eclipse spectrum at low energies – this is likely a consequence of the very large nH value arrived at <a href="#res-untied-nh">by our model fit</a>, which will preferentially supress low energies over high energies.
+
+The models as they stand are a poor representation of the observed spectra, implying that our current hypothesis was incorrect, and the current model parameter values are not to be trusted.
 
 ## 4. Fitting the model with nH and powerlaw normalization allowed to vary separately for both spectra
 
