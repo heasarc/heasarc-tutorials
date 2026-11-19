@@ -1170,9 +1170,7 @@ components and configuration.
 The key points of the new model configuration are:
 - Central energy of the new Gaussian component is **frozen** at 6.4 keV.
 - Both the sigma and normalization parameters of the Gaussian component are **untied**; they will vary independently for each spectrum.
-- The blackbody <span style="color:red">.......</span>
-
-
+- The blackbody temperature and normalization are free to vary, but tied across the two data groups.
 
 ```{code-cell} python
 ORIGINAL_XS_CHATTER = xs.Xset.chatter
@@ -1193,8 +1191,6 @@ spec_one_mod.gaussian.LineE.frozen = True
 
 spec_two_mod.gaussian.Sigma.untie()
 spec_two_mod.gaussian.norm.untie()
-
-spec_one_mod.bbody.kT = 2.0
 
 # -------- Showing the model --------
 xs.Xset.chatter = ORIGINAL_XS_CHATTER
