@@ -578,7 +578,7 @@ pre-eclipse spectrum and **2** for the post-eclipse).
 
 You'll note that we also pass `plotWindow=1` to every `xs.Plot.<>` call - this is because we are only
 asking PyXspec to generate plotting data for one 'window', the _data_ (`xs.Plot("data")`). In
-[the next section](#visualizing-the-fitted-model), where we have fitted a model and want to plot
+<a href="#vis-all-tied">the next section</a>, where we have fitted a model and want to plot
 the residuals as well, we will have a second plot window to retrieve data from:
 
 ```{code-cell} python
@@ -601,6 +601,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 
 Now, we can visualize our two spectra before we ignore any channels or fit any models:
 
+<a id="fig-raw-spectra"></a>
 ```{code-cell} python
 ---
 tags: [hide-input]
@@ -704,11 +705,12 @@ high-energy cut-off:
 - **highecut** – This multiplicative model has a constant value of **1** up to the 'cutoff energy'. Beyond that the model value begins to decrease with increasing energy, with the rate of decrease controlled by an 'e-folding energy' parameter.
 - **pow** – A shorthand name for one of XSPEC's simplest models; `powerlaw`.
 
-We do not assign the return of the `xs.Model(...)` definition to a variable (as we did in the {doc}`first PyXspec tutorial <pyxspec-basics>`).
+We do not assign the return of the `xs.Model(...)` definition to a variable (as we did
+in the {doc}`first PyXspec tutorial <pyxspec-basics>`); PyXspec has set up two separate
+instances of the model we specified, one per data group, and only the first is returned.
 
-Even though a single PyXspec `Model` instance is returned, PyXspec has _actually_ set up two separate instances of the model, one per data group.
-
-We will access them through PyXspec's `AllModels()` manager later on in this tutorial.
+PyXspec's `AllModels()` model manager will be used to access the model instances later
+on in this tutorial.
 
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
@@ -746,6 +748,7 @@ that both spectra represent the exact same emission/absorption state, with the s
 physical processes behind them.
 ```
 
+<a id="setup-all-tied"></a>
 ### Setting up
 
 ```{code-cell} python
@@ -764,6 +767,7 @@ very few data points in the spectra, and very few parameters in the models) that
 XSPEC use multiple cores for the model fit would actually _make the fit take longer_.
 ````
 
+<a id="fit-all-tied"></a>
 ### Performing the fit
 
 Our first demonstration is to fit the model exactly as we defined it, meaning that we've
@@ -787,10 +791,11 @@ We can also see that **this is an absolutely dreadful fit** – with a total fit
 
 From this, we can safely say that our first hypothesis was, as we thought, doomed from the start. These two spectra _do not_ represent Cen X-3 at the exact same emission phase.
 
+<a id="vis-all-tied"></a>
 ### Visualizing the fitted model
 
 To emphasize just how bad this first fit was, we will visualize it. Just as in the
-[first plot of our spectra](#examining-the-spectra) (without model fits), we store the
+<a href="#fig-raw-spectra">first plot of our spectra</a> (without model fits), we store the
 plotting information in dictionaries. Unlike that first visualization, we also
 wish to plot the model residuals, so we call `xs.Plot("data resid")` (as opposed to
 `xs.Plot("data")`), and extract the residual information from `plotWindow=2`:
@@ -828,6 +833,7 @@ We encourage you to look through the function definition to get an idea of how y
 
 Note that we are plotting these spectra and models with **linear** scaling applied to the y-axis:
 
+<a id="fig-all-tied"></a>
 ```{code-cell} python
 # Call the plotting convenience function
 plot_fit_residual_spec(
@@ -858,6 +864,7 @@ This is because XSPEC models are 'folded through' the responses of the instrumen
 Let us suppose that we have a theory that the difference between the two spectra **is a significant change in absorption**.
 ```
 
+<a id="setup-untied-nh"></a>
 ### Setting up
 
 We redeclare the model that we chose [earlier in the tutorial](#choosing-and-setting-up-a-model) to wipe the previous fit:
@@ -921,6 +928,7 @@ However, **we do recommend accessing through component model and parameter names
 the code cell above**, as it is much easier to read and recall what is being untied.
 ```
 
+<a id="fit-untied-nh"></a>
 ### Performing the fit
 
 We run the fit for our new definition of the model, with nH parameters untied and allowed
@@ -936,10 +944,11 @@ We can see that this version of the model fit achieved a total fit statistic
 $\gt 8\times10^{4}$, and 60 degrees of freedom (DOF), leading to a
 reduced-$\chi^{2}$ of $\gt 1300$.
 
-While certainly an improvement on [our first attempt](#performing-the-fit), we cannot
+While certainly an improvement on <a href="#fit-all-tied">our first attempt</a>, we cannot
 expect the models to closely follow the spectra's data points when we visualize them
 in the next subsection.
 
+<a id="vis-untied-nh"></a>
 ### Visualizing the fitted model
 
 ```{code-cell} python
@@ -964,6 +973,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     untied_nh_plot_data.append(grp_data)
 ```
 
+<a id="fig-untied-nh"></a>
 ```{code-cell} python
 plot_fit_residual_spec(
     untied_nh_plot_data,
@@ -997,6 +1007,7 @@ To decouple tied parameters, we can change the parameter value in the second
 group to a value – any value – different from that in the first group (changing the
 value in the first group has the effect of changing both without decoupling).
 
+<a id="setup-untied-nh-norm"></a>
 ### Setting up
 
 Once again, we redeclare the model that we chose [earlier in the tutorial](#choosing-and-setting-up-a-model)
@@ -1008,7 +1019,7 @@ xs.Model("tbabs * highecut(pow)")
 
 <br>
 
-We repeat the same nH parameter setup process that we used in [the last fit](#sett):
+We repeat the same nH parameter setup process that we used in <a href="#setup-untied-nh">the last fit</a>:
 
 ```{code-cell} python
 spec_one_mod = xs.AllModels(1)
@@ -1030,6 +1041,7 @@ spec_two_mod.powerlaw.norm = 1.0
 
 <br>
 
+<a id="fit-untied-nh-norm"></a>
 ### Performing the fit
 
 We run the fit for our new definition of the model, with nH and powerlaw normalization
@@ -1043,7 +1055,7 @@ xs.Fit.perform()
 <br>
 
 This decoupling improves the fit, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
-the [last model fit](#performing-the-fit-2) to a reduced-$\chi^{2}$ of $\gt 250$, but we
+the <a href="#fit-untied-nh">last model fit</a> to a reduced-$\chi^{2}$ of $\gt 250$, but we
 still clearly see that it **isn't a good fit**.
 
 Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption
@@ -1053,6 +1065,7 @@ and scattering does not work.
 
 <span style="color:red">Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).</span>
 
+<a id="vis-untied-nh-norm"></a>
 ### Visualizing the fitted model
 
 ```{code-cell} python
@@ -1077,6 +1090,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     untied_nh_plnorm_plot_data.append(grp_data)
 ```
 
+<a id="fig-untied-nh-norm"></a>
 ```{code-cell} python
 plot_fit_residual_spec(
     untied_nh_plnorm_plot_data,
@@ -1096,6 +1110,7 @@ plot_fit_residual_spec(
 That we are missing a low-temperature thermal emission component, and that there is an unmodelled Fe emission line around 6.4 keV.
 ```
 
+<a id="setup-add-comps"></a>
 ### Setting up
 
 Now
@@ -1130,6 +1145,7 @@ xs.AllModels.show()
 
 <br>
 
+<a id="fit-add-comps"></a>
 ### Performing the fit
 
 ```{code-cell} python
@@ -1144,6 +1160,7 @@ Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}2400$,
 $\chi^2$ of data group 2 is ${\sim}200$; the **fit to the second, post-eclipse, spectrum
 is considerably worse** than the fit to the first, pre-eclipse, data group.
 
+<a id="vis-add-comps"></a>
 ### Visualizing the fitted model
 
 ```{code-cell} python
@@ -1177,6 +1194,7 @@ line around 6.4 keV is being modeled now that we have the additional gaussian co
 the residuals of the fits, we can see that the emission line seems to be better modeled in the
 pre-eclipse spectrum than in the post-eclipse:
 
+<a id="fig-add-comps"></a>
 ```{code-cell} python
 plot_fit_residual_spec(
     untied_nh_norm_gauss_bbody_plot_data,
