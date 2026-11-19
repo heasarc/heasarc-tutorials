@@ -543,7 +543,7 @@ You would load them as:
 <div class="highlight"><pre><span></span><code>xs.AllData("<span style="color: #1f77b4; font-weight: bold;">1</span>:<span style="color: #d62728; font-weight: bold;">1</span> lo1.pha <span style="color: #1f77b4; font-weight: bold;">1</span>:<span style="color: #2ca02c; font-weight: bold;">2</span> lo2.pha <span style="color: #1f77b4; font-weight: bold;">1</span>:<span style="color: #9467bd; font-weight: bold;">3</span> lo3.pha <span style="color: #ff7f0e; font-weight: bold;">2</span>:<span style="color: #8c564b; font-weight: bold;">4</span> hi1.pha <span style="color: #ff7f0e; font-weight: bold;">2</span>:<span style="color: #e377c2; font-weight: bold;">5</span> hi2.pha <span style="color: #ff7f0e; font-weight: bold;">2</span>:<span style="color: #17becf; font-weight: bold;">6</span> hi3.pha")</code></pre></div>
 
 
-### Examining the spectra
+### Setting up
 
 We want the x-axis of every spectrum we visualize throughout this tutorial to be in terms of
 energy, in units of keV, so we make sure to set that up here:
@@ -558,12 +558,14 @@ means that it won't output figures - instead we construct our own figures with m
 from PyXspec.
 ```
 
-<span style="color:purple">If you're working in a Jupyter notebook, and are likely to be making multiple versions
-of an XSPEC plot, we recommend storing plot data in a dictionary, as we have
-demonstrated above.
+
+### Examining the spectra
+
+If you're working in a Jupyter notebook and are likely to be making multiple versions
+of an XSPEC plot, we recommend storing plot data in dictionaries, as we do below.
 This helps reduce the risk of accidentally re-using variable names and overwriting their
 existing values, or using plot data from a previous figure. As Jupyter notebooks can
-be run out of order, or have cells re-executed, this is an important consideration.</span>
+be run out of order, or have cells re-executed, this is an important consideration.
 
 We used this same approach to storing plotting information in the {doc}`first PyXspec tutorial <pyxspec-basics>`,
 where we also talked more about the types of plotting data you can extract from PyXspec, and how to do it.
@@ -645,7 +647,10 @@ plt.show()
 ```
 
 Looking at the spectra above, there are a few features we notice immediately:
-1. The pre-eclipse
+1. Cen X-3 in its _pre-eclipse_ phase had much lower overall flux than in its _post-eclipse_ phase.
+2. There is a prominent emission line evident in the _pre-eclipse_ spectrum, right around the energy we would expect for the iron complex. It seems very wide, which is easily explained by the poor (relative to modern missions) spectral/energy resolution of Ginga-LAC.
+3. Otherwise, the spectra are quite smooth, with little first-pass visual evidence of other emission lines, absorption edges, or absorption lines.
+4. The observed flux drops markedly below ${\sim}1.5-2.0 keV$, which is likely because Ginga-LACs recommended lower bound energy for analysis is 1.5 keV [Angelini L. and Allen, J.](https://heasarc.gsfc.nasa.gov/docs/ginga/ginga.html).
 
 ### Excluding parts of the spectra from our fit
 
@@ -764,7 +769,6 @@ We run the fit (of both spectra) by calling `xs.Fit.perform()`:
 ```{code-cell} python
 xs.Fit.perform()
 ```
-
 <br>
 
 Looking through the fit summary shown above (you may need to scroll if the output cell
@@ -777,7 +781,11 @@ From this, we can safely say that our first hypothesis was, as we thought, doome
 
 ### Visualizing the fitted model
 
-To emphasize just how bad this first fit was, we will visualize it. <span style="color:red">... Something something arranging in a dictionary</span>
+To emphasize just how bad this first fit was, we will visualize it. Just as in the
+[first plot of our spectra](#examining-the-spectra) (without model fits), we store the
+plotting information in dictionaries. Unlike that first visualization, we also
+wish to plot the model residuals, so we call `xs.Plot("data resid")` (as opposed to
+`xs.Plot("data")`), and extract the residual information from `plotWindow=2`:
 
 ```{code-cell} python
 # Fetch the plotting information for the spectra, models, and model residuals
@@ -1226,3 +1234,5 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 ### References
 
 [Nagase F., Corbet R.H.D., Day C.S.R., Inoue H., Takeshima T., Yoshida K. Mihara T. (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...396..147N/abstract) - _GINGA Observations of Centaurus X-3_
+
+[Angelini L. and Allen, J. - _HEASARC: The Ginga Observatory_ [ACCESSED 19-NOV-2026]](http://heasarc.gsfc.nasa.gov/docs/ginga/ginga.html)
