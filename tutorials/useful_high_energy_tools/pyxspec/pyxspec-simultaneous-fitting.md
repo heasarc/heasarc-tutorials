@@ -9,7 +9,7 @@ authors:
   email: djturner@umbc.edu
   orcid: 0000-0001-9658-1396
   website: https://davidt3.github.io/
-date: '2026-11-17'
+date: '2026-11-19'
 execution:
   cal-files:
     xmm-ccf: false
@@ -66,17 +66,14 @@ well-studied high-mass X-ray binary (HMXRB), and which was the first X-ray pulsa
 The observations in question were taken by Ginga (originally known as ASTRO-C), a Japanese Space Agency (JAXA) X-ray
 telescope that was launched in 1987, using the 'Large Area Proportional Counter' (LAC) instrument. Ginga's
 observations of Cen X-3 were taken in 1989 and cover pre- and post-eclipse emission (note that there are more
-Ginga observations than we use in this tutorial which cover other phases).
+Ginga observations than we use in this tutorial, and they cover other phases).
 
-Cen X-3's flux level before eclipse was much lower than the level after eclipse.
-
-<span style="color:purple">Here, we'll use PyXspec to see whether
-spectra from these two phases can be fitted with the same model, which differs only in
-the amount of absorption.</span>
+Cen X-3's flux level before eclipse was much lower than the level after eclipse. We're
+going to use PyXspec to explore how we can jointly fit these two spectra by linking some
+parameters across models and freeing others so they can vary independently.
 
 The spectra and corresponding response matrix were obtained from the HEASARC and are available from
 [the full XSPEC walkthrough dataset](https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough).
-
 
 ### Inputs
 
@@ -86,8 +83,8 @@ The spectra and corresponding response matrix were obtained from the HEASARC and
 
 ### Outputs
 
-- Diagnostic plots showing the simultaneously fitted spectra, models, and residuals for both data groups
-- Best-fit model parameters for the linked and partially decoupled models
+- Diagnostic plots showing the simultaneously fitted spectra, models, and residuals for both data groups.
+- Best-fit model parameters for the linked and partially decoupled models.
 
 ### Runtime
 
@@ -479,7 +476,6 @@ xs.Plot.device = "/null"
 ***
 
 ## 1. Handling multiple spectra and their models
-
 
 ### Loading multiple spectra into separate 'data groups'
 
@@ -1060,14 +1056,19 @@ starting value much higher than data group 2's:
 ```{code-cell} python
 xs.Fit.perform()
 ```
+<a id="res-untied-nh-norm"></a>
 
 <br>
 
-<span style="color:red">Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).</span>
-
-This decoupling improves the fit, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
+This decoupling improves things somewhat, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
 the <a href="#fit-untied-nh">last model fit</a> to a reduced-$\chi^{2}$ of $\gt 250$, but we
 still clearly see that it **isn't a good fit**.
+
+Takeaways from this fit:
+1. Comparing both groups nH values to those measured by <a href="#res-untied-nh">the previous fit</a>, we can see that the gulf between pre-eclipse (**group one**) and post-eclipse (**group two**) nH values has narrowed somewhat.
+2. The newly-untied powerlaw normalization is clearly accounting for that change in absorption applied by nH, with our **group one** value being ${\sim}5\times$ smaller than the group two value.
+3. Clearly the advantage of allowing the overall flux level of the whole emissive model to vary separately for each group is that it lifts the pressure on the absorption model (most effective at low energies) to account for flux difference between pre- and post-eclipse spectra.
+
 <a id="vis-untied-nh-norm"></a>
 ### Visualizing the fitted model
 
@@ -1194,8 +1195,8 @@ xs.Fit.perform()
 Our final fit is complete, and the reduced-$\chi^{2}$ is now ${\sim}50$, with 53 degrees of freedom.
 
 Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}2400$, and the
-$\chi^2$ of data group 2 is ${\sim}200$; the **fit to the second, post-eclipse, spectrum
-is considerably worse** than the fit to the first, pre-eclipse, data group.
+$\chi^2$ of data group 2 is ${\sim}200$; the **fit to the first, pre-eclipse, spectrum
+is considerably worse** than the fit to the second, post-eclipse, data group.
 <a id="vis-add-comps"></a>
 ### Visualizing the fitted model
 
@@ -1223,6 +1224,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
     )
     untied_nh_norm_gauss_bbody_plot_data.append(grp_data)
 ```
+<a id="res-add-comps"></a>
 
 Plotting our final model fits, we can see the impact of adding the two new emission
 components – just by eye the lower energy part of the pre-eclipse spectrum is better
@@ -1232,7 +1234,6 @@ The visually obvious (more so in the pre-eclipse than the post-eclipse spectrum)
 line around 6.4 keV is being modeled now that we have the additional gaussian component. Examining
 the residuals of the fits, we can see that the emission line seems to be better modeled in the
 pre-eclipse spectrum than in the post-eclipse:
-
 <a id="fig-add-comps"></a>
 ```{code-cell} python
 plot_fit_residual_spec(
@@ -1245,11 +1246,28 @@ plot_fit_residual_spec(
 )
 ```
 
-### Calculating parameter uncertainties
+### Forcing PyXspec to calculate parameter uncertainties with a very poor reduced-$\chi^{2}$
+
+In the previous, '{doc}`PyXspec basics <pyxspec-basics>`', demonstration, we talked about
+how you make PyXspec calculate reliable uncertainties on your fitted model parameters.
+While we won't repeat that discussion, we will use our current bad fit as an excuse to
+explain how you can force PyXspec to run the error calculation even if your overall
+reduced-$\chi^{2}$ is very poor.
+
+First, we'll tell PyXspec how many cores it is allowed to use for the error calculation
+(though parallelizing will not necessarily have a noticeable impact for our current use
+case). The`NUM_CORES` constant was set up in the ['Global Setup: Configuration'](#configuration)
+section, near the beginning of this tutorial:
 
 ```{code-cell} python
 xs.Xset.parallel.error = NUM_CORES
 ```
+
+Now we'll show you what happens when we call `xs.Fit.error(...)` for parameters 2, 3,
+12, and 13 (recalling that <a href="#res-add-comps">our final fit has
+reduced-$\chi^{2}{\sim}50$</a>) - note that we've wrapped this call in a `try except`,
+with it set up to print any error message output by `xs.Fit.error()` (that should give
+you a good idea of how well we expect this to go):
 
 ```{code-cell} python
 try:
@@ -1258,15 +1276,22 @@ except Exception as err:
     print(err)
 ```
 
+What you _should_ see above are **two separate errors**:
+1. **"Error executing command: error..."** – This references parameters 12 and 13, which we included to demonstrate what happens if you try to run `xs.Fit.error(...)` on a parameter that is linked to another parameter.
+2. **"Cannot do error calc: Reduced Chi^2..."** - By default, PyXspec will not perform an error calculation if the current fit is poor (reduced-$\chi^{2} \gt 2$).
+
+**However, if you absolutely must run the error calculation on a very poor fit, you can
+override the default limit**. This can be achieved by passing the 'maximum' command, followed
+by a new maximum $\chi^{2}$ (in this case 50); then the parameter ID(s) follow that:
+
 ```{code-cell} python
 xs.Fit.error("maximum 50 15")
 ```
 
-### Highlighting the very low quality of the fit
-
-```{code-cell} python
-xs.Xset.parallel.goodness = NUM_CORES
-xs.Fit.goodness(1000)
+```{caution}
+Please do not take this as a recommendation to ignore PyXspec's default reduced-$\chi^{2}$
+limit on calculating errors - you should only do this if you understand the potential
+statistical consequences of doing so.
 ```
 
 ## About this notebook
@@ -1275,7 +1300,7 @@ Author: Keith Arnaud, XSPEC Lead, Associate Research Scientist
 
 Author: David Turner, HEASARC Staff Scientist
 
-Updated On: 2026-11-17
+Updated On: 2026-11-19
 
 +++
 
