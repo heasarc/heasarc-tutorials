@@ -1009,7 +1009,9 @@ Takeaways from the visualization of the freed-nH model fit:
 3. The post-eclipse spectrum is well described by its model at lower energies (<4 keV), but over, and then under, predicts the flux of the data when we move up the energy scale.
 4. We severely underpredict the flux of the pre-eclipse spectrum at low energies – this is likely a consequence of the very large nH value arrived at <a href="#res-untied-nh">by our model fit</a>, which will preferentially supress low energies over high energies.
 
-The models as they stand are a poor representation of the observed spectra, implying that our current hypothesis was incorrect, and the current model parameter values are not to be trusted.
+The models as they stand are a poor representation of the observed spectra, implying
+that our current hypothesis is incorrect, and the current model parameter values are
+not to be trusted.
 
 ## 4. Fitting the model with nH and powerlaw normalization allowed to vary separately for both spectra
 
@@ -1022,15 +1024,12 @@ Perhaps scattering also plays a role in reducing the flux before eclipse?
 Our assumption that only a change in absorption can account for the spectral
 variation before and after eclipse is clearly wrong.
 
-Perhaps scattering also plays a role in reducing the flux before eclipse.
+It is possible that, pre-eclipse, the normalization and shape of Cen X-3's spectrum is
+being affected by something in the vicinity of the system (accreting material, for
+instance) scattering Cen X-3's emission out of our field of view.
 
-This could be modeled (simply at first) by
-allowing the normalization of the power law to be smaller before eclipse than after
-eclipse.
-
-To decouple tied parameters, we can change the parameter value in the second
-group to a value – any value – different from that in the first group (changing the
-value in the first group has the effect of changing both without decoupling).
+This could be modeled (simply at first) by allowing the normalization of the power law
+to be smaller before eclipse than after eclipse.
 
 <a id="setup-untied-nh-norm"></a>
 ### Setting up
@@ -1083,15 +1082,14 @@ This decoupling improves the fit, taking us from a reduced-$\chi^{2}$ of $\gt 13
 the <a href="#fit-untied-nh">last model fit</a> to a reduced-$\chi^{2}$ of $\gt 250$, but we
 still clearly see that it **isn't a good fit**.
 
-Indeed, this simple attempt to account for the spectral variability in terms of "blanket" cold absorption
-and scattering does not work.
-
-<span style="color:red">More sophisticated models involving additional components and partial absorption should be tried.</span>
 
 <span style="color:red">Point out the fitted parameter differences between Group 1 (`losum`, $N_{\mathrm{H}} \approx 20.6 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.0596$) and Group 2 (`hisum`, $N_{\mathrm{H}} \approx 1.31 \times 10^{22}\ \mathrm{cm}^{-2}$, $\mathrm{norm} \approx 0.314$), and note that Group 1 (the pre-eclipse spectrum) contributes the vast majority of the remaining $\chi^2$ (~13,993 vs ~1,316).</span>
 
 <a id="vis-untied-nh-norm"></a>
 ### Visualizing the fitted model
+
+Generating and extracting the plotting data is an identical process to when we did
+it <a href="#vis-all-tied">for the first model</a>:
 
 ```{code-cell} python
 # Fetch the plotting information for the spectra, models, and model residuals
@@ -1127,6 +1125,15 @@ plot_fit_residual_spec(
 )
 ```
 
+Indeed, this simple attempt to account for the spectral variability in terms of "blanket"
+cold absorption and scattering does not work. Clearly more sophisticated, physics-driven, models
+are required to properly describe and investigate this system. For instance, modeling
+_partial absorption_ rather than the rather heavy-handed approach we've taken, and including
+some more emission components.
+
+We will investigate that last idea for the final fitting attempt of this tutorial.
+
+
 ## Fitting a model with additional emission components
 
 ```{admonition} Hypothesis
@@ -1138,7 +1145,17 @@ That we are missing a low-temperature thermal emission component, and that there
 <a id="setup-add-comps"></a>
 ### Setting up
 
-Now
+At this point, we've come to the conclusion that the model we decided on [near the
+beginning of the demonstration](#choosing-and-setting-up-a-model) cannot be used to
+accurately represent our spectra.
+
+In our final attempt to improve it, we will add two new additive emission components, though
+_we do not necessarily expect this to be enough to result in a 'good' fit to our data:_
+- **gauss** – A Gaussian emission model intended to represent the obvious ${\sim}6.4$ keV emission line in the pre-eclipse spectrum, which we first noted in our <a href="#fig-raw-spectra">initial model-less visualization of the spectra</a>.
+- **bbody** – Straightforward blackbody, which we hope will fill in the deficit of low-energy emission we see in our model of the pre-eclipse spectrum.
+
+Note that we are keeping the `tbabs` absorption component, and that it applies to both
+of our new emission components because we have placed them _inside the brackets_:
 
 ```{code-cell} python
 xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
@@ -1146,10 +1163,22 @@ xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
 
 <br>
 
+In fact, we're going to make sure that the new model is set up in exactly the same way
+as <a href="#setup-untied-nh-norm">our last attempt</a>, just with some additional
+components and configuration.
+
+The key points of the new model configuration are:
+- Central energy of the new Gaussian component is **frozen** at 6.4 keV.
+- Both the sigma and normalization parameters of the Gaussian component are **untied**; they will vary independently for each spectrum.
+- The blackbody <span style="color:red">.......</span>
+
+
+
 ```{code-cell} python
 ORIGINAL_XS_CHATTER = xs.Xset.chatter
 xs.Xset.chatter = 0
 
+# --- Identical to the last model ---
 spec_one_mod = xs.AllModels(1)
 spec_one_mod.TBabs.nH = 100.0
 
@@ -1158,14 +1187,23 @@ spec_two_mod.TBabs.nH = 1.0
 
 spec_two_mod.powerlaw.norm = 1.0
 
+# ------- New for this model --------
 spec_one_mod.gaussian.LineE = 6.4
 spec_one_mod.gaussian.LineE.frozen = True
 
 spec_two_mod.gaussian.Sigma.untie()
 spec_two_mod.gaussian.norm.untie()
 
+spec_one_mod.bbody.kT = 2.0
+
+# -------- Showing the model --------
 xs.Xset.chatter = ORIGINAL_XS_CHATTER
 xs.AllModels.show()
+```
+
+```{note}
+You may have noticed that we temporarily set `xs.Xset.chatter=0`; this lets us avoid a new
+print-out of the fit and test statistic every time we alter a model parameter during setup.
 ```
 
 <br>
@@ -1187,6 +1225,9 @@ is considerably worse** than the fit to the first, pre-eclipse, data group.
 
 <a id="vis-add-comps"></a>
 ### Visualizing the fitted model
+
+Generating and extracting the plotting data is an identical process to when we did
+it <a href="#vis-all-tied">for the first model</a>:
 
 ```{code-cell} python
 # Fetch the plotting information for the spectra, models, and model residuals
