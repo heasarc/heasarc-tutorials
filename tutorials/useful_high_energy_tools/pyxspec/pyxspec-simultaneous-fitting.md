@@ -552,9 +552,26 @@ means that it won't output figures - instead we construct our own figures with m
 from PyXspec.
 ```
 
-<span style="color:red">Explain how `xs.Plot.y(plotGroup, plotWindow)`, `xs.Plot.yErr(plotGroup, plotWindow)`, and `xs.Plot.model(plotGroup)` work when multiple data groups are loaded: the first integer argument selects the data/plot group (`1` for `losum`, `2` for `hisum`), while the second selects the panel (`1` for `"data"`, `2` for `"resid"`).</span>
+<span style="color:purple">If you're working in a Jupyter notebook, and are likely to be making multiple versions
+of an XSPEC plot, we recommend storing plot data in a dictionary, as we have
+demonstrated above.
+This helps reduce the risk of accidentally re-using variable names and overwriting their
+existing values, or using plot data from a previous figure. As Jupyter notebooks can
+be run out of order, or have cells re-executed, this is an important consideration.</span>
 
-<span style="color:red">... Something something arranging in a dictionary</span>
+We used this same approach to storing plotting information in the {doc}`first PyXspec tutorial <pyxspec-basics>`,
+where we also talked more about the types of plotting data you can extract from PyXspec, and how to do it.
+
+In _this_ tutorial, we have two spectra in two different data groups – that changes how we retrieve the
+plotting information slightly. You can see below that when we call PyXspec functions (such as `xs.Plot.x(...)`), we
+are passing a `plotGroup=` argument - the value passed is the index number (remembering XSPEC indexing starts
+at **one not zero**) of the data group who's plotting information we wish to retrieve (**1** for the
+pre-eclipse spectrum and **2** for the post-eclipse).
+
+You'll note that we also pass `plotWindow=1` to every `xs.Plot.<>` call - this is because we are only
+asking PyXspec to generate plotting data for one 'window', the _data_ (`xs.Plot("data")`). In
+[the next section](#visualizing-the-fitted-model), where we have fitted a model and want to plot
+the residuals as well, we will have a second plot window to retrieve data from:
 
 ```{code-cell} python
 # Fetch the plotting information for the spectra
@@ -563,21 +580,18 @@ xs.Plot("data")
 raw_spec_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
-        "energy": np.array(xs.Plot.x(grp_id, 1)),
-        "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
-        "rate": np.array(xs.Plot.y(grp_id, 1)),
-        "rate_err": np.array(xs.Plot.yErr(grp_id, 1)),
-        "x_label": xs.Plot.labels(1)[0],
-        "y_label": xs.Plot.labels(1)[1],
-        "title": xs.Plot.labels(1)[2],
+        "energy": np.array(xs.Plot.x(plotGroup=grp_id, plotWindow=1)),
+        "energy_delta": np.array(xs.Plot.xErr(plotGroup=grp_id, plotWindow=1)),
+        "rate": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=1)),
+        "rate_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=1)),
+        "x_label": xs.Plot.labels(plotWindow=1)[0],
+        "y_label": xs.Plot.labels(plotWindow=1)[1],
+        "title": xs.Plot.labels(plotWindow=1)[2],
     }
     raw_spec_plot_data.append(grp_data)
 ```
 
-```{seealso}
-For more discussion of PyXspec plotting, please see the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial.
-```
-
+Now, we can visualize our two spectra before we ignore any channels or fit any models:
 ```{code-cell} python
 ---
 tags: [hide-input]
@@ -624,12 +638,14 @@ plt.tight_layout()
 plt.show()
 ```
 
+<span style="color:red">We can immediately ...</span>
+
 ### Excluding parts of the spectra from our fit
 
 We covered the ignore command in the '{doc}`PyXspec basics <pyxspec-basics>`' tutorial, and we will not repeat that
 discussion of the whys and wherefores of ignoring channels.
 
-However, the situation in this tutorial differs in one crucial way - we have multiple spectra loaded. <span style="color:red">.......</span>
+However, the situation in this tutorial differs in one crucial way – we have multiple spectra loaded. <span style="color:red">.......</span>
 
 <span style="color:red">when no spectrum index range (`<specRange>:`) is prefixed, `AllData.ignore` applies the channel range to every loaded spectrum</span>
 
@@ -761,13 +777,13 @@ xs.Plot("data resid")
 all_tied_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
-        "energy": np.array(xs.Plot.x(grp_id, 1)),
-        "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
-        "rate": np.array(xs.Plot.y(grp_id, 1)),
-        "rate_err": np.array(xs.Plot.yErr(grp_id, 1)),
-        "model": np.array(xs.Plot.model(grp_id, 1)),
-        "residual": np.array(xs.Plot.y(grp_id, 2)),
-        "residual_err": np.array(xs.Plot.yErr(grp_id, 2)),
+        "energy": np.array(xs.Plot.x(plotGroup=grp_id, plotWindow=1)),
+        "energy_delta": np.array(xs.Plot.xErr(plotGroup=grp_id, plotWindow=1)),
+        "rate": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=1)),
+        "rate_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=1)),
+        "model": np.array(xs.Plot.model(plotGroup=grp_id, plotWindow=1)),
+        "residual": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=2)),
+        "residual_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=2)),
     }
     grp_data["energy_step"] = np.append(
         grp_data["energy"] - grp_data["energy_delta"],
@@ -902,13 +918,13 @@ xs.Plot("data resid")
 untied_nh_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
-        "energy": np.array(xs.Plot.x(grp_id, 1)),
-        "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
-        "rate": np.array(xs.Plot.y(grp_id, 1)),
-        "rate_err": np.array(xs.Plot.yErr(grp_id, 1)),
-        "model": np.array(xs.Plot.model(grp_id, 1)),
-        "residual": np.array(xs.Plot.y(grp_id, 2)),
-        "residual_err": np.array(xs.Plot.yErr(grp_id, 2)),
+        "energy": np.array(xs.Plot.x(plotGroup=grp_id, plotWindow=1)),
+        "energy_delta": np.array(xs.Plot.xErr(plotGroup=grp_id, plotWindow=1)),
+        "rate": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=1)),
+        "rate_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=1)),
+        "model": np.array(xs.Plot.model(plotGroup=grp_id, plotWindow=1)),
+        "residual": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=2)),
+        "residual_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=2)),
     }
     grp_data["energy_step"] = np.append(
         grp_data["energy"] - grp_data["energy_delta"],
@@ -1010,13 +1026,13 @@ xs.Plot("data resid")
 untied_nh_plnorm_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
-        "energy": np.array(xs.Plot.x(grp_id, 1)),
-        "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
-        "rate": np.array(xs.Plot.y(grp_id, 1)),
-        "rate_err": np.array(xs.Plot.yErr(grp_id, 1)),
-        "model": np.array(xs.Plot.model(grp_id, 1)),
-        "residual": np.array(xs.Plot.y(grp_id, 2)),
-        "residual_err": np.array(xs.Plot.yErr(grp_id, 2)),
+        "energy": np.array(xs.Plot.x(plotGroup=grp_id, plotWindow=1)),
+        "energy_delta": np.array(xs.Plot.xErr(plotGroup=grp_id, plotWindow=1)),
+        "rate": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=1)),
+        "rate_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=1)),
+        "model": np.array(xs.Plot.model(plotGroup=grp_id, plotWindow=1)),
+        "residual": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=2)),
+        "residual_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=2)),
     }
     grp_data["energy_step"] = np.append(
         grp_data["energy"] - grp_data["energy_delta"],
@@ -1096,13 +1112,13 @@ xs.Plot("data resid")
 untied_nh_norm_gauss_bbody_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
-        "energy": np.array(xs.Plot.x(grp_id, 1)),
-        "energy_delta": np.array(xs.Plot.xErr(grp_id, 1)),
-        "rate": np.array(xs.Plot.y(grp_id, 1)),
-        "rate_err": np.array(xs.Plot.yErr(grp_id, 1)),
-        "model": np.array(xs.Plot.model(grp_id, 1)),
-        "residual": np.array(xs.Plot.y(grp_id, 2)),
-        "residual_err": np.array(xs.Plot.yErr(grp_id, 2)),
+        "energy": np.array(xs.Plot.x(plotGroup=grp_id, plotWindow=1)),
+        "energy_delta": np.array(xs.Plot.xErr(plotGroup=grp_id, plotWindow=1)),
+        "rate": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=1)),
+        "rate_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=1)),
+        "model": np.array(xs.Plot.model(plotGroup=grp_id, plotWindow=1)),
+        "residual": np.array(xs.Plot.y(plotGroup=grp_id, plotWindow=2)),
+        "residual_err": np.array(xs.Plot.yErr(plotGroup=grp_id, plotWindow=2)),
     }
     grp_data["energy_step"] = np.append(
         grp_data["energy"] - grp_data["energy_delta"],
