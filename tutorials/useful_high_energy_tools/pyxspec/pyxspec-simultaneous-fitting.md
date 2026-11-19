@@ -393,6 +393,12 @@ SRC_NAME = "Cen X-3"
 
 REMOTE_DATA_ROOT_URL = "https://heasarc.gsfc.nasa.gov/FTP/software/xspec/walkthrough/"
 REQUIRED_FILES = ["losum.pha", "hisum.pha", "ginga_lac.rsp"]
+
+# We are producing multiple takes on the same plot, so we define custom colors, marker
+#  shapes, and figure size here to make changing them over all plots easier
+MARKER_COLORS = ["tab:cyan", "magenta"]
+MARKER_SHAPES = ["x", "d"]
+FIGURE_SIZE = ((9.5, 7.5),)
 ```
 
 ### Configuration
@@ -592,18 +598,18 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 ```
 
 Now, we can visualize our two spectra before we ignore any channels or fit any models:
+
 ```{code-cell} python
 ---
 tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-plt.figure(figsize=(7.5, 5))
+plt.figure(figsize=FIGURE_SIZE)
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", top=True, right=True)
 
 raw_labels = ("Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)")
-raw_colors = ("navy", "darkgreen", "darkorange", "teal")
 
 for idx, p_data in enumerate(raw_spec_plot_data):
     sp_label = raw_labels[idx] if idx < len(raw_labels) else f"Group {idx + 1} data"
@@ -612,10 +618,10 @@ for idx, p_data in enumerate(raw_spec_plot_data):
         p_data["rate"],
         xerr=p_data["energy_delta"],
         yerr=p_data["rate_err"],
-        fmt="+",
+        fmt=MARKER_SHAPES[idx % len(MARKER_SHAPES)],
         capsize=1.5,
         label=sp_label,
-        color=raw_colors[idx % len(raw_colors)],
+        color=MARKER_COLORS[idx % len(MARKER_COLORS)],
     )
 
 plt.xscale("log")
@@ -638,7 +644,8 @@ plt.tight_layout()
 plt.show()
 ```
 
-<span style="color:red">We can immediately ...</span>
+Looking at the spectra above, there are a few features we notice immediately:
+1. The pre-eclipse
 
 ### Excluding parts of the spectra from our fit
 
@@ -694,6 +701,7 @@ We will access them through PyXspec's `AllModels()` manager later on in this tut
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
+
 <br>
 
 Notice how the summary of the model, displayed immediately above, is different now that
@@ -756,6 +764,7 @@ We run the fit (of both spectra) by calling `xs.Fit.perform()`:
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
 <br>
 
 Looking through the fit summary shown above (you may need to scroll if the output cell
@@ -810,7 +819,9 @@ plot_fit_residual_spec(
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=["1: Defaults", "2: Defaults"],
     y_scale="linear",
-    fig_size=(9.5, 7.5),
+    fig_size=FIGURE_SIZE,
+    sp_color=MARKER_COLORS,
+    sp_marker=MARKER_SHAPES,
 )
 ```
 
@@ -838,6 +849,7 @@ We redeclare the model that we chose [earlier in the tutorial](#choosing-and-set
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
+
 <br>
 
 What we want to do now is to **remove the link between the nH parameters of the first and
@@ -872,6 +884,7 @@ as $100\times10^{22}\: \mathrm{cm}^{-2}$, leaving default values set for all the
 ```{code-cell} python
 spec_one_mod.TBabs.nH = 100.0
 ```
+
 <br>
 
 Now, when it comes to the second group of parameters, we enter a column of $1\times10^{22}\:
@@ -881,6 +894,7 @@ the second data group model's nH from the first data group model's:
 ```{code-cell} python
 spec_two_mod.TBabs.nH = 1.0
 ```
+
 <br>
 
 ```{seealso}
@@ -899,6 +913,7 @@ to vary independently, and data group 1's nH starting value much higher than dat
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
 <br>
 
 We can see that this version of the model fit achieved a total fit statistic
@@ -939,7 +954,9 @@ plot_fit_residual_spec(
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=["1: untied nH", "2: untied nH"],
     y_scale="linear",
-    fig_size=(9.5, 7.5),
+    fig_size=FIGURE_SIZE,
+    sp_color=MARKER_COLORS,
+    sp_marker=MARKER_SHAPES,
 )
 ```
 
@@ -972,18 +989,19 @@ to wipe the previous fit:
 ```{code-cell} python
 xs.Model("tbabs * highecut(pow)")
 ```
+
 <br>
 
 We repeat the same nH parameter setup process that we used in [the last fit](#setting-up-1):
 
 ```{code-cell} python
-
 spec_one_mod = xs.AllModels(1)
 spec_two_mod = xs.AllModels(2)
 
 spec_one_mod.TBabs.nH = 100.0
 spec_two_mod.TBabs.nH = 1.0
 ```
+
 <br>
 
 Now we come to what we're changing this time around – the powerlaw normalization. Specifically,
@@ -993,6 +1011,7 @@ it can vary independently of the first data group's equivalent:
 ```{code-cell} python
 spec_two_mod.powerlaw.norm = 1.0
 ```
+
 <br>
 
 ### Performing the fit
@@ -1004,6 +1023,7 @@ starting value much higher than data group 2's:
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
 <br>
 
 This decoupling improves the fit, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
@@ -1046,7 +1066,9 @@ plot_fit_residual_spec(
     untied_nh_plnorm_plot_data,
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=["1: untied nH & norm", "2: untied nH & norm"],
-    fig_size=(9.5, 7.5),
+    fig_size=FIGURE_SIZE,
+    sp_color=MARKER_COLORS,
+    sp_marker=MARKER_SHAPES,
 )
 ```
 
@@ -1065,6 +1087,7 @@ Now
 ```{code-cell} python
 xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
 ```
+
 <br>
 
 ```{code-cell} python
@@ -1088,6 +1111,7 @@ spec_two_mod.gaussian.norm.untie()
 xs.Xset.chatter = ORIGINAL_XS_CHATTER
 xs.AllModels.show()
 ```
+
 <br>
 
 ### Performing the fit
@@ -1095,6 +1119,7 @@ xs.AllModels.show()
 ```{code-cell} python
 xs.Fit.perform()
 ```
+
 <br>
 
 Our final fit is complete, and the reduced-$\chi^{2}$ is now ${\sim}50$, with 53 degrees of freedom.
@@ -1141,7 +1166,9 @@ plot_fit_residual_spec(
     untied_nh_norm_gauss_bbody_plot_data,
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
     mod_expr=["1: original + bbody + gauss", "2: original + bbody + gauss"],
-    fig_size=(9.5, 7.5),
+    fig_size=FIGURE_SIZE,
+    sp_color=MARKER_COLORS,
+    sp_marker=MARKER_SHAPES,
 )
 ```
 
