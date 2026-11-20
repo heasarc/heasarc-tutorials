@@ -50,7 +50,7 @@ XSPEC has the very useful facility of allowing models to be fitted simultaneousl
 more than one data file. It is even possible to group files together and to fit
 different models simultaneously. Reasons for fitting in this manner include:
 
-- The same target has been observed at several epochs but, although the source stays constant, the response matrix has changed. When this happens, the data files cannot be added together; they have to be fitted separately. Fitting the data files simultaneously yields tighter constraints.
+- The same target has been observed at several epochs, but, although the source stays constant, the response matrix has changed. When this happens, the data files cannot be added together; they have to be fitted separately. Fitting the data files simultaneously yields tighter constraints.
 - The same target is observed with different instruments. All the instruments on Suzaku, for example, observe in the same direction simultaneously. As far as XSPEC is concerned, this is just like the previous case: two data files with two responses fitted simultaneously with the same model.
 - Different targets are observed, but the user wants to fit the same model to each data file with some parameters shared and some allowed to vary separately. For example, if we have a series of spectra from a variable AGN, we might want to fit them simultaneously with a model that has the same, common photon index but separately vary the normalization and absorption.
 
@@ -214,6 +214,9 @@ def plot_fit_residual_spec(
         "residual_err",
         "energy_step",
     ]
+
+    # Iterate through all the plotting data passed in, and checking that the
+    #  required information is present
     for idx, p_data in enumerate(plot_data_list):
         if any([en not in p_data for en in req_ents]):
             raise KeyError(

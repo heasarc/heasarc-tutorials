@@ -9,7 +9,7 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-07-30'
+date: '2026-11-20'
 execution:
   cal-files:
     xmm-ccf: false
@@ -675,7 +675,17 @@ tap_services
 We can extract the first entry from that search return, and we have our connection!
 
 ```{code-cell} python
-heasarc_vo = tap_services[0]
+try:
+    heasarc_vo = tap_services[0]
+except IndexError:
+    heasarc_vo = vo.dal.TAPService("https://heasarc.gsfc.nasa.gov/xamin/vo/tap")
+```
+
+```{important}
+We have added a try-except above to account for the possibility that nothing is returned
+from the `vo.regsearch(...)` call due to ongoing problems at the IVOA. If we fail
+to find the HEASARC service from the search, we define it manually using a hardcoded
+URL.
 ```
 
 ### Writing a query to match CARMENES to 2RXS
@@ -2424,7 +2434,7 @@ Author: David Turner, HEASARC Staff Scientist
 
 Author: Mike Corcoran, Associate Research Professor
 
-Updated On: 2026-07-30
+Updated On: 2026-11-20
 
 +++
 
