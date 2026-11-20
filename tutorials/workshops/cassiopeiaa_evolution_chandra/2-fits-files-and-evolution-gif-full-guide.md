@@ -17,7 +17,7 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-10-19'
+date: '2026-11-20'
 execution:
   cal-files:
     xmm-ccf: false
@@ -51,8 +51,6 @@ By the end of this tutorial, you will be able to:
 ## Introduction
 
 This notebook follows the `1-data-acquisition-full-guide` notebook, which downloads publicly available Chandra observations of **Cas A**.
-
-
 
 ## Imports
 
@@ -1186,7 +1184,7 @@ Author: Tess Jaffe, HEASARC Chief Archive Scientist.
 
 Author: Mike Corcoran, Associate Research Professor.
 
-Updated On: 2026-10-19
+Updated On: 2026-11-20
 
 +++
 
