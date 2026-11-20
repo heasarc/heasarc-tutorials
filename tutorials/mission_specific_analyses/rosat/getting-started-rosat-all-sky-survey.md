@@ -676,7 +676,7 @@ We can extract the first entry from that search return, and we have our connecti
 
 ```{code-cell} python
 try:
-    heasarc_vo = tap_services[0]
+    heasarc_vo = tap_services[0].service
 except IndexError:
     heasarc_vo = vo.dal.TAPService("https://heasarc.gsfc.nasa.gov/xamin/vo/tap")
 ```
@@ -800,7 +800,7 @@ argument must match the name of the table in the query
 [defined previously](#writing-a-query-to-match-carmenes-to-2rxs).
 
 ```{code-cell} python
-carm_2rxs_match = heasarc_vo.service.run_sync(query, uploads={"carmenes": carm_cat})
+carm_2rxs_match = heasarc_vo.run_sync(query, uploads={"carmenes": carm_cat})
 ```
 
 We can then convert the return to an Astropy `Table` and visualize it:
