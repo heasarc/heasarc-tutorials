@@ -648,7 +648,7 @@ Looking at the spectra above, there are a few features we notice immediately:
 1. Cen X-3 in its _pre-eclipse_ phase had much lower overall flux than in its _post-eclipse_ phase.
 2. There is a prominent emission line evident in the _pre-eclipse_ spectrum, right around the energy we would expect for the iron complex. It seems very wide, which is easily explained by the poor (relative to modern missions) spectral/energy resolution of Ginga-LAC.
 3. Otherwise, the spectra are quite smooth, with little first-pass visual evidence of other emission lines, absorption edges, or absorption lines.
-4. The observed flux drops markedly below ${\sim}1.5-2.0$ keV, which is likely because Ginga-LACs recommended lower bound energy for analysis is 1.5 keV ([HEASARC (2026)](https://heasarc.gsfc.nasa.gov/docs/heasarc/missions/ginga.html)).
+4. The observed flux drops markedly below ${\sim}1.5-2.0$ keV, which is likely because Ginga-LACs recommended lower bound energy for analysis is 1.5 keV ([HEASARC 2026](https://heasarc.gsfc.nasa.gov/docs/heasarc/missions/ginga.html)).
 5. Somewhat relatedly, the signal-to-noise above ${\sim} 20$ keV is very low, and those portions of the spectra may hamper our fit.
 
 ### Excluding parts of the spectra from our fit
@@ -1062,14 +1062,12 @@ xs.Fit.perform()
 ```
 <a id="res-untied-nh-norm"></a>
 
-<br>
-
 This decoupling improves things somewhat, taking us from the reduced-$\chi^{2}$ of $\gt 1300$ of
 the <a href="#fit-untied-nh">last model fit</a>, to a reduced-$\chi^{2}$ of $\gt 250$; however, we
 still clearly see that it **isn't a good fit**.
 
 Takeaways from this fit:
-1. Comparing both groups nH values to those measured by <a href="#res-untied-nh">the previous fit</a>, we can see that the gulf between pre-eclipse (**group one**) and post-eclipse (**group two**) nH values has narrowed somewhat.
+1. Comparing both group's nH values to those measured by <a href="#res-untied-nh">the previous fit</a>, we can see that the gulf between pre-eclipse (**group one**) and post-eclipse (**group two**) nH values has narrowed somewhat.
 2. The newly-untied powerlaw normalization is clearly accounting for that change in absorption applied by nH, with our **group one** value being ${\sim}5\times$ smaller than the group two value.
 3. Clearly the advantage of allowing the overall flux level of the whole emissive model to vary separately for each group is that it lifts the pressure on the absorption model (most effective at low energies) to account for flux difference between pre- and post-eclipse spectra.
 
@@ -1113,10 +1111,10 @@ plot_fit_residual_spec(
 )
 ```
 
-Comparing the visualization above to <a href="#fig-untied-nh-norm">our last attempt</a>:
-1. There is an obvious, but not massive, improvement in the residuals of the pre-eclipse fit. Our model still does a very bad job of representing the spectrum at energies $\lesssim 4.0$ keV - it seems likely that we're still modeling too much absorption for the pre-eclipse spectrum (latest nH${\sim}20\times10^{22}$ cm$^{-2}$).
+Comparing the visualization above to <a href="#fig-untied-nh">our last attempt</a>:
+1. There is an obvious, but not massive, improvement in the residuals of the pre-eclipse fit. Our model still does a very bad job of representing the spectrum at energies $\lesssim 4.0$ keV - it seems likely that we're still modeling too much absorption for the pre-eclipse spectrum (latest nH ${\sim}20\times10^{22}$ cm$^{-2}$).
 2. The post-eclipse spectrum's residuals have a markedly different shape, but seem improved over most of the energy range. The higher energy ($\gtrsim 10$ keV) parts of the spectrum in particular are much better represented by our current model than they were by our last.
-3. A very distinct, and very broad, Lorentzian-like shape has emerged in the post-eclipse spectrum. It is centered approximately where we would expect an iron line to be (recall that we previously noticed a <a href="#fig-raw-spectra">visually obvious emission line in the _pre-eclipse_ spectrum</a>). Ginga-LAC had an energy resolution of 18% at ${\sim}$6 keV ([HEASARC (2026)](https://heasarc.gsfc.nasa.gov/W3Browse/ginga/gingalac.html)), which equates to ${\sim}1.20$ keV at 6.5 keV; this seems like it would account for the very broad line shape we're seeing in the residuals.
+3. A very distinct, and very broad, Lorentzian-like shape has emerged in the post-eclipse residuals. It is centered approximately where we would expect an iron line to be (recall that we previously noticed a <a href="#fig-raw-spectra">visually obvious emission line in the _pre-eclipse_ spectrum</a>). Ginga-LAC had an energy resolution of 18% at ${\sim}$6 keV ([HEASARC 2026](https://heasarc.gsfc.nasa.gov/W3Browse/ginga/gingalac.html)), which equates to ${\sim}1.20$ keV at 6.5 keV; this seems like it would account for the very broad line shape we're seeing in the residuals.
 
 Our simple attempt to account for the spectral variability in terms of "blanket" cold
 absorption and scattering has not worked well. Clearly more sophisticated, physics-driven,
@@ -1142,14 +1140,14 @@ accurately represent our spectra.
 
 In our final attempt to improve it, we will add two new additive emission components, though
 _we do not necessarily expect this to be enough to result in a 'good' fit to our data:_
-- **gauss** – A Gaussian emission model intended to represent the obvious ${\sim}6.4$ keV emission line in the pre-eclipse spectrum, which we first noted in our <a href="#fig-raw-spectra">initial model-less visualization of the spectra</a>.
+- **lorentz** – A Lorentzian emission model intended to represent the obvious ${\sim}6.4$ keV emission line in the <a href="#fig-raw-spectra">pre-eclipse</a> spectrum, and the line in the post=eclipse spectrum made obvious by the <a href="#fig-untied-nh-norm">residuals of the last fit</a>.
 - **bbody** – Straightforward blackbody, which we hope will fill in the deficit of low-energy emission we see in our model of the pre-eclipse spectrum.
 
 Note that we are keeping the `tbabs` absorption component, and that it applies to both
 of our new emission components because we have placed them _inside the brackets_:
 
 ```{code-cell} python
-xs.Model("tbabs*(highecut(pow) + gauss + bbody)")
+xs.Model("tbabs*(highecut(pow) + lorentz + bbody)")
 ```
 
 <br>
@@ -1159,8 +1157,8 @@ as <a href="#setup-untied-nh-norm">our last attempt</a>, just with some addition
 components and configuration.
 
 The key points of the new model configuration are:
-- Central energy of the new Gaussian component is **frozen** at 6.4 keV.
-- Both the sigma and normalization parameters of the Gaussian component are **untied**; they will vary independently for each spectrum.
+- Central energy of the new Lorentzian component is **frozen** at 6.4 keV.
+- Both the width and normalization parameters of the Lorentzian component are **untied**; they will vary independently for each spectrum.
 - The blackbody temperature and normalization are free to vary, but tied across the two data groups.
 
 ```{code-cell} python
@@ -1177,11 +1175,11 @@ spec_two_mod.TBabs.nH = 1.0
 spec_two_mod.powerlaw.norm.untie()
 
 # ------- New for this model --------
-spec_one_mod.gaussian.LineE = 6.4
-spec_one_mod.gaussian.LineE.frozen = True
+spec_one_mod.lorentz.LineE = 6.4
+spec_one_mod.lorentz.LineE.frozen = True
 
-spec_two_mod.gaussian.Sigma.untie()
-spec_two_mod.gaussian.norm.untie()
+spec_two_mod.lorentz.Width.untie()
+spec_two_mod.lorentz.norm.untie()
 
 # -------- Showing the model --------
 xs.Xset.chatter = ORIGINAL_XS_CHATTER
@@ -1201,10 +1199,10 @@ xs.Fit.perform()
 
 <br>
 
-Our final fit is complete, and the reduced-$\chi^{2}$ is now ${\sim}50$, with 53 degrees of freedom.
+Our final fit is complete, and the reduced-$\chi^{2}$ is now ${\sim}40$, with 53 degrees of freedom.
 
-Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}2400$, and the
-$\chi^2$ of data group 2 is ${\sim}200$; the **fit to the first, pre-eclipse, spectrum
+Additionally, you will notice that the $\chi^2$ of data group 1 is ${\sim}1900$, and the
+$\chi^2$ of data group 2 is ${\sim}170$; the **fit to the first, pre-eclipse, spectrum
 is considerably worse** than the fit to the second, post-eclipse, data group.
 <a id="vis-add-comps"></a>
 ### Visualizing the fitted model
@@ -1216,7 +1214,7 @@ it <a href="#vis-all-tied">for the first model</a>:
 # Fetch the plotting information for the spectra, models, and model residuals
 xs.Plot("data resid")
 
-untied_nh_norm_gauss_bbody_plot_data = []
+untied_nh_norm_lorentz_bbody_plot_data = []
 for grp_id in range(1, xs.AllData.nGroups + 1):
     grp_data = {
         "energy": np.array(xs.Plot.x(plotGroup=grp_id, plotWindow=1)),
@@ -1231,7 +1229,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
         grp_data["energy"] - grp_data["energy_delta"],
         grp_data["energy"][-1] + grp_data["energy_delta"][-1],
     )
-    untied_nh_norm_gauss_bbody_plot_data.append(grp_data)
+    untied_nh_norm_lorentz_bbody_plot_data.append(grp_data)
 ```
 <a id="res-add-comps"></a>
 
@@ -1240,15 +1238,15 @@ components – just by eye the lower energy part of the pre-eclipse spectrum is 
 represented now we have an additional thermal component.
 
 The visually obvious (more so in the pre-eclipse than the post-eclipse spectrum) emission
-line around 6.4 keV is being modeled now that we have the additional gaussian component. Examining
+line around 6.4 keV is being modeled now that we have the additional Lorentzian component. Examining
 the residuals of the fits, we can see that the emission line seems to be better modeled in the
 pre-eclipse spectrum than in the post-eclipse:
 <a id="fig-add-comps"></a>
 ```{code-cell} python
 plot_fit_residual_spec(
-    untied_nh_norm_gauss_bbody_plot_data,
+    untied_nh_norm_lorentz_bbody_plot_data,
     inst_name=["Ginga-LAC (pre-eclipse)", "Ginga-LAC (post-eclipse)"],
-    mod_expr=["1: original + bbody + gauss", "2: original + bbody + gauss"],
+    mod_expr=["1: original + bbody + lorentz", "2: original + bbody + lorentz"],
     fig_size=FIGURE_SIZE,
     sp_color=MARKER_COLORS,
     sp_marker=MARKER_SHAPES,
@@ -1274,7 +1272,7 @@ xs.Xset.parallel.error = NUM_CORES
 
 Now we'll show you what happens when we call `xs.Fit.error(...)` for parameters 2, 3,
 12, and 13 (recalling that <a href="#res-add-comps">our final fit has
-reduced-$\chi^{2}{\sim}50$</a>) - note that we've wrapped this call in a `try except`,
+reduced-$\chi^{2}{\sim}40$</a>) - note that we've wrapped this call in a `try except`,
 with it set up to print any error message output by `xs.Fit.error()` (that should give
 you a good idea of how well we expect this to go):
 
@@ -1334,6 +1332,6 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 
 [Nagase F., Corbet R.H.D., Day C.S.R., Inoue H., Takeshima T., Yoshida K. Mihara T. (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...396..147N/abstract) - _GINGA Observations of Centaurus X-3_
 
-[HEASARC (2026) - _GINGALAC - Ginga Source Lightcurves & Spectra_ [ACCESSED 23-NOV-2026]](https://heasarc.gsfc.nasa.gov/W3Browse/ginga/gingalac.html)
-
 [HEASARC (2026) - _HEASARC: The Ginga Satellite_ [ACCESSED 23-NOV-2026]](https://heasarc.gsfc.nasa.gov/docs/heasarc/missions/ginga.html)
+
+[HEASARC (2026) - _GINGALAC - Ginga Source Lightcurves & Spectra_ [ACCESSED 23-NOV-2026]](https://heasarc.gsfc.nasa.gov/W3Browse/ginga/gingalac.html)
