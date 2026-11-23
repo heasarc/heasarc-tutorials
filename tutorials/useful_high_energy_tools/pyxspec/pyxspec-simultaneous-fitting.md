@@ -821,7 +821,7 @@ for grp_id in range(1, xs.AllData.nGroups + 1):
 
 Over the course of this tutorial we're going to be plotting the spectra, fitted models, and
 model residuals several times. As such, we've implemented a small convenience function in
-the[Global Setup: Functions](#functions) section near the beginning of the notebook - `plot_fit_residual_spec()`.
+the [Global Setup: Functions](#functions) section near the beginning of the notebook - `plot_fit_residual_spec()`.
 
 This function is very similar to the one we defined in the
 {doc}`first PyXspec tutorial <pyxspec-basics>`, but in this case we've adapted it so
