@@ -17,7 +17,7 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-11-20'
+date: '2026-11-23'
 execution:
   cal-files:
     xmm-ccf: false
@@ -273,7 +273,7 @@ Now, onto the `.data` property. While the _contents_ of a header will change dep
 
 The return from the `.data` property of a `BinTableHDU` comes in the form of a `FITS_rec` object - this is what `astropy` uses to represent and interact with FITS tables (see the second `print` we do below, of a small subset of the events list table). We also include a `print` of the `.data` property of the `PrimaryHDU`, to show that in this case there is no data associated.
 
-These `FITS_rec` objects aren't always nice to work with though, particularly if we want a nice-looking table to examine for our demonstration. We can solve that problem easily, however, by wrapping the return in an `astropy` `Table`, which is the type of object we've been using to interact with our table of observations both in this notebook and the first. You'll note as well, that when we assign the `.data` output to a _variable_ using `evto_table = ...`, we can access that data _outside_ of the `with` statement:
+These `FITS_rec` objects aren't always nice to work with though, particularly if we want a nice-looking table to examine for our demonstration. We can solve that problem easily, however, by wrapping the return in an `astropy` `Table`, which is the type of object we've been using to interact with our table of observations both in this notebook and the first. You'll note as well, that when we assign the `.data` output to a _variable_ using `evto_table = ...`, we can access that data _outside_ the `with` statement:
 
 ```{code-cell} python
 with fits.open(demo_evt_path) as evto:
@@ -295,7 +295,7 @@ With all that information, you can see why X-ray and Gamma-ray observations are 
 
 The energy and positional information can also be combined to make images only within specific energy bands (filters), **after the observation has been made**. Most lower-energy (e.g. infrared, optical) observations have to decide which filters to use **before** they make their observations.
 
-Recording all this informaton about individual X-ray/Gamma-ray photons is possible only because they are _so high-energy_ that an individual incident photon can cause a detectable charge to accumulate in the detector, whereas lower-energy (longer-wavelength) observations have to "integrate" for some amount of time for charge to accumulate from multiple photon arrivals - they then can't measure the properties of individual photons, and lose the flexibility of an event list.
+Recording all this information about individual X-ray/Gamma-ray photons is possible only because they are _so high-energy_ that an individual incident photon can cause a detectable charge to accumulate in the detector, whereas lower-energy (longer-wavelength) observations have to "integrate" for some amount of time for charge to accumulate from multiple photon arrivals - they then can't measure the properties of individual photons, and lose the flexibility of an event list.
 
 All the information we gain from observing our lovely X-ray/Gamma-ray photons does come at a cost though - _because_ they are so high-energy, it is actually very difficult to **focus** these photons, which means X-ray and Gamma-ray observations cannot attain the high level of spatial (also described as "angular") resolution possible for longer-wavelength telescopes. The optics in a focusing X-ray telescope look nothing like those of an optical telescope.
 
@@ -377,7 +377,7 @@ with fits.open(demo_img_path) as imgo:
 
 Think back to the quick look we took at an events list, and you'll remember we highlighted two sets of column pairs that provided spatial information in different coordinate systems (_x_/_y_ and _detx_/_dety_), and mentioned a third coordinate system RA-Dec (generally the coordinate system we ultimately want to end up in, as it describes positions on the actual sky).
 
-When it comes to images, we have at least one more to think about - the _image pixel_ coordinate system, which is likely a binned version of the _x_-_y_ system. With all these definitions of position, and the fact that when we analyse images we tend to define positions, masks, analysis regions, in _pixel_ coordinates, but will eventually need that information in RA-Dec so that it is in the context of the sky, rather than an image that other scientists won't have access to, we **clearly need to be able to convert between these coordinate systems**.
+When it comes to images, we have at least one more to think about - the _image pixel_ coordinate system, which is likely a binned version of the _x_-_y_ system. With all these definitions of position, and the fact that when we analyze images we tend to define positions, masks, analysis regions, in _pixel_ coordinates, but will eventually need that information in RA-Dec so that it is in the context of the sky, rather than an image that other scientists won't have access to, we **clearly need to be able to convert between these coordinate systems**.
 
 Describing the mapping between different coordinate systems is one of the primary purposes of a "World Coordinate System" (or WCS) - a concept used throughout astronomy, represented in specific ways in FITS files, following the FITS standard, and with a nice interface in `astropy`. WCSes can account for different **projections** - think how the spherical surface of the Earth is 'projected' into just two-dimensions for maps; astronomy has the same problem, but we're _inside_ the sphere, rather than outside - the rotation of spacecraft and instruments relative to the definition of _north_ in different sky coordinate systems, and a bunch of other effects.
 
@@ -385,7 +385,7 @@ We won't be diving deep into the fundamentals of WCSes, as they are far too comp
 1. A WCS that can convert between the X-Y (what we saw in the event list, similar to detector coordinates but rotated to be aligned with RA-Dec's definition of north) and image pixels.
 2. Another WCS that can convert between _RA-Dec_ and image pixels.
 
-Headers defining both of those WCSes are printed separately below. Focusing particularly on the second block of headers (for the RA-Dec <-> image pixel WCS), we can see (for each axis of the coordinate systems):
+Headers defining both of those WCSes are printed separately below. Focusing particularly on the second block of headers (for the RA-Dec ↔ image pixel WCS), we can see (for each axis of the coordinate systems):
 - **CTYPE\<N\>** - In this case describes the type of projection (mapping) between RA-Dec and the pixel coordinates (which are cartesian) for one of the axes (this is why there are two sets of each of these headers, one for image x pixels and one for image y pixels).
 - **CRVAL\<N\>** - Gives us a 'reference' value for the RA or Dec axis of the coordinate system.
 - **CRPIX\<N\>** - Tells us the image pixel coordinate that corresponds to the RA-Dec reference value given in the last header.
@@ -408,7 +408,7 @@ with fits.open(demo_img_path) as imgo:
     demo_img_hdr = imgo["PRIMARY"].header
 ```
 
-You may well be happy to hear that, with `astropy`, we don't have to deal with setting up WCSes directly (for images at least). Instead we can use the `WCS` class - feeding it an image header will let it pick out the relevant entries and automatically construct a WCS (**by default, the WCS that maps between RA-Dec and image pixels**):
+You may well be happy to hear that, with `astropy`, we don't have to deal with setting up WCSes directly (for images at least). Instead, we can use the `WCS` class - feeding it an image header will let it pick out the relevant entries and automatically construct a WCS (**by default, the WCS that maps between RA-Dec and image pixels**):
 
 ```{code-cell} python
 demo_wcs = WCS(demo_img_hdr)
@@ -425,7 +425,7 @@ print(SkyCoord.from_pixel(600, 600, wcs=demo_wcs))
 
 ### 3.4 Extracting relevant information from our Chandra image files
 
-Now we've discussed the contents of a FITS file, and how to access them through `astropy`, we will load images for all of the entries in the our table of selected observations (`obs_table`). We've already discussed that we don't want to leave file handler connections open any longer than we have to, so we make sure to store all the information we need from the image headers and data arrays in a Python dictionary `all_loaded_img_info` for easy access later in the notebook:
+Now we've discussed the contents of a FITS file, and how to access them through `astropy`, we will load images for all the entries in our table of selected observations (`obs_table`). We've already discussed that we don't want to leave file handler connections open any longer than we have to, so we make sure to store all the information we need from the image headers and data arrays in a Python dictionary `all_loaded_img_info` for easy access later in the notebook:
 
 ```{code-cell} python
 all_loaded_img_info = {}
@@ -487,7 +487,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-You'll probably find that its quite hard to pick out many features looking at the image above, there is very little contrast. That is because, though most of the pixels have relatively low values (the mean pixel value, excluding zero-values, of the demonstration array we're using is ~15), there are a few pixels with much higher values. Those pixels with high values are being assigned the high-contrast colors (pinks, oranges, and yellows in this colormap), and all the pixels that show the interesting detail and spatial structure of the supernova remnant are consigned to the low-contrast blues.
+You'll probably find that it's quite hard to pick out many features looking at the image above, there is very little contrast. That is because, though most of the pixels have relatively low values (the mean pixel value, excluding zero-values, of the demonstration array we're using is ~15), there are a few pixels with much higher values. Those pixels with high values are being assigned the high-contrast colors (pinks, oranges, and yellows in this colormap), and all the pixels that show the interesting detail and spatial structure of the supernova remnant are consigned to the low-contrast blues.
 
 This is a common issue when examining X-ray observations of extended sources, and actually has its root in the physics of some X-ray emission mechanisms (we won't go into that in this workshop). The solution is to change the scaling, or stretch, of the mapping between pixel values and colors. The easiest way to stretch the image in Python is to use a few features of the `astropy.visualization` submodule ([see this documentation for a more detailed explanation of what `astropy` can do with respect to image stretching](https://docs.astropy.org/en/stable/visualization/normalization.html)) - alternatively, you could apply the `numpy` function `np.log(...)` to the data array before passing it to `plt.imshow(...)`.
 
@@ -531,7 +531,7 @@ The `astropy.visualization` submodule includes several other stretch classes ([t
 
 When dealing with multiple observations of an object, we cannot guarantee that they will all be perfectly aligned - in fact, it is incredibly unlikely that they will be. As such, we shouldn't just plot all the images as they are, because any evidence of Cas A's evolution would likely be obscured by the misalignment that comes from the telescope being oriented or pointed in slightly different directions.
 
-To solve that problem, we're going to choose a single coordinate to center every image on, as well as setting up to cut-out only a section of each image - that way we can zoom-in on the more interesting parts of the observations, if we want. To demonstrate, we'll set the central coordinate of our cutouts to `SRC_COORD` and specify that the side-lengths of the cutout should be _200 pixels_ (**note that we'll also be able to specify the side-length in _angular units_ - degrees, arcminutes, etc.**). We choose the ObsID of the last entry in the `obs_table` to demonstrate with:
+To solve that problem, we're going to choose a single coordinate to center every image on, as well as setting up to cut out only a section of each image - that way we can zoom-in on the more interesting parts of the observations, if we want. To demonstrate, we'll set the central coordinate of our cutouts to `SRC_COORD` and specify that the side-lengths of the cutout should be _200 pixels_ (**note that we'll also be able to specify the side-length in _angular units_ - degrees, arcminutes, etc.**). We choose the ObsID of the last entry in the `obs_table` to demonstrate with:
 
 ```{code-cell} python
 demo_central_coord = SRC_COORD
@@ -655,7 +655,7 @@ fig_img_norm = ImageNormalize(interval=fig_img_interval, stretch=fig_img_stretch
 
 ### 4.5 Producing the side-by-side comparison figure
 
-Finally, we use `matplotlib` to produce a comparison figure, showing all of observations side-by-side. As `matplotlib` is not the main focus of this workshop, we won't go into details right now, but if you do have questions/would _like_ the details, please ask one of the presenters.
+Finally, we use `matplotlib` to produce a comparison figure, showing all the observations side-by-side. As `matplotlib` is not the main focus of this workshop, we won't go into details right now, but if you do have questions/would _like_ the details, please ask one of the presenters.
 
 One thing to note though, is that we are producing cutouts as we go - meaning we're not storing them in any variables for later use. This means that we don't use up memory on cutouts that we might not want to use again after this step:
 
@@ -765,7 +765,7 @@ If you think back to the histogram we made in the first notebook, that showed us
 
 A simple proxy for observation quality is the **exposure time** - how long Chandra was looking at the target during a particular observation. Longer exposure times result in what we call 'deeper' data, meaning that we collect more photons and become sensitive to lower and lower flux emission. X-ray astronomy is a photon-starved field, we never really seem to have enough, so _generally speaking_ longer exposure times are better.
 
-**Of course, there is more nuance involved than longest exposure == best observation, but it is a safe enough assumption to start with**.
+**Of course, there is more nuance involved than "longest exposure == best observation", but it is a safe enough assumption to start with**.
 
 We're going to modify the `filt_obs_table` table so that it has a new boolean column called _year\_best_ - that column value will be set to `True` for observations that had the longest exposure time of the year. The first step is to add the new column, setting every entry to `False`:
 
@@ -807,7 +807,7 @@ That `groups` property of our new grouped table - `filt_obs_table` - has a set o
 
 Here we will use the `aggregate(...)` function, which will apply a passed function (in this case `np.argmax`) to each of the groups individually - when we aggregate-run `argmax` on the exposure column of each of our groups (again, think of them as sub-tables) the return will be the index **within each group/sub-table** of the highest-exposure observation.
 
-If only one observation was taken in the year 2002, for instance, then the group for that year will contain **one** row, so the index of the maximum exposure observation within that group will be **0**. That _doesn't_ tell us where that particular row is in the overall `filt_obs_table` table, however, which we need to know because we want to modify it's _year\_best_ entry to be `True`!
+If only one observation was taken in the year 2002, for instance, then the group for that year will contain **one** row, so the index of the maximum exposure observation within that group will be **0**. That _doesn't_ tell us where that particular row is in the overall `filt_obs_table` table, however, which we need to know because we want to modify its _year\_best_ entry to be `True`!
 
 Thankfully, as we saw in the output of the cell above, we know the indexes at which each group starts in the overall `filt_obs_table` table, so we can just add those to the indexes returned from the `aggregate(...)` function:
 
@@ -861,7 +861,7 @@ Extracting the ObsIDs to include in the GIF – we're going to limit ourselves t
 gif_obs_ids = filt_obs_table[filt_obs_table["year_best"]]["obsid"]
 ```
 
-As we've chosen a subset of the available observations to use to create a 'data product' (in this case an animation of the expansion of Cas A's X-ray emission), we may want to keep a record of exactly which data went into that product. We could add another boolean column to the "CasA-selected-chandra-observations.csv" file we created in the first notebook (and loaded in earlier in this one), but sometimes its just easier to make a new file with only those relevant entries in.
+As we've chosen a subset of the available observations to use to create a 'data product' (in this case an animation of the expansion of Cas A's X-ray emission), we may want to keep a record of exactly which data went into that product. We could add another boolean column to the "CasA-selected-chandra-observations.csv" file we created in the first notebook (and loaded in earlier in this one), but sometimes it's just easier to make a new file with only those relevant entries in.
 
 This is a mildly inefficient use of storage space, seeing as it is purely a subset of an existing sample file, but the file sizes here are so small that, practically speaking, it doesn't matter:
 
@@ -1184,7 +1184,7 @@ Author: Tess Jaffe, HEASARC Chief Archive Scientist.
 
 Author: Mike Corcoran, Associate Research Professor.
 
-Updated On: 2026-11-20
+Updated On: 2026-11-23
 
 +++
 
