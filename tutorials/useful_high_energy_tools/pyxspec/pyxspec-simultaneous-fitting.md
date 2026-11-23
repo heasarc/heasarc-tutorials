@@ -648,7 +648,7 @@ Looking at the spectra above, there are a few features we notice immediately:
 1. Cen X-3 in its _pre-eclipse_ phase had much lower overall flux than in its _post-eclipse_ phase.
 2. There is a prominent emission line evident in the _pre-eclipse_ spectrum, right around the energy we would expect for the iron complex. It seems very wide, which is easily explained by the poor (relative to modern missions) spectral/energy resolution of Ginga-LAC.
 3. Otherwise, the spectra are quite smooth, with little first-pass visual evidence of other emission lines, absorption edges, or absorption lines.
-4. The observed flux drops markedly below ${\sim}1.5-2.0$ keV, which is likely because Ginga-LACs recommended lower bound energy for analysis is 1.5 keV ([Angelini L. and Allen, J.](https://heasarc.gsfc.nasa.gov/docs/ginga/ginga.html)).
+4. The observed flux drops markedly below ${\sim}1.5-2.0$ keV, which is likely because Ginga-LACs recommended lower bound energy for analysis is 1.5 keV ([HEASARC (2026)](https://heasarc.gsfc.nasa.gov/docs/heasarc/missions/ginga.html)).
 5. Somewhat relatedly, the signal-to-noise above ${\sim} 20$ keV is very low, and those portions of the spectra may hamper our fit.
 
 ### Excluding parts of the spectra from our fit
@@ -1113,9 +1113,14 @@ plot_fit_residual_spec(
 )
 ```
 
-Indeed, this simple attempt to account for the spectral variability in terms of "blanket"
-cold absorption and scattering does not work. Clearly more sophisticated, physics-driven, models
-are required to properly describe and investigate this system. For instance, modeling
+Comparing the visualization above to <a href="#fig-untied-nh-norm">our last attempt</a>:
+1. There is an obvious, but not massive, improvement in the residuals of the pre-eclipse fit. Our model still does a very bad job of representing the spectrum at energies $\lesssim 4.0$ keV - it seems likely that we're still modeling too much absorption for the pre-eclipse spectrum (latest nH${\sim}20\times10^{22}$ cm$^{-2}$).
+2. The post-eclipse spectrum's residuals have a markedly different shape, but seem improved over most of the energy range. The higher energy ($\gtrsim 10$ keV) parts of the spectrum in particular are much better represented by our current model than they were by our last.
+3. A very distinct, and very broad, Lorentzian-like shape has emerged in the post-eclipse spectrum. It is centered approximately where we would expect an iron line to be (recall that we previously noticed a <a href="#fig-raw-spectra">visually obvious emission line in the _pre-eclipse_ spectrum</a>). Ginga-LAC had an energy resolution of 18% at ${\sim}$6 keV ([HEASARC (2026)](https://heasarc.gsfc.nasa.gov/W3Browse/ginga/gingalac.html)), which equates to ${\sim}1.20$ keV at 6.5 keV; this seems like it would account for the very broad line shape we're seeing in the residuals.
+
+Our simple attempt to account for the spectral variability in terms of "blanket" cold
+absorption and scattering has not worked well. Clearly more sophisticated, physics-driven,
+models are required to properly describe and investigate this system. For instance, modeling
 _partial absorption_ rather than the rather heavy-handed approach we've taken, and including
 some more emission components.
 
@@ -1329,4 +1334,6 @@ Support: [XSPEC Helpdesk](https://heasarc.gsfc.nasa.gov/cgi-bin/Feedback?selecte
 
 [Nagase F., Corbet R.H.D., Day C.S.R., Inoue H., Takeshima T., Yoshida K. Mihara T. (1992)](https://ui.adsabs.harvard.edu/abs/1992ApJ...396..147N/abstract) - _GINGA Observations of Centaurus X-3_
 
-[Angelini L. and Allen, J. - _HEASARC: The Ginga Observatory_ [ACCESSED 19-NOV-2026]](http://heasarc.gsfc.nasa.gov/docs/ginga/ginga.html)
+[HEASARC (2026) - _GINGALAC - Ginga Source Lightcurves & Spectra_ [ACCESSED 23-NOV-2026]](https://heasarc.gsfc.nasa.gov/W3Browse/ginga/gingalac.html)
+
+[HEASARC (2026) - _HEASARC: The Ginga Satellite_ [ACCESSED 23-NOV-2026]](https://heasarc.gsfc.nasa.gov/docs/heasarc/missions/ginga.html)
