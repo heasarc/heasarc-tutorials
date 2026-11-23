@@ -1288,10 +1288,11 @@ What you _should_ see above are **two separate errors**:
 2. **"Cannot do error calc: Reduced Chi^2..."** - By default, PyXspec will not perform an error calculation if the current fit is poor (reduced-$\chi^{2} \gt 2$).
 
 **However, if you absolutely must run the error calculation on a very poor fit, you can
-override the default limit**. This can be achieved by passing the 'maximum' command, followed
+override the default limit**. This could be achieved by passing the 'maximum' command, followed
 by a new maximum $\chi^{2}$ (in this case 50); then the parameter ID(s) follow that:
 
-```{code-cell} python
+```python
+# Given as an example, will not be executed
 xs.Fit.error("maximum 50 15")
 ```
 
