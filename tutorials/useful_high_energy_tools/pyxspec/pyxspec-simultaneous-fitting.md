@@ -869,7 +869,7 @@ We redeclare the model that we chose [earlier in the tutorial](#choosing-and-set
 xs.Model("tbabs * highecut(pow)")
 ```
 
-<br>
+<a id="discuss-untie-methods"></a>
 
 What we want to do now is to **remove the link between the nH parameters of the first and
 second data groups**; looking at the model summary above, you should be able to see that
@@ -1043,10 +1043,11 @@ spec_two_mod.TBabs.nH = 1.0
 
 Now we come to what we're changing this time around – the powerlaw normalization. Specifically,
 we're untying the normalization of the second data group model's powerlaw component so that
-it can vary independently of the first data group's equivalent:
+it can vary independently of the first data group's equivalent (using the second
+of the <a href="#discuss-untie-methods">untying methods we discussed earlier</a>):
 
 ```{code-cell} python
-spec_two_mod.powerlaw.norm = 1.0
+spec_two_mod.powerlaw.norm.untie()
 ```
 
 <a id="fit-untied-nh-norm"></a>
@@ -1063,8 +1064,8 @@ xs.Fit.perform()
 
 <br>
 
-This decoupling improves things somewhat, taking us from a reduced-$\chi^{2}$ of $\gt 1300$ from
-the <a href="#fit-untied-nh">last model fit</a> to a reduced-$\chi^{2}$ of $\gt 250$, but we
+This decoupling improves things somewhat, taking us from the reduced-$\chi^{2}$ of $\gt 1300$ of
+the <a href="#fit-untied-nh">last model fit</a>, to a reduced-$\chi^{2}$ of $\gt 250$; however, we
 still clearly see that it **isn't a good fit**.
 
 Takeaways from this fit:
@@ -1168,7 +1169,7 @@ spec_one_mod.TBabs.nH = 100.0
 spec_two_mod = xs.AllModels(2)
 spec_two_mod.TBabs.nH = 1.0
 
-spec_two_mod.powerlaw.norm = 1.0
+spec_two_mod.powerlaw.norm.untie()
 
 # ------- New for this model --------
 spec_one_mod.gaussian.LineE = 6.4
