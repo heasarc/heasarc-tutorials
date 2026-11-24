@@ -129,11 +129,26 @@ if not os.path.exists(ROOT_OUT_PATH):
 
 ## 1. Defining our target name and position
 
+Section 1.1 of the previous workshop notebook -
+'{doc}`Full Guide 1 – Identifying and downloading Chandra observations <1-data-acquisition-full-guide>`' - discussed
+how we look up Cassiopeia A's coordinate in some detail. Here we use the same method to fetch the coordinate:
+
 ```{code-cell} python
 SRC_NAME = "Cas A"
 
 SRC_COORD = SkyCoord.from_name(SRC_NAME, frame="icrs")
 SRC_COORD
+```
+
+```{seealso}
+Cassiopeia A's coordinates (seen above in the RA-Dec system) are [111.7376, -2.1345]$^{\circ}$ when written in the _galactic_
+coordinate system; the first number is galactic _longitude_ (_l_) which describes how east or west an object is of the
+line between the Sun and the center of the Milky Way; the second number is galactic _latitude_, which describes how north
+or south an object is from the plane of our galaxy (see the [Galactic coordinate system Wikipedia article](https://en.wikipedia.org/wiki/Galactic_coordinate_system)
+for a more information).
+
+These galactic coordinates place Cas A in the 'Perseus arm' of our galaxy, at a latitude close to zero, so not
+significantly above or below the flat disk of our galaxy.
 ```
 
 ## 2. Loading our observation information table
