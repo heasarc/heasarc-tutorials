@@ -617,7 +617,7 @@ demo_full_down_mask = (selected_obs["obsid"] == "00114") | (
     selected_obs["obsid"] == "31579"
 )
 
-if len(demo_full_down_mask) > 0:
+if demo_full_down_mask.any():
     demo_full_down_links = obs_data_links[demo_full_down_mask]
 else:
     demo_full_down_links = obs_data_links[:2]

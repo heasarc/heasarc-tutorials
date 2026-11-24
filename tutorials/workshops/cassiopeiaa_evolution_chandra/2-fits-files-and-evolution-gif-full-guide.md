@@ -50,35 +50,36 @@ By the end of this tutorial, you will be able to:
 
 ## Introduction
 
-This notebook follows the `1-data-acquisition-full-guide` notebook, which downloads publicly available Chandra observations of **Cas A**.
+This notebook follows the `1-data-acquisition-full-guide` notebook, which downloads publicly available Chandra
+observations of **Cas A** and _must be run first for this notebook to work_.
 
 ## Imports
 
 ```{code-cell} python
 import os
-from pprint import pprint
+from pprint import pprint  # Pretty-prints dictionaries and nested objects
 from warnings import filterwarnings
 
 import astropy.io.fits as fits
 import matplotlib.pyplot as plt
 import numpy as np
 from astropy.coordinates import SkyCoord
-from astropy.nddata import Cutout2D
+from astropy.nddata import Cutout2D  # Extracts 2D cutouts from images with WCS
 from astropy.table import Table
 from astropy.time import Time
 from astropy.units import Quantity
-from astropy.visualization import (
+from astropy.visualization import (  # Tools for scaling/stretching image pixel values
     ImageNormalize,
     LogStretch,
     ManualInterval,
     MinMaxInterval,
 )
 from astropy.wcs import WCS, FITSFixedWarning
-from IPython.display import Image
-from matplotlib import animation
-from matplotlib.cm import ScalarMappable
-from matplotlib.patches import Circle
-from tqdm import tqdm
+from IPython.display import Image  # Displays saved GIF/image files inline in notebooks
+from matplotlib import animation  # Builds frame-by-frame animations/movies
+from matplotlib.cm import ScalarMappable  # Maps data values to a standalone colorbar
+from matplotlib.patches import Circle  # Draws circular regions on matplotlib plots
+from tqdm import tqdm  # Displays progress bars for loops
 
 filterwarnings("ignore", category=FITSFixedWarning)
 ```
@@ -725,7 +726,7 @@ cut_demo_obs_id = obs_table[-1][
 ```
 
 Below, we use yet another `astropy` function to easily create our cutouts - `Cutout2D`. It requires both an image data array
-and the corresponding WCS (which we discussed in [an earlier section](#world-coordinate-system-wcs-constructed-from-header.)
+and the corresponding WCS (which we discussed in [an earlier section](#world-coordinate-system-wcs-constructed-from-header)
 of the notebook), so it can automatically convert between image pixel and RA-Dec coordinate systems. Some other
 arguments are also passed to fine tune its behavior:
 - `mode='partial'` - This tells the function how to deal with a requested cutout that goes off the edge of actual size of the full image. The 'partial' option means that if _some_ of the requested cutout goes off the edge of the image, `Cutout2D` will make an array of the requested size, and fill any part of it that is off of the original image with the specified `fill_value`.
