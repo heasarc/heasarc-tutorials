@@ -275,10 +275,9 @@ The first thing to note is that we are opening the FITS file using a `with` stat
 which in this case is a Pythonic way of making sure that the 'file handler' set up by `fits.open(...)` to read data
 from the FITS file is closed when we reach the end of the code block indented in the `with`.
 
-Leaving file handler connections open means that you can ask to read more things from the file - say, for instance,
-that you had loaded the header that describes a FITS image's properties, but not the data array itself, but then later
-in the code you wanted to read in that data - an open file handler would let you do that, if it had closed you would
-have to run the `fits.open(...)` call again.
+Leaving file handler connections open means that you can read more stored information from the file - for example first
+loading the header that describes a FITS image's properties, then later reading in the data. If the file handler had
+closed, you would have to re-open the file using the fits.open(...) call again.
 
 **However**, there are significant caveats to leaving them open (which is why the context manager is considered best practise):
 1) If you leave a lot of connections to different files **open** (and it is common to want to read from many 10s of files, sometimes significantly more, during an analysis) then that can negatively impact the performance of your file system (reading and writing files will get slower).
