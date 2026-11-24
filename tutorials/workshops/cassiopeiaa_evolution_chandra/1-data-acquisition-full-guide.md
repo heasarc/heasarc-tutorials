@@ -147,7 +147,7 @@ Our first task is to determine which of Chandra's very large archive of observat
 
 To access and download the Chandra data relevant to the Cas A supernova remnant (SNR) we are going to make use of [`astroquery`](https://astroquery.readthedocs.io/en/latest/) - this is a popular (in observational astrophysics circles at least) Python module that provides interfaces to a good fraction of the many astronomical data archives that are publicly accessible.
 
-### Setting up the name and position of our target
+### 1.1 Setting up the name and position of our target
 
 ```{code-cell} python
 # The name of the source of interest (variable name in ALL CAPS to
@@ -206,7 +206,7 @@ This declares the same coordinate we got from the name lookup, but demonstrates 
 
 ````
 
-### Preparing to search the Chandra data archive
+### 1.2 Preparing to search the Chandra data archive
 
 Now that we have retrieved Cas A's coordinates, we can search for Chandra observations!
 
@@ -253,7 +253,7 @@ match_radius = 1.0 * u.arcminute
 As an ***extension to this notebook***, you could test different values for the matching radius to see what effect it has on the number of observations selected.
 ```
 
-### Running the search for Chandra observations
+### 1.3 Running the search for Chandra observations
 
 Finally, we are ready to run the search! We use the `query_region` function of the `astroquery` package's HEASARC submodule, passing it Cas A's coordinates (`SRC_POSITION`), the name of the catalog to search (`obs_catalog_name`, set to the name of the Chandra master catalog), and the matching radius (`match_radius`). We also pass `columns='*'`, which tells the function to include every column in the table in the return, rather than a standard subset of columns (defined separately for each HEASARC-hosted catalog):
 
@@ -291,7 +291,7 @@ scripts - there you would have to use the `print(...)` function.
 
 ## 2. Deciding which Chandra observations we want to download
 
-### Filtering out _future_ and _proprietary_ observations
+### 2.1 Filtering out _future_ and _proprietary_ observations
 
 Chandra is an **active mission** – meaning that it is still operating and people are still proposing observation targets. This is relevant for two reasons:
 1. The observation summary table (master catalog) for Chandra doesn't _just_ contain entries for observations that have already been made. It also contains an entry for each **scheduled** (but not yet completed) observation. So, if Chandra is planning on observing Cas A in the future (which is **true** at the time of writing, 16th August 2026), we have likely included those scheduled observations in our search results.
@@ -333,7 +333,7 @@ search_result["status"] == "archived"
 
 That boolean array can then itself be used to **index** the `astropy` `Table` - meaning that a new table, with only those rows that have a `True` entry in the array above, is created and returned. This returned Table is a subset of the original, and has been filtered to exclude any observation that does not have "archived" status.
 
-### Specifying which of Chandra's instruments we want to use
+### 2.2 Specifying which of Chandra's instruments we want to use
 
 We are going to restrict ourselves to using _one_ of Chandra's instruments - **ACIS**. This will make it easier for us to create our movie of Cas A's evolution, later in the workshop, as the other instrument (**HRC**) has significantly different spatial resolution and sensitivity characteristics.
 
@@ -405,7 +405,7 @@ print(
 )
 ```
 
-### Excluding observations that used a transmission grating spectrometer
+### 2.3 Excluding observations that used a transmission grating spectrometer
 
 In addition to the **ACIS** and **HRC** instruments, Chandra can also place 'transmission gratings' (a type of diffraction grating) between the incoming photons and the currently selected instrument - this enables high resolution X-ray _spectroscopy_ of a target using Chandra. However, the images produced by such observations are not well suited to our current task, so we want to exclude them.
 
@@ -419,7 +419,7 @@ print(
 )
 ```
 
-### Dropping calibration observations
+### 2.4 Dropping calibration observations
 
 Finally, we're going to select only those Chandra observations that were intended for **science**, as opposed to any observations scheduled by the Chandra control team to take data used to calibrate the telescope and detectors.
 
@@ -445,7 +445,7 @@ selected_obs = search_result[(search_result['status'] == "archived")
 ```
 ````
 
-### Temporal distribution of Chandra observations
+### 2.5 Temporal distribution of Chandra observations
 
 Our ultimate goal is to see how the supernova remnant changes with time, so we want to select images that span a reasonable time. Note that these times are given in [Modified Julian Dates (MJDs)](https://scienceworld.wolfram.com/astronomy/ModifiedJulianDate.html), which are essentially dates that start from November 17, 1858. For our general purposes, units of MJD are equivalent to days, so these data span from MJD = 51410 to 61217, roughly, which is ~27 years. Cas A is a popular and frequently observed source, so this spans the entire lifetime of the Chandra mission (from 1999 to 2026).
 
@@ -550,7 +550,7 @@ plt.show()
 As an ***extension to this notebook***, you could add the distributions of the observations remaining after each of the filtering steps (i.e. the `acis_avail_obs` and `nograt_acis_avail_obs` tables) - don't forget to label the new distributions so they appear in the legend, and try to choose colors/styles that are easily distinguishable from one another, while being mindful of how the figure would look to viewers [with different forms of color blindness](https://www.color-blindness.com/coblis-color-blindness-simulator/).
 ```
 
-### Reformatting the ObsID column to be easier to work with
+### 2.6 Reformatting the ObsID column to be easier to work with
 
 Finally, before we move on to downloading the observation data, we make a small quality-of-life change to the ObsID column of our `selected_obs` table. Specifically, we make sure that the integer ObsID column is converted to a string datatype, and that each ObsID is _exactly_ 5 characters long by adding "0" characters to the front of the string.
 
@@ -570,7 +570,7 @@ selected_obs[:5]
 
 Now we've decided which Chandra observations we might want to use to explore the evolution of the Cassiopeia A supernova remnant, the next step is to download the files!
 
-### Determining where the observation data are stored
+### 3.1 Determining where the observation data are stored
 
 To be able to download the Chandra observation data, we first have to know **where to download it from**.
 
@@ -591,7 +591,7 @@ Looking at the table of datalinks, you'll notice three columns of links. We will
 - ***aws*** - Provides a **Uniform Resource Identifier** (URI) that tells us where to find the data on the **HEASARC S3 bucket**. This is a storage solution provided by Amazon Web Services (AWS) as part of the [NASA Space Act](https://registry.opendata.aws/collab/nasa/) agreement, into which we mirror all of our high-energy astrophysics data. The advantage of this is that the access speeds to this bucket are _much_ faster when working in the Amazon cloud (which, if you are running this notebook on NASA Fornax, you are doing).
 ```
 
-### The **easiest** way to download Chandra data
+### 3.2 The **easiest** way to download Chandra data
 
 **We now know where the relevant Chandra data are stored** (both in the HEASARC S3 bucket, and on the HEASARC FTP server), and can start downloading them for local use.
 
@@ -630,7 +630,7 @@ Heasarc.download_data(demo_full_down_links, host="aws", location=full_obs_downlo
 Chandra observation data directories can be on the order of several gigabytes in size, so if you are downloading large numbers of observations you need to make sure you have the storage space, and be prepared for a little bit of a wait!
 ```
 
-### Downloading **only images** to save time and storage
+### 3.3 Downloading **only images** to save time and storage
 
 Rather than downloading all files for all our observations, we will now _only_ fetch those that are directly
 relevant to what we want to do in this notebook - this method is a little more involved than using Astroquery, but
@@ -823,7 +823,7 @@ selected_obs["img_file_name"] = specific_img_file_names
 
 ## 4. Preparing for the next notebook
 
-### Saving the modified selected observation table
+### 4.1 Saving the modified selected observation table
 
 The selected observations table contains useful information that we will want to use in later notebooks. So let's store it!
 
