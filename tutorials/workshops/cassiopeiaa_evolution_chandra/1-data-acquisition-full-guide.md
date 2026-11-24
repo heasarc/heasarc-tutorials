@@ -17,7 +17,7 @@ authors:
   affiliations: [The Catholic University of America, 'HEASARC, NASA Goddard']
   orcid: 0000-0002-7762-3172
   website: https://science.gsfc.nasa.gov/sci/bio/michael.f.corcoran
-date: '2026-10-19'
+date: '2026-11-24'
 execution:
   cal-files:
     xmm-ccf: false
@@ -35,7 +35,7 @@ kernelspec:
   display_name: heasoft
   language: python
   name: heasoft
-title: Full Guide 1 – Identifying and downloading Chandra observations
+title: "Full Guide 1 \u2013 Identifying and downloading Chandra observations"
 ---
 
 # Full Guide 1 – Identifying and downloading Chandra observations
@@ -498,7 +498,6 @@ tags: [hide-input]
 jupyter:
   source_hidden: true
 ---
-
 plt.figure(figsize=(6, 5.5))
 plt.minorticks_on()
 plt.tick_params(which="both", direction="in", right=True, top=False)
@@ -611,8 +610,20 @@ os.makedirs(full_obs_download_dir, exist_ok=True)
 Now we use _another_ feature of the HEASARC submodule of `astroquery`, the `.download_data(...)` function. This takes the datalinks table we just created as an input (_though here we slice the table so only the first two rows are given to the function_). It also takes a `host=` input, which just tells it where to download the data from (i.e. which column of the datalinks table to use) - here we telling it to download from AWS. Finally, we use the `location=` argument to ensure that the downloaded Chandra data directories are stored in the output directory we just set up:
 
 ```{code-cell} python
+# We specify two ObsIDs to fully download, but if the notebook has been pointed at a
+#  different object from Cas A, and those ObsIDs are not relevant, we fall back to
+#  downloading the first two entries in the table
+demo_full_down_mask = (selected_obs["obsid"] == "00114") | (
+    selected_obs["obsid"] == "31579"
+)
+
+if len(demo_full_down_mask) > 0:
+    demo_full_down_links = obs_data_links[demo_full_down_mask]
+else:
+    demo_full_down_links = obs_data_links[:2]
+
 # host= selects which datalink column to pull the URI from
-Heasarc.download_data(obs_data_links[:2], host="aws", location=full_obs_download_dir)
+Heasarc.download_data(demo_full_down_links, host="aws", location=full_obs_download_dir)
 ```
 
 ```{caution}
@@ -838,7 +849,7 @@ Author: Tess Jaffe, HEASARC Chief Archive Scientist.
 
 Author: Mike Corcoran, Associate Research Professor.
 
-Updated On: 2026-10-19
+Updated On: 2026-11-24
 
 +++
 
