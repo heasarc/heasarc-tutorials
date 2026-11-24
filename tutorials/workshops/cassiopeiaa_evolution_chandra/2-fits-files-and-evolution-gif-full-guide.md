@@ -837,10 +837,13 @@ Anyway, we do still find the maximum value of each count-rate array, but we then
 to use as the upper limit:
 
 ```{code-cell} python
+# Get a list of the maximum count rate in each of the images in the set
 max_rate_vals = [
     cur_im_info["data"].max() for cur_im_info in all_loaded_img_info.values()
 ]
 
+# Get the 95 percentile values of the maximum rates, and use that as the upper limit
+#  for the interval we'll use to normalize the set
 img_upper_lim = np.percentile(max_rate_vals, 95)
 
 fig_img_interval = ManualInterval(vmin=0, vmax=img_upper_lim)
