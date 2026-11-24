@@ -145,7 +145,7 @@ Cassiopeia A's coordinates (seen above in the RA-Dec system) are [111.7376, -2.1
 coordinate system; the first number is galactic _longitude_ (_l_) which describes how east or west an object is of the
 line between the Sun and the center of the Milky Way; the second number is galactic _latitude_, which describes how north
 or south an object is from the plane of our galaxy (see the [Galactic coordinate system Wikipedia article](https://en.wikipedia.org/wiki/Galactic_coordinate_system)
-for a more information).
+for more information).
 
 These galactic coordinates place Cas A in the 'Perseus arm' of our galaxy, at a latitude close to zero, so not
 significantly above or below the flat disk of our galaxy.
@@ -212,8 +212,7 @@ by _time_ afterwards though, otherwise your GIF will not be showing the evolutio
 
 ## 3. Loading the Chandra FITS images into memory
 
-FITS is a very versatile format, used almost ubiquitously in the astronomy community (conversations about what we're
-going to replace it with have begun, and some missions are **already** using other file formats). It can be used to
+FITS is a very versatile format, used almost ubiquitously in the astronomy community. It can be used to
 store anything from **images**, to spectra, to tables of catalog information, to **event lists** (restricted to
 high-energy missions, and one of the things that makes archival X-ray and Gamma-ray data so flexible and useful for
 serendipitous science).
@@ -364,7 +363,11 @@ with fits.open(demo_evt_path) as evto:
 evto_table
 ```
 
-Every entry in this table represents an _event_ recorded by the detector, each of which would represent a separate high-energy photon (in a perfect world). The reality is a little different, and some of these events will actually represent high energy particles like cosmic rays, multiple detections of the same photon/particle, or multiple photons combined into one detection. We have various techniques for cleaning event lists so that the vast majority of non-photon-events are removed however, and we are then left with a dataset that tells us:
+Every entry in this table represents an _event_ recorded by the detector, each of which would represent a separate
+high-energy photon (in a perfect world). The reality is a little different, and some of these events will actually
+represent high energy particles like cosmic rays, multiple detections of the same photon/particle, or multiple photons
+combined into one detection. We have various techniques for cleaning event lists so that the vast majority of
+non-photon-events are removed however, and we are then left with a dataset that tells us:
 1) The **arrival time** of each individual; the _time_ column.
 2) **Where on the detector each photon landed**; _detx_ and _dety_ columns. For missions that _focus_ the light using X-ray optics (as opposed to just gathering light from a big chunk of the sky and lumping it together - non-imaging missions) we can map the detector positions of photons to locations on the sky; the _x_ and _y_ columns give event positions in a coordinate position that can be transformed to RA-Dec coordinates, as the _detx_ and _dety_ coordinate system has been rotated to align with the RA-Dec coordinate system orientation.
 3) The **energy of the incident photon**; the _energy_ column in Chandra-ACIS event lists (though in other mission's event lists it is more common to only see the _pha_ or _pi_ columns, which are detector measurements of the 'strength' of each photon's detection signal that map to energy), and have to do the conversion yourself.
@@ -464,10 +467,11 @@ with fits.open(demo_img_path) as imgo:
 
 #### 3.3.2 Header
 
-Looking at the image header, we once again show a 30-long slice of entries (as the whole header is much longer). If you
+Looking at the image header, we show a 20-long slice of entries (as the whole header is much longer). If you
 compare this to the event list _table_ header, you'll likely notice some differences - for instance, the first entry of
 the events list table header was `XTENSION` (with the value set to "BINTABLE"), whereas that entry is missing entirely
-here (as an image HDU is considered the default).
+here because this is the _primary_ HDU, which according to the FITS standard can **only** contain image (or N-dimensional
+array) data, or no data at all.
 
 Note that the NAXIS1 and NAXIS2 values (describing the dimensions of the data array stored in the HDU) give the shape
 of the array we retrieved in the last step.
@@ -481,6 +485,7 @@ with fits.open(demo_img_path) as imgo:
 
     print("\n------------------------------------------------\n")
 
+    print(f"This image's header has {len(imgo["PRIMARY"].header)} entries.")
     print(f"This image's telescope is {imgo["PRIMARY"].header['TELESCOP']}")
     print(f"This image's instrument is {imgo["PRIMARY"].header['INSTRUME']}")
     print(f"This image's ObsID is {imgo["PRIMARY"].header['OBS_ID']}")
@@ -496,7 +501,7 @@ coordinate system RA-Dec (generally the coordinate system we ultimately want to 
 on the actual sky).
 
 When it comes to images, we have at least one more to think about - the _image pixel_ coordinate system, which is likely
-a binned version of the _x_-_y_ system. **Clearly need to be able to convert between all these coordinate systems**.
+a binned version of the _x_-_y_ system. **We clearly need to be able to convert between all these coordinate systems**.
 
 Describing the mapping between different coordinate systems is one of the primary purposes of a "World Coordinate
 System" (or WCS) - a concept used throughout astronomy, represented in specific ways in FITS files, following the
@@ -657,7 +662,7 @@ linear. We configure it by passing the following:
 - `interval=MinMaxInterval()` - Sets up and passes a `MinMaxInterval()` interval object, which sets the _input_ data interval between which values will be normalized to between **0** and **1**. There are different varieties of interval class (and one can specify the values manually), but this one just looks at the input given to `data=` and finds its minimum and maximum values.
 - `stretch=LogStretch()` - Tells the normalizer that the relationship between _input_ values within the **interval**, and output values between **0** and **1** should be logarithmic.
 
-We show the normalized results of two values as a demonstration (**if no stretch were applied the second printed value
+We show the normalized results of two fake count values as a demonstration (**if no stretch were applied the second printed value
 would be twice as large as the first**):
 
 ```{code-cell} python
@@ -720,7 +725,7 @@ cut_demo_obs_id = obs_table[-1][
 ```
 
 Below, we use yet another `astropy` function to easily create our cutouts - `Cutout2D`. It requires both an image data array
-and the corresponding WCS (which we discussed in [an earlier section](#333-world-coordinate-system-wcs---constructed-from-header)
+and the corresponding WCS (which we discussed in [an earlier section](#world-coordinate-system-wcs-constructed-from-header.)
 of the notebook), so it can automatically convert between image pixel and RA-Dec coordinate systems. Some other
 arguments are also passed to fine tune its behavior:
 - `mode='partial'` - This tells the function how to deal with a requested cutout that goes off the edge of actual size of the full image. The 'partial' option means that if _some_ of the requested cutout goes off the edge of the image, `Cutout2D` will make an array of the requested size, and fill any part of it that is off of the original image with the specified `fill_value`.
@@ -802,8 +807,14 @@ for cur_obs_id in all_loaded_img_info:
         all_loaded_img_info[cur_obs_id]["count_rate"] = True
 ```
 
+As an example of how to access the data, we show the minimum and maximum values of a
+count-rate data array (using the ObsID stored in the `cut_demo_obs_id` variable):
+
 ```{code-cell} python
-all_loaded_img_info["00114"]["data"]
+print(cut_demo_obs_id)
+
+print(all_loaded_img_info[cut_demo_obs_id]["data"].min())
+print(all_loaded_img_info[cut_demo_obs_id]["data"].max())
 ```
 
 ### 4.4 Setting up for the side-by-side comparison figure
@@ -1294,7 +1305,7 @@ Image(filename=gif_out_path)
 
 Some takeaways from our movie:
 1. We're seeing a very complex system of hot gas expanding outwards from a central point, perpendicular to our line of sight. This sort of movement, which is happening parallel to the plane of the sky, is called 'proper motion'.
-2. What we _aren't_ seeing is the movement of hot gas ejecta directly _towards or away from us_ (line of sight, or radial, motion); we can only see _proper_ motion, and so we can't see any blobs of gas that have been ejected directly towards us, no matter how fast they are going. We must remember that this is a three-dimensional
+2. What we _aren't_ seeing is the movement of hot gas ejecta directly _towards or away from us_ (line of sight, or radial, motion); we can only see _proper_ motion, and so we can't see any blobs of gas that have been ejected directly towards us, no matter how fast they are going.
 3. It is really remarkable to see such a dramatic change over the course of only a few decades; few astrophysical sources change like this on such a human timescale, and fewer still are close enough for us to notice them.
 
 ```{admonition} Extra Task
