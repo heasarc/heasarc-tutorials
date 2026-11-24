@@ -405,12 +405,11 @@ demo_img_path = os.path.join(
 )
 ```
 
-Now we follow the exact same process as before to read the file in using `astropy` - we also `print` the same
+Below, we follow the exact same process as before to read the file using `astropy` - we also `print` the same
 information as when we first demonstrated loading an event list. This shows that our image file contains **three**
 HDUs - the first, _primary_, HDU contains the image data array we want to use, but you'll also notice that **two tables**
-are stored in this file as well! That is actually fairly common, particularly for high-energy mission data files, as
-we sometimes wish to keep information about what events, data, or filtering operations were used to generate an image,
-alongside it, in the same file.
+are stored in this file as well! This is common for high-energy mission data files, as we sometimes wish to keep
+information about what events, data, or filtering operations were used to generate an image, alongside it, in the same file.
 
 The two tables in this image file contain "good time interval" (GTI) information, which describes the time periods of
 the observation that the events used to make the image were extracted from. Sometimes we need to filter out large
