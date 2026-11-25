@@ -53,6 +53,9 @@ By the end of this tutorial, you will be able to:
 This notebook follows the `1-data-acquisition-full-guide` notebook, which downloads publicly available Chandra
 observations of **Cas A** and _must be run first for this notebook to work_.
 
+Throughout this notebook we will rely heavily on the `astropy` module (think of it as the core library for
+astronomy/astrophysics in Python) to handle coordinates, tables, FITS files, and image visualization.
+
 ## Imports
 
 ```{code-cell} python
@@ -184,20 +187,10 @@ if you can spot the difference in the ObsID column.
 
 ### 2.1 Make sure observations are ordered by start time
 
-Seeing as our goal is to make a GIF of the evolution of Cassiopeia A's X-ray emission, it would be quite nice to know
-that the observations in our `obs_table` variable are ordered from first-taken to last-taken. Now, thanks to the
-process we went through to give our table a _year_best_ column **at the end of the first notebook** (particularly the
-bit where we grouped observations by the year they were taken in), the table should be in nearly the right order.
-
-However, seeing as it is critical that the observations be ordered correctly (if they aren't then we might see some
-quite confusing things in our eventual GIF), we should make absolutely sure through the use of the `.sort(...)`
-function that is built-in to the `Table` class! We simply need to pass the name of the column we want to sort
-by - _time_.
-
-The default behavior of the `.sort(...)` function is to sort in **ascending order**, but if for some reason you needed
-a table ordered _the other way_, you could pass an extra argument to the function - e.g. `obs_table.sort('time', reverse=True)`.
-
-Now we run the sort and look at the first ten rows:
+Now we sort the table by time, since we want the images  to be time-ordered images for our movie to see how Cas A's
+X-ray emissions change as the years go by. Using the `Table.sort('time')` method will sort the whole table into
+the ascending order of the _time_ column (you could call `Table.sort('time', reverse=True)` if you wanted _descending_
+order):
 
 ```{code-cell} python
 # Sorting an astropy Table is an 'in place' operation, so we don't assign the
@@ -231,11 +224,11 @@ a coding environment than in a GUI tool).
 
 ### 3.1 Opening a FITS file in Python using `astropy`
 
-The `astropy` module (think of it as the core library for astronomy/astrophysics in Python) contains a powerful
-submodule for interacting with FITS files - "_interacting_", in this case, covers everything from reading data from
-the various storage structures that FITS files can contain, to making completely new files, to modifying existing ones.
+The `astropy` module contains a powerful submodule for interacting with FITS files - "_interacting_", in this case,
+covers everything from reading data from the various storage structures that FITS files can contain, to making
+completely new files, to modifying existing ones.
 
-Specifically, we will use the `astropy.io.fits(...)` function.
+Specifically, we will use the `astropy.io.fits` submodule.
 
 Before we get to loading in all the images we'll use to explore the X-ray evolution of Cassiopeia A, we will read a
 couple of files from the whole-observation-data-directories we downloaded as a demonstration of the 'easiest' way to
@@ -272,25 +265,10 @@ demo_evt_name = obs_table[obs_table["obsid"] == demo_obs_id]["img_file_name"][
 demo_evt_path = os.path.join(demo_dir, "primary", demo_evt_name)
 ```
 
-The first thing to note is that we are opening the FITS file using a `with` statement - this is a **"context manager"**,
-which in this case is a Pythonic way of making sure that the 'file handler' set up by `fits.open(...)` to read data
-from the FITS file is closed when we reach the end of the code block indented in the `with`.
-
-Leaving file handler connections open means that you can read more stored information from the file - for example first
-loading the header that describes a FITS image's properties, then later reading in the data. If the file handler had
-closed, you would have to re-open the file using the fits.open(...) call again.
-
-**However**, there are significant caveats to leaving them open (which is why the context manager is considered best practise):
-1) If you leave a lot of connections to different files **open** (and it is common to want to read from many 10s of files, sometimes significantly more, during an analysis) then that can negatively impact the performance of your file system (reading and writing files will get slower).
-2) Operating systems impose hard limits on how many files can be 'open' at once (though the number is normally quite large, so unlikely to be a problem for a notebook like this).
-3) Every connection will use up some of your RAM, which is a finite resource, particularly on smaller Fornax server instances.
-
-
-Now we will _proceed to be quite inefficient and repeatedly read the same file_, so we can separately demonstrate
-different aspects of interacting with a FITS file in Python. The first thing to know is that FITS files are made up
-various _Header Data Units_ - there are different types of HDU that store images and tables, and a 'primary' HDU (an
-image HDU) which is always the first entry, and contains information about the contents of the rest of the FITS file. We
-can see below that our demonstration event list has three different `BinTableHDU`s (they store table data).
+The first thing to know is that FITS files are made up various _Header Data Units_ - there are different types of
+HDU that store images and tables, and a 'primary' HDU (an image HDU) which is always the first entry, and contains
+information about the contents of the rest of the FITS file. We can see below that our demonstration event list has
+three different `BinTableHDU`s (they store table data).
 
 Additionally, each HDU is in a FITS file assigned a name, which usually informs you of the contents:
 
@@ -303,6 +281,20 @@ with fits.open(demo_evt_path) as evto:
     for cur_hdu in evto:
         print(cur_hdu.name)
 ```
+
+You'll notice we have used a `with` statement - this is a **"context manager"**. In this case it ensures that the
+'file handler' set up by `fits.open(...)` to read data from the FITS file is closed when we reach the end of the
+code block indented in the `with`.
+
+Leaving file handler connections open means that you can read more stored information from the file - for example first
+loading the header that describes a FITS image's properties, then later reading in the data. If the file handler had
+closed, you would have to re-open the file using the fits.open(...) call again.
+
+**However**, there are significant caveats to leaving them open (which is why the context manager is considered best practise):
+1) If you leave a lot of connections to different files **open** (and it is common to want to read from many 10s of files, sometimes significantly more, during an analysis) then that can negatively impact the performance of your file system (reading and writing files will get slower).
+2) Operating systems impose hard limits on how many files can be 'open' at once (though the number is normally quite large, so unlikely to be a problem for a notebook like this).
+3) Every connection will use up some of your RAM, which is a finite resource, particularly on smaller Fornax server instances.
+
 
 The information about the detected photons that we're interested in is given in the EVENTS HDU, so let's take a quick
 look at that. The two most important properties of an `astropy` HDU are generally `.header` and `.data` (though it is
@@ -333,8 +325,8 @@ with fits.open(demo_evt_path) as evto:
 
 ```{tip}
 The built-in Python function `dir(<put Python object here>)` is a **very** useful way of learning your way around a
-    new-to-you type of object (a `BinTableHDU` instance, for example), as it will list all of the functions, attributes,
-    and properties of the object. Try it out!
+new-to-you type of object (a `BinTableHDU` instance, for example), as it will list all of the functions, attributes,
+and properties of the object. Try it out!
 ```
 
 Now, onto the `.data` property. While the _contents_ of a header will change depending on the type of HDU it is a part
@@ -343,16 +335,8 @@ fundamentally different kinds of data - an events list takes the form of a table
 different data types (strings, integers, floats, etc.); an image, as we'll see very soon, takes the form of an array,
 with no named columns or rows, and a uniform data type.
 
-The return from the `.data` property of a `BinTableHDU` comes in the form of a `FITS_rec` object - this is what `astropy`
-uses to represent and interact with FITS tables (see the second `print` we do below, of a small subset of the events
-list table). We also include a `print` of the `.data` property of the `PrimaryHDU`, to show that in this case there is
-no data associated.
-
-These `FITS_rec` objects aren't always nice to work with though, particularly if we want a nice-looking table to examine
-for our demonstration. We can solve that problem easily, however, by wrapping the return in an `astropy` `Table`, which
-is the type of object we've been using to interact with our table of observations both in this notebook and the first. You'll
-note as well, that when we assign the `.data` output to a _variable_ using `evto_table = ...`, we can access that data
-_outside_ the `with` statement:
+Below, we wrap the `.data` property of the `BinTableHDU` in a `Table`, as they are nicer to work with. We also include
+a `print` of the `.data` property of the `PrimaryHDU`, to show that in this case there is no data associated:
 
 ```{code-cell} python
 with fits.open(demo_evt_path) as evto:
@@ -453,8 +437,9 @@ large images, remote files, etc. - wading in to all those options is outside the
 #### 3.3.1 Data
 
 Looking at the `.data` property of the image file's `PrimaryHDU`, you'll note that we get the data returned as a
-standard numpy array. We've shown a 2D slice of values around the center of the image - each of those numbers is the
-'count' of events within that spatial bin (or pixel of the image):
+standard numpy array. We've shown a 2D slice of values around the center of the image (as this image is 1024x1024
+pixels, the center is at [512, 512]) - each of those numbers is the 'count' of events within that spatial bin (or pixel
+of the image):
 
 ```{code-cell} python
 with fits.open(demo_img_path) as imgo:
@@ -464,7 +449,7 @@ with fits.open(demo_img_path) as imgo:
 
     print(demo_img_arr.shape, "\n")
 
-    print(demo_img_arr[550:650, 550:650])
+    print(demo_img_arr[462:562, 462:562])
 ```
 
 #### 3.3.2 Header
@@ -513,7 +498,7 @@ we're _inside_ the sphere, rather than outside - the rotation of spacecraft and 
 of _north_ in different sky coordinate systems, and a bunch of other effects.
 
 We won't be diving deep into the fundamentals of WCSes, as they are far too complicated for this workshop, and even
-professional astronomers have trouble with them sometimes (including the author of this notebook). Instead, we will
+professional astronomers have trouble with them sometimes. Instead, we will
 quickly demonstrate how the WCS information is stored inside a FITS header. Multiple WCSes can be (and often are) stored
 in high-energy mission image headers. Our Chandra images contain:
 1. A WCS that can convert between the X-Y (what we saw in the event list, similar to detector coordinates but rotated to be aligned with RA-Dec's definition of north) and image pixels.
@@ -843,11 +828,11 @@ image is going to have different minimum and maximum values, so the exact same c
 represent the same count-rate! That would make a direct comparison much harder, so we'll set an interval (using
 the `ManualInterval` class) that will be _applied to all images uniformly_.
 
-We're going to set the minimum value to zero. The maximum value _could_ just be set to the highest pixel value found
-in any of the images, but instead we could take this opportunity to place the upper limit below the true maximum - that
-then de-emphasizes the brightest pixels (which are usually from bright, point like sources), and allows the
-slightly-less-bright _structure_ of the supernova remnant to be shown in higher contrast colors - making them more
-visually obvious.
+We're going to set the minimum value to zero. The maximum value _could_ just be set to the highest pixel value
+(in counts-per-second) found in any of the images, but instead we could take this opportunity to place the upper limit
+below the true maximum - that then de-emphasizes the brightest pixels (which are usually from bright, point like
+sources), and allows the slightly-less-bright _structure_ of the supernova remnant to be shown in higher contrast
+colors - making them more visually obvious.
 
 Anyway, we do still find the maximum value of each count-rate array, but we then calculate the 95th percentile value
 to use as the upper limit:
@@ -887,9 +872,11 @@ One thing to note is that we are producing cutouts as we go - meaning we're not 
 for later use. This means that we don't use up memory on cutouts that we might not want to use again after this step:
 
 ```{code-cell} python
+# Calculate the number of rows needed for the subplot grid
 num_ims = len(all_loaded_img_info)
 fig_num_rows = int(np.ceil(num_ims / fig_num_cols))
 
+# Set up the figure and grid of subplot axes
 fig, ax_arr = plt.subplots(
     ncols=fig_num_cols,
     nrows=fig_num_rows,
@@ -898,9 +885,9 @@ fig, ax_arr = plt.subplots(
 plt.subplots_adjust(wspace=0.02, hspace=0.02)
 
 ax_ind = 0
-all_im_arrs = []
-all_date_strs = []
+# Iterate over every subplot axis in the 2D array
 for ax_arr_ind, ax in np.ndenumerate(ax_arr):
+    # Hide any leftover subplot panels if the grid has more cells than images
     if ax_ind >= num_ims:
         ax.set_visible(False)
         continue
@@ -909,6 +896,7 @@ for ax_arr_ind, ax in np.ndenumerate(ax_arr):
 
     cur_obs_id = list(all_loaded_img_info.keys())[ax_ind]
 
+    # Generate the cutout for the current observation on the fly
     cur_cutout_data_arr = Cutout2D(
         all_loaded_img_info[cur_obs_id]["data"],
         fig_central_coord,
@@ -918,10 +906,12 @@ for ax_arr_ind, ax in np.ndenumerate(ax_arr):
         fill_value=0,
     ).data
 
+    # Display the cutout using the shared normalization and colormap
     ax.imshow(
         cur_cutout_data_arr, origin="lower", norm=fig_img_norm, cmap=fig_color_map
     )
 
+    # Overlay the observation date (top-left) and ObsID (bottom-right)
     ax.text(
         0.05,
         0.92,
