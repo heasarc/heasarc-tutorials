@@ -769,8 +769,8 @@ demo_cutout.data
 
 ```{admonition} Extra Task
 :class: seealso
-**As an extension to this notebook**, you could take what you learned about visualizing X-ray images earlier in the
-notebook, and try to make a nice figure out of our demonstration cutout.
+**As an extension to this notebook**, you could take what you learned about visualizing X-ray images and try to
+make a nice figure out of our demonstration cutout.
 ```
 
 ### 4.3 How do we normalize the images by their exposure time?
@@ -812,8 +812,10 @@ As an example of how to access the data, we show the minimum and maximum values 
 count-rate data array (using the ObsID stored in the `cut_demo_obs_id` variable):
 
 ```{code-cell} python
+# Show the demo ObsID for context
 print(cut_demo_obs_id)
 
+# Show the minimum and maximum values of the data array
 print(all_loaded_img_info[cut_demo_obs_id]["data"].min())
 print(all_loaded_img_info[cut_demo_obs_id]["data"].max())
 ```
