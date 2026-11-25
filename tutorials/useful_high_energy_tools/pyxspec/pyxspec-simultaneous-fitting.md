@@ -1124,7 +1124,7 @@ some more emission components.
 
 We will investigate that last idea for the final fitting attempt of this tutorial.
 
-## 5.Fitting a model with additional emission components
+## 5. Fitting a model with additional emission components
 
 ```{admonition} Hypothesis
 :class: hint
