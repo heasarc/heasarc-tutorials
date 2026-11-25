@@ -154,17 +154,18 @@ significantly above or below the flat disk of our galaxy.
 
 ## 2. Loading our observation information table
 
-If you recall, at the end of the first notebook we saved our table of selected observations as a comma-separated-value
-(CSV) file. That file contains information that we're going to need to use in this notebook, so our first task is to
-read it back into an `astropy` `Table` object - we know the name we gave the file, and where we saved it.
+In '{doc}`Full Guide 1 – Identifying and downloading Chandra observations <1-data-acquisition-full-guide>`', we saved
+information about selected Chandra observations to a CSV file, including:
+- **obsid** - Unique identifier of the Chandra observation described by the table row.
+- **ra/dec** - The right-ascension and declination of the observations aim point.
+- **detector** - Which Chandra instrument was used for the observation.
+- **exposure** - How long Chandra was observing.
+- **img_file_name** - A column we added in the last notebook, giving the name of the image file we downloaded.
 
-That path can then be passed to the `Table.read(...)` function, which will return an instance of the `Table` class for
-our observation table (we used the counterpart `.write(...)` function to save the file to disk in the first place).
-
-The only other information we give the `Table.read(...)` function goes to the `converters` argument, and is used to
-explicitly tell the read-in process that the contents of the ObsID column should be treated as strings, rather than
-integers - that is because we want to keep the prepended zeros that we added to the ObsIDs in the first notebook, and
-it will default to reading them as integers (and removing the zeros):
+This file is loaded in using Astropy's `Table.read(...)` function (we used the `Table.write()` counterpart to create
+this file in the last notebook). We pass the path to the information file, and also tell the `Table.read(...)` function
+that `obsid` column entries should be read in as string values, and `year_best` entries should be read in as boolean
+(True/False) values:
 
 ```{code-cell} python
 obs_table_path = os.path.join(
@@ -703,7 +704,7 @@ a `LinearStretch` class that will apply no stretch at all. **As an extension to 
 other stretches (e.g. `SqrtStretch`) and use it to normalize an image - how does it look different, and why?
 ```
 
-### 4.2 How do we align and crop the images?
+### 4.2 How do we align, center, and crop the images?
 
 When dealing with multiple observations of an object, we cannot guarantee that they will all be perfectly aligned - in
 fact, it is incredibly unlikely that they will be. As such, we shouldn't just plot all the images as they are, because
@@ -775,26 +776,14 @@ make a nice figure out of our demonstration cutout.
 
 ### 4.3 How do we normalize the images by their exposure time?
 
-These images have different exposures so to show an apples-to-apples comparison we want to have the images scaled to
-similar flux which is proportional to count rate. Since the pure images are in counts we need to divide the image values
-by the exposure times.
-
-Just as observations of an object aren't always going to be pointed exactly the same, they are very rarely going to have
-the exact same exposure time. As such, we can't just compare our _images_ to one another to see how Cas A evolves, as an
-image represents the number of 'counts' (events) per pixel - if you observed something for half an hour, then the same
-thing for two days, you would expect the latter observation to have many more counts per pixel (unless of course the
-_emission from the object is changing_).
-
-So, before any analysis, we tend to turn our _images_ into _count-rate maps_ - it is possible to relate a count-rate
-to the number of photons emitted by the object per second, if you understand the characteristics of your telescope (and
-other things), and that gives you a window into the astrophysical processes that are _causing_ the emission of X-ray photons.
-
-The "proper" way to the turn an image into a count-rate array (or rate-map) is to divide by an _exposure map_ (please
-ask one of the presenters if you want to learn about exposure maps), but we'll make a reasonable approximation here by
-dividing the image by the exposure time stored in its FITS header.
+These images have different exposure times, so to show an apples-to-apples comparison we want to have the images scaled
+to similar flux which is proportional to count rate. Since the pure images are in counts we need to divide the image
+values by the exposure times. The 'proper' way to turn a counts image into a rate image is to divide by an exposure
+map, which accounts for variations across the detector, though here we'll just divide the counts images by the total
+exposure time in the FITS header as a simple approximation.
 
 To avoid setting up a new array per observation, and thus using up more memory than we have to, we're going to modify
-the existing data arrays we stored in `all_loaded_img_info`, and to make sure that we don't divide by exposure again
+the existing data arrays we stored in `all_loaded_img_info`. To make sure that we don't divide by exposure again
 if we accidentally re-run this cell, we put a boolean variable in `all_loaded_img_info` that is False initially, and
 set to True when the modification is made:
 
@@ -1197,10 +1186,10 @@ def update_frame(frame_obs_id):
 
 ### 6.3 Creating and watching our evolution animation!
 
-Finally, we set up a count-rate map visualization (essentially as we've done in the other parts of this notebook we've
-looked at images), and overlay observation date, ObsID, and a circle. The `animation.FuncAnimation(...)` imported from
-`matplotlib` then takes a list of our chosen ObsIDs, and iterates through them, passing each to our `update_frame` in
-turn.
+Finally, we set up a count-rate map visualization (essentially as we've done in the other parts of this notebook where
+we've visualized images), and overlay observation date, ObsID, and a fixed circle. The `animation.FuncAnimation(...)`
+imported from `matplotlib` then takes the list of observations, and iterates through them, passing each to our
+`update_frame` in turn.
 
 Note that in order to make the GIF pause slightly at the first and last observations, we duplicate the initial and final
 frame several times.
