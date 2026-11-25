@@ -343,9 +343,9 @@ elif isinstance(NUM_CORES, int) and NUM_CORES > total_cores:
 
 # -------------- Set paths and create directories --------------
 if os.path.exists("../../../_data"):
-    ROOT_DATA_DIR = "../../../_data/PyXSPEC/EXOSAT"
+    ROOT_DATA_DIR = "../../../_data/PyXspec/EXOSAT"
 else:
-    ROOT_DATA_DIR = "PyXSPEC/EXOSAT"
+    ROOT_DATA_DIR = "PyXspec/EXOSAT"
 
 # Ensure that the specified directory exists
 ROOT_DATA_DIR = os.path.abspath(ROOT_DATA_DIR)
